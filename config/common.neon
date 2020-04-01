@@ -1,0 +1,236 @@
+#
+# Service DI configuration
+#
+# @license		More in license.md
+# @copyright	https://www.fastybird.com
+# @author		Adam Kadlec <adam.kadlec@fastybird.com>
+# @package		FastyBird:AccountsNode!
+# @subpackage	config
+# @since		0.1.0
+#
+# @date			30.03.20
+
+##############################
+# Node predefined parameters #
+##############################
+
+parameters:
+	origin: com.fastybird.accounts-node
+
+	rabbitmq:
+		queueName: fb.devices.node.exchange
+
+#########################
+# Used Nette extensions #
+#########################
+
+extensions:
+	contributteEventDispatcher	: Contributte\EventDispatcher\DI\EventDispatcherExtension
+	contributteTranslation		: Contributte\Translation\DI\TranslationExtension
+	ipubDoctrineConsistence		: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
+	ipubDoctrineCrud			: IPub\DoctrineCrud\DI\DoctrineCrudExtension
+	ipubDoctrineTimestampable	: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
+	nettrineAnnotations			: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrineCache				: Nettrine\Cache\DI\CacheExtension
+	nettrineDbal				: Nettrine\DBAL\DI\DbalExtension
+	nettrineOrm					: Nettrine\ORM\DI\OrmExtension
+	nettrineOrmAnnotations		: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
+	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
+
+##################################
+# Nette extensions configuration #
+##################################
+
+# Node web server
+#################
+nodeWebServer:
+	server:
+		address: %server.address%
+		port: %server.port%
+
+# Node translations
+###################
+contributteTranslation:
+	locales:
+		default: en_US
+		fallback: [en_US, en]
+	localeResolvers: []
+	dirs:
+		- %appDir%/src/Translations
+
+# Doctrine DBAL
+###############
+nettrineDbal:
+	connection:
+		serverVersion: %database.version%
+		host: %database.host%
+		port: %database.port%
+		driver: %database.driver%
+		memory: %database.memory%
+		dbname: %database.dbname%
+		user: %database.username%
+		password: %database.password%
+		charset: utf8
+
+		types:
+			uuid_binary:
+				class: Ramsey\Uuid\Doctrine\UuidBinaryType
+				commented: false
+			utcdatetime:
+				class: IPub\DoctrineTimestampable\Types\UTCDateTime
+				commented: false
+
+		typesMapping:
+			uuid_binary: binary
+
+# Doctrine ORM annoations
+#########################
+nettrineAnnotations:
+	debug: %debugMode%
+	ignore:
+		- writable
+		- validator
+		- module
+		- author
+		- subpackage
+		- package
+		- phpcsSuppress
+
+# Doctrine ORM
+##############
+nettrineOrm:
+	configuration:
+		proxyDir	: %tempDir%/cache/doctrine.proxies
+
+nettrineOrmAnnotations:
+	paths:
+		- %appDir%/src/Entities
+
+#############################
+# Node services definitions #
+#############################
+
+services:
+	# Security
+	##########
+
+	- {factory: FastyBird\AccountsNode\Security\Authenticator}
+
+	- {factory: FastyBird\AccountsNode\Security\Authorizator}
+
+	- {factory: FastyBird\AccountsNode\Security\TokenReader}
+
+	- {factory: FastyBird\AccountsNode\Helpers\SecurityHash}
+
+	-
+		factory: FastyBird\AccountsNode\Security\TokenBuilder
+		arguments:
+			tokenSignature: 'g3xHbkELpMD9LRqW4WmJkHL7kz2bdNYAQJyEuFVzR3k='
+
+	# Define JWT services
+	#####################
+
+	- {factory: Lcobucci\JWT\Signer\Hmac\Sha256}
+
+	- {factory: Lcobucci\JWT\Parser}
+
+	# Nette services overwrite
+	##########################
+
+	security.user: FastyBird\AccountsNode\Security\User
+	security.userStorage: FastyBird\AccountsNode\Security\UserStorage
+
+	# Http router
+	#############
+
+	- {factory: FastyBird\AccountsNode\Middleware\JsonApiMiddleware, tags: [middleware: {priority: 10}]}
+
+	- {factory: FastyBird\AccountsNode\Middleware\AccountMiddleware, tags: [middleware: {priority: 15}]}
+
+	-
+		factory: FastyBird\AccountsNode\Router\Router
+		setup:
+			- registerRoutes
+
+	# Console commands
+	##################
+
+	- {factory: FastyBird\AccountsNode\Commands\Accounts\CreateCommand}
+
+	- {factory: FastyBird\AccountsNode\Commands\Roles\CreateCommand}
+
+	# Events subscribers
+	####################
+
+	- {factory: FastyBird\AccountsNode\Subscribers\EmailEntitySubscriber}
+
+	# Database repositories
+	#######################
+
+	- {factory: FastyBird\AccountsNode\Models\Accounts\AccountRepository}
+
+	- {factory: FastyBird\AccountsNode\Models\Emails\EmailRepository}
+
+	- {factory: FastyBird\AccountsNode\Models\Identities\IdentityRepository}
+
+	- {factory: FastyBird\AccountsNode\Models\Privileges\PrivilegeRepository}
+
+	- {factory: FastyBird\AccountsNode\Models\Resources\ResourceRepository}
+
+	- {factory: FastyBird\AccountsNode\Models\Roles\RoleRepository}
+
+	- {factory: FastyBird\AccountsNode\Models\Tokens\TokenRepository}
+
+	# Database managers
+	###################
+
+	- {factory: FastyBird\AccountsNode\Models\Accounts\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Accounts\Account))}
+
+	- {factory: FastyBird\AccountsNode\Models\Emails\EmailsManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Emails\Email))}
+
+	- {factory: FastyBird\AccountsNode\Models\Identities\IdentitiesManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Identities\Identity))}
+
+	- {factory: FastyBird\AccountsNode\Models\Privileges\PrivilegesManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Privileges\Privilege))}
+
+	- {factory: FastyBird\AccountsNode\Models\Resources\ResourcesManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Resources\Resource))}
+
+	- {factory: FastyBird\AccountsNode\Models\Roles\RolesManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Roles\Role))}
+
+	- {factory: FastyBird\AccountsNode\Models\SecurityQuestions\QuestionsManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\SecurityQuestions\Question))}
+
+	- {factory: FastyBird\AccountsNode\Models\Tokens\TokensManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Tokens\Token))}
+
+	# API controllers
+	#################
+
+	- {factory: FastyBird\AccountsNode\Controllers\AccountV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AccountsNode\Controllers\EmailsV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AccountsNode\Controllers\SecurityQuestionV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AccountsNode\Controllers\SessionV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AccountsNode\Controllers\SystemIdentityV1Controller, tags: [nette.inject]}
+
+	# API schemas
+	#############
+
+	- {factory: FastyBird\AccountsNode\Schemas\AccountSchema}
+
+	- {factory: FastyBird\AccountsNode\Schemas\EmailSchema}
+
+	- {factory: FastyBird\AccountsNode\Schemas\SecurityQuestionSchema}
+
+	- {factory: FastyBird\AccountsNode\Schemas\SessionSchema}
+
+	# API hydrators
+	###############
+
+	- {factory: FastyBird\AccountsNode\Hydrators\AccountHydrator}
+
+	- {factory: FastyBird\AccountsNode\Hydrators\EmailHydrator}
+
+	- {factory: FastyBird\AccountsNode\Hydrators\SecurityQuestionHydrator}
