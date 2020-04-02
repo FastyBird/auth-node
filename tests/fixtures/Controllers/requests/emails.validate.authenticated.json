@@ -1,0 +1,8 @@
+{
+  "data" : {
+    "type" : "accounts-node/email",
+    "attributes" : {
+      "address" : "john.doe@fastybird.com"
+    }
+  }
+}

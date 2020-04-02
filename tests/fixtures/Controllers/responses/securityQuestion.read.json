@@ -1,0 +1,35 @@
+{
+  "data" : {
+    "attributes" : {
+      "is_custom" : false,
+      "question" : "firstPetName"
+    },
+    "id" : "4774b7c3-8b21-40c7-b8d7-e4242a962b71",
+    "links" : {
+      "self" : "/v1/account/security-question"
+    },
+    "relationships" : {
+      "account" : {
+        "data" : {
+          "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
+          "type" : "accounts-node/account"
+        },
+        "links" : {
+          "related" : "/v1/account",
+          "self" : "/v1/account/security-question/relationships/account"
+        }
+      }
+    },
+    "type" : "accounts-node/security-question"
+  },
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "self" : "/v1/account/security-question"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  }
+}

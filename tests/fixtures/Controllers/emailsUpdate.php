@@ -15,7 +15,7 @@ return [
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg',
 		file_get_contents(__DIR__ . '/requests/emails.update.invalidType.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/emails.update.invalidType.json',
+		__DIR__ . '/responses/emails.invalidType.json',
 	],
 	'unauthorized' => [
 		'/v1/account/emails/0b46d3d6-c980-494a-8b40-f19e6095e610',

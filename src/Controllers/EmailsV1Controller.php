@@ -425,6 +425,17 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		$attributes = $document->getResource()->getAttributes();
 
+		if ($document->getResource()->getType() !== Schemas\EmailSchema::SCHEMA_TYPE) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.invalidType.heading'),
+				$this->translator->translate('messages.invalidType.message'),
+				[
+					'pointer' => '/data/type',
+				]
+			);
+		}
+
 		if (!$attributes->has('address')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,

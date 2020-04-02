@@ -121,6 +121,8 @@ class Router extends Routing\Router
 
 					$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'delete']);
 
+					$group->post('/validate', [$this->emailsV1Controller, 'validate']);
+
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->emailsV1Controller, 'readRelationship']);
 					$route->setName('account.email.relationship');
 				});

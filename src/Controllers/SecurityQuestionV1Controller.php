@@ -23,6 +23,7 @@ use FastyBird\AccountsNode\Schemas;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
+use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
 use Psr\Http\Message;
 use Throwable;
 
@@ -125,11 +126,39 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			// Create new item in database
-			$question = $this->questionsManager->create($this->questionHydrator->hydrate($document->getResource()));
+			if ($document->getResource()->getType() === Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
+				$createData = $this->questionHydrator->hydrate($document->getResource());
+				$createData->offsetSet('account', $this->user->getAccount());
+
+				// Create new item in database
+				$question = $this->questionsManager->create($createData);
+
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('messages.invalidType.heading'),
+					$this->translator->translate('messages.invalidType.message'),
+					[
+						'pointer' => '/data/type',
+					]
+				);
+			}
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
+
+		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollback();
+
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => 'data/attributes/' . $ex->getField(),
+				]
+			);
 
 		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
@@ -187,13 +216,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 
 		$document = $this->createDocument($request);
 
-		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalid.heading'),
-				$this->translator->translate('//node.base.messages.invalid.message')
-			);
-		}
+		$attributes = $document->getResource()->getAttributes();
 
 		$question = $this->user->getAccount()->getSecurityQuestion();
 
@@ -202,6 +225,36 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message')
+			);
+		}
+
+		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_BAD_REQUEST,
+				$this->translator->translate('//node.base.messages.invalid.heading'),
+				$this->translator->translate('//node.base.messages.invalid.message')
+			);
+		}
+
+		if (!$attributes->has('question')) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/question',
+				]
+			);
+		}
+
+		if (!$attributes->has('answer')) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/answer',
+				]
 			);
 		}
 
@@ -227,6 +280,12 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
+
+		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollBack();
+
+			throw $ex;
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
@@ -306,7 +365,13 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			);
 		}
 
-		if ($this->user->getAccount()->getSecurityQuestion() === null) {
+		$document = $this->createDocument($request);
+
+		$attributes = $document->getResource()->getAttributes()->toArray();
+
+		$question = $this->user->getAccount()->getSecurityQuestion();
+
+		if ($question === null) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
@@ -314,13 +379,28 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			);
 		}
 
-		$document = $this->createDocument($request);
+		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_BAD_REQUEST,
+				$this->translator->translate('//node.base.messages.invalid.heading'),
+				$this->translator->translate('//node.base.messages.invalid.message')
+			);
+		}
 
-		$attributes = $document->getResource()->getAttributes()->toArray();
+		if ($document->getResource()->getType() !== Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.invalidType.heading'),
+				$this->translator->translate('messages.invalidType.message'),
+				[
+					'pointer' => '/data/type',
+				]
+			);
+		}
 
 		if (
 			!isset($attributes['current_answer'])
-			|| $this->user->getAccount()->getSecurityQuestion()->getAnswer() !== $attributes['current_answer']
+			|| $question->getAnswer() !== $attributes['current_answer']
 		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,

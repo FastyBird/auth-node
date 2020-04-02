@@ -4,7 +4,7 @@
       "code" : "422",
       "status" : "422",
       "title" : "Invalid type",
-      "detail" : "Provided email entity type is not valid",
+      "detail" : "Provided security question entity type is not valid",
       "source" : {
         "pointer" : "/data/type"
       }

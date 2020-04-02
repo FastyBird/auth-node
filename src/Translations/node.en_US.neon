@@ -106,8 +106,14 @@ emails:
 			heading	: "Email is default"
 			message	: "Default email address could not be deleted"
 
-question:
+securityQuestion:
 	messages:
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided security question entity type is not valid"
+		notFound:
+			heading	: "Not found"
+			message	: "Requested security question was not found"
 		accountHasQuestion:
 			heading	: "Invalid request"
 			message	: "This account has already defined security question"
@@ -117,18 +123,9 @@ question:
 		notUpdated:
 			heading	: "System error"
 			message	: "Something went wrong, security question could not be updated"
-		notValidated:
-			heading	: "System error"
-			message	: "Something went wrong, security question could not be validated"
 		incorrect:
 			heading	: "Not processed"
 			message	: "Provided answer to current question is incorrect"
-		notSet:
-			heading	: "No security question"
-			message	: "Account is without security question"
-		systemError:
-			heading	: "System error"
-			message	: "Something went wrong, account could not be loaded"
 
 password:
 	messages:

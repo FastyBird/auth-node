@@ -1,0 +1,13 @@
+{
+  "errors" : [
+    {
+      "code" : "400",
+      "status" : "400",
+      "title" : "Invalid request",
+      "detail" : "This account has already defined security question"
+    }
+  ],
+  "jsonapi" : {
+    "version" : "1.1"
+  }
+}
