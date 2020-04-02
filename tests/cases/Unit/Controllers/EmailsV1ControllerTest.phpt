@@ -130,7 +130,7 @@ final class EmailsV1ControllerTest extends DbTestCase
 			$url,
 			[
 				'authorization' => $token,
-			],
+			]
 		);
 
 		$response = $router->handle($request);
