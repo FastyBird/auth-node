@@ -27,6 +27,7 @@ use FastyBird\AccountsNode\Schemas;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
+use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
 use Nette\Utils;
 use Psr\Http\Message;
 use Ramsey\Uuid;
@@ -147,12 +148,25 @@ final class EmailsV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			$createData = $this->emailHydrator->hydrate($document->getResource());
-			$createData->offsetSet('verificationHash', $this->securityHash->createKey());
-			$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
+			if ($document->getResource()->getType() === Schemas\EmailSchema::SCHEMA_TYPE) {
+				$createData = $this->emailHydrator->hydrate($document->getResource());
+				$createData->offsetSet('account', $this->user->getAccount());
+				$createData->offsetSet('verificationHash', $this->securityHash->createKey());
+				$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
 
-			// Store item into database
-			$email = $this->emailsManager->create($createData);
+				// Store item into database
+				$email = $this->emailsManager->create($createData);
+
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('messages.invalidType.heading'),
+					$this->translator->translate('messages.invalidType.message'),
+					[
+						'pointer' => '/data/type',
+					]
+				);
+			}
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
@@ -180,6 +194,19 @@ final class EmailsV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.taken.message'),
 				[
 					'pointer' => '/data/attributes/address',
+				]
+			);
+
+		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollback();
+
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => 'data/attributes/' . $ex->getField(),
 				]
 			);
 
@@ -263,6 +290,12 @@ final class EmailsV1Controller extends BaseV1Controller
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
+
+		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollBack();
+
+			throw $ex;
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
@@ -395,8 +428,8 @@ final class EmailsV1Controller extends BaseV1Controller
 		if (!$attributes->has('address')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.missingMandatory.message'),
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
 				[
 					'pointer' => '/data/attributes/address',
 				]
@@ -405,8 +438,8 @@ final class EmailsV1Controller extends BaseV1Controller
 		} elseif (!Utils\Validators::isEmail($attributes->toArray()['address'])) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.notValidEmail.heading'),
-				$this->translator->translate('//node.base.messages.notValidEmail.message'),
+				$this->translator->translate('messages.notValid.heading'),
+				$this->translator->translate('messages.notValid.message'),
 				[
 					'pointer' => '/data/attributes/address',
 				]

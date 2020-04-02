@@ -74,8 +74,8 @@ final class AccountHydrator extends Hydrator
 			} else {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-					$this->translator->translate('//node.base.messages.missingMandatory.message'),
+					$this->translator->translate('//node.base.messages.missingRequired.heading'),
+					$this->translator->translate('//node.base.messages.missingRequired.message'),
 					[
 						'pointer' => '/data/attributes/details/first_name',
 					]
@@ -88,8 +88,8 @@ final class AccountHydrator extends Hydrator
 			} else {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-					$this->translator->translate('//node.base.messages.missingMandatory.message'),
+					$this->translator->translate('//node.base.messages.missingRequired.heading'),
+					$this->translator->translate('//node.base.messages.missingRequired.message'),
 					[
 						'pointer' => '/data/attributes/details/last_name',
 					]

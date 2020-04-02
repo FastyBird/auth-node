@@ -1,0 +1,43 @@
+{
+  "data" : [
+    {
+      "attributes" : {
+        "address" : "john.doe@fastybird.ovh",
+        "is_default" : false,
+        "is_private" : false,
+        "is_verified" : true
+      },
+      "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c",
+      "links" : {
+        "self" : "/v1/account/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c"
+      },
+      "relationships" : {
+        "account" : {
+          "data" : {
+            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
+            "type" : "accounts-node/account"
+          },
+          "links" : {
+            "related" : "/v1/account",
+            "self" : "/v1/account/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c/relationships/account"
+          }
+        }
+      },
+      "type" : "accounts-node/email"
+    }
+  ],
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "first" : "/v1/account/emails?page%5Boffset%5D=0&page%5Blimit%5D=1",
+    "last" : "/v1/account/emails?page%5Boffset%5D=1&page%5Blimit%5D=1",
+    "prev" : "/v1/account/emails?page%5Boffset%5D=0&page%5Blimit%5D=1",
+    "self" : "/v1/account/emails?page%5Boffset%5D=1&page%5Blimit%5D=1"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o",
+    "totalCount" : 2
+  }
+}

@@ -70,7 +70,6 @@ class Email extends Entities\Entity implements IEmail
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\Column(type="string", name="email_address", unique=true, length=150, nullable=false)
 	 */
 	private $address;
@@ -139,6 +138,7 @@ class Email extends Entities\Entity implements IEmail
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->account = $account;
+		$this->visibility = Types\EmailVisibilityType::get(Types\EmailVisibilityType::VISIBILITY_PUBLIC);
 
 		$this->setAddress($address);
 

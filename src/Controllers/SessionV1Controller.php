@@ -109,8 +109,8 @@ final class SessionV1Controller extends BaseV1Controller
 		if (!$attributes->has('uid')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.missingMandatory.message'),
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
 				[
 					'pointer' => '/data/attributes/uid',
 				]
@@ -120,8 +120,8 @@ final class SessionV1Controller extends BaseV1Controller
 		if (!$attributes->has('password')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.missingMandatory.message'),
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
 				[
 					'pointer' => '/data/attributes/password',
 				]
@@ -265,8 +265,8 @@ final class SessionV1Controller extends BaseV1Controller
 		if (!$attributes->has('refresh')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.missingMandatory.message'),
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
 				[
 					'pointer' => '/data/attributes/refresh',
 				]
@@ -468,8 +468,8 @@ final class SessionV1Controller extends BaseV1Controller
 		if (!$attributes->has('uid')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.missingMandatory.message'),
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
 				[
 					'pointer' => '/data/attributes/uid',
 				]

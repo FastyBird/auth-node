@@ -122,8 +122,8 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//userProfile.api.base.messages.missingMandatory.heading'),
-				$this->translator->translate('//userProfile.api.base.messages.missingMandatory.message'),
+				$this->translator->translate('//userProfile.api.base.messages.missingRequired.heading'),
+				$this->translator->translate('//userProfile.api.base.messages.missingRequired.message'),
 				[
 					'pointer' => '/data/attributes/password/new',
 				]

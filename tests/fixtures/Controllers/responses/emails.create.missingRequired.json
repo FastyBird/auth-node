@@ -6,7 +6,7 @@
       "title" : "Missing required attribute",
       "detail" : "Provided request is missing required attribute or relation",
       "source" : {
-        "pointer" : "/data/attributes/password"
+        "pointer" : "data/attributes/address"
       }
     }
   ],

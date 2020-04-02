@@ -27,18 +27,21 @@ base:
 		relationNotFound:
 			heading	: "Relation not found"
 			message	: "Requested relation %relation% was not found"
-		missingMandatory:
-			heading	: "Missing required parameter"
-			message	: "Provided request is missing mandatory parameter"
+		missingRequired:
+			heading	: "Missing required attribute"
+			message	: "Provided request is missing required attribute or relation"
+		invalid:
+			heading	: "Bad request"
+			message	: "Request resource identifier is invalid"
+		identifierInvalid:
+			heading	: "Entity identifier invalid"
+			message	: "Provided entity identifier is not valid"
 		notAuthorized:
 			heading	: "Not authorized"
 			message	: "You are not authorized to perform this action"
 		forbidden:
 			heading	: "Not allowed"
 			message	: "You are not allowed to perform this action"
-		identifierInvalid:
-			heading	: "Entity identifier invalid"
-			message	: "Provided entity identifier is not valid"
 
 session:
 	messages:
@@ -72,15 +75,12 @@ account:
 		notUpdated:
 			heading	: "System error"
 			message	: "Something went wrong, account could not be updated"
-		emailNotFound:
-			heading	: "Not found"
-			message	: "Requested email address was not found"
-		systemError:
-			heading	: "System error"
-			message	: "Something went wrong, account could not be loaded"
 
 emails:
 	messages:
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided email entity type is not valid"
 		notFound:
 			heading	: "Not found"
 			message	: "Requested email address was not found"
@@ -89,19 +89,22 @@ emails:
 			message	: "Provided email address is not valid"
 		taken:
 			heading	: "Not processed"
-			message	: "Provided email address is allready in use"
+			message	: "Provided email address is already in use"
 		notCreated:
 			heading	: "System error"
 			message	: "Something went wrong, email address could not be created"
 		notUpdated:
 			heading	: "System error"
 			message	: "Something went wrong, email address could not be updated"
+		notDeleted:
+			heading	: "System error"
+			message	: "Something went wrong, email address could not be deleted"
 		invalid:
 			heading	: "Bad request"
 			message	: "Request resource identifier is invalid"
-		systemError:
-			heading	: "System error"
-			message	: "Something went wrong, account could not be loaded"
+		defaultNotDeletable:
+			heading	: "Email is default"
+			message	: "Default email address could not be deleted"
 
 question:
 	messages:

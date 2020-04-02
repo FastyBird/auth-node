@@ -15,12 +15,9 @@
 
 namespace FastyBird\AccountsNode\Hydrators;
 
-use Contributte\Translation;
-use Doctrine\Common;
 use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Security;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
-use Fig\Http\Message\StatusCodeInterface;
+use FastyBird\AccountsNode\Types;
+use IPub\JsonAPIDocument;
 
 /**
  * Email entity hydrator
@@ -38,23 +35,11 @@ final class EmailHydrator extends Hydrator
 
 	/** @var string[] */
 	protected $attributes = [
-		'address',
-		'is_default',
-		'account',
+		0 => 'address',
+
+		'is_default' => 'default',
+		'is_private' => 'visibility',
 	];
-
-	/** @var Security\User */
-	private $user;
-
-	public function __construct(
-		Security\User $user,
-		Common\Persistence\ManagerRegistry $managerRegistry,
-		Translation\Translator $translator
-	) {
-		parent::__construct($managerRegistry, $translator);
-
-		$this->user = $user;
-	}
 
 	/**
 	 * {@inheritdoc}
@@ -65,23 +50,15 @@ final class EmailHydrator extends Hydrator
 	}
 
 	/**
-	 * @return Entities\Accounts\IAccount
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @return Types\EmailVisibilityType
 	 */
-	protected function hydrateAccountAttribute(): Entities\Accounts\IAccount
+	protected function hydrateVisibilityAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): Types\EmailVisibilityType
 	{
-		$account = $this->user->getAccount();
+		$isPrivate = (bool) $attributes->get('is_private');
 
-		if ($account === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.accountNotFound.heading'),
-				$this->translator->translate('//node.base.messages.accountNotFound.message')
-			);
-		}
-
-		return $account;
+		return Types\EmailVisibilityType::get($isPrivate ? Types\EmailVisibilityType::VISIBILITY_PRIVATE : Types\EmailVisibilityType::VISIBILITY_PUBLIC);
 	}
 
 }

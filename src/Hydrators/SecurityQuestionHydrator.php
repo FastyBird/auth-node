@@ -15,12 +15,7 @@
 
 namespace FastyBird\AccountsNode\Hydrators;
 
-use Contributte\Translation;
-use Doctrine\Common;
 use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Security;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
-use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 
 /**
@@ -42,21 +37,7 @@ final class SecurityQuestionHydrator extends Hydrator
 		'question',
 		'custom',
 		'answer',
-		'account',
 	];
-
-	/** @var Security\User */
-	private $user;
-
-	public function __construct(
-		Security\User $user,
-		Common\Persistence\ManagerRegistry $managerRegistry,
-		Translation\Translator $translator
-	) {
-		parent::__construct($managerRegistry, $translator);
-
-		$this->user = $user;
-	}
 
 	/**
 	 * {@inheritdoc}
@@ -76,26 +57,6 @@ final class SecurityQuestionHydrator extends Hydrator
 		$custom = $attributes->get('custom');
 
 		return $custom === Entities\SecurityQuestions\IQuestion::CUSTOM_QUESTION;
-	}
-
-	/**
-	 * @return Entities\Accounts\IAccount
-	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
-	 */
-	protected function hydrateAccountAttribute(): Entities\Accounts\IAccount
-	{
-		$account = $this->user->getAccount();
-
-		if ($account === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.accountNotFound.heading'),
-				$this->translator->translate('//node.base.messages.accountNotFound.message')
-			);
-		}
-
-		return $account;
 	}
 
 }

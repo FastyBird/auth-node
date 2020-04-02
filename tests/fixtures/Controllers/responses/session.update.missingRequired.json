@@ -3,8 +3,8 @@
     {
       "code" : "422",
       "status" : "422",
-      "title" : "Missing required parameter",
-      "detail" : "Provided request is missing mandatory parameter",
+      "title" : "Missing required attribute",
+      "detail" : "Provided request is missing required attribute or relation",
       "source" : {
         "pointer" : "/data/attributes/refresh"
       }
