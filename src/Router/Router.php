@@ -122,7 +122,7 @@ class Router extends Routing\Router
 					$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'delete']);
 
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->emailsV1Controller, 'readRelationship']);
-					$route->setName('account.emails.relationship');
+					$route->setName('account.email.relationship');
 				});
 
 				$group->group('/security-question', function (Routing\RouteCollector $group): void {

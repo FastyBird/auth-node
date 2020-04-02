@@ -161,8 +161,9 @@ final class EmailSchema extends JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'account.emails.relationship',
+					'account.email.relationship',
 					[
+						Router\Router::URL_ITEM_ID     => $email->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,
 					]
 				),

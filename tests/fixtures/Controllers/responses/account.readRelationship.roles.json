@@ -1,0 +1,14 @@
+{
+  "data" : [ ],
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "related" : "/v1/account/roles",
+    "self" : "/v1/account/relationships/roles"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "data" : {
+    "type" : "accounts-node/account",
+    "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
+    "attributes" : {
+      "details" : {
+        "last_name" : "Smith",
+        "middle_name" : null
+      },
+      "params" : {
+        "datetime" : {
+          "format" : {
+            "date" : "YYYY/DD/MM",
+            "time" : "HH:mm"
+          },
+          "week_start" : 1,
+          "zone" : "Europe/Prague"
+        }
+      }
+    }
+  }
+}

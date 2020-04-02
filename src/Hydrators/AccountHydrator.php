@@ -37,12 +37,8 @@ final class AccountHydrator extends Hydrator
 
 	/** @var string[] */
 	protected $attributes = [
-		0 => 'details',
-		1 => 'params',
-
-		'first_name'  => 'firstName',
-		'last_name'   => 'lastName',
-		'middle_name' => 'middleName',
+		'details',
+		'params',
 	];
 
 	/**
@@ -55,58 +51,62 @@ final class AccountHydrator extends Hydrator
 
 	/**
 	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
+	 * @param Entities\Accounts\IAccount $entity
 	 *
-	 * @return string
-	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
-	 */
-	protected function hydrateFirstNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
-	{
-		if (!$attributes->has('first_name')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.missingMandatory.message'),
-				[
-					'pointer' => '/data/attributes/details/first_name',
-				]
-			);
-		}
-
-		return (string) $attributes->get('first_name');
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 *
-	 * @return string
+	 * @return Utils\ArrayHash|null
 	 *
 	 * @throws NodeWebServerExceptions\JsonApiErrorException
 	 */
-	protected function hydrateLastNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
-	{
-		if (!$attributes->has('last_name')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.missingMandatory.message'),
-				[
-					'pointer' => '/data/attributes/details/last_name',
-				]
-			);
+	protected function hydrateDetailsAttribute(
+		JsonAPIDocument\Objects\IStandardObject $attributes,
+		Entities\Accounts\IAccount $entity
+	): ?Utils\ArrayHash {
+		if ($attributes->has('details')) {
+			$details = $attributes->get('details');
+
+			$update = new Utils\ArrayHash();
+			$update['entity'] = Entities\Details\Details::class;
+			$update['id'] = $entity->getDetails()->getId();
+
+			if ($details->has('first_name')) {
+				$update->offsetSet('firstName', $details->get('first_name'));
+
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('//node.base.messages.missingMandatory.heading'),
+					$this->translator->translate('//node.base.messages.missingMandatory.message'),
+					[
+						'pointer' => '/data/attributes/details/first_name',
+					]
+				);
+			}
+
+			if ($details->has('last_name')) {
+				$update->offsetSet('lastName', $details->get('last_name'));
+
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('//node.base.messages.missingMandatory.heading'),
+					$this->translator->translate('//node.base.messages.missingMandatory.message'),
+					[
+						'pointer' => '/data/attributes/details/last_name',
+					]
+				);
+			}
+
+			if ($details->has('middle_name') && $details->get('middle_name') !== '') {
+				$update->offsetSet('middleName', $details->get('middle_name'));
+
+			} else {
+				$update->offsetSet('middleName', null);
+			}
+
+			return $update;
 		}
 
-		return (string) $attributes->get('last_name');
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 *
-	 * @return string|null
-	 */
-	protected function hydrateMiddleNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): ?string
-	{
-		return $attributes->has('middle_name') ? (string) $attributes->get('middle_name') : null;
+		return null;
 	}
 
 	/**

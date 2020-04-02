@@ -1,0 +1,17 @@
+{
+  "data" : {
+    "id" : "4774b7c3-8b21-40c7-b8d7-e4242a962b71",
+    "type" : "accounts-node/security-question"
+  },
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "related" : "/v1/account/security-question",
+    "self" : "/v1/account/relationships/security-question"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  }
+}
