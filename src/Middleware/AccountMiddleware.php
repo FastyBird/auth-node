@@ -72,7 +72,7 @@ final class AccountMiddleware implements MiddlewareInterface
 	{
 		// Request has to have Authorization header
 		if ($request->hasHeader('Authorization')) {
-			$token = $this->tokenReader->read();
+			$token = $this->tokenReader->read($request);
 
 			if (
 				$token === null
@@ -81,8 +81,8 @@ final class AccountMiddleware implements MiddlewareInterface
 			) {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNAUTHORIZED,
-					$this->translator->translate('messages.notAuthorized.heading'),
-					$this->translator->translate('messages.notAuthorized.message')
+					$this->translator->translate('//node.base.messages.notAuthorized.heading'),
+					$this->translator->translate('//node.base.messages.notAuthorized.message')
 				);
 
 			} else {

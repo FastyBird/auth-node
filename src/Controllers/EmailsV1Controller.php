@@ -24,7 +24,6 @@ use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Queries;
 use FastyBird\AccountsNode\Router;
 use FastyBird\AccountsNode\Schemas;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
@@ -56,9 +55,6 @@ final class EmailsV1Controller extends BaseV1Controller
 	/** @var Helpers\SecurityHash */
 	private $securityHash;
 
-	/** @var NodeLibsHelpers\DateFactory */
-	private $dateTimeFactory;
-
 	/** @var string */
 	protected $translationDomain = 'node.emails';
 
@@ -66,8 +62,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		Hydrators\EmailHydrator $emailHydrator,
 		Models\Emails\IEmailRepository $emailRepository,
 		Models\Emails\IEmailsManager $emailsManager,
-		Helpers\SecurityHash $securityHash,
-		NodeLibsHelpers\DateFactory $dateTimeFactory
+		Helpers\SecurityHash $securityHash
 	) {
 		$this->emailHydrator = $emailHydrator;
 
@@ -75,8 +70,6 @@ final class EmailsV1Controller extends BaseV1Controller
 		$this->emailsManager = $emailsManager;
 
 		$this->securityHash = $securityHash;
-
-		$this->dateTimeFactory = $dateTimeFactory;
 	}
 
 	/**
@@ -156,7 +149,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 			$createData = $this->emailHydrator->hydrate($document->getResource());
 			$createData->offsetSet('verificationHash', $this->securityHash->createKey());
-			$createData->offsetSet('verificationCreated', $this->dateTimeFactory->getNow());
+			$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
 
 			// Store item into database
 			$email = $this->emailsManager->create($createData);

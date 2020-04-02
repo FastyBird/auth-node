@@ -24,7 +24,6 @@ use FastyBird\AccountsNode\Router;
 use FastyBird\AccountsNode\Schemas;
 use FastyBird\AccountsNode\Security;
 use FastyBird\AccountsNode\Types;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
@@ -55,9 +54,6 @@ final class SessionV1Controller extends BaseV1Controller
 	/** @var Security\TokenReader */
 	private $tokenReader;
 
-	/** @var NodeLibsHelpers\DateFactory */
-	private $dateTimeFactory;
-
 	/** @var string */
 	protected $translationDomain = 'node.session';
 
@@ -65,16 +61,13 @@ final class SessionV1Controller extends BaseV1Controller
 		Models\Tokens\ITokenRepository $tokenRepository,
 		Models\Tokens\ITokensManager $tokensManager,
 		Models\Identities\IIdentityRepository $identityRepository,
-		Security\TokenReader $tokenReader,
-		NodeLibsHelpers\DateFactory $dateTimeFactory
+		Security\TokenReader $tokenReader
 	) {
 		$this->tokenRepository = $tokenRepository;
 		$this->tokensManager = $tokensManager;
 		$this->identityRepository = $identityRepository;
 
 		$this->tokenReader = $tokenReader;
-
-		$this->dateTimeFactory = $dateTimeFactory;
 	}
 
 	/**
@@ -89,7 +82,7 @@ final class SessionV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$token = $this->getToken();
+		$token = $this->getToken($request);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($token));
@@ -116,8 +109,8 @@ final class SessionV1Controller extends BaseV1Controller
 		if (!$attributes->has('uid')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.messages.missingMandatory.message'),
+				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
+				$this->translator->translate('//node.base.messages.missingMandatory.message'),
 				[
 					'pointer' => '/data/attributes/uid',
 				]
@@ -127,8 +120,8 @@ final class SessionV1Controller extends BaseV1Controller
 		if (!$attributes->has('password')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.messages.missingMandatory.message'),
+				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
+				$this->translator->translate('//node.base.messages.missingMandatory.message'),
 				[
 					'pointer' => '/data/attributes/password',
 				]
@@ -204,6 +197,7 @@ final class SessionV1Controller extends BaseV1Controller
 				'entity'    => Entities\Tokens\AccessToken::class,
 				'validTill' => $this->getNow()->modify(Entities\Tokens\IAccessToken::TOKEN_EXPIRATION),
 				'status'    => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
+				'identity'  => $this->user->getIdentity(),
 			]);
 
 			$accessToken = $this->tokensManager->create($values);
@@ -271,8 +265,8 @@ final class SessionV1Controller extends BaseV1Controller
 		if (!$attributes->has('refresh')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.messages.missingMandatory.heading'),
-				$this->translator->translate('//node.base.messages.messages.missingMandatory.message'),
+				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
+				$this->translator->translate('//node.base.messages.missingMandatory.message'),
 				[
 					'pointer' => '/data/attributes/refresh',
 				]
@@ -292,7 +286,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 		if (
 			$refreshToken->getValidTill() !== null
-			&& $refreshToken->getValidTill() < $this->dateTimeFactory->getNow()
+			&& $refreshToken->getValidTill() < $this->dateFactory->getNow()
 		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
@@ -314,6 +308,7 @@ final class SessionV1Controller extends BaseV1Controller
 				'entity'    => Entities\Tokens\AccessToken::class,
 				'validTill' => $this->getNow()->modify(Entities\Tokens\IAccessToken::TOKEN_EXPIRATION),
 				'status'    => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
+				'identity'  => $this->user->getIdentity(),
 			]);
 
 			$newAccessToken = $this->tokensManager->create($values);
@@ -376,7 +371,7 @@ final class SessionV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$accessToken = $this->getToken();
+		$accessToken = $this->getToken($request);
 
 		try {
 			// Start transaction connection to the database
@@ -470,36 +465,36 @@ final class SessionV1Controller extends BaseV1Controller
 
 		$attributes = $document->getResource()->getAttributes();
 
-		if (!$attributes->has('credentials') || !$attributes->get('credentials')->has('uid')) {
+		if (!$attributes->has('uid')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingMandatory.heading'),
 				$this->translator->translate('//node.base.messages.missingMandatory.message'),
 				[
-					'pointer' => '/data/attributes/credentials/uid',
+					'pointer' => '/data/attributes/uid',
 				]
 			);
 		}
 
-		$account = $this->findIdentityAccount($attributes->toArray()['credentials']['uid']);
+		$account = $this->findIdentityAccount($attributes->toArray()['uid']);
 
 		if ($account === null) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message'),
+				$this->translator->translate('messages.unknownAccount.heading'),
+				$this->translator->translate('messages.unknownAccount.message'),
 				[
-					'pointer' => '/data/attributes/credentials/uid',
+					'pointer' => '/data/attributes/uid',
 				]
 			);
 
 		} elseif ($account->isDeleted()) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message'),
+				$this->translator->translate('messages.unknownAccount.heading'),
+				$this->translator->translate('messages.unknownAccount.message'),
 				[
-					'pointer' => '/data/attributes/credentials/uid',
+					'pointer' => '/data/attributes/uid',
 				]
 			);
 		}
@@ -517,7 +512,7 @@ final class SessionV1Controller extends BaseV1Controller
 	private function getNow(): DateTimeImmutable
 	{
 		/** @var DateTimeImmutable $now */
-		$now = $this->dateTimeFactory->getNow();
+		$now = $this->dateFactory->getNow();
 
 		return $now;
 	}
@@ -541,13 +536,15 @@ final class SessionV1Controller extends BaseV1Controller
 	}
 
 	/**
+	 * @param Message\ServerRequestInterface $request
+	 *
 	 * @return Entities\Tokens\IAccessToken
 	 *
 	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
-	private function getToken(): Entities\Tokens\IAccessToken
+	private function getToken(Message\ServerRequestInterface $request): Entities\Tokens\IAccessToken
 	{
-		$token = $this->tokenReader->read();
+		$token = $this->tokenReader->read($request);
 
 		if (
 			$token === null

@@ -57,7 +57,7 @@ final class SecurityQuestionSchema extends JsonApiSchema
 	 */
 	public function getEntityClass(): string
 	{
-		return Entities\Tokens\AccessToken::class;
+		return Entities\SecurityQuestions\Question::class;
 	}
 
 	/**

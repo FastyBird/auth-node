@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "type" : "accounts-node/session",
+    "attributes" : {
+      "uid" : "bruce.wane@fastybird.com",
+      "password" : "123456789"
+    }
+  }
+}

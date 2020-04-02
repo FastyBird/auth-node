@@ -40,6 +40,7 @@ final class Authenticator implements NS\IAuthenticator
 
 	public const ACCOUNT_PROFILE_BLOCKED = 210;
 	public const ACCOUNT_PROFILE_DELETED = 220;
+	public const ACCOUNT_PROFILE_OTHER_ERROR = 230;
 
 	/** @var Models\Identities\IIdentityRepository */
 	private $identityRepository;
@@ -94,6 +95,10 @@ final class Authenticator implements NS\IAuthenticator
 
 		$account = $identity->getAccount();
 
+		if ($account->getStatus()->equalsValue(Types\AccountStatusType::STATE_ACTIVATED)) {
+			return $identity;
+		}
+
 		if ($account->getStatus()->equalsValue(Types\AccountStatusType::STATE_BLOCKED)) {
 			throw new Exceptions\AuthenticationFailedException('Account profile is blocked', self::ACCOUNT_PROFILE_BLOCKED);
 
@@ -101,7 +106,7 @@ final class Authenticator implements NS\IAuthenticator
 			throw new Exceptions\AuthenticationFailedException('Account profile is deleted', self::ACCOUNT_PROFILE_DELETED);
 		}
 
-		return $identity;
+		throw new Exceptions\AuthenticationFailedException('Account profile is not available', self::ACCOUNT_PROFILE_OTHER_ERROR);
 	}
 
 }

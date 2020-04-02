@@ -19,6 +19,7 @@ use Contributte\Translation;
 use Doctrine\DBAL\Connection;
 use FastyBird\AccountsNode\Exceptions;
 use FastyBird\AccountsNode\Security;
+use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
@@ -44,6 +45,9 @@ abstract class BaseV1Controller
 	/** @var Security\User */
 	protected $user;
 
+	/** @var NodeLibsHelpers\DateFactory */
+	protected $dateFactory;
+
 	/** @var Translation\PrefixedTranslator */
 	protected $translator;
 
@@ -64,6 +68,16 @@ abstract class BaseV1Controller
 	public function injectUser(Security\User $user): void
 	{
 		$this->user = $user;
+	}
+
+	/**
+	 * @param NodeLibsHelpers\DateFactory $dateFactory
+	 *
+	 * @return void
+	 */
+	public function injectDateFactory(NodeLibsHelpers\DateFactory $dateFactory): void
+	{
+		$this->dateFactory = $dateFactory;
 	}
 
 	/**

@@ -18,6 +18,7 @@ namespace FastyBird\AccountsNode\Security;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Models;
 use Nette;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * JW token header reader
@@ -45,35 +46,16 @@ final class TokenReader
 	}
 
 	/**
+	 * @param ServerRequestInterface $request
+	 *
 	 * @return Entities\Tokens\IAccessToken|null
 	 */
-	public function read(): ?Entities\Tokens\IAccessToken
+	public function read(ServerRequestInterface $request): ?Entities\Tokens\IAccessToken
 	{
-		// HEADERS
-		if (function_exists('apache_request_headers')) {
-			$headers = apache_request_headers();
+		$headerJWT = $request->hasHeader(self::TOKEN_HEADER_NAME) ? $request->getHeader(self::TOKEN_HEADER_NAME) : null;
+		$headerJWT = is_array($headerJWT) ? reset($headerJWT) : $headerJWT;
 
-		} else {
-			$headers = [];
-
-			foreach ($_SERVER as $k => $v) {
-				if (strncmp($k, 'HTTP_', 5) === 0) {
-					$k = substr($k, 5);
-
-				} elseif (strncmp($k, 'CONTENT_', 8)) {
-					continue;
-				}
-
-				$headers[strtr($k, '_', '-')] = $v;
-			}
-		}
-
-		$headers = array_change_key_case((array) $headers, CASE_LOWER);
-
-		/** @var string|null $headerJWT */
-		$headerJWT = $headers[self::TOKEN_HEADER_NAME] ?? null;
-
-		if ($headerJWT !== null && preg_match(self::TOKEN_HEADER_REGEXP, $headerJWT, $matches)) {
+		if (is_string($headerJWT) && preg_match(self::TOKEN_HEADER_REGEXP, $headerJWT, $matches)) {
 			/** @var Entities\Tokens\IAccessToken|null $token */
 			$token = $this->tokenRepository->findOneByToken($matches[1], Entities\Tokens\AccessToken::class);
 

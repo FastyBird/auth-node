@@ -12,3 +12,141 @@
 #
 # @date			01.04.20
 #
+
+base:
+	messages:
+		notValidJson:
+			heading	: "Not valid content"
+			message	: "Provided request content is not valid JSON content"
+		notValidJsonApi:
+			heading	: "Not valid content"
+			message	: "Provided request content is not valid {JSON:API} content"
+		unknownRelation:
+			heading	: "Relation not found"
+			message	: "Requested unknown relation"
+		relationNotFound:
+			heading	: "Relation not found"
+			message	: "Requested relation %relation% was not found"
+		missingMandatory:
+			heading	: "Missing required parameter"
+			message	: "Provided request is missing mandatory parameter"
+		notAuthorized:
+			heading	: "Not authorized"
+			message	: "You are not authorized to perform this action"
+		forbidden:
+			heading	: "Not allowed"
+			message	: "You are not allowed to perform this action"
+		identifierInvalid:
+			heading	: "Entity identifier invalid"
+			message	: "Provided entity identifier is not valid"
+
+session:
+	messages:
+		unknownAccount:
+			heading	: "Invalid attribute"
+			message	: "Provided account credentials could not be found in our system"
+		accountBlocked:
+			heading	: "Forbidden"
+			message	: "Access to our system is for this account disabled"
+		accountDeleted:
+			heading	: "Forbidden"
+			message	: "This account has been deleted"
+		notCreated:
+			heading	: "System error"
+			message	: "Something went wrong, session creation could not be finished"
+		invalidRefreshToken:
+			heading	: "Not found"
+			message	: "Provided refresh token is invalid"
+		refreshTokenExpired:
+			heading	: "Not found"
+			message	: "Provided refresh token is expired"
+		refreshingTokenFailed:
+			heading	: "System error"
+			message	: "Something went wrong, token could not be refreshed"
+		destroyingSessionFailed:
+			heading	: "System error"
+			message	: "Something went wrong, session could not be destroyed"
+
+account:
+	messages:
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, account could not be updated"
+		emailNotFound:
+			heading	: "Not found"
+			message	: "Requested email address was not found"
+		systemError:
+			heading	: "System error"
+			message	: "Something went wrong, account could not be loaded"
+
+emails:
+	messages:
+		notFound:
+			heading	: "Not found"
+			message	: "Requested email address was not found"
+		notValid:
+			heading	: "Not processed"
+			message	: "Provided email address is not valid"
+		taken:
+			heading	: "Not processed"
+			message	: "Provided email address is allready in use"
+		notCreated:
+			heading	: "System error"
+			message	: "Something went wrong, email address could not be created"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, email address could not be updated"
+		invalid:
+			heading	: "Bad request"
+			message	: "Request resource identifier is invalid"
+		systemError:
+			heading	: "System error"
+			message	: "Something went wrong, account could not be loaded"
+
+question:
+	messages:
+		accountHasQuestion:
+			heading	: "Invalid request"
+			message	: "This account has already defined security question"
+		notCreated:
+			heading	: "System error"
+			message	: "Something went wrong, security question could not be created"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, security question could not be updated"
+		notValidated:
+			heading	: "System error"
+			message	: "Something went wrong, security question could not be validated"
+		incorrect:
+			heading	: "Not processed"
+			message	: "Provided answer to current question is incorrect"
+		notSet:
+			heading	: "No security question"
+			message	: "Account is without security question"
+		systemError:
+			heading	: "System error"
+			message	: "Something went wrong, account could not be loaded"
+
+password:
+	messages:
+		invalidOld:
+			heading	: "Not processed"
+			message	: "Provided current password is invalid"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, password could not be updated"
+
+identity:
+	messages:
+		notFound:
+			heading	: "Not found"
+			message	: "Requested account was not found"
+		notActivated:
+			heading	: "Not processed"
+			message	: "Account is not activated yet. Activation email was resend"
+		blocked:
+			heading	: "Not processed"
+			message	: "This account is blocked"
+		requestNotSent:
+			heading	: "System error"
+			message	: "Something went wrong, password reset request could not be processed"

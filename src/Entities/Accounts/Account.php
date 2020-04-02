@@ -118,7 +118,7 @@ class Account extends Entities\Entity implements IAccount
 	 * @var Common\Collections\Collection<int, Entities\Emails\IEmail>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Emails\Email", mappedBy="owner", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Emails\Email", mappedBy="account", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $emails;
 

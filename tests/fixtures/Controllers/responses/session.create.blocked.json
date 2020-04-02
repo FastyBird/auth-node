@@ -1,0 +1,13 @@
+{
+  "errors" : [
+    {
+      "code" : "403",
+      "status" : "403",
+      "title" : "Forbidden",
+      "detail" : "Access to our system is for this account disabled"
+    }
+  ],
+  "jsonapi" : {
+    "version" : "1.1"
+  }
+}
