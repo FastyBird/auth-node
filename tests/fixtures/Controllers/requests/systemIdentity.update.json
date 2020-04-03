@@ -1,0 +1,11 @@
+{
+  "data" : {
+    "type" : "accounts-node/system-identity",
+    "attributes" : {
+      "password" : {
+        "current" : "123456789",
+        "new" : "987654321"
+      }
+    }
+  }
+}

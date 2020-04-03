@@ -19,6 +19,7 @@ use Doctrine;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Helpers;
 use FastyBird\AccountsNode\Models;
+use FastyBird\AccountsNode\Schemas;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
@@ -71,15 +72,13 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$document = $this->createDocument($request);
-
 		if ($this->user->getAccount() === null) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
@@ -87,8 +86,6 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 				$this->translator->translate('//node.base.messages.forbidden.message')
 			);
 		}
-
-		$attributes = $document->getResource()->getAttributes();
 
 		/** @var Entities\Identities\System|null $identity */
 		$identity = $this->identityRepository->findOneForAccount($this->user->getAccount(), Entities\Identities\System::class);
@@ -101,15 +98,18 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			);
 		}
 
+		$document = $this->createDocument($request);
+
+		$attributes = $document->getResource()->getAttributes();
+
 		if (
 			!$attributes->has('password')
 			|| !$attributes->get('password')->has('current')
-			|| !$identity->verifyPassword($attributes->toArray()['password']['current'])
 		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidOld.heading'),
-				$this->translator->translate('messages.invalidOld.message'),
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
 				[
 					'pointer' => '/data/attributes/password/current',
 				]
@@ -122,10 +122,21 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//userProfile.api.base.messages.missingRequired.heading'),
-				$this->translator->translate('//userProfile.api.base.messages.missingRequired.message'),
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
 				[
 					'pointer' => '/data/attributes/password/new',
+				]
+			);
+		}
+
+		if (!$identity->verifyPassword($attributes->toArray()['password']['current'])) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.invalidPassword.heading'),
+				$this->translator->translate('messages.invalidPassword.message'),
+				[
+					'pointer' => '/data/attributes/password/current',
 				]
 			);
 		}
@@ -134,14 +145,32 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			$update = new Utils\ArrayHash();
-			$update->offsetSet('password', $attributes->toArray()['password']['new']);
+			if ($document->getResource()->getType() === Schemas\SystemIdentity::SCHEMA_TYPE) {
+				$update = new Utils\ArrayHash();
+				$update->offsetSet('password', $attributes->toArray()['password']['new']);
 
-			// Update item in database
-			$this->identitiesManager->update($identity, $update);
+				// Update item in database
+				$this->identitiesManager->update($identity, $update);
+
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('messages.invalidType.heading'),
+					$this->translator->translate('messages.invalidType.message'),
+					[
+						'pointer' => '/data/type',
+					]
+				);
+			}
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
+
+		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollBack();
+
+			throw $ex;
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
@@ -175,7 +204,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function requestPassword(
@@ -184,9 +213,31 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		$document = $this->createDocument($request);
 
-		$attributes = $document->getResource()->getAttributes()->toArray();
+		$attributes = $document->getResource()->getAttributes();
 
-		$identity = $this->findIdentity($attributes['credentials']['uid']);
+		if (!$attributes->has('uid')) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/uid',
+				]
+			);
+		}
+
+		if ($document->getResource()->getType() !== Schemas\SystemIdentity::SCHEMA_TYPE) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.invalidType.heading'),
+				$this->translator->translate('messages.invalidType.message'),
+				[
+					'pointer' => '/data/type',
+				]
+			);
+		}
+
+		$identity = $this->findIdentity((string) $attributes->get('uid'));
 
 		if ($identity === null) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -194,7 +245,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message'),
 				[
-					'pointer' => '/data/attributes/credentials/uid',
+					'pointer' => '/data/attributes/uid',
 				]
 			);
 		}
@@ -207,7 +258,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message'),
 				[
-					'pointer' => '/data/attributes/credentials/uid',
+					'pointer' => '/data/attributes/uid',
 				]
 			);
 
@@ -228,7 +279,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.notActivated.heading'),
 				$this->translator->translate('messages.notActivated.message'),
 				[
-					'pointer' => '/data/attributes/credentials/uid',
+					'pointer' => '/data/attributes/uid',
 				]
 			);
 
@@ -238,7 +289,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.blocked.heading'),
 				$this->translator->translate('messages.blocked.message'),
 				[
-					'pointer' => '/data/attributes/credentials/uid',
+					'pointer' => '/data/attributes/uid',
 				]
 			);
 		}
@@ -257,6 +308,12 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
+		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollBack();
+
+			throw $ex;
+
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollback();
@@ -274,7 +331,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.requestNotSent.heading'),
 				$this->translator->translate('messages.requestNotSent.message'),
 				[
-					'pointer' => '/data/attributes/credentials/uid',
+					'pointer' => '/data/attributes/uid',
 				]
 			);
 		}
@@ -292,8 +349,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
-	 * @throws Doctrine\DBAL\ConnectionException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function validate(
 		Message\ServerRequestInterface $request,
@@ -307,10 +363,6 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			);
 		}
 
-		$document = $this->createDocument($request);
-
-		$attributes = $document->getResource()->getAttributes();
-
 		/** @var Entities\Identities\System|null $identity */
 		$identity = $this->identityRepository->findOneForAccount($this->user->getAccount(), Entities\Identities\System::class);
 
@@ -322,15 +374,40 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			);
 		}
 
+		$document = $this->createDocument($request);
+
+		$attributes = $document->getResource()->getAttributes();
+
+		if ($document->getResource()->getType() !== Schemas\SystemIdentity::SCHEMA_TYPE) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.invalidType.heading'),
+				$this->translator->translate('messages.invalidType.message'),
+				[
+					'pointer' => '/data/type',
+				]
+			);
+		}
+
 		if (
 			!$attributes->has('password')
 			|| !$attributes->get('password')->has('current')
-			|| !$identity->verifyPassword($attributes->toArray()['password']['current'])
 		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidOld.heading'),
-				$this->translator->translate('messages.invalidOld.message'),
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/password/current',
+				]
+			);
+		}
+
+		if (!$identity->verifyPassword($attributes->toArray()['password']['current'])) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.invalidPassword.heading'),
+				$this->translator->translate('messages.invalidPassword.message'),
 				[
 					'pointer' => '/data/attributes/password/current',
 				]

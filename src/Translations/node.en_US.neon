@@ -127,20 +127,20 @@ securityQuestion:
 			heading	: "Not processed"
 			message	: "Provided answer to current question is incorrect"
 
-password:
+systemIdentity:
 	messages:
-		invalidOld:
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided identity entity type is not valid"
+		notFound:
+			heading	: "Not found"
+			message	: "Requested identity was not found"
+		invalidPassword:
 			heading	: "Not processed"
 			message	: "Provided current password is invalid"
 		notUpdated:
 			heading	: "System error"
 			message	: "Something went wrong, password could not be updated"
-
-identity:
-	messages:
-		notFound:
-			heading	: "Not found"
-			message	: "Requested account was not found"
 		notActivated:
 			heading	: "Not processed"
 			message	: "Account is not activated yet. Activation email was resend"

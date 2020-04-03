@@ -95,7 +95,6 @@ final class SessionV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeWebServerExceptions\IJsonApiException
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function create(
@@ -251,7 +250,6 @@ final class SessionV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeWebServerExceptions\IJsonApiException
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function update(
@@ -423,7 +421,7 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
@@ -455,7 +453,7 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
 	public function validate(
 		Message\ServerRequestInterface $request,

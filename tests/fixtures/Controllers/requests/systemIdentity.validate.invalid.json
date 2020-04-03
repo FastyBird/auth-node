@@ -1,0 +1,10 @@
+{
+  "data" : {
+    "type" : "accounts-node/system-identity",
+    "attributes" : {
+      "password" : {
+        "current" : "wrongpass"
+      }
+    }
+  }
+}

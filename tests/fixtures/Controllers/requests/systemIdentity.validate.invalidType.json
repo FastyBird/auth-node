@@ -1,0 +1,10 @@
+{
+  "data" : {
+    "type" : "accounts-node/invalid",
+    "attributes" : {
+      "password" : {
+        "current" : "123456789"
+      }
+    }
+  }
+}

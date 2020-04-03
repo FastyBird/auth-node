@@ -1,0 +1,10 @@
+{
+  "data" : {
+    "type" : "accounts-node/system-identity",
+    "attributes" : {
+      "password" : {
+        "new" : "987654321"
+      }
+    }
+  }
+}
