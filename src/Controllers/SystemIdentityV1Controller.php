@@ -130,7 +130,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			);
 		}
 
-		if (!$identity->verifyPassword($attributes->toArray()['password']['current'])) {
+		if (!$identity->verifyPassword((string) $attributes->get('password')->get('current'))) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidPassword.heading'),
@@ -147,7 +147,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\SystemIdentity::SCHEMA_TYPE) {
 				$update = new Utils\ArrayHash();
-				$update->offsetSet('password', $attributes->toArray()['password']['new']);
+				$update->offsetSet('password', (string) $attributes->get('password')->get('new'));
 
 				// Update item in database
 				$this->identitiesManager->update($identity, $update);
@@ -403,7 +403,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			);
 		}
 
-		if (!$identity->verifyPassword($attributes->toArray()['password']['current'])) {
+		if (!$identity->verifyPassword((string) $attributes->get('password')->get('current'))) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidPassword.heading'),

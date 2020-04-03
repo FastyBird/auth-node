@@ -214,10 +214,6 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			);
 		}
 
-		$document = $this->createDocument($request);
-
-		$attributes = $document->getResource()->getAttributes();
-
 		$question = $this->user->getAccount()->getSecurityQuestion();
 
 		if ($question === null) {
@@ -227,6 +223,10 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.notFound.message')
 			);
 		}
+
+		$document = $this->createDocument($request);
+
+		$attributes = $document->getResource()->getAttributes();
 
 		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -333,6 +333,14 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			);
 		}
 
+		if (!$this->user->getAccount()->hasSecurityQuestion()) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
+			);
+		}
+
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
 		if ($relationEntity === Schemas\SecurityQuestionSchema::RELATIONSHIPS_ACCOUNT) {
@@ -365,10 +373,6 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			);
 		}
 
-		$document = $this->createDocument($request);
-
-		$attributes = $document->getResource()->getAttributes()->toArray();
-
 		$question = $this->user->getAccount()->getSecurityQuestion();
 
 		if ($question === null) {
@@ -378,6 +382,10 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.notFound.message')
 			);
 		}
+
+		$document = $this->createDocument($request);
+
+		$attributes = $document->getResource()->getAttributes();
 
 		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -398,10 +406,18 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			);
 		}
 
-		if (
-			!isset($attributes['current_answer'])
-			|| $question->getAnswer() !== $attributes['current_answer']
-		) {
+		if (!$attributes->has('current_answer')) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/current_answer',
+				]
+			);
+		}
+
+		if ($question->getAnswer() !== $attributes->get('current_answer')) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.incorrect.heading'),

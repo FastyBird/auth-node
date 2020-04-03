@@ -133,10 +133,22 @@ final class AccountV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			$account = $this->accountsManager->update(
-				$this->user->getAccount(),
-				$this->accountHydrator->hydrate($document->getResource(), $this->user->getAccount())
-			);
+			if ($document->getResource()->getType() === Schemas\AccountSchema::SCHEMA_TYPE) {
+				$account = $this->accountsManager->update(
+					$this->user->getAccount(),
+					$this->accountHydrator->hydrate($document->getResource(), $this->user->getAccount())
+				);
+
+			} else {
+				throw new NodeWebServerExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('messages.invalidType.heading'),
+					$this->translator->translate('messages.invalidType.message'),
+					[
+						'pointer' => '/data/type',
+					]
+				);
+			}
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();

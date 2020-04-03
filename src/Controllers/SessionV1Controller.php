@@ -129,7 +129,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 		try {
 			// Login user with system authenticator
-			$this->user->login($attributes->toArray()['uid'], $attributes->toArray()['password']);
+			$this->user->login((string) $attributes->get('uid'), (string) $attributes->get('password'));
 
 		} catch (Throwable $ex) {
 			if ($ex instanceof Exceptions\AccountNotFoundException) {
@@ -272,7 +272,7 @@ final class SessionV1Controller extends BaseV1Controller
 		}
 
 		/** @var Entities\Tokens\IRefreshToken|null $refreshToken */
-		$refreshToken = $this->tokenRepository->findOneByToken($attributes->toArray()['refresh'], Entities\Tokens\RefreshToken::class);
+		$refreshToken = $this->tokenRepository->findOneByToken((string) $attributes->get('refresh'), Entities\Tokens\RefreshToken::class);
 
 		if ($refreshToken === null) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -286,6 +286,9 @@ final class SessionV1Controller extends BaseV1Controller
 			$refreshToken->getValidTill() !== null
 			&& $refreshToken->getValidTill() < $this->dateFactory->getNow()
 		) {
+			// Remove expired tokens
+			$this->tokensManager->delete($refreshToken->getAccessToken());
+
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.refreshTokenExpired.heading'),
@@ -325,6 +328,12 @@ final class SessionV1Controller extends BaseV1Controller
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
+
+		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollBack();
+
+			throw $ex;
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
@@ -385,6 +394,12 @@ final class SessionV1Controller extends BaseV1Controller
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
+
+		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+			// Revert all changes when error occur
+			$this->getOrmConnection()->rollBack();
+
+			throw $ex;
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
@@ -474,7 +489,7 @@ final class SessionV1Controller extends BaseV1Controller
 			);
 		}
 
-		$account = $this->findIdentityAccount($attributes->toArray()['uid']);
+		$account = $this->findIdentityAccount((string) $attributes->get('uid'));
 
 		if ($account === null) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(

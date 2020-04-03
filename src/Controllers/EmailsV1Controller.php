@@ -275,6 +275,8 @@ final class EmailsV1Controller extends BaseV1Controller
 			if ($document->getResource()->getType() === Schemas\EmailSchema::SCHEMA_TYPE) {
 				$updateEmailData = $this->emailHydrator->hydrate($document->getResource(), $email);
 
+				$email = $this->emailsManager->update($email, $updateEmailData);
+
 			} else {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -285,8 +287,6 @@ final class EmailsV1Controller extends BaseV1Controller
 					]
 				);
 			}
-
-			$email = $this->emailsManager->update($email, $updateEmailData);
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
@@ -446,7 +446,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				]
 			);
 
-		} elseif (!Utils\Validators::isEmail($attributes->toArray()['address'])) {
+		} elseif (!Utils\Validators::isEmail((string) $attributes->get('address'))) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notValid.heading'),
@@ -465,7 +465,7 @@ final class EmailsV1Controller extends BaseV1Controller
 					$this->translator->translate('//node.base.messages.forbidden.message')
 				);
 
-			} elseif (!$this->emailRepository->isEmailAvailable($attributes->toArray()['address'], $this->user->getAccount())) {
+			} elseif (!$this->emailRepository->isEmailAvailable((string) $attributes->get('address'), $this->user->getAccount())) {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.taken.heading'),
@@ -477,7 +477,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			}
 
 		} else {
-			$email = $this->emailRepository->findOneByAddress($attributes->toArray()['address']);
+			$email = $this->emailRepository->findOneByAddress((string) $attributes->get('address'));
 
 			if ($email !== null) {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
