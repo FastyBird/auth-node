@@ -18,14 +18,17 @@ namespace FastyBird\AccountsNode\Commands\Accounts;
 use Contributte\Translation;
 use Doctrine\Common;
 use Doctrine\DBAL\Connection;
+use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Exceptions;
 use FastyBird\AccountsNode\Models;
 use Nette\Utils;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input;
 use Symfony\Component\Console\Output;
 use Symfony\Component\Console\Style;
 use Throwable;
+use Tracy\Debugger;
 
 /**
  * Account creation command
@@ -50,11 +53,14 @@ class CreateCommand extends Console\Command\Command
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
+	/** @var LoggerInterface */
+	private $logger;
+
 	/** @var Translation\PrefixedTranslator */
 	private $translator;
 
 	/** @var string */
-	private $translationDomain = 'commands.accountCreate';
+	private $translationDomain = 'node.commands.accountCreate';
 
 	public function __construct(
 		Models\Accounts\IAccountsManager $accountsManager,
@@ -62,6 +68,7 @@ class CreateCommand extends Console\Command\Command
 		Models\Emails\IEmailsManager $emailsManager,
 		Translation\Translator $translator,
 		Common\Persistence\ManagerRegistry $managerRegistry,
+		LoggerInterface $logger,
 		?string $name = null
 	) {
 		$this->accountsManager = $accountsManager;
@@ -69,6 +76,8 @@ class CreateCommand extends Console\Command\Command
 		$this->emailsManager = $emailsManager;
 
 		$this->managerRegistry = $managerRegistry;
+
+		$this->logger = $logger;
 
 		$this->translator = new Translation\PrefixedTranslator($translator, $this->translationDomain);
 
@@ -148,6 +157,7 @@ class CreateCommand extends Console\Command\Command
 			$create = new Utils\ArrayHash();
 
 			$details = new Utils\ArrayHash();
+			$details->offsetSet('entity', Entities\Details\Details::class);
 			$details->offsetSet('firstName', $firstName);
 			$details->offsetSet('lastName', $lastName);
 
@@ -170,8 +180,11 @@ class CreateCommand extends Console\Command\Command
 			$io->text(sprintf('<info>%s</info>', $this->translator->translate('success', ['name' => $account->getName()])));
 
 		} catch (Throwable $ex) {
+			Debugger::log($ex);
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
+
+			$this->logger->error($ex->getMessage());
 
 			$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.account.wasNotCreated', ['error' => $ex->getMessage()])));
 		}

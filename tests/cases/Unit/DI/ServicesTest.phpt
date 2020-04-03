@@ -64,6 +64,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Schemas\EmailSchema::class));
 		Assert::notNull($container->getByType(Schemas\SecurityQuestionSchema::class));
 		Assert::notNull($container->getByType(Schemas\SessionSchema::class));
+		Assert::notNull($container->getByType(Schemas\SystemIdentity::class));
 
 		Assert::notNull($container->getByType(Hydrators\AccountHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\EmailHydrator::class));

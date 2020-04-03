@@ -45,7 +45,7 @@ class CreateCommand extends Console\Command\Command
 	private $translator;
 
 	/** @var string */
-	private $translationDomain = 'commands.roleCreate';
+	private $translationDomain = 'node.commands.roleCreate';
 
 	public function __construct(
 		Models\Roles\IRoleRepository $roleRepository,

@@ -37,8 +37,12 @@ final class AccountHydrator extends Hydrator
 
 	/** @var string[] */
 	protected $attributes = [
-		'details',
-		'params',
+		0 => 'details',
+		1 => 'params',
+
+		'first_name'  => 'firstName',
+		'last_name'   => 'lastName',
+		'middle_name' => 'middleName',
 	];
 
 	/**
@@ -47,6 +51,62 @@ final class AccountHydrator extends Hydrator
 	protected function getEntityName(): string
 	{
 		return Entities\Accounts\Account::class;
+	}
+
+	/**
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
+	 *
+	 * @return string
+	 *
+	 * @throws NodeWebServerExceptions\IJsonApiException
+	 */
+	protected function hydrateFirstNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
+	{
+		if (!$attributes->has('first_name')) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/details/first_name',
+				]
+			);
+		}
+
+		return (string) $attributes->get('first_name');
+	}
+
+	/**
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
+	 *
+	 * @return string
+	 *
+	 * @throws NodeWebServerExceptions\IJsonApiException
+	 */
+	protected function hydrateLastNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
+	{
+		if (!$attributes->has('last_name')) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/details/last_name',
+				]
+			);
+		}
+
+		return (string) $attributes->get('last_name');
+	}
+
+	/**
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
+	 *
+	 * @return string|null
+	 */
+	protected function hydrateMiddleNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): ?string
+	{
+		return $attributes->has('middle_name') && (string) $attributes->get('middle_name') !== '' ? (string) $attributes->get('middle_name') : null;
 	}
 
 	/**

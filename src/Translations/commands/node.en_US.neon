@@ -1,0 +1,52 @@
+#
+# User profile module translations - commands
+#
+# @language		en_US
+#
+# @copyright	More in license.md
+# @license		https://www.ipublikuj.eu
+# @author		Adam Kadlec <adam.kadlec@ipublikuj.eu>
+# @package		iPublikuj:UserProfileModule!
+# @subpackage	Translations
+# @since		1.0.0
+#
+# @date			25.01.17
+#
+
+#
+# COMMANDS
+#
+
+commands:
+	accountCreate:
+		inputs:
+			firstName:
+				title	: "User first name?"
+			lastName:
+				title	: "User last name?"
+			email:
+				title	: "User primary email address?"
+
+		validation:
+			email:
+				taken	: "User with email \"%email%\" already exists."
+				invalid	: "Address \"%email%\" is not a valid email. Please read it again, correct any typos you may have done and then try it again."
+			account:
+				wasNotCreated	: "Account could not be created. Error was logged."
+
+		success	: "Account \"%name%\" was successfully saved."
+
+	roleCreate:
+		key:
+			title	: "Role key name?"
+		name:
+			title	: "Role name?"
+		priority:
+			title	: "Role priority?"
+
+		validation:
+			role:
+				exists			: "Role with key name %role% already exists."
+				wasNotCreated	: "Role could not be created. Error was logged."
+
+		success	: "Created role : \"%name%\" with key: \"%key%\"."

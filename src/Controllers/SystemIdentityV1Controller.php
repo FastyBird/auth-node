@@ -268,7 +268,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			if ($hash === null || !$this->securityHash->isValid($hash)) {
 				// Verification hash is expired, create new one for user
 				$this->accountsManager->update($account, Utils\ArrayHash::from([
-					'requestHash' => $this->securityHash->getRecoveryKey(),
+					'requestHash' => $this->securityHash->createKey(),
 				]));
 			}
 
@@ -300,7 +300,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 
 			// Update entity
 			$this->accountsManager->update($account, Utils\ArrayHash::from([
-				'requestHash' => $this->securityHash->getRecoveryKey(),
+				'requestHash' => $this->securityHash->createKey(),
 			]));
 
 			// TODO: Send reset password email

@@ -16,7 +16,6 @@
 namespace FastyBird\AccountsNode\Helpers;
 
 use DateTimeImmutable;
-use FastyBird\AccountsNode\Models;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Nette;
 use Nette\Utils;
@@ -39,20 +38,14 @@ final class SecurityHash
 	/** @var  string */
 	private $interval;
 
-	/** @var Models\Accounts\IAccountRepository */
-	private $accountRepository;
-
-	/** @var NodeLibsHelpers\DateFactory */
+	/** @var NodeLibsHelpers\IDateFactory */
 	private $dateTimeFactory;
 
 	public function __construct(
-		Models\Accounts\IAccountRepository $accountRepository,
-		NodeLibsHelpers\DateFactory $dateTimeFactory,
+		NodeLibsHelpers\IDateFactory $dateTimeFactory,
 		string $interval = '+ 1 hour'
 	) {
 		$this->interval = $interval;
-
-		$this->accountRepository = $accountRepository;
 
 		$this->dateTimeFactory = $dateTimeFactory;
 	}
@@ -103,22 +96,6 @@ final class SecurityHash
 		}
 
 		return false;
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getRecoveryKey(): string
-	{
-		$key = $this->createKey();
-
-		$account = $this->accountRepository->findOneByHash($key);
-
-		if ($account !== null) {
-			$key = $this->getRecoveryKey();
-		}
-
-		return $key;
 	}
 
 }

@@ -52,6 +52,13 @@ final class Password
 			throw new Exceptions\InvalidStateException('Only password string or hash could be provided');
 		}
 
+		if ($salt !== null) {
+			$this->salt = $salt;
+
+		} else {
+			$this->createSalt();
+		}
+
 		if ($password !== null) {
 			$this->setPassword($password, $salt);
 
@@ -60,13 +67,6 @@ final class Password
 
 		} else {
 			throw new Exceptions\InvalidStateException('Password or hash have to be provided');
-		}
-
-		if ($salt !== null) {
-			$this->salt = $salt;
-
-		} else {
-			$this->createSalt();
 		}
 	}
 

@@ -18,10 +18,8 @@ namespace FastyBird\AccountsNode\Subscribers;
 use Doctrine\Common;
 use Doctrine\ORM;
 use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Types;
 use Nette;
-use Nette\Utils;
 
 /**
  * Doctrine entities events
@@ -35,21 +33,6 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 {
 
 	use Nette\SmartObject;
-
-	/** @var Models\Identities\IIdentitiesManager */
-	private $identitiesManager;
-
-	/** @var ORM\EntityManagerInterface */
-	private $entityManager;
-
-	public function __construct(
-		Models\Identities\IIdentitiesManager $identitiesManager,
-		ORM\EntityManagerInterface $entityManager
-	) {
-		$this->identitiesManager = $identitiesManager;
-		$this->entityManager = $entityManager;
-	}
-
 
 	/**
 	 * Register events
@@ -67,21 +50,24 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 	 * @param ORM\Event\OnFlushEventArgs $eventArgs
 	 *
 	 * @return void
+	 *
+	 * @throws ORM\ORMException
 	 */
 	public function onFlush(ORM\Event\OnFlushEventArgs $eventArgs): void
 	{
-		$uow = $this->entityManager->getUnitOfWork();
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
 
 		// Check all scheduled updates
 		foreach (array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledEntityUpdates()) as $object) {
 			if ($object instanceof Entities\Emails\IEmail && $object->isDefault()) {
 				$changeSet = $uow->getEntityChangeSet($object);
-				$classMetadata = $this->entityManager->getClassMetadata(get_class($object));
+				$classMetadata = $em->getClassMetadata(get_class($object));
 
 				// Check if entity was set as default
 				if (array_key_exists('default', $changeSet)) {
 					$this->setAsDefault($uow, $classMetadata, $object);
-					$this->updateSystemIdentityEmail($object);
+					$this->updateSystemIdentityEmail($em, $uow, $object);
 				}
 			}
 		}
@@ -103,7 +89,10 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 
 		foreach ($email->getAccount()->getEmails() as $accountEmail) {
 			// Deactivate all other user emails
-			if ($accountEmail->getId() !== $email->getId()) {
+			if (
+				$accountEmail->getId() !== $email->getId()
+				&& $accountEmail->isDefault()
+			) {
 				$accountEmail->setDefault(false);
 
 				$oldValue = $property->getValue($email);
@@ -117,23 +106,30 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 	}
 
 	/**
+	 * @param ORM\EntityManager $em
+	 * @param ORM\UnitOfWork $uow
 	 * @param Entities\Emails\IEmail $email
 	 *
 	 * @return void
+	 *
+	 * @throws ORM\ORMException
 	 */
 	private function updateSystemIdentityEmail(
+		ORM\EntityManager $em,
+		ORM\UnitOfWork $uow,
 		Entities\Emails\IEmail $email
 	): void {
 		foreach ($email->getAccount()->getIdentities() as $identity) {
 			if (
 				$identity instanceof Entities\Identities\System
-				&& $identity->getEmail() !== $email
+				&& $identity->getEmail() !== $email->getAddress()
 				&& $identity->getStatus()->equalsValue(Types\IdentityStatusType::STATE_ACTIVE)
 			) {
-				$update = new Utils\ArrayHash();
-				$update->offsetSet('email', $email->getAddress());
+				$identity->setEmail($email->getAddress());
 
-				$this->identitiesManager->update($identity, $update);
+				$em->persist($identity);
+				$classMetadata = $em->getClassMetadata(Entities\Identities\System::class);
+				$uow->computeChangeSet($classMetadata, $identity);
 			}
 		}
 	}

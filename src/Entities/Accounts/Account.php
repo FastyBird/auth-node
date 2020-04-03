@@ -76,7 +76,7 @@ class Account extends Entities\Entity implements IAccount
 	/**
 	 * @var Entities\Details\IDetails
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\OneToOne(targetEntity="FastyBird\AccountsNode\Entities\Details\Details", mappedBy="account", cascade={"persist", "remove"})
 	 */
 	private $details;
@@ -102,9 +102,9 @@ class Account extends Entities\Entity implements IAccount
 	 * @var string|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="account_request_hash", nullable=false)
+	 * @ORM\Column(type="string", name="account_request_hash", nullable=true, options={"default": null})
 	 */
-	private $requestHash;
+	private $requestHash = null;
 
 	/**
 	 * @var Entities\SecurityQuestions\IQuestion|null
@@ -146,18 +146,16 @@ class Account extends Entities\Entity implements IAccount
 	private $roles;
 
 	/**
-	 * @param Entities\Details\IDetails $details
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
-		Entities\Details\IDetails $details,
 		?Uuid\UuidInterface $id = null
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
-		$this->details = $details;
+		$this->status = Types\AccountStatusType::get(Types\AccountStatusType::STATE_NOT_ACTIVATED);
 
 		$this->emails = new Common\Collections\ArrayCollection();
 		$this->identities = new Common\Collections\ArrayCollection();
