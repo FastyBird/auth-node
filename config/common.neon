@@ -18,7 +18,7 @@ parameters:
 	origin: com.fastybird.accounts-node
 
 	rabbitmq:
-		queueName: fb.devices.node.exchange
+		queueName: fb.accounts.node.exchange
 
 #########################
 # Used Nette extensions #
