@@ -91,4 +91,4 @@ RUN chmod +x /wait
 ################
 
 # Supervisord run command
-CMD ["/usr/bin/supervisord"]
+CMD /wait && /usr/bin/supervisord
