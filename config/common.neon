@@ -25,7 +25,6 @@ parameters:
 #########################
 
 extensions:
-	contributteEventDispatcher	: Contributte\EventDispatcher\DI\EventDispatcherExtension
 	contributteTranslation		: Contributte\Translation\DI\TranslationExtension
 	ipubDoctrineConsistence		: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
 	ipubDoctrineCrud			: IPub\DoctrineCrud\DI\DoctrineCrudExtension
@@ -112,6 +111,14 @@ nettrineOrmAnnotations:
 # Node services definitions #
 #############################
 
+decorator:
+	FastyBird\NodeWebServer\Commands\HttpServerCommand:
+		setup:
+			- '$onServerStart[]' = @FastyBird\AccountsNode\Events\ServerStartHandler
+			- '$onRequest[]' = @FastyBird\AccountsNode\Events\RequestHandler
+			- '$onResponse[]' = @FastyBird\AccountsNode\Events\ResponseHandler
+			- '$onAfterConsumeMessage[]' = @FastyBird\AccountsNode\Events\AfterConsumeHandler
+
 services:
 	# Security
 	##########
@@ -149,10 +156,23 @@ services:
 
 	- {factory: FastyBird\AccountsNode\Middleware\AccountMiddleware, tags: [middleware: {priority: 15}]}
 
+	- {factory: FastyBird\AccountsNode\Middleware\DbErrorMiddleware, tags: [middleware: {priority: 50}]}
+
 	-
 		factory: FastyBird\AccountsNode\Router\Router
 		setup:
 			- registerRoutes
+
+	# Node events
+	#############
+
+	- {factory: FastyBird\AccountsNode\Events\ServerStartHandler}
+
+	- {factory: FastyBird\AccountsNode\Events\RequestHandler}
+
+	- {factory: FastyBird\AccountsNode\Events\ResponseHandler}
+
+	- {factory: FastyBird\AccountsNode\Events\AfterConsumeHandler}
 
 	# Console commands
 	##################
