@@ -14,7 +14,7 @@
     },
     {
       "pattern" : "/fb/+/+/$child/+/+/+/+/+/+/+"
-    }
+    },
     {
       "pattern" : "$SYS/broker/log/#"
     }
