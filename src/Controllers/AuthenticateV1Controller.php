@@ -15,9 +15,7 @@
 
 namespace FastyBird\AccountsNode\Controllers;
 
-use Doctrine;
 use FastyBird\AccountsNode\Exceptions;
-use FastyBird\AccountsNode\Models;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Utils;
@@ -78,19 +76,13 @@ final class AuthenticateV1Controller extends BaseV1Controller
 			$this->user->login($username, $password);
 
 			$publishRule1 = new stdClass();
-			$publishRule1->pattern = '/fb/+/+/+/+/+/+/+/+';
-
-			$publishRule2 = new stdClass();
-			$publishRule2->pattern = '/fb/+/+/$child/+/+/+/+/+/+/+';
+			$publishRule1->pattern = '/fb/+/#';
 
 			$subscribeRule1 = new stdClass();
-			$subscribeRule1->pattern = '/fb/+/+/+/+/+/+/+/+';
+			$subscribeRule1->pattern = '/fb/+/#';
 
 			$subscribeRule2 = new stdClass();
-			$subscribeRule2->pattern = '/fb/+/+/$child/+/+/+/+/+/+/+';
-
-			$subscribeRule3 = new \stdClass();
-			$subscribeRule3->pattern = '$SYS/broker/log/#';
+			$subscribeRule2->pattern = '$SYS/broker/log/#';
 
 			try {
 				/** @var NodeWebServerHttp\Response $response */
@@ -100,12 +92,10 @@ final class AuthenticateV1Controller extends BaseV1Controller
 						'result'        => 'ok',
 						'publish_acl'   => [
 							$publishRule1,
-							$publishRule2,
 						],
 						'subscribe_acl' => [
 							$subscribeRule1,
 							$subscribeRule2,
-							$subscribeRule3,
 						],
 					]));
 
