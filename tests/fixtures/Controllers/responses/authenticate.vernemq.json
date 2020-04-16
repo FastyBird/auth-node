@@ -1,0 +1,22 @@
+{
+  "publish_acl" : [
+    {
+      "pattern" : "/fb/+/+/+/+/+/+/+/+"
+    },
+    {
+      "pattern" : "/fb/+/+/$child/+/+/+/+/+/+/+"
+    }
+  ],
+  "result" : "ok",
+  "subscribe_acl" : [
+    {
+      "pattern" : "/fb/+/+/+/+/+/+/+/+"
+    },
+    {
+      "pattern" : "/fb/+/+/$child/+/+/+/+/+/+/+"
+    }
+    {
+      "pattern" : "$SYS/broker/log/#"
+    }
+  ]
+}

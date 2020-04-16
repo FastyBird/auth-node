@@ -52,6 +52,9 @@ class Router extends Routing\Router
 	/** @var Controllers\RolesV1Controller */
 	private $rolesV1Controller;
 
+	/** @var Controllers\AuthenticateV1Controller */
+	private $authenticateV1Controller;
+
 	public function __construct(
 		Controllers\SessionV1Controller $sessionV1Controller,
 		Controllers\AccountV1Controller $accountV1Controller,
@@ -59,6 +62,7 @@ class Router extends Routing\Router
 		Controllers\SecurityQuestionV1Controller $securityQuestionV1Controller,
 		Controllers\SystemIdentityV1Controller $systemIdentityV1Controller,
 		Controllers\RolesV1Controller $rolesV1Controller,
+		Controllers\AuthenticateV1Controller $authenticateV1Controller,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
@@ -69,6 +73,7 @@ class Router extends Routing\Router
 		$this->securityQuestionV1Controller = $securityQuestionV1Controller;
 		$this->systemIdentityV1Controller = $systemIdentityV1Controller;
 		$this->rolesV1Controller = $rolesV1Controller;
+		$this->authenticateV1Controller = $authenticateV1Controller;
 	}
 
 	/**
@@ -157,6 +162,10 @@ class Router extends Routing\Router
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rolesV1Controller, 'readRelationship']);
 					$route->setName('account.roles.relationship');
 				});
+			});
+
+			$group->group('/authenticate', function (Routing\RouteCollector $group): void {
+				$group->post('/vernemq', [$this->authenticateV1Controller, 'vernemq']);
 			});
 		});
 	}
