@@ -111,6 +111,7 @@ final class SessionV1ControllerTest extends DbTestCase
 				if (isset($actual['data']['attributes'])) {
 					$expectation = str_replace('__ACCESS_TOKEN__', $actual['data']['attributes']['token'], $expectation);
 					$expectation = str_replace('__REFRESH_TOKEN__', $actual['data']['attributes']['refresh'], $expectation);
+					$expectation = str_replace('__ENTITY_ID__', $actual['data']['id'], $expectation);
 				}
 
 				return $expectation;
@@ -167,6 +168,7 @@ final class SessionV1ControllerTest extends DbTestCase
 				if (isset($actual['data']['attributes'])) {
 					$expectation = str_replace('__ACCESS_TOKEN__', $actual['data']['attributes']['token'], $expectation);
 					$expectation = str_replace('__REFRESH_TOKEN__', $actual['data']['attributes']['refresh'], $expectation);
+					$expectation = str_replace('__ENTITY_ID__', $actual['data']['id'], $expectation);
 				}
 
 				return $expectation;
