@@ -75,7 +75,7 @@
               "count" : 0
             }
           },
-          "self" : "/accounts-node/account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/roles"
+          "self" : "/v1/account/relationships/roles"
         }
       },
       "security-question" : {
