@@ -153,9 +153,9 @@ class Router extends Routing\Router
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->systemIdentityV1Controller, 'read']);
 					$route->setName('account.identity');
 
-					$group->patch('', [$this->systemIdentityV1Controller, 'update']);
+					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->systemIdentityV1Controller, 'update']);
 
-					$group->post('/validate', [$this->systemIdentityV1Controller, 'validate']);
+					$group->post('/{' . self::URL_ITEM_ID . '}/validate', [$this->systemIdentityV1Controller, 'validate']);
 				});
 
 				$group->group('/roles', function (Routing\RouteCollector $group): void {

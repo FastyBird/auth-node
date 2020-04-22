@@ -158,6 +158,14 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 
 		$document = $this->createDocument($request);
 
+		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_BAD_REQUEST,
+				$this->translator->translate('//node.base.messages.invalid.heading'),
+				$this->translator->translate('//node.base.messages.invalid.message')
+			);
+		}
+
 		$attributes = $document->getResource()->getAttributes();
 
 		if (
@@ -433,6 +441,14 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 		}
 
 		$document = $this->createDocument($request);
+
+		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_BAD_REQUEST,
+				$this->translator->translate('//node.base.messages.invalid.heading'),
+				$this->translator->translate('//node.base.messages.invalid.message')
+			);
+		}
 
 		$attributes = $document->getResource()->getAttributes();
 
