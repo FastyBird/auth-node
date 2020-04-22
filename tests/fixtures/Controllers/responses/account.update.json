@@ -49,6 +49,23 @@
           "self" : "/v1/account/relationships/emails"
         }
       },
+      "identities" : {
+        "data" : [
+          {
+            "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
+            "type" : "accounts-node/system-identity"
+          }
+        ],
+        "links" : {
+          "related" : {
+            "href" : "/v1/account/identities",
+            "meta" : {
+              "count" : 1
+            }
+          },
+          "self" : "/v1/account/relationships/identities"
+        }
+      },
       "roles" : {
         "data" : [ ],
         "links" : {
