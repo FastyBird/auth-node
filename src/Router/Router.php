@@ -146,7 +146,7 @@ class Router extends Routing\Router
 					$route->setName('account.security.question.relationship');
 				});
 
-				$group->group('/identity', function (Routing\RouteCollector $group): void {
+				$group->group('/identities', function (Routing\RouteCollector $group): void {
 					$route = $group->get('', [$this->systemIdentityV1Controller, 'index']);
 					$route->setName('account.identities');
 

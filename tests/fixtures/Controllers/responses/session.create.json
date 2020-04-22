@@ -6,6 +6,7 @@
       "token" : "__ACCESS_TOKEN__",
       "token_type" : "Bearer"
     },
+    "id": "00892288-a6f8-485f-9f05-d47c8890d52a",
     "links" : {
       "self" : "/v1/session"
     },
