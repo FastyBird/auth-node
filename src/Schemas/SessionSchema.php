@@ -61,18 +61,6 @@ final class SessionSchema extends JsonApiSchema
 	}
 
 	/**
-	 * @param Entities\Tokens\AccessToken $accessToken
-	 *
-	 * @return string|null
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 */
-	public function getId($accessToken): ?string
-	{
-		return null;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getType(): string

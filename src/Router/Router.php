@@ -147,6 +147,12 @@ class Router extends Routing\Router
 				});
 
 				$group->group('/identity', function (Routing\RouteCollector $group): void {
+					$route = $group->get('', [$this->systemIdentityV1Controller, 'index']);
+					$route->setName('account.identities');
+
+					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->systemIdentityV1Controller, 'read']);
+					$route->setName('account.identity');
+
 					$group->patch('', [$this->systemIdentityV1Controller, 'update']);
 
 					$group->post('/validate', [$this->systemIdentityV1Controller, 'validate']);

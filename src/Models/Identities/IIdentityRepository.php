@@ -18,6 +18,7 @@ namespace FastyBird\AccountsNode\Models\Identities;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Queries;
+use IPub\DoctrineOrmQuery;
 
 /**
  * Account identity repository interface
@@ -104,5 +105,21 @@ interface IIdentityRepository
 		Queries\FindIdentitiesQuery $queryObject,
 		string $type = Entities\Identities\Identity::class
 	): ?Entities\Identities\IIdentity;
+
+	/**
+	 * @param Queries\FindIdentitiesQuery $queryObject
+	 * @param string $type
+	 *
+	 * @return DoctrineOrmQuery\ResultSet
+	 *
+	 * @phpstan-template T of Entities\Identities\Identity
+	 * @phpstan-param    Queries\FindIdentitiesQuery<T> $queryObject
+	 * @phpstan-param    class-string<T> $type
+	 * @phpstan-return   DoctrineOrmQuery\ResultSet<T>
+	 */
+	public function getResultSet(
+		Queries\FindIdentitiesQuery $queryObject,
+		string $type = Entities\Identities\Identity::class
+	): DoctrineOrmQuery\ResultSet;
 
 }

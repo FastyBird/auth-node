@@ -21,9 +21,11 @@ use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Exceptions;
 use FastyBird\AccountsNode\Queries;
 use FastyBird\AccountsNode\Types;
+use IPub\DoctrineOrmQuery;
 use Nette;
 use Nette\Utils;
 use Ramsey\Uuid;
+use Throwable;
 
 /**
  * Account identity facade
@@ -120,6 +122,24 @@ final class IdentityRepository implements IIdentityRepository
 		$identity = $queryObject->fetchOne($this->getRepository($type));
 
 		return $identity;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws Throwable
+	 */
+	public function getResultSet(
+		Queries\FindIdentitiesQuery $queryObject,
+		string $type = Entities\Identities\Identity::class
+	): DoctrineOrmQuery\ResultSet {
+		$result = $queryObject->fetch($this->getRepository($type));
+
+		if (!$result instanceof DoctrineOrmQuery\ResultSet) {
+			throw new Exceptions\InvalidStateException('Result set for given query could not be loaded.');
+		}
+
+		return $result;
 	}
 
 	/**

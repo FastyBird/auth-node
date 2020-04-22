@@ -246,6 +246,10 @@ final class AccountV1Controller extends BaseV1Controller
 					->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getSecurityQuestion()));
 			}
 
+		} elseif ($relationEntity === Schemas\AccountSchema::RELATIONSHIPS_IDENTITIES) {
+			return $response
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getIdentities()));
+
 		} elseif ($relationEntity === Schemas\AccountSchema::RELATIONSHIPS_ROLES) {
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getRoles()));

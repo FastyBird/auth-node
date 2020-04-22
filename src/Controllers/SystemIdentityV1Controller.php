@@ -19,6 +19,8 @@ use Doctrine;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Helpers;
 use FastyBird\AccountsNode\Models;
+use FastyBird\AccountsNode\Queries;
+use FastyBird\AccountsNode\Router;
 use FastyBird\AccountsNode\Schemas;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
@@ -64,6 +66,62 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 		$this->accountsManager = $accountsManager;
 
 		$this->securityHash = $securityHash;
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeWebServerExceptions\IJsonApiException
+	 */
+	public function index(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		if ($this->user->getAccount() === null) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
+			);
+		}
+
+		$findQuery = new Queries\FindIdentitiesQuery();
+		$findQuery->forAccount($this->user->getAccount());
+
+		$identities = $this->identityRepository->getResultSet($findQuery);
+
+		return $response
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($identities));
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeWebServerExceptions\IJsonApiException
+	 */
+	public function read(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		// Find identity
+		$identity = $this->findIdentity($request->getAttribute(Router\Router::URL_ITEM_ID));
+
+		if ($identity === null) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
+			);
+		}
+
+		return $response
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($identity));
 	}
 
 	/**

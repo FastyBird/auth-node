@@ -61,18 +61,6 @@ final class SystemIdentity extends JsonApiSchema
 	}
 
 	/**
-	 * @param Entities\Identities\System $identity
-	 *
-	 * @return string|null
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 */
-	public function getId($identity): ?string
-	{
-		return null;
-	}
-
-	/**
 	 * @return string
 	 */
 	public function getType(): string

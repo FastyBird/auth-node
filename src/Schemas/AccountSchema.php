@@ -43,6 +43,7 @@ final class AccountSchema extends JsonApiSchema
 	 */
 	public const RELATIONSHIPS_EMAILS = 'emails';
 	public const RELATIONSHIPS_QUESTION = 'security-question';
+	public const RELATIONSHIPS_IDENTITIES = 'identities';
 	public const RELATIONSHIPS_ROLES = 'roles';
 
 	/** @var Routing\IRouter */
@@ -138,6 +139,11 @@ final class AccountSchema extends JsonApiSchema
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
+			self::RELATIONSHIPS_IDENTITIES => [
+				self::RELATIONSHIP_DATA          => $account->getIdentities(),
+				self::RELATIONSHIP_LINKS_SELF    => true,
+				self::RELATIONSHIP_LINKS_RELATED => true,
+			],
 			self::RELATIONSHIPS_ROLES    => [
 				self::RELATIONSHIP_DATA          => $account->getRoles(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
@@ -173,6 +179,16 @@ final class AccountSchema extends JsonApiSchema
 				false
 			);
 
+		} elseif ($name === self::RELATIONSHIPS_IDENTITIES) {
+			return new JsonApi\Schema\Link(
+				false,
+				$this->router->urlFor('account.identities'),
+				true,
+				[
+					'count' => count($account->getIdentities()),
+				]
+			);
+
 		} elseif ($name === self::RELATIONSHIPS_ROLES) {
 			return new JsonApi\Schema\Link(
 				false,
@@ -200,7 +216,8 @@ final class AccountSchema extends JsonApiSchema
 		if (
 			$name === self::RELATIONSHIPS_EMAILS
 			|| $name === self::RELATIONSHIPS_QUESTION
-			|| $name === self::RELATIONSHIPS_EMAILS
+			|| $name === self::RELATIONSHIPS_IDENTITIES
+			|| $name === self::RELATIONSHIPS_ROLES
 		) {
 			return new JsonApi\Schema\Link(
 				false,
