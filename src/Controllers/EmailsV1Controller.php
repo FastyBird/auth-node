@@ -85,7 +85,10 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
@@ -114,6 +117,17 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
+			);
+		}
+
 		// Find email
 		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
 
@@ -134,7 +148,10 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
@@ -256,6 +273,17 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
+			);
+		}
+
 		$document = $this->createDocument($request);
 
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
@@ -336,6 +364,17 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
+			);
+		}
+
 		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
 
 		if ($email->isDefault()) {
@@ -393,6 +432,17 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
+			);
+		}
+
 		// At first, try to load email
 		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
 

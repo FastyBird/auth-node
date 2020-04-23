@@ -100,7 +100,8 @@ final class EmailSchema extends JsonApiSchema
 			$this->router->urlFor(
 				'account.email',
 				[
-					Router\Router::URL_ITEM_ID => $email->getPlainId(),
+					Router\Router::URL_ITEM_ID    => $email->getPlainId(),
+					Router\Router::URL_ACCOUNT_ID => $email->getAccount()->getPlainId(),
 				]
 			),
 			false
@@ -139,7 +140,12 @@ final class EmailSchema extends JsonApiSchema
 		if ($name === self::RELATIONSHIPS_ACCOUNT) {
 			return new JsonApi\Schema\Link(
 				false,
-				$this->router->urlFor('account'),
+				$this->router->urlFor(
+					'account',
+					[
+						Router\Router::URL_ITEM_ID => $email->getAccount()->getPlainId(),
+					]
+				),
 				false
 			);
 		}
@@ -164,6 +170,7 @@ final class EmailSchema extends JsonApiSchema
 					'account.email.relationship',
 					[
 						Router\Router::URL_ITEM_ID     => $email->getPlainId(),
+						Router\Router::URL_ACCOUNT_ID  => $email->getAccount()->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,
 					]
 				),

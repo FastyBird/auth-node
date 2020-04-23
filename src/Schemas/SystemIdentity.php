@@ -99,7 +99,8 @@ final class SystemIdentity extends JsonApiSchema
 			$this->router->urlFor(
 				'account.identity',
 				[
-					Router\Router::URL_ITEM_ID => $identity->getPlainId(),
+					Router\Router::URL_ITEM_ID    => $identity->getPlainId(),
+					Router\Router::URL_ACCOUNT_ID => $identity->getAccount()->getPlainId(),
 				]
 			),
 			false
@@ -138,7 +139,12 @@ final class SystemIdentity extends JsonApiSchema
 		if ($name === self::RELATIONSHIPS_ACCOUNT) {
 			return new JsonApi\Schema\Link(
 				false,
-				$this->router->urlFor('account'),
+				$this->router->urlFor(
+					'account',
+					[
+						Router\Router::URL_ITEM_ID => $identity->getAccount()->getPlainId(),
+					]
+				),
 				false
 			);
 		}
@@ -163,6 +169,7 @@ final class SystemIdentity extends JsonApiSchema
 					'account.identity.relationship',
 					[
 						Router\Router::URL_ITEM_ID     => $identity->getPlainId(),
+						Router\Router::URL_ACCOUNT_ID  => $identity->getAccount()->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,
 					]
 				),

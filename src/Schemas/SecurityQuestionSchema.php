@@ -95,7 +95,12 @@ final class SecurityQuestionSchema extends JsonApiSchema
 	{
 		return new JsonApi\Schema\Link(
 			false,
-			$this->router->urlFor('account.security.question'),
+			$this->router->urlFor(
+				'account.security.question',
+				[
+					Router\Router::URL_ACCOUNT_ID => $question->getAccount()->getPlainId(),
+				]
+			),
 			false
 		);
 	}
@@ -132,7 +137,12 @@ final class SecurityQuestionSchema extends JsonApiSchema
 		if ($name === self::RELATIONSHIPS_ACCOUNT) {
 			return new JsonApi\Schema\Link(
 				false,
-				$this->router->urlFor('account'),
+				$this->router->urlFor(
+					'account',
+					[
+						Router\Router::URL_ITEM_ID => $question->getAccount()->getPlainId(),
+					]
+				),
 				false
 			);
 		}
@@ -156,6 +166,7 @@ final class SecurityQuestionSchema extends JsonApiSchema
 				$this->router->urlFor(
 					'account.security.question.relationship',
 					[
+						Router\Router::URL_ACCOUNT_ID  => $question->getAccount()->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,
 					]
 				),

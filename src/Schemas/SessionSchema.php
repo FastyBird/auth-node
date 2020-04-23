@@ -134,7 +134,12 @@ final class SessionSchema extends JsonApiSchema
 		if ($name === self::RELATIONSHIPS_ACCOUNT) {
 			return new JsonApi\Schema\Link(
 				false,
-				$this->router->urlFor('account'),
+				$this->router->urlFor(
+					'account',
+					[
+						Router\Router::URL_ITEM_ID => $accessToken->getIdentity()->getAccount()->getPlainId(),
+					]
+				),
 				false
 			);
 		}

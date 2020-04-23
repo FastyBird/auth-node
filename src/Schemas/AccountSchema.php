@@ -113,7 +113,12 @@ final class AccountSchema extends JsonApiSchema
 	{
 		return new JsonApi\Schema\Link(
 			false,
-			$this->router->urlFor('account'),
+			$this->router->urlFor(
+				'account',
+				[
+					Router\Router::URL_ITEM_ID => $account->getPlainId(),
+				]
+			),
 			false
 		);
 	}
@@ -129,12 +134,12 @@ final class AccountSchema extends JsonApiSchema
 	public function getRelationships($account, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		return [
-			self::RELATIONSHIPS_EMAILS   => [
+			self::RELATIONSHIPS_EMAILS     => [
 				self::RELATIONSHIP_DATA          => $account->getEmails(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
-			self::RELATIONSHIPS_QUESTION => [
+			self::RELATIONSHIPS_QUESTION   => [
 				self::RELATIONSHIP_DATA          => $account->getSecurityQuestion(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
@@ -144,7 +149,7 @@ final class AccountSchema extends JsonApiSchema
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
-			self::RELATIONSHIPS_ROLES    => [
+			self::RELATIONSHIPS_ROLES      => [
 				self::RELATIONSHIP_DATA          => $account->getRoles(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
@@ -165,7 +170,12 @@ final class AccountSchema extends JsonApiSchema
 		if ($name === self::RELATIONSHIPS_EMAILS) {
 			return new JsonApi\Schema\Link(
 				false,
-				$this->router->urlFor('account.emails'),
+				$this->router->urlFor(
+					'account.emails',
+					[
+						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
+					]
+				),
 				true,
 				[
 					'count' => count($account->getEmails()),
@@ -175,14 +185,24 @@ final class AccountSchema extends JsonApiSchema
 		} elseif ($name === self::RELATIONSHIPS_QUESTION) {
 			return new JsonApi\Schema\Link(
 				false,
-				$this->router->urlFor('account.security.question'),
+				$this->router->urlFor(
+					'account.security.question',
+					[
+						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
+					]
+				),
 				false
 			);
 
 		} elseif ($name === self::RELATIONSHIPS_IDENTITIES) {
 			return new JsonApi\Schema\Link(
 				false,
-				$this->router->urlFor('account.identities'),
+				$this->router->urlFor(
+					'account.identities',
+					[
+						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
+					]
+				),
 				true,
 				[
 					'count' => count($account->getIdentities()),
@@ -192,7 +212,12 @@ final class AccountSchema extends JsonApiSchema
 		} elseif ($name === self::RELATIONSHIPS_ROLES) {
 			return new JsonApi\Schema\Link(
 				false,
-				$this->router->urlFor('account.roles'),
+				$this->router->urlFor(
+					'account.roles',
+					[
+						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
+					]
+				),
 				true,
 				[
 					'count' => count($account->getRoles()),
@@ -224,6 +249,7 @@ final class AccountSchema extends JsonApiSchema
 				$this->router->urlFor(
 					'account.relationship',
 					[
+						Router\Router::URL_ITEM_ID     => $account->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,
 					]
 				),

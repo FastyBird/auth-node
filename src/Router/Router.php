@@ -32,6 +32,8 @@ class Router extends Routing\Router
 
 	public const URL_ITEM_ID = 'id';
 
+	public const URL_ACCOUNT_ID = 'account';
+
 	public const RELATION_ENTITY = 'relationEntity';
 
 	/** @var Controllers\SessionV1Controller */
@@ -86,6 +88,8 @@ class Router extends Routing\Router
 
 			$group->post('/password-reset', [$this->systemIdentityV1Controller, 'requestPassword']);
 
+			$group->post('/validate-email', [$this->emailsV1Controller, 'validate']);
+
 			$group->group('/session', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->sessionV1Controller, 'read']);
 				$route->setName('session');
@@ -103,16 +107,18 @@ class Router extends Routing\Router
 			});
 
 			$group->group('/account', function (Routing\RouteCollector $group): void {
-				$route = $group->get('', [$this->accountV1Controller, 'read']);
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->accountV1Controller, 'read']);
 				$route->setName('account');
 
-				$group->patch('', [$this->accountV1Controller, 'update']);
+				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->accountV1Controller, 'update']);
 
-				$group->delete('', [$this->accountV1Controller, 'delete']);
+				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->accountV1Controller, 'delete']);
 
-				$route = $group->get('/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountV1Controller, 'readRelationship']);
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountV1Controller, 'readRelationship']);
 				$route->setName('account.relationship');
+			});
 
+			$group->group('/account/{' . self::URL_ACCOUNT_ID . '}', function (Routing\RouteCollector $group): void {
 				$group->group('/emails', function (Routing\RouteCollector $group): void {
 					$route = $group->get('', [$this->emailsV1Controller, 'index']);
 					$route->setName('account.emails');
@@ -125,8 +131,6 @@ class Router extends Routing\Router
 					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'update']);
 
 					$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'delete']);
-
-					$group->post('/validate', [$this->emailsV1Controller, 'validate']);
 
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->emailsV1Controller, 'readRelationship']);
 					$route->setName('account.email.relationship');
@@ -156,6 +160,9 @@ class Router extends Routing\Router
 					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->systemIdentityV1Controller, 'update']);
 
 					$group->post('/{' . self::URL_ITEM_ID . '}/validate', [$this->systemIdentityV1Controller, 'validate']);
+
+					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->systemIdentityV1Controller, 'readRelationship']);
+					$route->setName('account.identity.relationship');
 				});
 
 				$group->group('/roles', function (Routing\RouteCollector $group): void {

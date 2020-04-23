@@ -80,7 +80,10 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
@@ -109,6 +112,17 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
+			);
+		}
+
 		// Find identity
 		$identity = $this->findIdentity($request->getAttribute(Router\Router::URL_ITEM_ID));
 
@@ -137,7 +151,10 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
@@ -417,11 +434,53 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeWebServerExceptions\IJsonApiException
 	 */
+	public function readRelationship(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
+			);
+		}
+
+		// At first, try to load identity
+		$identity = $this->findIdentity($request->getAttribute(Router\Router::URL_ITEM_ID));
+
+		// & relation entity name
+		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
+
+		if ($relationEntity === Schemas\EmailSchema::RELATIONSHIPS_ACCOUNT) {
+			return $response
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($identity->getAccount()));
+		}
+
+		$this->throwUnknownRelation($relationEntity);
+
+		return $response;
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeWebServerExceptions\IJsonApiException
+	 */
 	public function validate(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
+		if (
+			$this->user->getAccount() === null
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
