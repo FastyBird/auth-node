@@ -106,7 +106,7 @@ class Router extends Routing\Router
 				$route->setName('session.relationship');
 			});
 
-			$group->group('/account', function (Routing\RouteCollector $group): void {
+			$group->group('/accounts', function (Routing\RouteCollector $group): void {
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->accountV1Controller, 'read']);
 				$route->setName('account');
 
@@ -118,7 +118,7 @@ class Router extends Routing\Router
 				$route->setName('account.relationship');
 			});
 
-			$group->group('/account/{' . self::URL_ACCOUNT_ID . '}', function (Routing\RouteCollector $group): void {
+			$group->group('/accounts/{' . self::URL_ACCOUNT_ID . '}', function (Routing\RouteCollector $group): void {
 				$group->group('/emails', function (Routing\RouteCollector $group): void {
 					$route = $group->get('', [$this->emailsV1Controller, 'index']);
 					$route->setName('account.emails');
