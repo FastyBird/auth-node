@@ -6,7 +6,7 @@
       "token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg",
       "token_type" : "Bearer"
     },
-    "id": "00892288-a6f8-485f-9f05-d47c8890d52a",
+    "id" : "00892288-a6f8-485f-9f05-d47c8890d52a",
     "links" : {
       "self" : "/v1/session"
     },
@@ -17,7 +17,7 @@
           "type" : "accounts-node/account"
         },
         "links" : {
-          "related" : "/v1/account",
+          "related" : "/v1/account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
           "self" : "/v1/session/relationships/account"
         }
       }

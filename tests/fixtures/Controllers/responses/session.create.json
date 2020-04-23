@@ -17,7 +17,7 @@
           "type" : "accounts-node/account"
         },
         "links" : {
-          "related" : "/v1/account",
+          "related" : "/v1/account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
           "self" : "/v1/session/relationships/account"
         }
       }
