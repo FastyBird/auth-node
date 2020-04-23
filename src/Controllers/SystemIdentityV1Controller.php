@@ -452,6 +452,14 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 		// At first, try to load identity
 		$identity = $this->findIdentity($request->getAttribute(Router\Router::URL_ITEM_ID));
 
+		if ($identity === null) {
+			throw new NodeWebServerExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
+			);
+		}
+
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
