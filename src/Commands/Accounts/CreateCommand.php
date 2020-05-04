@@ -28,7 +28,6 @@ use Symfony\Component\Console\Input;
 use Symfony\Component\Console\Output;
 use Symfony\Component\Console\Style;
 use Throwable;
-use Tracy\Debugger;
 
 /**
  * Account creation command
@@ -180,7 +179,6 @@ class CreateCommand extends Console\Command\Command
 			$io->text(sprintf('<info>%s</info>', $this->translator->translate('success', ['name' => $account->getName()])));
 
 		} catch (Throwable $ex) {
-			Debugger::log($ex);
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
