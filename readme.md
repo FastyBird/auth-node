@@ -12,11 +12,11 @@
 
 Accounts node is a microservice for managing user accounts & sessions for user interface.
 
-FastyBird accounts node is an Apache2 licensed distributed MQTT exchange microservice, developed in PHP with [Nette framework](https://nette.org).
+FastyBird accounts node is an Apache2 licensed distributed user accounts storage microservice, developed in PHP with [Nette framework](https://nette.org).
 
 ## Requirements
 
-FastyBird devices node is tested against PHP 7.3 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server and [RabbitMQ](https://www.rabbitmq.com/) 3.7 message broker
+FastyBird accounts node is tested against PHP 7.3 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server and [RabbitMQ](https://www.rabbitmq.com/) 3.7 message broker
 
 ## Getting started
 
@@ -87,6 +87,8 @@ Configuration could be made via environment variables:
 | | |
 | `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
+| | |
+| `FB_NODE_PARAMETER__NODE_TOKEN_SIGNATURE=g3xHbkELpMD9LRqW4WmJkHL7kz2bdNYAQJyEuFVzR3k=` | Account access token signature string |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
 

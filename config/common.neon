@@ -134,7 +134,7 @@ services:
 	-
 		factory: FastyBird\AccountsNode\Security\TokenBuilder
 		arguments:
-			tokenSignature: 'g3xHbkELpMD9LRqW4WmJkHL7kz2bdNYAQJyEuFVzR3k='
+			tokenSignature: %node.token.signature%
 
 	# Define JWT services
 	#####################
