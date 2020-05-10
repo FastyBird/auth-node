@@ -88,9 +88,27 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 | | |
-| `FB_NODE_PARAMETER__NODE_TOKEN_SIGNATURE=g3xHbkELpMD9LRqW4WmJkHL7kz2bdNYAQJyEuFVzR3k=` | Account access token signature string |
+| `FB_NODE_PARAMETER__NODE_TOKEN_SIGNATURE=` | Account access token signature string |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
+
+## Initialization
+
+This microservice is using database, so you have to initialise basic database schema. It could be done via shell command:
+
+```sh
+$ php vendor/bin/doctrine orm:schema-tool:create
+```
+
+After schema is created, you should create first user account:
+
+```sh
+$ vendor/bin/fb-console fb:accounts-node:accounts:create
+```
+
+Console command will ask you for all required information.
+
+After this steps, microservice could be started with [server command](#http-server)
 
 ## Feedback
 
