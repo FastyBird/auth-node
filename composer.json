@@ -1,14 +1,16 @@
 {
   "name" : "fastybird/accounts-node",
   "type" : "project",
-  "description" : "FastyBird users accounts info & logic service",
+  "description" : "FastyBird IOT server Accounts node for user storage & basic logic service",
   "keywords" : [
     "fastybird",
     "fb",
     "users",
     "accounts",
     "profiles",
-    "service"
+    "service",
+    "authentication",
+    "authorization"
   ],
 
   "homepage" : "https://www.fastybird.com",
@@ -32,27 +34,27 @@
   "minimum-stability" : "dev",
 
   "require" : {
-    "php": ">=7.2.0",
-    "ext-json": "*",
-    "ext-openssl": "*",
-    "contributte/translation": "^0.6",
-    "cweagans/composer-patches": "^1.6",
-    "fastybird/node-libs": "^0.5",
-    "fastybird/node-web-server": "^0.3",
-    "ipub/doctrine-consistence": "^0.3",
-    "ipub/doctrine-crud": "^2.3",
-    "ipub/doctrine-orm-query": "^0.0.5",
-    "ipub/doctrine-timestampable": "^1.4",
-    "ipub/json-api-document": "^0.1",
-    "ipub/slim-router": "^0.1",
-    "lcobucci/jwt": "^3.3",
-    "neomerx/json-api": "^4.0",
-    "nette/security": "^3.0",
-    "nettrine/cache": "^0.1",
-    "nettrine/orm": "^0.5",
-    "phpdocumentor/reflection-docblock": "^5.1",
-    "ramsey/uuid": "^3.9",
-    "ramsey/uuid-doctrine": "^1.6"
+    "php" : ">=7.2.0",
+    "ext-json" : "*",
+    "ext-openssl" : "*",
+    "contributte/translation" : "^0.6",
+    "cweagans/composer-patches" : "^1.6",
+    "fastybird/node-libs" : "^0.5",
+    "fastybird/node-web-server" : "^0.3",
+    "ipub/doctrine-consistence" : "^0.3",
+    "ipub/doctrine-crud" : "^2.3",
+    "ipub/doctrine-orm-query" : "^0.0.5",
+    "ipub/doctrine-timestampable" : "^1.4",
+    "ipub/json-api-document" : "^0.1",
+    "ipub/slim-router" : "^0.1",
+    "lcobucci/jwt" : "^3.3",
+    "neomerx/json-api" : "^4.0",
+    "nette/security" : "^3.0",
+    "nettrine/cache" : "^0.1",
+    "nettrine/orm" : "^0.5",
+    "phpdocumentor/reflection-docblock" : "^5.1",
+    "ramsey/uuid" : "^3.9",
+    "ramsey/uuid-doctrine" : "^1.6"
   },
 
   "require-dev" : {
