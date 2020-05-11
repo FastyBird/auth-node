@@ -54,7 +54,7 @@ Docker image: [fastybird/accounts-node](https://hub.docker.com/r/fastybird/accou
 ### Use docker hub image
 
 ```bash
-$ docker run -d -it --name mqtt fastybird/accounts-node:latest
+$ docker run -d -it --name accounts fastybird/accounts-node:latest
 ```
 
 ### Generate local image
