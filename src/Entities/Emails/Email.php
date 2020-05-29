@@ -21,6 +21,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Exceptions;
 use FastyBird\AccountsNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Nette\Utils;
@@ -44,7 +45,7 @@ use Throwable;
  *     }
  * )
  */
-class Email extends Entities\Entity implements IEmail
+class Email extends NodeDatabaseEntities\Entity implements IEmail
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

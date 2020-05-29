@@ -83,7 +83,13 @@ final class SecurityHash
 	 */
 	public function isValid(string $key): bool
 	{
-		$pieces = explode(self::SEPARATOR, base64_decode($key));
+		$encoded = base64_decode($key, true);
+
+		if ($encoded === false) {
+			return false;
+		}
+
+		$pieces = explode(self::SEPARATOR, $encoded);
 
 		if (count($pieces) === 2) {
 			[, $timestamp] = $pieces;

@@ -133,7 +133,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->beginTransaction();
 
 			if ($document->getResource()->getType() === Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
-				$createData = $this->questionHydrator->hydrate($document->getResource());
+				$createData = $this->questionHydrator->hydrate($document);
 				$createData->offsetSet('account', $this->user->getAccount());
 
 				// Create new item in database
@@ -155,7 +155,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 
 		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -174,7 +174,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -272,7 +272,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->beginTransaction();
 
 			if ($document->getResource()->getType() === Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
-				$updateQuestionData = $this->questionHydrator->hydrate($document->getResource(), $question);
+				$updateQuestionData = $this->questionHydrator->hydrate($document, $question);
 
 			} else {
 				throw new NodeWebServerExceptions\JsonApiErrorException(
@@ -298,7 +298,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [

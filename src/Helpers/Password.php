@@ -165,7 +165,7 @@ final class Password
 	 */
 	public function __toString(): string
 	{
-		return (string) $this->hash;
+		return $this->hash;
 	}
 
 	/**
@@ -176,7 +176,7 @@ final class Password
 	 */
 	private function hashPassword(string $password, ?string $salt = null): string
 	{
-		return hash('sha512', $salt . self::SEPARATOR . (string) $password);
+		return hash('sha512', $salt . self::SEPARATOR . $password);
 	}
 
 }

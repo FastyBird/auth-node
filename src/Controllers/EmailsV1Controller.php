@@ -166,7 +166,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->beginTransaction();
 
 			if ($document->getResource()->getType() === Schemas\EmailSchema::SCHEMA_TYPE) {
-				$createData = $this->emailHydrator->hydrate($document->getResource());
+				$createData = $this->emailHydrator->hydrate($document);
 				$createData->offsetSet('account', $this->user->getAccount());
 				$createData->offsetSet('verificationHash', $this->securityHash->createKey());
 				$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
@@ -190,7 +190,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		} catch (Exceptions\EmailIsNotValidException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -203,7 +203,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		} catch (Exceptions\EmailAlreadyTakenException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -216,7 +216,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -235,7 +235,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -301,7 +301,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->beginTransaction();
 
 			if ($document->getResource()->getType() === Schemas\EmailSchema::SCHEMA_TYPE) {
-				$updateEmailData = $this->emailHydrator->hydrate($document->getResource(), $email);
+				$updateEmailData = $this->emailHydrator->hydrate($document, $email);
 
 				$email = $this->emailsManager->update($email, $updateEmailData);
 
@@ -327,7 +327,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -396,7 +396,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [

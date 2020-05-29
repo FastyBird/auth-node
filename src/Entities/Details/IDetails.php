@@ -16,6 +16,7 @@
 namespace FastyBird\AccountsNode\Entities\Details;
 
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -26,7 +27,7 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IDetails extends Entities\IEntity,
+interface IDetails extends NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineTimestampable\Entities\IEntityUpdated
 {

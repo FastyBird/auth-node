@@ -16,6 +16,7 @@
 namespace FastyBird\AccountsNode\Entities\Privileges;
 
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -26,7 +27,7 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IPrivilege extends Entities\IEntity,
+interface IPrivilege extends NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineTimestampable\Entities\IEntityUpdated
 {

@@ -18,6 +18,7 @@ namespace FastyBird\AccountsNode\Entities\Emails;
 use DateTimeInterface;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -28,7 +29,7 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IEmail extends Entities\IEntity,
+interface IEmail extends NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineTimestampable\Entities\IEntityUpdated
 {

@@ -17,6 +17,7 @@ namespace FastyBird\AccountsNode\Entities\Rules;
 
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -36,7 +37,7 @@ use Throwable;
  *     }
  * )
  */
-class Rule extends Entities\Entity implements IRule
+class Rule extends NodeDatabaseEntities\Entity implements IRule
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

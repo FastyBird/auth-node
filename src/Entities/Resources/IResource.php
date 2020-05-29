@@ -16,6 +16,7 @@
 namespace FastyBird\AccountsNode\Entities\Resources;
 
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 use Nette\Security as NS;
 
@@ -28,7 +29,7 @@ use Nette\Security as NS;
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 interface IResource extends NS\IResource,
-	Entities\IEntity,
+	NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineTimestampable\Entities\IEntityUpdated
 {

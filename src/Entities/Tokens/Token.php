@@ -20,8 +20,8 @@ use DateTime;
 use DateTimeInterface;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -49,10 +49,10 @@ use Throwable;
  * })
  * @ORM\MappedSuperclass
  */
-abstract class Token extends Entities\Entity implements IToken
+abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 {
 
-	use Entities\TEntityParams;
+	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 

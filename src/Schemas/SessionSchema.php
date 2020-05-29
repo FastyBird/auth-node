@@ -23,12 +23,13 @@ use Neomerx\JsonApi;
 /**
  * Session entity schema
  *
- * @package         iPublikuj:UserProfileModule!
- * @subpackage      Schemas
+ * @package            iPublikuj:UserProfileModule!
+ * @subpackage         Schemas
  *
- * @author          Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author             Adam Kadlec <adam.kadlec@ipublikuj.eu>
  *
- * @phpstan-extends JsonApiSchema<Entities\Tokens\IAccessToken>
+ * @phpstan-template   T of Entities\Tokens\IAccessToken
+ * @phpstan-extends    JsonApiSchema<T>
  */
 final class SessionSchema extends JsonApiSchema
 {
@@ -69,7 +70,7 @@ final class SessionSchema extends JsonApiSchema
 	}
 
 	/**
-	 * @param Entities\Tokens\AccessToken $accessToken
+	 * @param Entities\Tokens\IAccessToken $accessToken
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
 	 * @return iterable<string, mixed>
@@ -87,7 +88,7 @@ final class SessionSchema extends JsonApiSchema
 	}
 
 	/**
-	 * @param Entities\Tokens\AccessToken $accessToken
+	 * @param Entities\Tokens\IAccessToken $accessToken
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
 	 *
@@ -103,7 +104,7 @@ final class SessionSchema extends JsonApiSchema
 	}
 
 	/**
-	 * @param Entities\Tokens\AccessToken $accessToken
+	 * @param Entities\Tokens\IAccessToken $accessToken
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
 	 * @return iterable<string, mixed>
@@ -122,7 +123,7 @@ final class SessionSchema extends JsonApiSchema
 	}
 
 	/**
-	 * @param Entities\Tokens\AccessToken $accessToken
+	 * @param Entities\Tokens\IAccessToken $accessToken
 	 * @param string $name
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
@@ -148,7 +149,7 @@ final class SessionSchema extends JsonApiSchema
 	}
 
 	/**
-	 * @param Entities\Tokens\AccessToken $accessToken
+	 * @param Entities\Tokens\IAccessToken $accessToken
 	 * @param string $name
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface

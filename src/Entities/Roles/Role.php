@@ -18,6 +18,7 @@ namespace FastyBird\AccountsNode\Entities\Roles;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -41,7 +42,7 @@ use Throwable;
  *     }
  * )
  */
-class Role extends Entities\Entity implements IRole
+class Role extends NodeDatabaseEntities\Entity implements IRole
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

@@ -215,7 +215,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -337,7 +337,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -403,7 +403,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -545,7 +545,7 @@ final class SessionV1Controller extends BaseV1Controller
 			$identity = $this->identityRepository->findOneByEmail($uid, Entities\Identities\System::class);
 		}
 
-		return $identity ? $identity->getAccount() : null;
+		return $identity !== null ? $identity->getAccount() : null;
 	}
 
 	/**
@@ -561,7 +561,6 @@ final class SessionV1Controller extends BaseV1Controller
 
 		if (
 			$token === null
-			|| !$token instanceof Entities\Tokens\IAccessToken
 			|| !$token->isValid()
 		) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(

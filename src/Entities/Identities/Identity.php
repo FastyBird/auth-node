@@ -19,6 +19,7 @@ use Consistence\Doctrine\Enum\EnumAnnotation as Enum;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Nette\Utils;
@@ -44,7 +45,7 @@ use Throwable;
  * @ORM\DiscriminatorColumn(name="identity_type", type="string", length=15)
  * @ORM\MappedSuperclass
  */
-abstract class Identity extends Entities\Entity implements IIdentity
+abstract class Identity extends NodeDatabaseEntities\Entity implements IIdentity
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

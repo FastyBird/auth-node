@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Exceptions;
 use FastyBird\AccountsNode\Helpers;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use Throwable;
 
@@ -32,10 +33,10 @@ use Throwable;
  *
  * @ORM\Entity
  */
-class System extends Identity implements Entities\IEntityParams
+class System extends Identity implements NodeDatabaseEntities\IEntityParams
 {
 
-	use Entities\TEntityParams;
+	use NodeDatabaseEntities\TEntityParams;
 
 	/**
 	 * Identity constants

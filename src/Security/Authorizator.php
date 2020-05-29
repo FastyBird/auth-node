@@ -74,7 +74,7 @@ final class Authorizator extends NS\Permission implements NS\IAuthorizator
 			$resourceParent = $resource->getParent();
 
 			// Assign resource to application permission checker
-			$this->addResource($resource->getResourceId(), $resourceParent ? $resourceParent->getResourceId() : null);
+			$this->addResource($resource->getResourceId(), $resourceParent !== null ? $resourceParent->getResourceId() : null);
 		}
 
 		// Get all available roles
@@ -120,13 +120,13 @@ final class Authorizator extends NS\Permission implements NS\IAuthorizator
 	): void {
 		$roleParent = $role->getParent();
 
-		if ($roleParent) {
+		if ($roleParent !== null) {
 			$this->checkAndAddRole($roleParent);
 		}
 
 		// Assign role to application permission checker
 		if (!$this->hasRole($role->getRoleId())) {
-			$this->addRole($role->getRoleId(), $roleParent ? $roleParent->getRoleId() : null);
+			$this->addRole($role->getRoleId(), $roleParent !== null ? $roleParent->getRoleId() : null);
 		}
 	}
 

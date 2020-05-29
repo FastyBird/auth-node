@@ -74,7 +74,7 @@ final class TokenBuilder
 		$jwtBuilder = new JWT\Builder();
 		$jwtBuilder->issuedAt($timestamp);
 
-		if ($expirationTime) {
+		if ($expirationTime !== null) {
 			$jwtBuilder->expiresAt($expirationTime->getTimestamp());
 		}
 

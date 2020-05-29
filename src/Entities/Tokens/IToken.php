@@ -16,8 +16,8 @@
 namespace FastyBird\AccountsNode\Entities\Tokens;
 
 use DateTimeInterface;
-use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -28,8 +28,8 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IToken extends Entities\IEntity,
-	Entities\IEntityParams,
+interface IToken extends NodeDatabaseEntities\IEntity,
+	NodeDatabaseEntities\IEntityParams,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineTimestampable\Entities\IEntityUpdated
 {

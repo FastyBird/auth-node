@@ -106,21 +106,21 @@ class CreateCommand extends Console\Command\Command
 
 		$io->title('FB accounts node - create account');
 
-		if ($input->hasOption('lastName') && $input->getOption('lastName')) {
+		if ($input->hasOption('lastName') && $input->getOption('lastName') !== '') {
 			$lastName = $input->getOption('lastName');
 
 		} else {
 			$lastName = $io->ask($this->translator->translate('inputs.lastName.title'));
 		}
 
-		if ($input->hasOption('firstName') && $input->getOption('firstName')) {
+		if ($input->hasOption('firstName') && $input->getOption('firstName') !== '') {
 			$firstName = $input->getOption('firstName');
 
 		} else {
 			$firstName = $io->ask($this->translator->translate('inputs.firstName.title'));
 		}
 
-		if ($input->hasOption('email') && $input->getOption('email')) {
+		if ($input->hasOption('email') && $input->getOption('email') !== '') {
 			$emailAddress = $input->getOption('email');
 
 		} else {

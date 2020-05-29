@@ -16,6 +16,7 @@
 namespace FastyBird\AccountsNode\Hydrators;
 
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Hydrators as NodeDatabaseHydrators;
 use IPub\JsonAPIDocument;
 
 /**
@@ -26,7 +27,7 @@ use IPub\JsonAPIDocument;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class SecurityQuestionHydrator extends Hydrator
+final class SecurityQuestionHydrator extends NodeDatabaseHydrators\Hydrator
 {
 
 	/** @var string */

@@ -87,7 +87,7 @@ class CreateCommand extends Console\Command\Command
 
 		$io->title('FB accounts node - create role');
 
-		if ($input->hasOption('key') && $input->getOption('key')) {
+		if ($input->hasOption('key') && $input->getOption('key') !== '') {
 			$keyName = $input->getOption('key');
 
 		} else {
@@ -107,7 +107,7 @@ class CreateCommand extends Console\Command\Command
 
 		} while ($repeat);
 
-		if ($input->hasOption('name') && $input->getOption('name')) {
+		if ($input->hasOption('name') && $input->getOption('name') !== '') {
 			$name = $input->getOption('name');
 
 		} else {
@@ -118,7 +118,7 @@ class CreateCommand extends Console\Command\Command
 			$create = new Utils\ArrayHash();
 			$create->keyName = $keyName;
 			$create->name = $name;
-			$create->priority = $input->getArgument('priority') ?: 0;
+			$create->priority = $input->getArgument('priority') !== '' ? $input->getArgument('priority') : 0;
 
 			$role = $this->rolesManager->create($create);
 

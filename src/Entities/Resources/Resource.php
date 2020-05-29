@@ -18,6 +18,7 @@ namespace FastyBird\AccountsNode\Entities\Resources;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -37,7 +38,7 @@ use Throwable;
  *     }
  * )
  */
-class Resource extends Entities\Entity implements IResource
+class Resource extends NodeDatabaseEntities\Entity implements IResource
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

@@ -142,7 +142,7 @@ final class AccountV1Controller extends BaseV1Controller
 			if ($document->getResource()->getType() === Schemas\AccountSchema::SCHEMA_TYPE) {
 				$account = $this->accountsManager->update(
 					$this->user->getAccount(),
-					$this->accountHydrator->hydrate($document->getResource(), $this->user->getAccount())
+					$this->accountHydrator->hydrate($document, $this->user->getAccount())
 				);
 
 			} else {
@@ -167,7 +167,7 @@ final class AccountV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollback();
+			$this->getOrmConnection()->rollBack();
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [

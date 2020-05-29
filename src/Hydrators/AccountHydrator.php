@@ -16,6 +16,7 @@
 namespace FastyBird\AccountsNode\Hydrators;
 
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Hydrators as NodeDatabaseHydrators;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
@@ -29,7 +30,7 @@ use Nette\Utils;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class AccountHydrator extends Hydrator
+final class AccountHydrator extends NodeDatabaseHydrators\Hydrator
 {
 
 	/** @var string */

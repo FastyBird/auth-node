@@ -21,6 +21,7 @@ use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -40,10 +41,10 @@ use Throwable;
  *     }
  * )
  */
-class Account extends Entities\Entity implements IAccount
+class Account extends NodeDatabaseEntities\Entity implements IAccount
 {
 
-	use Entities\TEntityParams;
+	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 
@@ -425,7 +426,7 @@ class Account extends Entities\Entity implements IAccount
 				})
 				->first();
 
-			return $email ?: null;
+			return $email !== false ? $email : null;
 		}
 
 		return null;
@@ -508,7 +509,7 @@ class Account extends Entities\Entity implements IAccount
 				})
 				->first();
 
-			return $role !== null;
+			return $role !== false;
 		}
 
 		return false;

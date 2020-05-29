@@ -16,7 +16,6 @@
 namespace FastyBird\AccountsNode\Middleware;
 
 use Contributte\Translation;
-use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Security;
 use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
 use Fig\Http\Message\StatusCodeInterface;
@@ -76,7 +75,6 @@ final class AccountMiddleware implements MiddlewareInterface
 
 			if (
 				$token === null
-				|| !$token instanceof Entities\Tokens\IAccessToken
 				|| !$token->isValid()
 			) {
 				throw new NodeWebServerExceptions\JsonApiErrorException(

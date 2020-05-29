@@ -17,6 +17,7 @@ namespace FastyBird\AccountsNode\Entities\Privileges;
 
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AccountsNode\Entities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -36,7 +37,7 @@ use Throwable;
  *     }
  * )
  */
-class Privilege extends Entities\Entity implements IPrivilege
+class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 {
 
 	use DoctrineTimestampable\Entities\TEntityCreated;

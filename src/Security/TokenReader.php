@@ -55,7 +55,7 @@ final class TokenReader
 		$headerJWT = $request->hasHeader(self::TOKEN_HEADER_NAME) ? $request->getHeader(self::TOKEN_HEADER_NAME) : null;
 		$headerJWT = is_array($headerJWT) ? reset($headerJWT) : $headerJWT;
 
-		if (is_string($headerJWT) && preg_match(self::TOKEN_HEADER_REGEXP, $headerJWT, $matches)) {
+		if (is_string($headerJWT) && preg_match(self::TOKEN_HEADER_REGEXP, $headerJWT, $matches) !== false) {
 			/** @var Entities\Tokens\IAccessToken|null $token */
 			$token = $this->tokenRepository->findOneByToken($matches[1], Entities\Tokens\AccessToken::class);
 

@@ -62,7 +62,7 @@ class User extends NS\User
 		if ($this->isLoggedIn()) {
 			$account = $this->getAccount();
 
-			return $account ? $account->getName() : 'Registered';
+			return $account !== null ? $account->getName() : 'Registered';
 		}
 
 		return 'Guest';
@@ -81,7 +81,7 @@ class User extends NS\User
 
 		$account = $this->getAccount();
 
-		if ($account) {
+		if ($account !== null) {
 			return $account->getRoles();
 		}
 
@@ -89,8 +89,8 @@ class User extends NS\User
 	}
 
 	/**
-	 * @param string $resource
-	 * @param string $privilege
+	 * @param mixed $resource
+	 * @param mixed $privilege
 	 *
 	 * @return bool
 	 *

@@ -16,7 +16,7 @@ FastyBird accounts node is an Apache2 licensed distributed user accounts storage
 
 ## Requirements
 
-FastyBird accounts node is tested against PHP 7.3 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server and [RabbitMQ](https://www.rabbitmq.com/) 3.7 message broker
+FastyBird accounts node is tested against PHP 7.3 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server
 
 ## Getting started
 
@@ -72,12 +72,6 @@ Configuration could be made via environment variables:
 
 | Environment Variable | Description |
 | ---------------------- | ---------------------------- |
-| `FB_NODE_PARAMETER__RABBITMQ_HOST=127.0.0.1` | RabbitMQ host address |
-| `FB_NODE_PARAMETER__RABBITMQ_PORT=5672` | RabbitMQ access port |
-| `FB_NODE_PARAMETER__RABBITMQ_VHOST=/` | RabbitMQ vhost |
-| `FB_NODE_PARAMETER__RABBITMQ_USERNAME=guest` | Username |
-| `FB_NODE_PARAMETER__RABBITMQ_PASSWORD=guest` | Password |
-| | |
 | `FB_NODE_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
 | `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
 | `FB_NODE_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
