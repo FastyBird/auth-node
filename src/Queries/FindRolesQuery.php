@@ -82,16 +82,6 @@ class FindRolesQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
-	 * @param string $order
-	 */
-	public function sortByPriority(string $order = 'ASC'): void
-	{
-		$this->filter[] = function (ORM\QueryBuilder $qb) use ($order): void {
-			$qb->addOrderBy('r.priority', $order);
-		};
-	}
-
-	/**
 	 * @param ORM\EntityRepository<Entities\Roles\Role> $repository
 	 *
 	 * @return ORM\QueryBuilder
