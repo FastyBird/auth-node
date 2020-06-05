@@ -67,14 +67,13 @@
         }
       },
       "roles" : {
-        "data" : [ ],
+        "data" : [
+          {
+            "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef",
+            "type" : "accounts-node/role"
+          }
+        ],
         "links" : {
-          "related" : {
-            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/roles",
-            "meta" : {
-              "count" : 0
-            }
-          },
           "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/roles"
         }
       },

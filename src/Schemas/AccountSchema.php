@@ -152,7 +152,7 @@ final class AccountSchema extends JsonApiSchema
 			self::RELATIONSHIPS_ROLES      => [
 				self::RELATIONSHIP_DATA          => $account->getRoles(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
+				self::RELATIONSHIP_LINKS_RELATED => false,
 			],
 		];
 	}

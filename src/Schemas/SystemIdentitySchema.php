@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * SessionSchema.php
+ * SystemIdentitySchema.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -30,7 +30,7 @@ use Neomerx\JsonApi;
  *
  * @phpstan-extends JsonApiSchema<Entities\Identities\System>
  */
-final class SystemIdentity extends JsonApiSchema
+final class SystemIdentitySchema extends JsonApiSchema
 {
 
 	/**

@@ -1,0 +1,13 @@
+{
+  "errors" : [
+    {
+      "code" : "400",
+      "detail" : "Request resource identifier is invalid",
+      "status" : "400",
+      "title" : "Bad request"
+    }
+  ],
+  "jsonapi" : {
+    "version" : "1.1"
+  }
+}

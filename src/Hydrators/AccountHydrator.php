@@ -47,7 +47,7 @@ final class AccountHydrator extends NodeDatabaseHydrators\Hydrator
 	];
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	protected function getEntityName(): string
 	{

@@ -81,7 +81,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 * @var Entities\Resources\IResource|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="Resource", inversedBy="children")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Resources\Resource", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="resource_id", nullable=true, onDelete="set null")
 	 */
 	protected $parent = null;
@@ -89,7 +89,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	/**
 	 * @var Common\Collections\Collection<int, IResource>
 	 *
-	 * @ORM\OneToMany(targetEntity="Resource", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Resources\Resource", mappedBy="parent")
 	 */
 	protected $children;
 

@@ -1,0 +1,19 @@
+{
+  "data" : {
+    "id" : "86f623df-276a-46c0-adbe-fb9ac8ddeb02",
+    "type" : "accounts-node/invalid",
+    "attributes" : {
+      "key_name" : "custom_role",
+      "name" : "Custom role",
+      "priority" : 10
+    },
+    "relationships" : {
+      "parent" : {
+        "data" : {
+          "id" : "efbfbd04-0158-efbf-bdef-bfbd4defbfbd",
+          "type" : "accounts-node/role"
+        }
+      }
+    }
+  }
+}

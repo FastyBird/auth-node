@@ -42,6 +42,18 @@ class FindRolesQuery extends DoctrineOrmQuery\QueryObject
 	private $select = [];
 
 	/**
+	 * @param Uuid\UuidInterface $id
+	 *
+	 * @return void
+	 */
+	public function byId(Uuid\UuidInterface $id): void
+	{
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($id): void {
+			$qb->andWhere('r.id = :id')->setParameter('id', $id->getBytes());
+		};
+	}
+
+	/**
 	 * @param string $keyName
 	 *
 	 * @return void
@@ -58,7 +70,7 @@ class FindRolesQuery extends DoctrineOrmQuery\QueryObject
 	 *
 	 * @return void
 	 */
-	public function byParent(Entities\Roles\IRole $role): void
+	public function forParent(Entities\Roles\IRole $role): void
 	{
 		$this->select[] = function (ORM\QueryBuilder $qb): void {
 			$qb->join('r.parent', 'parent');

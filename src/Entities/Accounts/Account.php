@@ -61,7 +61,7 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 	 * @var IAccount|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="Account", inversedBy="children")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Accounts\Account", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="account_id", nullable=true, onDelete="set null")
 	 */
 	private $parent;
@@ -70,7 +70,7 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 	 * @var Common\Collections\Collection<int, IAccount>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="Account", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Accounts\Account", mappedBy="parent")
 	 */
 	private $children;
 

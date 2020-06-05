@@ -43,7 +43,7 @@ final class EmailHydrator extends NodeDatabaseHydrators\Hydrator
 	];
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	protected function getEntityName(): string
 	{

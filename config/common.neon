@@ -37,6 +37,7 @@ extensions:
 	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
 	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
 	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
+	nodeDatabase				: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
 
 ##################################
 # Nette extensions configuration #
@@ -113,14 +114,6 @@ nettrineOrmAnnotations:
 # Node services definitions #
 #############################
 
-decorator:
-	FastyBird\NodeWebServer\Commands\HttpServerCommand:
-		setup:
-			- '$onServerStart[]' = @FastyBird\AccountsNode\Events\ServerStartHandler
-			- '$onRequest[]' = @FastyBird\AccountsNode\Events\RequestHandler
-			- '$onResponse[]' = @FastyBird\AccountsNode\Events\ResponseHandler
-			- '$onAfterConsumeMessage[]' = @FastyBird\AccountsNode\Events\AfterConsumeHandler
-
 services:
 	# Security
 	##########
@@ -154,27 +147,12 @@ services:
 	# Http router
 	#############
 
-	- {factory: FastyBird\AccountsNode\Middleware\JsonApiMiddleware, tags: [middleware: {priority: 10}]}
-
 	- {factory: FastyBird\AccountsNode\Middleware\AccountMiddleware, tags: [middleware: {priority: 15}]}
-
-	- {factory: FastyBird\AccountsNode\Middleware\DbErrorMiddleware, tags: [middleware: {priority: 50}]}
 
 	-
 		factory: FastyBird\AccountsNode\Router\Router
 		setup:
 			- registerRoutes
-
-	# Node events
-	#############
-
-	- {factory: FastyBird\AccountsNode\Events\ServerStartHandler}
-
-	- {factory: FastyBird\AccountsNode\Events\RequestHandler}
-
-	- {factory: FastyBird\AccountsNode\Events\ResponseHandler}
-
-	- {factory: FastyBird\AccountsNode\Events\AfterConsumeHandler}
 
 	# Console commands
 	##################
@@ -239,6 +217,8 @@ services:
 
 	- {factory: FastyBird\AccountsNode\Controllers\RolesV1Controller, tags: [nette.inject]}
 
+	- {factory: FastyBird\AccountsNode\Controllers\RoleChildrenV1Controller, tags: [nette.inject]}
+
 	- {factory: FastyBird\AccountsNode\Controllers\AuthenticateV1Controller, tags: [nette.inject]}
 
 	# API schemas
@@ -252,7 +232,9 @@ services:
 
 	- {factory: FastyBird\AccountsNode\Schemas\SessionSchema}
 
-	- {factory: FastyBird\AccountsNode\Schemas\SystemIdentity}
+	- {factory: FastyBird\AccountsNode\Schemas\SystemIdentitySchema}
+
+	- {factory: FastyBird\AccountsNode\Schemas\Roles\RoleSchema}
 
 	# API hydrators
 	###############
@@ -262,3 +244,5 @@ services:
 	- {factory: FastyBird\AccountsNode\Hydrators\EmailHydrator}
 
 	- {factory: FastyBird\AccountsNode\Hydrators\SecurityQuestionHydrator}
+
+	- {factory: FastyBird\AccountsNode\Hydrators\Roles\RoleHydrator}

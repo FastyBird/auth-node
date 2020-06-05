@@ -42,6 +42,12 @@ base:
 		forbidden:
 			heading	: "Not allowed"
 			message	: "You are not allowed to perform this action"
+		roleNotFound:
+			heading	: "Role not found"
+			message	: "Requested role was not found"
+		uniqueConstraint:
+			heading	: "Attribute not unique"
+			message	: "Provided attribute is not unique"
 
 session:
 	messages:
@@ -150,3 +156,21 @@ systemIdentity:
 		requestNotSent:
 			heading	: "System error"
 			message	: "Something went wrong, password reset request could not be processed"
+
+roles:
+	messages:
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided role entity type is not valid"
+		notCreated:
+			heading	: "System error"
+			message	: "Something went wrong, role could not be created"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, role could not be updated"
+		notDeleted:
+			heading	: "System error"
+			message	: "Something went wrong, role could not be deleted"
+		systemNotDeletable:
+			heading	: "Role is system"
+			message	: "System role could not be deleted"

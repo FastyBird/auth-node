@@ -69,7 +69,7 @@ abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 	 * @var IToken|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="Token", inversedBy="children")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Tokens\Token", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="token_id", nullable=true, onDelete="set null")
 	 */
 	protected $parent;
@@ -78,7 +78,7 @@ abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 	 * @var Common\Collections\Collection<int, IToken>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="Token", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Tokens\Token", mappedBy="parent")
 	 */
 	protected $children;
 

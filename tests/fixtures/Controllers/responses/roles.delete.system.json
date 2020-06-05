@@ -1,0 +1,13 @@
+{
+  "errors" : [
+    {
+      "code" : "422",
+      "detail" : "System role could not be deleted",
+      "status" : "422",
+      "title" : "Role is system"
+    }
+  ],
+  "jsonapi" : {
+    "version" : "1.1"
+  }
+}

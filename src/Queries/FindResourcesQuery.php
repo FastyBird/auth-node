@@ -58,7 +58,7 @@ class FindResourcesQuery extends DoctrineOrmQuery\QueryObject
 	 *
 	 * @return void
 	 */
-	public function byParent(Entities\Resources\IResource $resource): void
+	public function forParent(Entities\Resources\IResource $resource): void
 	{
 		$this->select[] = function (ORM\QueryBuilder $qb): void {
 			$qb->join('r.parent', 'parent');

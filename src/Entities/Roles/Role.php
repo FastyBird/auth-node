@@ -68,7 +68,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="role_name", length=100, nullable=false)
 	 */
 	private $name;
@@ -85,7 +85,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 * @var IRole|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="Role", inversedBy="children")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Roles\Role", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="role_id", nullable=true, onDelete="set null")
 	 */
 	private $parent;
@@ -93,7 +93,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	/**
 	 * @var Common\Collections\Collection<int, IRole>
 	 *
-	 * @ORM\OneToMany(targetEntity="Role", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Roles\Role", mappedBy="parent")
 	 */
 	private $children;
 
@@ -101,7 +101,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 * @var int
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="integer", name="priority", length=15, nullable=false, options={"default" = 0})
+	 * @ORM\Column(type="integer", name="role_priority", length=15, nullable=false, options={"default" = 0})
 	 */
 	private $priority = 0;
 
@@ -116,14 +116,16 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	/**
 	 * @param string $keyName
 	 * @param string $name
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
-	public function __construct(string $keyName, string $name)
-	{
-		$id = Uuid\Uuid::uuid4();
-
-		$this->id = $id;
+	public function __construct(
+		string $keyName,
+		string $name,
+		?Uuid\UuidInterface $id = null
+	) {
+		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->keyName = $keyName;
 		$this->name = $name;

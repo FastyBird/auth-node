@@ -228,7 +228,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\SystemIdentity::SCHEMA_TYPE) {
+			if ($document->getResource()->getType() === Schemas\SystemIdentitySchema::SCHEMA_TYPE) {
 				$update = new Utils\ArrayHash();
 				$update->offsetSet('password', (string) $attributes->get('password')->get('new'));
 
@@ -309,7 +309,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 			);
 		}
 
-		if ($document->getResource()->getType() !== Schemas\SystemIdentity::SCHEMA_TYPE) {
+		if ($document->getResource()->getType() !== Schemas\SystemIdentitySchema::SCHEMA_TYPE) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidType.heading'),
@@ -519,7 +519,7 @@ final class SystemIdentityV1Controller extends BaseV1Controller
 
 		$attributes = $document->getResource()->getAttributes();
 
-		if ($document->getResource()->getType() !== Schemas\SystemIdentity::SCHEMA_TYPE) {
+		if ($document->getResource()->getType() !== Schemas\SystemIdentitySchema::SCHEMA_TYPE) {
 			throw new NodeWebServerExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidType.heading'),

@@ -1,0 +1,19 @@
+{
+  "data" : {
+    "id" : "86f623df-276a-46c0-adbe-fb9ac8ddeb02",
+    "type" : "accounts-node/role",
+    "attributes" : {
+      "key_name" : "administrator",
+      "name" : "Administrator",
+      "priority" : 10
+    },
+    "relationships" : {
+      "parent" : {
+        "data" : {
+          "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
+          "type" : "accounts-node/role"
+        }
+      }
+    }
+  }
+}

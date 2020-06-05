@@ -16,6 +16,7 @@
 namespace FastyBird\AccountsNode\Models\Roles;
 
 use FastyBird\AccountsNode\Entities;
+use FastyBird\AccountsNode\Exceptions;
 use FastyBird\AccountsNode\Models;
 use IPub\DoctrineCrud\Crud;
 use Nette;
@@ -75,6 +76,10 @@ class RolesManager implements IRolesManager
 	public function delete(
 		Entities\Roles\IRole $entity
 	): bool {
+		if ($entity->isLocked()) {
+			throw new Exceptions\InvalidStateException('System role can\'t be deleted');
+		}
+
 		// Delete entity from database
 		return $this->entityCrud->getEntityDeleter()->delete($entity);
 	}

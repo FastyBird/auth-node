@@ -1,0 +1,62 @@
+{
+  "data" : {
+    "attributes" : {
+      "administrator" : false,
+      "anonymous" : false,
+      "authenticated" : true,
+      "comment" : null,
+      "key_name" : "authenticated",
+      "locked" : true,
+      "name" : "Authenticated",
+      "priority" : 1
+    },
+    "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
+    "links" : {
+      "self" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61"
+    },
+    "relationships" : {
+      "children" : {
+        "data" : [
+          {
+            "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef",
+            "type" : "accounts-node/role"
+          },
+          {
+            "id" : "89f4a14f-7f78-4216-99b8-584ab9229f1c",
+            "type" : "accounts-node/role"
+          }
+        ],
+        "links" : {
+          "related" : {
+            "href" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/children",
+            "meta" : {
+              "count" : 2
+            }
+          },
+          "self" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/relationships/children"
+        }
+      },
+      "parent" : {
+        "data" : {
+          "id" : "efbfbd04-0158-efbf-bdef-bfbd4defbfbd",
+          "type" : "accounts-node/role"
+        },
+        "links" : {
+          "related" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
+          "self" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/relationships/parent"
+        }
+      }
+    },
+    "type" : "accounts-node/role"
+  },
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "self" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  }
+}

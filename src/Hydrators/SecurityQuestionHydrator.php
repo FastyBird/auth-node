@@ -41,7 +41,7 @@ final class SecurityQuestionHydrator extends NodeDatabaseHydrators\Hydrator
 	];
 
 	/**
-	 * {@inheritdoc}
+	 * {@inheritDoc}
 	 */
 	protected function getEntityName(): string
 	{

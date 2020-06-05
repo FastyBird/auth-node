@@ -18,6 +18,7 @@ namespace FastyBird\AccountsNode\Models\Roles;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Queries;
+use IPub\DoctrineOrmQuery;
 
 /**
  * ACL role repository interface
@@ -51,5 +52,26 @@ interface IRoleRepository
 	 * @return Entities\Roles\IRole[]
 	 */
 	public function findAll(): array;
+
+	/**
+	 * @param Queries\FindRolesQuery $queryObject
+	 *
+	 * @return Entities\Roles\IRole[]
+	 *
+	 * @phpstan-template T of Entities\Roles\Role
+	 * @phpstan-param    Queries\FindRolesQuery<T> $queryObject
+	 */
+	public function findAllBy(Queries\FindRolesQuery $queryObject): array;
+
+	/**
+	 * @param Queries\FindRolesQuery $queryObject
+	 *
+	 * @return DoctrineOrmQuery\ResultSet
+	 *
+	 * @phpstan-template T of Entities\Roles\Role
+	 * @phpstan-param    Queries\FindRolesQuery<T> $queryObject
+	 * @phpstan-return   DoctrineOrmQuery\ResultSet<T>
+	 */
+	public function getResultSet(Queries\FindRolesQuery $queryObject): DoctrineOrmQuery\ResultSet;
 
 }

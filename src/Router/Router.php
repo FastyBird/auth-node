@@ -54,6 +54,9 @@ class Router extends Routing\Router
 	/** @var Controllers\RolesV1Controller */
 	private $rolesV1Controller;
 
+	/** @var Controllers\RoleChildrenV1Controller */
+	private $roleChildrenV1Controller;
+
 	/** @var Controllers\AuthenticateV1Controller */
 	private $authenticateV1Controller;
 
@@ -64,6 +67,7 @@ class Router extends Routing\Router
 		Controllers\SecurityQuestionV1Controller $securityQuestionV1Controller,
 		Controllers\SystemIdentityV1Controller $systemIdentityV1Controller,
 		Controllers\RolesV1Controller $rolesV1Controller,
+		Controllers\RoleChildrenV1Controller $roleChildrenV1Controller,
 		Controllers\AuthenticateV1Controller $authenticateV1Controller,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
@@ -75,6 +79,7 @@ class Router extends Routing\Router
 		$this->securityQuestionV1Controller = $securityQuestionV1Controller;
 		$this->systemIdentityV1Controller = $systemIdentityV1Controller;
 		$this->rolesV1Controller = $rolesV1Controller;
+		$this->roleChildrenV1Controller = $roleChildrenV1Controller;
 		$this->authenticateV1Controller = $authenticateV1Controller;
 	}
 
@@ -164,17 +169,29 @@ class Router extends Routing\Router
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->systemIdentityV1Controller, 'readRelationship']);
 					$route->setName('account.identity.relationship');
 				});
+			});
 
-				$group->group('/roles', function (Routing\RouteCollector $group): void {
-					$route = $group->get('', [$this->rolesV1Controller, 'index']);
-					$route->setName('account.roles');
+			$group->group('/roles', function (Routing\RouteCollector $group): void {
+				/**
+				 * CHILDREN
+				 */
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/children', [$this->roleChildrenV1Controller, 'index']);
+				$route->setName('role.children');
 
-					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->rolesV1Controller, 'read']);
-					$route->setName('account.role');
+				$route = $group->get('', [$this->rolesV1Controller, 'index']);
+				$route->setName('roles');
 
-					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rolesV1Controller, 'readRelationship']);
-					$route->setName('account.roles.relationship');
-				});
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->rolesV1Controller, 'read']);
+				$route->setName('role');
+
+				$group->post('', [$this->rolesV1Controller, 'create']);
+
+				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->rolesV1Controller, 'update']);
+
+				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->rolesV1Controller, 'delete']);
+
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rolesV1Controller, 'readRelationship']);
+				$route->setName('role.relationship');
 			});
 
 			$group->group('/authenticate', function (Routing\RouteCollector $group): void {
