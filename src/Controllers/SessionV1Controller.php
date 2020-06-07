@@ -24,7 +24,7 @@ use FastyBird\AccountsNode\Router;
 use FastyBird\AccountsNode\Schemas;
 use FastyBird\AccountsNode\Security;
 use FastyBird\AccountsNode\Types;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Utils;
@@ -76,7 +76,7 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -94,7 +94,7 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function create(
@@ -106,7 +106,7 @@ final class SessionV1Controller extends BaseV1Controller
 		$attributes = $document->getResource()->getAttributes();
 
 		if (!$attributes->has('uid')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -117,7 +117,7 @@ final class SessionV1Controller extends BaseV1Controller
 		}
 
 		if (!$attributes->has('password')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -134,14 +134,14 @@ final class SessionV1Controller extends BaseV1Controller
 		} catch (Throwable $ex) {
 			if ($ex instanceof Exceptions\AccountNotFoundException) {
 				if ($ex->getCode() === Security\Authenticator::IDENTITY_EMAIL_NOT_FOUND) {
-					throw new NodeWebServerExceptions\JsonApiErrorException(
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 						$this->translator->translate('messages.unknownAccount.heading'),
 						$this->translator->translate('messages.unknownAccount.message')
 					);
 				}
 
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.unknownAccount.heading'),
 					$this->translator->translate('messages.unknownAccount.message')
@@ -150,21 +150,21 @@ final class SessionV1Controller extends BaseV1Controller
 			} elseif ($ex instanceof Exceptions\AuthenticationFailedException) {
 				switch ($ex->getCode()) {
 					case Security\Authenticator::ACCOUNT_PROFILE_BLOCKED:
-						throw new NodeWebServerExceptions\JsonApiErrorException(
+						throw new NodeJsonApiExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_FORBIDDEN,
 							$this->translator->translate('messages.accountBlocked.heading'),
 							$this->translator->translate('messages.accountBlocked.message')
 						);
 
 					case Security\Authenticator::ACCOUNT_PROFILE_DELETED:
-						throw new NodeWebServerExceptions\JsonApiErrorException(
+						throw new NodeJsonApiExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_FORBIDDEN,
 							$this->translator->translate('messages.accountDeleted.heading'),
 							$this->translator->translate('messages.accountDeleted.message')
 						);
 
 					default:
-						throw new NodeWebServerExceptions\JsonApiErrorException(
+						throw new NodeJsonApiExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 							$this->translator->translate('messages.unknownAccount.heading'),
 							$this->translator->translate('messages.unknownAccount.message')
@@ -180,7 +180,7 @@ final class SessionV1Controller extends BaseV1Controller
 					],
 				]);
 
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.notCreated.heading'),
 					$this->translator->translate('messages.notCreated.message')
@@ -225,7 +225,7 @@ final class SessionV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notCreated.heading'),
 				$this->translator->translate('messages.notCreated.message'),
@@ -249,7 +249,7 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function update(
@@ -261,7 +261,7 @@ final class SessionV1Controller extends BaseV1Controller
 		$attributes = $document->getResource()->getAttributes();
 
 		if (!$attributes->has('refresh')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -275,7 +275,7 @@ final class SessionV1Controller extends BaseV1Controller
 		$refreshToken = $this->tokenRepository->findOneByToken((string) $attributes->get('refresh'), Entities\Tokens\RefreshToken::class);
 
 		if ($refreshToken === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.invalidRefreshToken.heading'),
 				$this->translator->translate('messages.invalidRefreshToken.message')
@@ -289,7 +289,7 @@ final class SessionV1Controller extends BaseV1Controller
 			// Remove expired tokens
 			$this->tokensManager->delete($refreshToken->getAccessToken());
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.refreshTokenExpired.heading'),
 				$this->translator->translate('messages.refreshTokenExpired.message')
@@ -329,7 +329,7 @@ final class SessionV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
@@ -347,7 +347,7 @@ final class SessionV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.refreshingTokenFailed.heading'),
 				$this->translator->translate('messages.refreshingTokenFailed.message'),
@@ -371,7 +371,7 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function delete(
@@ -395,7 +395,7 @@ final class SessionV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
@@ -413,7 +413,7 @@ final class SessionV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.destroyingSessionFailed.heading'),
 				$this->translator->translate('messages.destroyingSessionFailed.message'),
@@ -436,14 +436,14 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		if ($this->user->getAccount() === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -468,7 +468,7 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function validate(
 		Message\ServerRequestInterface $request,
@@ -479,7 +479,7 @@ final class SessionV1Controller extends BaseV1Controller
 		$attributes = $document->getResource()->getAttributes();
 
 		if (!$attributes->has('uid')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -492,7 +492,7 @@ final class SessionV1Controller extends BaseV1Controller
 		$account = $this->findIdentityAccount((string) $attributes->get('uid'));
 
 		if ($account === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.unknownAccount.heading'),
 				$this->translator->translate('messages.unknownAccount.message'),
@@ -502,7 +502,7 @@ final class SessionV1Controller extends BaseV1Controller
 			);
 
 		} elseif ($account->isDeleted()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.unknownAccount.heading'),
 				$this->translator->translate('messages.unknownAccount.message'),
@@ -553,7 +553,7 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @return Entities\Tokens\IAccessToken
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	private function getToken(Message\ServerRequestInterface $request): Entities\Tokens\IAccessToken
 	{
@@ -563,7 +563,7 @@ final class SessionV1Controller extends BaseV1Controller
 			$token === null
 			|| !$token->isValid()
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -577,7 +577,7 @@ final class SessionV1Controller extends BaseV1Controller
 			return $token;
 		}
 
-		throw new NodeWebServerExceptions\JsonApiErrorException(
+		throw new NodeJsonApiExceptions\JsonApiErrorException(
 			StatusCodeInterface::STATUS_FORBIDDEN,
 			$this->translator->translate('//node.base.messages.forbidden.heading'),
 			$this->translator->translate('//node.base.messages.forbidden.message')

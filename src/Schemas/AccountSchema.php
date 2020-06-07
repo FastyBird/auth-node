@@ -17,6 +17,7 @@ namespace FastyBird\AccountsNode\Schemas;
 
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Router;
+use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
 use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
 
@@ -28,9 +29,9 @@ use Neomerx\JsonApi;
  *
  * @author          Adam Kadlec <adam.kadlec@ipublikuj.eu>
  *
- * @phpstan-extends JsonApiSchema<Entities\Accounts\IAccount>
+ * @phpstan-extends NodeJsonApiSchemas\JsonApiSchema<Entities\Accounts\IAccount>
  */
-final class AccountSchema extends JsonApiSchema
+final class AccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 {
 
 	/**

@@ -19,7 +19,7 @@ use FastyBird\AccountsNode\Controllers;
 use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Queries;
 use FastyBird\AccountsNode\Router;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Psr\Http\Message;
 
@@ -54,7 +54,7 @@ final class RoleChildrenV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,

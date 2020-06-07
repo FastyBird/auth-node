@@ -17,7 +17,7 @@ namespace FastyBird\AccountsNode\Middleware;
 
 use Contributte\Translation;
 use FastyBird\AccountsNode\Security;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Security as NS;
 use Psr\Http\Message\ResponseInterface;
@@ -63,7 +63,7 @@ final class AccountMiddleware implements MiddlewareInterface
 	 *
 	 * @return ResponseInterface
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Translation\Exceptions\InvalidArgument
 	 * @throws NS\AuthenticationException
 	 */
@@ -77,7 +77,7 @@ final class AccountMiddleware implements MiddlewareInterface
 				$token === null
 				|| !$token->isValid()
 			) {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNAUTHORIZED,
 					$this->translator->translate('//node.base.messages.notAuthorized.heading'),
 					$this->translator->translate('//node.base.messages.notAuthorized.message')

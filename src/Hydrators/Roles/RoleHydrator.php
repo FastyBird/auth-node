@@ -17,7 +17,7 @@ namespace FastyBird\AccountsNode\Hydrators\Roles;
 
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Schemas;
-use FastyBird\NodeDatabase\Hydrators as NodeDatabaseHydrators;
+use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 use IPub\JsonAPIDocument;
 use Nette\Utils;
 
@@ -29,7 +29,7 @@ use Nette\Utils;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class RoleHydrator extends NodeDatabaseHydrators\Hydrator
+final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 {
 
 	/** @var string */

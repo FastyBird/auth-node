@@ -19,7 +19,7 @@ use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Queries;
 use FastyBird\AccountsNode\Router;
-use FastyBird\AccountsNode\Schemas;
+use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
 use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
 
@@ -32,9 +32,9 @@ use Neomerx\JsonApi;
  * @author           Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @phpstan-template T of Entities\Roles\IRole
- * @phpstan-extends  Schemas\JsonApiSchema<T>
+ * @phpstan-extends  NodeJsonApiSchemas\JsonApiSchema<T>
  */
-final class RoleSchema extends Schemas\JsonApiSchema
+final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 {
 
 	/**

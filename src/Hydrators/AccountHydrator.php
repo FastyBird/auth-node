@@ -16,8 +16,8 @@
 namespace FastyBird\AccountsNode\Hydrators;
 
 use FastyBird\AccountsNode\Entities;
-use FastyBird\NodeDatabase\Hydrators as NodeDatabaseHydrators;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
+use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 use Nette\Utils;
@@ -30,7 +30,7 @@ use Nette\Utils;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class AccountHydrator extends NodeDatabaseHydrators\Hydrator
+final class AccountHydrator extends NodeJsonApiHydrators\Hydrator
 {
 
 	/** @var string */
@@ -59,12 +59,12 @@ final class AccountHydrator extends NodeDatabaseHydrators\Hydrator
 	 *
 	 * @return string
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	protected function hydrateFirstNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
 	{
 		if (!$attributes->has('first_name')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -82,12 +82,12 @@ final class AccountHydrator extends NodeDatabaseHydrators\Hydrator
 	 *
 	 * @return string
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	protected function hydrateLastNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
 	{
 		if (!$attributes->has('last_name')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -116,7 +116,7 @@ final class AccountHydrator extends NodeDatabaseHydrators\Hydrator
 	 *
 	 * @return Utils\ArrayHash|null
 	 *
-	 * @throws NodeWebServerExceptions\JsonApiErrorException
+	 * @throws NodeJsonApiExceptions\JsonApiErrorException
 	 */
 	protected function hydrateDetailsAttribute(
 		JsonAPIDocument\Objects\IStandardObject $attributes,
@@ -133,7 +133,7 @@ final class AccountHydrator extends NodeDatabaseHydrators\Hydrator
 				$update->offsetSet('firstName', $details->get('first_name'));
 
 			} else {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('//node.base.messages.missingRequired.heading'),
 					$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -147,7 +147,7 @@ final class AccountHydrator extends NodeDatabaseHydrators\Hydrator
 				$update->offsetSet('lastName', $details->get('last_name'));
 
 			} else {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('//node.base.messages.missingRequired.heading'),
 					$this->translator->translate('//node.base.messages.missingRequired.message'),

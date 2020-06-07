@@ -20,7 +20,7 @@ use FastyBird\AccountsNode\Hydrators;
 use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Router;
 use FastyBird\AccountsNode\Schemas;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
@@ -62,7 +62,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -72,7 +72,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -86,7 +86,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getSecurityQuestion()));
 
 		} else {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message')
@@ -100,7 +100,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function create(
@@ -111,7 +111,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -119,7 +119,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		}
 
 		if ($this->user->getAccount()->hasSecurityQuestion()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('messages.accountHasQuestion.heading'),
 				$this->translator->translate('messages.accountHasQuestion.message')
@@ -140,7 +140,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				$question = $this->questionsManager->create($createData);
 
 			} else {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.invalidType.heading'),
 					$this->translator->translate('messages.invalidType.message'),
@@ -157,7 +157,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -166,7 +166,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				]
 			);
 
-		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
@@ -184,7 +184,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notCreated.heading'),
 				$this->translator->translate('messages.notCreated.message')
@@ -205,7 +205,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function update(
@@ -216,7 +216,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -226,7 +226,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		$question = $this->user->getAccount()->getSecurityQuestion();
 
 		if ($question === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message')
@@ -238,7 +238,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		$attributes = $document->getResource()->getAttributes();
 
 		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.invalid.heading'),
 				$this->translator->translate('//node.base.messages.invalid.message')
@@ -246,7 +246,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		}
 
 		if (!$attributes->has('question')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -257,7 +257,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		}
 
 		if (!$attributes->has('answer')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -275,7 +275,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				$updateQuestionData = $this->questionHydrator->hydrate($document, $question);
 
 			} else {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.invalidType.heading'),
 					$this->translator->translate('messages.invalidType.message'),
@@ -290,7 +290,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
@@ -308,7 +308,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notUpdated.heading'),
 				$this->translator->translate('messages.notUpdated.message')
@@ -328,7 +328,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
@@ -338,7 +338,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -346,7 +346,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		}
 
 		if (!$this->user->getAccount()->hasSecurityQuestion()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message')
@@ -371,7 +371,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function validate(
 		Message\ServerRequestInterface $request,
@@ -381,7 +381,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -391,7 +391,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		$question = $this->user->getAccount()->getSecurityQuestion();
 
 		if ($question === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message')
@@ -403,7 +403,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		$attributes = $document->getResource()->getAttributes();
 
 		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.invalid.heading'),
 				$this->translator->translate('//node.base.messages.invalid.message')
@@ -411,7 +411,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		}
 
 		if ($document->getResource()->getType() !== Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidType.heading'),
 				$this->translator->translate('messages.invalidType.message'),
@@ -422,7 +422,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		}
 
 		if (!$attributes->has('current_answer')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -433,7 +433,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 		}
 
 		if ($question->getAnswer() !== $attributes->get('current_answer')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.incorrect.heading'),
 				$this->translator->translate('messages.incorrect.message'),

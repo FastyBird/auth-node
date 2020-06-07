@@ -24,7 +24,7 @@ use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Queries;
 use FastyBird\AccountsNode\Router;
 use FastyBird\AccountsNode\Schemas;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
@@ -79,7 +79,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -89,7 +89,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -111,7 +111,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -121,7 +121,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -141,7 +141,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function create(
@@ -152,7 +152,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -175,7 +175,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				$email = $this->emailsManager->create($createData);
 
 			} else {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.invalidType.heading'),
 					$this->translator->translate('messages.invalidType.message'),
@@ -192,7 +192,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notValid.heading'),
 				$this->translator->translate('messages.notValid.message'),
@@ -205,7 +205,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.taken.heading'),
 				$this->translator->translate('messages.taken.message'),
@@ -218,7 +218,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -227,7 +227,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				]
 			);
 
-		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
@@ -245,7 +245,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notCreated.heading'),
 				$this->translator->translate('messages.notCreated.message')
@@ -266,7 +266,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function update(
@@ -277,7 +277,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -287,7 +287,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		$document = $this->createDocument($request);
 
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.invalid.heading'),
 				$this->translator->translate('//node.base.messages.invalid.message')
@@ -306,7 +306,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				$email = $this->emailsManager->update($email, $updateEmailData);
 
 			} else {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.invalidType.heading'),
 					$this->translator->translate('messages.invalidType.message'),
@@ -319,7 +319,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (NodeWebServerExceptions\IJsonApiException $ex) {
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
 			$this->getOrmConnection()->rollBack();
 
@@ -337,7 +337,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notUpdated.heading'),
 				$this->translator->translate('messages.notUpdated.message')
@@ -357,7 +357,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 */
 	public function delete(
@@ -368,7 +368,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -378,7 +378,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
 
 		if ($email->isDefault()) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.defaultNotDeletable.heading'),
 				$this->translator->translate('messages.defaultNotDeletable.message')
@@ -406,7 +406,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				],
 			]);
 
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notDeleted.heading'),
 				$this->translator->translate('messages.notDeleted.message')
@@ -426,7 +426,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
@@ -436,7 +436,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->user->getAccount() === null
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -465,7 +465,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function validate(
 		Message\ServerRequestInterface $request,
@@ -476,7 +476,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		$attributes = $document->getResource()->getAttributes();
 
 		if ($document->getResource()->getType() !== Schemas\EmailSchema::SCHEMA_TYPE) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidType.heading'),
 				$this->translator->translate('messages.invalidType.message'),
@@ -487,7 +487,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		}
 
 		if (!$attributes->has('address')) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
@@ -497,7 +497,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			);
 
 		} elseif (!Utils\Validators::isEmail((string) $attributes->get('address'))) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.notValid.heading'),
 				$this->translator->translate('messages.notValid.message'),
@@ -509,14 +509,14 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		if ($this->user->isLoggedIn()) {
 			if ($this->user->getAccount() === null) {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_FORBIDDEN,
 					$this->translator->translate('//node.base.messages.forbidden.heading'),
 					$this->translator->translate('//node.base.messages.forbidden.message')
 				);
 
 			} elseif (!$this->emailRepository->isEmailAvailable((string) $attributes->get('address'), $this->user->getAccount())) {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.taken.heading'),
 					$this->translator->translate('messages.taken.message'),
@@ -530,7 +530,7 @@ final class EmailsV1Controller extends BaseV1Controller
 			$email = $this->emailRepository->findOneByAddress((string) $attributes->get('address'));
 
 			if ($email !== null) {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('messages.taken.heading'),
 					$this->translator->translate('messages.taken.message'),
@@ -552,12 +552,12 @@ final class EmailsV1Controller extends BaseV1Controller
 	 *
 	 * @return Entities\Emails\IEmail
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	private function findEmail(string $id): Entities\Emails\IEmail
 	{
 		if ($this->user->getAccount() === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
 				$this->translator->translate('//node.base.messages.forbidden.message')
@@ -565,7 +565,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		}
 
 		if (!Uuid\Uuid::isValid($id)) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message')
@@ -579,7 +579,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		$email = $this->emailRepository->findOneBy($findQuery);
 
 		if ($email === null) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
 				$this->translator->translate('messages.notFound.message')

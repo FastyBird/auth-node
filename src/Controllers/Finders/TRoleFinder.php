@@ -18,7 +18,7 @@ namespace FastyBird\AccountsNode\Controllers\Finders;
 use FastyBird\AccountsNode\Entities;
 use FastyBird\AccountsNode\Models;
 use FastyBird\AccountsNode\Queries;
-use FastyBird\NodeWebServer\Exceptions as NodeWebServerExceptions;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Localization;
 use Ramsey\Uuid;
@@ -35,7 +35,7 @@ trait TRoleFinder
 	 *
 	 * @return Entities\Roles\IRole
 	 *
-	 * @throws NodeWebServerExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	protected function findRole(string $id): Entities\Roles\IRole
 	{
@@ -46,7 +46,7 @@ trait TRoleFinder
 			$role = $this->roleRepository->findOneBy($findQuery);
 
 			if ($role === null) {
-				throw new NodeWebServerExceptions\JsonApiErrorException(
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_NOT_FOUND,
 					$this->translator->translate('//node.base.messages.roleNotFound.heading'),
 					$this->translator->translate('//node.base.messages.roleNotFound.message')
@@ -54,7 +54,7 @@ trait TRoleFinder
 			}
 
 		} catch (Uuid\Exception\InvalidUuidStringException $ex) {
-			throw new NodeWebServerExceptions\JsonApiErrorException(
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('//node.base.messages.roleNotFound.heading'),
 				$this->translator->translate('//node.base.messages.roleNotFound.message')
