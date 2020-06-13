@@ -6,17 +6,17 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Schemas
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Schemas;
+namespace FastyBird\AuthNode\Schemas;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Router;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
 use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
@@ -24,10 +24,10 @@ use Neomerx\JsonApi;
 /**
  * Session entity schema
  *
- * @package            iPublikuj:UserProfileModule!
+ * @package            FastyBird:AuthNode!
  * @subpackage         Schemas
  *
- * @author             Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author             Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @phpstan-template   T of Entities\Tokens\IAccessToken
  * @phpstan-extends    NodeJsonApiSchemas\JsonApiSchema<T>
@@ -38,7 +38,7 @@ final class SessionSchema extends NodeJsonApiSchemas\JsonApiSchema
 	/**
 	 * Define entity schema type string
 	 */
-	public const SCHEMA_TYPE = 'accounts-node/session';
+	public const SCHEMA_TYPE = 'auth-node/session';
 
 	/**
 	 * Define relationships names
@@ -139,7 +139,7 @@ final class SessionSchema extends NodeJsonApiSchemas\JsonApiSchema
 				$this->router->urlFor(
 					'account',
 					[
-						Router\Router::URL_ITEM_ID => $accessToken->getIdentity()->getAccount()->getPlainId(),
+						Router\Router::URL_ACCOUNT_ID => $accessToken->getIdentity()->getAccount()->getPlainId(),
 					]
 				),
 				false

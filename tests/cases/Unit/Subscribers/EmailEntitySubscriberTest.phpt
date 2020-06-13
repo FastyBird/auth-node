@@ -2,9 +2,9 @@
 
 namespace Tests\Cases;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Queries;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
 use Nette\Utils;
 use Tester\Assert;
 
@@ -42,9 +42,9 @@ final class EmailEntitySubscriberTest extends DbTestCase
 		/** @var Models\Identities\IIdentityRepository $repository */
 		$repository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
 
-		$identity = $repository->findOneBy($findEntityQuery, Entities\Identities\System::class);
+		$identity = $repository->findOneBy($findEntityQuery, Entities\Identities\UserAccountIdentity::class);
 
-		Assert::same('john.doe@fastybird.ovh', $identity->getEmail());
+		Assert::same('john.doe@fastybird.ovh', $identity->getAccount()->getEmail()->getAddress());
 		Assert::same('john.doe@fastybird.com', $identity->getUid());
 	}
 

@@ -6,24 +6,24 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Security
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Security;
+namespace FastyBird\AuthNode\Security;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
 use Nette;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * JW token header reader
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Security
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -33,7 +33,7 @@ final class TokenReader
 
 	use Nette\SmartObject;
 
-	private const TOKEN_HEADER_NAME = 'authorization';
+	public const TOKEN_HEADER_NAME = 'authorization';
 	private const TOKEN_HEADER_REGEXP = '/Bearer\s+(.*)$/i';
 
 	/** @var Models\Tokens\ITokenRepository */

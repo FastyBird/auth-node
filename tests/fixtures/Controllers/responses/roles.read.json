@@ -4,11 +4,9 @@
       "administrator" : false,
       "anonymous" : false,
       "authenticated" : true,
-      "comment" : null,
-      "key_name" : "authenticated",
+      "name" : "authenticated",
       "locked" : true,
-      "name" : "Authenticated",
-      "priority" : 1
+      "comment" : "Authenticated"
     },
     "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
     "links" : {
@@ -19,11 +17,11 @@
         "data" : [
           {
             "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef",
-            "type" : "accounts-node/role"
+            "type" : "auth-node/role"
           },
           {
             "id" : "89f4a14f-7f78-4216-99b8-584ab9229f1c",
-            "type" : "accounts-node/role"
+            "type" : "auth-node/role"
           }
         ],
         "links" : {
@@ -39,7 +37,7 @@
       "parent" : {
         "data" : {
           "id" : "efbfbd04-0158-efbf-bdef-bfbd4defbfbd",
-          "type" : "accounts-node/role"
+          "type" : "auth-node/role"
         },
         "links" : {
           "related" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
@@ -47,7 +45,7 @@
         }
       }
     },
-    "type" : "accounts-node/role"
+    "type" : "auth-node/role"
   },
   "jsonapi" : {
     "version" : "1.1"

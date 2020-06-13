@@ -6,20 +6,21 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Controllers;
+namespace FastyBird\AuthNode\Controllers;
 
 use Doctrine;
-use FastyBird\AccountsNode\Hydrators;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Router;
-use FastyBird\AccountsNode\Schemas;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Hydrators;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Router;
+use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
@@ -30,7 +31,7 @@ use Throwable;
 /**
  * Account security question controller
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -70,6 +71,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -109,6 +111,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -214,6 +217,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -336,6 +340,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -379,6 +384,7 @@ final class SecurityQuestionV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(

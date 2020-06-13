@@ -32,11 +32,11 @@
         "data" : [
           {
             "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
-            "type" : "accounts-node/email"
+            "type" : "auth-node/email"
           },
           {
             "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c",
-            "type" : "accounts-node/email"
+            "type" : "auth-node/email"
           }
         ],
         "links" : {
@@ -53,7 +53,7 @@
         "data" : [
           {
             "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
-            "type" : "accounts-node/system-identity"
+            "type" : "auth-node/user-account-identity"
           }
         ],
         "links" : {
@@ -70,7 +70,7 @@
         "data" : [
           {
             "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef",
-            "type" : "accounts-node/role"
+            "type" : "auth-node/role"
           }
         ],
         "links" : {
@@ -80,7 +80,7 @@
       "security-question" : {
         "data" : {
           "id" : "4774b7c3-8b21-40c7-b8d7-e4242a962b71",
-          "type" : "accounts-node/security-question"
+          "type" : "auth-node/security-question"
         },
         "links" : {
           "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/security-question",
@@ -88,7 +88,7 @@
         }
       }
     },
-    "type" : "accounts-node/account"
+    "type" : "auth-node/user-account"
   },
   "included" : [
     {
@@ -106,7 +106,7 @@
         "account" : {
           "data" : {
             "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "type" : "accounts-node/account"
+            "type" : "auth-node/user-account"
           },
           "links" : {
             "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
@@ -114,7 +114,7 @@
           }
         }
       },
-      "type" : "accounts-node/email"
+      "type" : "auth-node/email"
     },
     {
       "attributes" : {
@@ -131,7 +131,7 @@
         "account" : {
           "data" : {
             "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "type" : "accounts-node/account"
+            "type" : "auth-node/user-account"
           },
           "links" : {
             "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
@@ -139,7 +139,7 @@
           }
         }
       },
-      "type" : "accounts-node/email"
+      "type" : "auth-node/email"
     },
     {
       "attributes" : {
@@ -154,7 +154,7 @@
         "account" : {
           "data" : {
             "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "type" : "accounts-node/account"
+            "type" : "auth-node/user-account"
           },
           "links" : {
             "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
@@ -162,7 +162,7 @@
           }
         }
       },
-      "type" : "accounts-node/security-question"
+      "type" : "auth-node/security-question"
     }
   ],
   "jsonapi" : {

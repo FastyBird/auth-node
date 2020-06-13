@@ -6,18 +6,18 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
  * @since          0.1.0
  *
  * @date           03.06.20
  */
 
-namespace FastyBird\AccountsNode\Controllers\Finders;
+namespace FastyBird\AuthNode\Controllers\Finders;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Queries;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Localization;

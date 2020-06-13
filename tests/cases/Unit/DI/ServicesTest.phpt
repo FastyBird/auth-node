@@ -2,13 +2,13 @@
 
 namespace Tests\Cases;
 
-use FastyBird\AccountsNode\Commands;
-use FastyBird\AccountsNode\Controllers;
-use FastyBird\AccountsNode\Hydrators;
-use FastyBird\AccountsNode\Middleware;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Schemas;
-use FastyBird\AccountsNode\Subscribers;
+use FastyBird\AuthNode\Commands;
+use FastyBird\AuthNode\Controllers;
+use FastyBird\AuthNode\Hydrators;
+use FastyBird\AuthNode\Middleware;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Schemas;
+use FastyBird\AuthNode\Subscribers;
 use FastyBird\NodeLibs\Boot;
 use Ninjify\Nunjuck\TestCase\BaseTestCase;
 use Tester\Assert;
@@ -30,11 +30,13 @@ final class ServicesTest extends BaseTestCase
 		$container = $configurator->createContainer();
 
 		Assert::notNull($container->getByType(Middleware\AccountMiddleware::class));
+		Assert::notNull($container->getByType(Middleware\AccessMiddleware::class));
 
 		Assert::notNull($container->getByType(Commands\Accounts\CreateCommand::class));
 		Assert::notNull($container->getByType(Commands\Roles\CreateCommand::class));
 
 		Assert::notNull($container->getByType(Subscribers\EmailEntitySubscriber::class));
+		Assert::notNull($container->getByType(Subscribers\UserAccountIdentityEntitySubscriber::class));
 
 		Assert::notNull($container->getByType(Models\Accounts\AccountRepository::class));
 		Assert::notNull($container->getByType(Models\Emails\EmailRepository::class));
@@ -52,23 +54,24 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Models\Roles\RolesManager::class));
 		Assert::notNull($container->getByType(Models\SecurityQuestions\QuestionsManager::class));
 		Assert::notNull($container->getByType(Models\Tokens\TokensManager::class));
+		Assert::notNull($container->getByType(Models\Vernemq\AccountsManager::class));
 
 		Assert::notNull($container->getByType(Controllers\AccountV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\EmailsV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\SecurityQuestionV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\SessionV1Controller::class));
-		Assert::notNull($container->getByType(Controllers\SystemIdentityV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\UserAccountIdentityV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RolesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RoleChildrenV1Controller::class));
 
-		Assert::notNull($container->getByType(Schemas\AccountSchema::class));
+		Assert::notNull($container->getByType(Schemas\Accounts\UserAccountSchema::class));
 		Assert::notNull($container->getByType(Schemas\EmailSchema::class));
 		Assert::notNull($container->getByType(Schemas\SecurityQuestionSchema::class));
 		Assert::notNull($container->getByType(Schemas\SessionSchema::class));
-		Assert::notNull($container->getByType(Schemas\SystemIdentitySchema::class));
+		Assert::notNull($container->getByType(Schemas\Identities\UserAccountIdentitySchema::class));
 		Assert::notNull($container->getByType(Schemas\Roles\RoleSchema::class));
 
-		Assert::notNull($container->getByType(Hydrators\AccountHydrator::class));
+		Assert::notNull($container->getByType(Hydrators\Accounts\UserAccountHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\EmailHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\SecurityQuestionHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Roles\RoleHydrator::class));

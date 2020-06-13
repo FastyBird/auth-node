@@ -6,25 +6,25 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Emails;
+namespace FastyBird\AuthNode\Entities\Emails;
 
 use DateTimeInterface;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Types;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
  * Account email entity interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -35,9 +35,9 @@ interface IEmail extends NodeDatabaseEntities\IEntity,
 {
 
 	/**
-	 * @return Entities\Accounts\IAccount
+	 * @return Entities\Accounts\IUserAccount
 	 */
-	public function getAccount(): Entities\Accounts\IAccount;
+	public function getAccount(): Entities\Accounts\IUserAccount;
 
 	/**
 	 * @param string $address

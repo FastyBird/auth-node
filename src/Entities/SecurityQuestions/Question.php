@@ -6,17 +6,17 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\SecurityQuestions;
+namespace FastyBird\AuthNode\Entities\SecurityQuestions;
 
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -52,7 +52,7 @@ class Question extends NodeDatabaseEntities\Entity implements IQuestion
 	/**
 	 * @var Entities\Accounts\IAccount
 	 *
-	 * @ORM\OneToOne(targetEntity="FastyBird\AccountsNode\Entities\Accounts\Account", inversedBy="securityQuestion")
+	 * @ORM\OneToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\UserAccount", inversedBy="securityQuestion")
 	 * @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", unique=true, onDelete="cascade", nullable=false)
 	 */
 	private $account;

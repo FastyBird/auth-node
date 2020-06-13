@@ -6,22 +6,22 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Security
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Security;
+namespace FastyBird\AuthNode\Security;
 
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use Nette\Security as NS;
 
 /**
  * Application user storage for authentication
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Security
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

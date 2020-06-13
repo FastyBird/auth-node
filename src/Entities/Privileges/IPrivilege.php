@@ -6,23 +6,23 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Privileges;
+namespace FastyBird\AuthNode\Entities\Privileges;
 
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
  * ACL privilege entity interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -31,6 +31,11 @@ interface IPrivilege extends NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineTimestampable\Entities\IEntityUpdated
 {
+
+	/**
+	 * @return string
+	 */
+	public function getPrivilegeId(): string;
 
 	/**
 	 * @param string $name
@@ -55,11 +60,6 @@ interface IPrivilege extends NodeDatabaseEntities\IEntity,
 	 * @return string|null
 	 */
 	public function getComment(): ?string;
-
-	/**
-	 * @return string
-	 */
-	public function getPrivilegeId(): string;
 
 	/**
 	 * @return Entities\Resources\IResource

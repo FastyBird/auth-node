@@ -6,25 +6,24 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Subscribers
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Subscribers;
+namespace FastyBird\AuthNode\Subscribers;
 
 use Doctrine\Common;
 use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Types;
+use FastyBird\AuthNode\Entities;
 use Nette;
 
 /**
  * Doctrine entities events
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Subscribers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -67,7 +66,6 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 				// Check if entity was set as default
 				if (array_key_exists('default', $changeSet)) {
 					$this->setAsDefault($uow, $classMetadata, $object);
-					$this->updateSystemIdentityEmail($em, $uow, $object);
 				}
 			}
 		}
@@ -90,7 +88,7 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 		foreach ($email->getAccount()->getEmails() as $accountEmail) {
 			// Deactivate all other user emails
 			if (
-				$accountEmail->getId() !== $email->getId()
+				!$accountEmail->getId()->equals($email->getId())
 				&& $accountEmail->isDefault()
 			) {
 				$accountEmail->setDefault(false);
@@ -101,35 +99,6 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 				$uow->scheduleExtraUpdate($accountEmail, [
 					'default' => [$oldValue, false],
 				]);
-			}
-		}
-	}
-
-	/**
-	 * @param ORM\EntityManager $em
-	 * @param ORM\UnitOfWork $uow
-	 * @param Entities\Emails\IEmail $email
-	 *
-	 * @return void
-	 *
-	 * @throws ORM\ORMException
-	 */
-	private function updateSystemIdentityEmail(
-		ORM\EntityManager $em,
-		ORM\UnitOfWork $uow,
-		Entities\Emails\IEmail $email
-	): void {
-		foreach ($email->getAccount()->getIdentities() as $identity) {
-			if (
-				$identity instanceof Entities\Identities\System
-				&& $identity->getEmail() !== $email->getAddress()
-				&& $identity->getStatus()->equalsValue(Types\IdentityStatusType::STATE_ACTIVE)
-			) {
-				$identity->setEmail($email->getAddress());
-
-				$em->persist($identity);
-				$classMetadata = $em->getClassMetadata(Entities\Identities\System::class);
-				$uow->computeChangeSet($classMetadata, $identity);
 			}
 		}
 	}

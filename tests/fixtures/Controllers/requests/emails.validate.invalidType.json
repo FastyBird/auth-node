@@ -1,6 +1,6 @@
 {
   "data" : {
-    "type" : "accounts-node/invalid",
+    "type" : "auth-node/invalid",
     "attributes" : {
       "address" : "john@doe.com"
     }

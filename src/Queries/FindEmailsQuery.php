@@ -6,25 +6,25 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Queries
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Queries;
+namespace FastyBird\AuthNode\Queries;
 
 use Closure;
 use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use IPub\DoctrineOrmQuery;
 use Ramsey\Uuid;
 
 /**
  * Find accounts entities query
  *
- * @package          FastyBird:AccountsNode!
+ * @package          FastyBird:AuthNode!
  * @subpackage       Queries
  *
  * @author           Adam Kadlec <adam.kadlec@fastybird.com>

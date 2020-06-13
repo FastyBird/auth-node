@@ -4,11 +4,9 @@
       "administrator" : false,
       "anonymous" : false,
       "authenticated" : false,
-      "comment" : null,
-      "key_name" : "custom-role",
+      "name" : "custom-role",
       "locked" : false,
-      "name" : "Custom role",
-      "priority" : 10
+      "comment" : "Custom role"
     },
     "id" : "86f623df-276a-46c0-adbe-fb9ac8ddeb02",
     "links" : {
@@ -30,7 +28,7 @@
       "parent" : {
         "data" : {
           "id" : "efbfbd04-0158-efbf-bdef-bfbd4defbfbd",
-          "type" : "accounts-node/role"
+          "type" : "auth-node/role"
         },
         "links" : {
           "related" : "/v1/roles/86f623df-276a-46c0-adbe-fb9ac8ddeb02",
@@ -38,7 +36,7 @@
         }
       }
     },
-    "type" : "accounts-node/role"
+    "type" : "auth-node/role"
   },
   "jsonapi" : {
     "version" : "1.1"

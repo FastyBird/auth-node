@@ -6,17 +6,19 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Tokens;
+namespace FastyBird\AuthNode\Entities\Tokens;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
+use Ramsey\Uuid;
 use Throwable;
 
 /**
@@ -36,7 +38,7 @@ class AccessToken extends Token implements IAccessToken
 	/**
 	 * @var Entities\Identities\IIdentity
 	 *
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Identities\Identity")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Identities\Identity")
 	 * @ORM\JoinColumn(name="identity_id", referencedColumnName="identity_id", onDelete="cascade", nullable=false)
 	 */
 	private $identity;
@@ -44,14 +46,18 @@ class AccessToken extends Token implements IAccessToken
 	/**
 	 * @param Entities\Identities\IIdentity $identity
 	 * @param string $token
+	 * @param DateTimeInterface|null $validTill
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Identities\IIdentity $identity,
-		string $token
+		string $token,
+		?DateTimeInterface $validTill,
+		?Uuid\UuidInterface $id = null
 	) {
-		parent::__construct($token);
+		parent::__construct($token, $validTill, $id);
 
 		$this->identity = $identity;
 	}
@@ -69,9 +75,7 @@ class AccessToken extends Token implements IAccessToken
 	 */
 	public function getRefreshToken(): ?IRefreshToken
 	{
-		$children = parent::getChildren();
-
-		$token = reset($children);
+		$token = $this->children->first();
 
 		if ($token instanceof IRefreshToken) {
 			return $token;

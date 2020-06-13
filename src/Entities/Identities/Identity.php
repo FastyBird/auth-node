@@ -6,19 +6,19 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Identities;
+namespace FastyBird\AuthNode\Entities\Identities;
 
 use Consistence\Doctrine\Enum\EnumAnnotation as Enum;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Types;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -37,17 +37,21 @@ use Throwable;
  *     },
  *     indexes={
  *       @ORM\Index(name="identity_uid_idx", columns={"identity_uid"}),
- *       @ORM\Index(name="identity_email_idx", columns={"identity_email"}),
  *       @ORM\Index(name="identity_status_idx", columns={"identity_status"})
  *     }
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="identity_type", type="string", length=15)
+ * @ORM\DiscriminatorMap({
+ *      "identity"   = "FastyBird\AuthNode\Entities\Identities\Identity",
+ *      "system"     = "FastyBird\AuthNode\Entities\Identities\UserAccountIdentity"
+ * })
  * @ORM\MappedSuperclass
  */
 abstract class Identity extends NodeDatabaseEntities\Entity implements IIdentity
 {
 
+	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 
@@ -63,7 +67,7 @@ abstract class Identity extends NodeDatabaseEntities\Entity implements IIdentity
 	/**
 	 * @var Entities\Accounts\IAccount
 	 *
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Accounts\Account", inversedBy="identities", cascade={"persist", "remove"})
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\Account", inversedBy="identities", cascade={"persist", "remove"})
 	 * @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", onDelete="cascade", nullable=false)
 	 */
 	protected $account;
@@ -77,14 +81,6 @@ abstract class Identity extends NodeDatabaseEntities\Entity implements IIdentity
 	protected $uid;
 
 	/**
-	 * @var string|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="identity_email", length=100, nullable=true)
-	 */
-	protected $email = null;
-
-	/**
 	 * @var Types\IdentityStatusType
 	 *
 	 * @Enum(class=Types\IdentityStatusType::class)
@@ -96,20 +92,17 @@ abstract class Identity extends NodeDatabaseEntities\Entity implements IIdentity
 	/**
 	 * @param Entities\Accounts\IAccount $account
 	 * @param string $uid
-	 * @param string|null $email
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Accounts\IAccount $account,
-		string $uid,
-		?string $email = null
+		string $uid
 	) {
 		$this->id = Uuid\Uuid::uuid4();
 
 		$this->account = $account;
 		$this->uid = $uid;
-		$this->email = $email;
 
 		$this->status = Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_ACTIVE);
 	}
@@ -128,22 +121,6 @@ abstract class Identity extends NodeDatabaseEntities\Entity implements IIdentity
 	public function getUid(): string
 	{
 		return $this->uid;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setEmail(?string $email = null): void
-	{
-		$this->email = $email;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getEmail(): ?string
-	{
-		return $this->email;
 	}
 
 	/**

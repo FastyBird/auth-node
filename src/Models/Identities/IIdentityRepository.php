@@ -6,24 +6,24 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Identities;
+namespace FastyBird\AuthNode\Models\Identities;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Queries;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
 use IPub\DoctrineOrmQuery;
 
 /**
  * Account identity repository interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -47,38 +47,8 @@ interface IIdentityRepository
 	): ?Entities\Identities\IIdentity;
 
 	/**
-	 * @param string $identifier
-	 * @param string|null $type
-	 *
-	 * @return Entities\Identities\IIdentity|null
-	 *
-	 * @phpstan-template T of Entities\Identities\Identity
-	 * @phpstan-param    string $identifier
-	 * @phpstan-param    class-string<T> $type
-	 */
-	public function findOneByIdentifier(
-		string $identifier,
-		string $type = Entities\Identities\Identity::class
-	): ?Entities\Identities\IIdentity;
-
-	/**
-	 * @param string $email
-	 * @param string|null $type
-	 *
-	 * @return Entities\Identities\IIdentity|null
-	 *
-	 * @phpstan-template T of Entities\Identities\Identity
-	 * @phpstan-param    string $email
-	 * @phpstan-param    class-string<T> $type
-	 */
-	public function findOneByEmail(
-		string $email,
-		string $type = Entities\Identities\Identity::class
-	): ?Entities\Identities\IIdentity;
-
-	/**
 	 * @param string $uid
-	 * @param string|null $type
+	 * @param string $type
 	 *
 	 * @return Entities\Identities\IIdentity|null
 	 *

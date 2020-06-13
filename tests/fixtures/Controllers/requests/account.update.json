@@ -1,6 +1,6 @@
 {
   "data" : {
-    "type" : "accounts-node/account",
+    "type" : "auth-node/user-account",
     "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
     "attributes" : {
       "details" : {

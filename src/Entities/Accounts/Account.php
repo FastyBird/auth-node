@@ -6,21 +6,21 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Accounts;
+namespace FastyBird\AuthNode\Entities\Accounts;
 
 use Consistence\Doctrine\Enum\EnumAnnotation as Enum;
 use DateTimeInterface;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Types;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -34,14 +34,19 @@ use Throwable;
  *     options={
  *       "collate"="utf8mb4_general_ci",
  *       "charset"="utf8mb4",
- *       "comment"="User accounts"
- *     },
- *     indexes={
- *       @ORM\Index(name="account_request_hash_idx", columns={"account_request_hash"})
+ *       "comment"="Application accounts"
  *     }
  * )
+ * @ORM\InheritanceType("JOINED")
+ * @ORM\DiscriminatorColumn(name="account_type", type="string", length=20)
+ * @ORM\DiscriminatorMap({
+ *      "account"   = "FastyBird\AuthNode\Entities\Accounts\Account",
+ *      "user"      = "FastyBird\AuthNode\Entities\Accounts\UserAccount",
+ *      "machine"   = "FastyBird\AuthNode\Entities\Accounts\MachineAccount"
+ * })
+ * @ORM\MappedSuperclass
  */
-class Account extends NodeDatabaseEntities\Entity implements IAccount
+abstract class Account extends NodeDatabaseEntities\Entity implements IAccount
 {
 
 	use NodeDatabaseEntities\TEntityParams;
@@ -58,38 +63,13 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 	protected $id;
 
 	/**
-	 * @var IAccount|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Accounts\Account", inversedBy="children")
-	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="account_id", nullable=true, onDelete="set null")
-	 */
-	private $parent;
-
-	/**
-	 * @var Common\Collections\Collection<int, IAccount>
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Accounts\Account", mappedBy="parent")
-	 */
-	private $children;
-
-	/**
-	 * @var Entities\Details\IDetails
-	 *
-	 * @IPubDoctrine\Crud(is={"required", "writable"})
-	 * @ORM\OneToOne(targetEntity="FastyBird\AccountsNode\Entities\Details\Details", mappedBy="account", cascade={"persist", "remove"})
-	 */
-	private $details;
-
-	/**
 	 * @var Types\AccountStatusType
 	 *
 	 * @Enum(class=Types\AccountStatusType::class)
 	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\Column(type="string_enum", name="account_status", nullable=false, options={"default": "notActivated"})
 	 */
-	private $status;
+	protected $status;
 
 	/**
 	 * @var DateTimeInterface
@@ -97,44 +77,20 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\Column(type="datetime", name="account_last_visit", nullable=true, options={"default": null})
 	 */
-	private $lastVisit = null;
-
-	/**
-	 * @var string|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="account_request_hash", nullable=true, options={"default": null})
-	 */
-	private $requestHash = null;
-
-	/**
-	 * @var Entities\SecurityQuestions\IQuestion|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToOne(targetEntity="FastyBird\AccountsNode\Entities\SecurityQuestions\Question", mappedBy="account", cascade={"persist", "remove"})
-	 */
-	private $securityQuestion = null;
-
-	/**
-	 * @var Common\Collections\Collection<int, Entities\Emails\IEmail>
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Emails\Email", mappedBy="account", cascade={"persist", "remove"}, orphanRemoval=true)
-	 */
-	private $emails;
+	protected $lastVisit = null;
 
 	/**
 	 * @var Common\Collections\Collection<int, Entities\Identities\IIdentity>
 	 *
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Identities\Identity", mappedBy="account")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Identities\Identity", mappedBy="account")
 	 */
-	private $identities;
+	protected $identities;
 
 	/**
 	 * @var Common\Collections\Collection<int, Entities\Roles\IRole>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToMany(targetEntity="FastyBird\AccountsNode\Entities\Roles\Role")
+	 * @ORM\ManyToMany(targetEntity="FastyBird\AuthNode\Entities\Roles\Role")
 	 * @ORM\JoinTable(name="fb_accounts_roles",
 	 *    joinColumns={
 	 *       @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", onDelete="cascade")
@@ -144,7 +100,7 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 	 *    }
 	 * )
 	 */
-	private $roles;
+	protected $roles;
 
 	/**
 	 * @param Uuid\UuidInterface|null $id
@@ -158,91 +114,8 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 
 		$this->status = Types\AccountStatusType::get(Types\AccountStatusType::STATE_NOT_ACTIVATED);
 
-		$this->emails = new Common\Collections\ArrayCollection();
 		$this->identities = new Common\Collections\ArrayCollection();
-		$this->children = new Common\Collections\ArrayCollection();
 		$this->roles = new Common\Collections\ArrayCollection();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setParent(IAccount $account): void
-	{
-		$this->parent = $account;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getParent(): ?IAccount
-	{
-		return $this->parent;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function removeParent(): void
-	{
-		$this->parent = null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setChildren(array $children): void
-	{
-		$this->children = new Common\Collections\ArrayCollection();
-
-		// Process all passed entities...
-		/** @var IAccount $entity */
-		foreach ($children as $entity) {
-			if (!$this->children->contains($entity)) {
-				// ...and assign them to collection
-				$this->children->add($entity);
-			}
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function addChild(IAccount $child): void
-	{
-		// Check if collection does not contain inserting entity
-		if (!$this->children->contains($child)) {
-			// ...and assign it to collection
-			$this->children->add($child);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getChildren(): array
-	{
-		return $this->children->toArray();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function removeChild(IAccount $child): void
-	{
-		// Check if collection contain removing entity...
-		if ($this->children->contains($child)) {
-			// ...and remove it from collection
-			$this->children->removeElement($child);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getDetails(): Entities\Details\IDetails
-	{
-		return $this->details;
 	}
 
 	/**
@@ -259,14 +132,6 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 	public function getStatus(): Types\AccountStatusType
 	{
 		return $this->status;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setVerified(): void
-	{
-		$this->status->equalsValue(Types\AccountStatusType::STATE_ACTIVATED);
 	}
 
 	/**
@@ -323,113 +188,6 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 	public function getLastVisit(): ?DateTimeInterface
 	{
 		return $this->lastVisit;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setRequestHash(string $requestHash): void
-	{
-		$this->requestHash = $requestHash;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRequestHash(): ?string
-	{
-		return $this->requestHash;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setSecurityQuestion(?Entities\SecurityQuestions\IQuestion $securityQuestion): void
-	{
-		$this->securityQuestion = $securityQuestion;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getSecurityQuestion(): ?Entities\SecurityQuestions\IQuestion
-	{
-		return $this->securityQuestion;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function hasSecurityQuestion(): bool
-	{
-		return $this->securityQuestion !== null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setEmails(array $emails): void
-	{
-		$this->emails = new Common\Collections\ArrayCollection();
-
-		// Process all passed entities...
-		/** @var Entities\Emails\IEmail $entity */
-		foreach ($emails as $entity) {
-			if (!$this->emails->contains($entity)) {
-				// ...and assign them to collection
-				$this->emails->add($entity);
-			}
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function addEmail(Entities\Emails\IEmail $email): void
-	{
-		// Check if collection does not contain inserting entity
-		if (!$this->emails->contains($email)) {
-			// ...and assign it to collection
-			$this->emails->add($email);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getEmails(): array
-	{
-		return $this->emails->toArray();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function removeEmail(Entities\Emails\IEmail $email): void
-	{
-		// Check if collection contain removing entity...
-		if ($this->emails->contains($email)) {
-			// ...and remove it from collection
-			$this->emails->removeElement($email);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getEmail(?string $id = null): ?Entities\Emails\IEmail
-	{
-		if ($this->emails !== null) {
-			$email = $this->emails
-				->filter(function (Entities\Emails\IEmail $row) use ($id): bool {
-					return $id !== null ? $row->getId()->equals(Uuid\Uuid::fromString($id)) : $row->isDefault();
-				})
-				->first();
-
-			return $email !== false ? $email : null;
-		}
-
-		return null;
 	}
 
 	/**
@@ -513,32 +271,6 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 		}
 
 		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getName(): string
-	{
-		return $this->details->getLastName() . ' ' . $this->details->getFirstName();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getUsername(): string
-	{
-		return 'account_' . $this->id->toString();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * TODO: Should be refactored
-	 */
-	public function getLanguage(): string
-	{
-		return 'en';
 	}
 
 }

@@ -6,23 +6,23 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Helpers;
+namespace FastyBird\AuthNode\Helpers;
 
-use FastyBird\AccountsNode\Exceptions;
+use FastyBird\AuthNode\Exceptions;
 use Nette;
 use Nette\Utils;
 
 /**
  * Password generator and verification
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Helpers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

@@ -6,17 +6,17 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Privileges;
+namespace FastyBird\AuthNode\Entities\Privileges;
 
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -32,8 +32,8 @@ use Throwable;
  *       "charset"="utf8mb4",
  *       "comment"="ACL privileges"
  *     },
- *     indexes={
- *       @ORM\Index(name="privilege_key_name_idx", columns={"privilege_key_name"})
+ *     uniqueConstraints={
+ *       @ORM\UniqueConstraint(name="privilege_name_unique", columns={"privilege_name"})
  *     }
  * )
  */
@@ -55,15 +55,7 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="privilege_key_name", length=100, nullable=false)
-	 */
-	private $keyName;
-
-	/**
-	 * @var string
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="privilege_name", length=100, nullable=false)
 	 */
 	private $name;
@@ -79,28 +71,33 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 	/**
 	 * @var Entities\Resources\IResource
 	 *
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Resources\Resource", inversedBy="privileges")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Resources\Resource", inversedBy="privileges")
 	 * @ORM\JoinColumn(name="resource_id", referencedColumnName="resource_id", onDelete="cascade", nullable=false)
 	 */
 	private $resource;
 
 	/**
 	 * @param Entities\Resources\IResource $resource
-	 * @param string $keyName
 	 * @param string $name
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Resources\IResource $resource,
-		string $keyName,
 		string $name
 	) {
 		$this->id = Uuid\Uuid::uuid4();
 
 		$this->resource = $resource;
-		$this->keyName = $keyName;
 		$this->name = $name;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getPrivilegeId(): string
+	{
+		return $this->getName();
 	}
 
 	/**
@@ -138,14 +135,6 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getPrivilegeId(): string
-	{
-		return $this->keyName;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getResource(): Entities\Resources\IResource
 	{
 		return $this->resource;
@@ -156,7 +145,7 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 	 */
 	public function __toString(): string
 	{
-		return $this->keyName;
+		return $this->name;
 	}
 
 }

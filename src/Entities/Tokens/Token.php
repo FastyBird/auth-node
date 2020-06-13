@@ -6,21 +6,21 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Tokens;
+namespace FastyBird\AuthNode\Entities\Tokens;
 
 use Consistence\Doctrine\Enum\EnumAnnotation as Enum;
 use DateTime;
 use DateTimeInterface;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Types;
+use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -34,7 +34,7 @@ use Throwable;
  *     options={
  *       "collate"="utf8mb4_general_ci",
  *       "charset"="utf8mb4",
- *       "comment"="Security access tokens"
+ *       "comment"="Security tokens"
  *     },
  *     indexes={
  *       @ORM\Index(name="token_status_idx", columns={"token_status"})
@@ -43,9 +43,9 @@ use Throwable;
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="token_type", type="string", length=20)
  * @ORM\DiscriminatorMap({
- *      "token"         = "FastyBird\AccountsNode\Entities\Tokens\Token",
- *      "access_token"  = "FastyBird\AccountsNode\Entities\Tokens\AccessToken",
- *      "refresh_token" = "FastyBird\AccountsNode\Entities\Tokens\RefreshToken"
+ *      "token"         = "FastyBird\AuthNode\Entities\Tokens\Token",
+ *      "access_token"  = "FastyBird\AuthNode\Entities\Tokens\AccessToken",
+ *      "refresh_token" = "FastyBird\AuthNode\Entities\Tokens\RefreshToken"
  * })
  * @ORM\MappedSuperclass
  */
@@ -69,7 +69,7 @@ abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 	 * @var IToken|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Tokens\Token", inversedBy="children")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Tokens\Token", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="token_id", nullable=true, onDelete="set null")
 	 */
 	protected $parent;
@@ -78,7 +78,7 @@ abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 	 * @var Common\Collections\Collection<int, IToken>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Tokens\Token", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Tokens\Token", mappedBy="parent")
 	 */
 	protected $children;
 
@@ -108,17 +108,20 @@ abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 
 	/**
 	 * @param string $token
+	 * @param DateTimeInterface|null $validTill
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		string $token,
+		?DateTimeInterface $validTill,
 		?Uuid\UuidInterface $id = null
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->token = $token;
+		$this->validTill = $validTill;
 		$this->status = Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE);
 
 		$this->children = new Common\Collections\ArrayCollection();
@@ -205,14 +208,6 @@ abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 	public function getToken(): string
 	{
 		return $this->token;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setValidTill(?DateTimeInterface $validTill): void
-	{
-		$this->validTill = $validTill;
 	}
 
 	/**

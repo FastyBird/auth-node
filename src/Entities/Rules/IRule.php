@@ -6,23 +6,23 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Rules;
+namespace FastyBird\AuthNode\Entities\Rules;
 
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
  * ACL rule entity interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -53,35 +53,14 @@ interface IRule extends NodeDatabaseEntities\IEntity,
 	public function hasAccess(): bool;
 
 	/**
-	 * @param Entities\Roles\IRole $role
-	 *
-	 * @return void
-	 */
-	public function setRole(Entities\Roles\IRole $role): void;
-
-	/**
 	 * @return Entities\Roles\IRole
 	 */
 	public function getRole(): Entities\Roles\IRole;
 
 	/**
-	 * @param Entities\Privileges\IPrivilege $privilege
-	 *
-	 * @return void
-	 */
-	public function setPrivilege(Entities\Privileges\IPrivilege $privilege): void;
-
-	/**
 	 * @return Entities\Privileges\IPrivilege
 	 */
 	public function getPrivilege(): Entities\Privileges\IPrivilege;
-
-	/**
-	 * @param Entities\Resources\IResource $resource
-	 *
-	 * @return void
-	 */
-	public function setResource(Entities\Resources\IResource $resource): void;
 
 	/**
 	 * @return Entities\Resources\IResource

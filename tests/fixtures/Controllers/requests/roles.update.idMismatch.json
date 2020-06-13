@@ -1,10 +1,9 @@
 {
   "data" : {
     "id" : "eebfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
-    "type" : "accounts-node/role",
+    "type" : "auth-node/role",
     "attributes" : {
-      "name" : "Authenticated with update",
-      "priority" : 1
+      "comment" : "Authenticated with update"
     }
   }
 }

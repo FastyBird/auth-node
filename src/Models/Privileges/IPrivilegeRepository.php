@@ -6,36 +6,29 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Privileges;
+namespace FastyBird\AuthNode\Models\Privileges;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Queries;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
 
 /**
  * ACL privileges repository interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 interface IPrivilegeRepository
 {
-
-	/**
-	 * @param string $keyName
-	 *
-	 * @return Entities\Privileges\IPrivilege|null
-	 */
-	public function findOneByKeyName(string $keyName): ?Entities\Privileges\IPrivilege;
 
 	/**
 	 * @param Queries\FindPrivilegesQuery $queryObject

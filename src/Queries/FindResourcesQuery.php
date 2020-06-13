@@ -6,25 +6,25 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Queries
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Queries;
+namespace FastyBird\AuthNode\Queries;
 
 use Closure;
 use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use IPub\DoctrineOrmQuery;
 use Ramsey\Uuid;
 
 /**
  * Find resources entities query
  *
- * @package          FastyBird:AccountsNode!
+ * @package          FastyBird:AuthNode!
  * @subpackage       Queries
  *
  * @author           Adam Kadlec <adam.kadlec@fastybird.com>
@@ -40,18 +40,6 @@ class FindResourcesQuery extends DoctrineOrmQuery\QueryObject
 
 	/** @var Closure[] */
 	private $select = [];
-
-	/**
-	 * @param string $keyName
-	 *
-	 * @return void
-	 */
-	public function byKeyName(string $keyName): void
-	{
-		$this->filter[] = function (ORM\QueryBuilder $qb) use ($keyName): void {
-			$qb->andWhere('r.keyName = :keyName')->setParameter('keyName', $keyName);
-		};
-	}
 
 	/**
 	 * @param Entities\Resources\IResource $resource

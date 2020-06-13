@@ -1,6 +1,6 @@
 {
   "data" : {
-    "type" : "accounts-node/security-question",
+    "type" : "auth-node/security-question",
     "id" : "4eaed254-161e-4ba0-8bd6-33f611c06b9d",
     "attributes" : {
       "is_custom" : false,

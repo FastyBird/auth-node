@@ -6,17 +6,17 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Commands
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Commands\Roles;
+namespace FastyBird\AuthNode\Commands\Roles;
 
 use Contributte\Translation;
-use FastyBird\AccountsNode\Models;
+use FastyBird\AuthNode\Models;
 use Nette\Utils;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input;
@@ -27,7 +27,7 @@ use Throwable;
 /**
  * ACL role creation command
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Commands
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -70,7 +70,7 @@ class CreateCommand extends Console\Command\Command
 		parent::configure();
 
 		$this
-			->setName('fb:accounts-node:roles:create')
+			->setName('fb:auth-node:roles:create')
 			->addArgument('key', Input\InputArgument::OPTIONAL, $this->translator->translate('key.title'))
 			->addArgument('name', Input\InputArgument::OPTIONAL, $this->translator->translate('name.title'))
 			->addArgument('priority', Input\InputArgument::OPTIONAL, $this->translator->translate('priority.title'))
@@ -85,7 +85,7 @@ class CreateCommand extends Console\Command\Command
 	{
 		$io = new Style\SymfonyStyle($input, $output);
 
-		$io->title('FB accounts node - create role');
+		$io->title('FB auth node - create role');
 
 		if ($input->hasOption('key') && $input->getOption('key') !== '') {
 			$keyName = $input->getOption('key');
@@ -95,7 +95,7 @@ class CreateCommand extends Console\Command\Command
 		}
 
 		do {
-			$role = $this->roleRepository->findOneByKeyName($keyName);
+			$role = $this->roleRepository->findOneByName($keyName);
 
 			$repeat = $role !== null;
 

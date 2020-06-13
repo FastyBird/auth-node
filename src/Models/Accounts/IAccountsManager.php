@@ -6,23 +6,23 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Accounts;
+namespace FastyBird\AuthNode\Models\Accounts;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
 use Nette\Utils;
 
 /**
  * Accounts entities manager interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

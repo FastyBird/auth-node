@@ -3,8 +3,8 @@
 namespace Tests\Cases;
 
 use DateTimeImmutable;
-use FastyBird\AccountsNode\Controllers;
-use FastyBird\AccountsNode\Router;
+use FastyBird\AuthNode\Controllers;
+use FastyBird\AuthNode\Router;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;

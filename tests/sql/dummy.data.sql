@@ -1,10 +1,18 @@
-INSERT IGNORE INTO `fb_accounts` (`account_id`, `parent_id`, `account_status`, `account_last_visit`, `account_request_hash`, `params`, `created_at`, `updated_at`) VALUES
-	(_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, NULL, 'activated', '2019-11-07 22:30:56', 'NGZqMmVxdnhubjJpIyMxNTc0NDUwNDAz', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
-	(_binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, NULL, 'activated', '2019-05-29 07:38:24', 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
-	(_binary 0xFAE8D7817E2C43189C8543BA637D14C5, NULL, 'approvalWaiting', '2019-05-29 07:38:24', 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
-	(_binary 0xFD23CCB48D874EB394DA638AB4E10AE3, NULL, 'notActivated', '2019-05-29 07:38:24', 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
-	(_binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, NULL, 'deleted', '2019-05-29 07:38:24', 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
-	(_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, NULL, 'blocked', '2019-05-29 07:38:24', 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00');
+INSERT IGNORE INTO `fb_accounts` (`account_id`, `account_type`, `account_status`, `account_last_visit`, `params`, `created_at`, `updated_at`) VALUES
+	(_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'user', 'activated', '2019-11-07 22:30:56', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
+	(_binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, 'user', 'activated', '2019-05-29 07:38:24', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
+	(_binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'user', 'approvalWaiting', '2019-05-29 07:38:24', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
+	(_binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'user', 'notActivated', '2019-05-29 07:38:24', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
+	(_binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, 'user', 'deleted', '2019-05-29 07:38:24', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
+	(_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, 'user', 'blocked', '2019-05-29 07:38:24', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00');
+
+INSERT IGNORE INTO `fb_accounts_users` (`account_id`, `parent_id`, `account_request_hash`) VALUES
+	(_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, NULL, 'NGZqMmVxdnhubjJpIyMxNTc0NDUwNDAz'),
+	(_binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, NULL, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1'),
+	(_binary 0xFAE8D7817E2C43189C8543BA637D14C5, NULL, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1'),
+	(_binary 0xFD23CCB48D874EB394DA638AB4E10AE3, NULL, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1'),
+	(_binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, NULL, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1'),
+	(_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, NULL, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1');
 
 INSERT IGNORE INTO `fb_accounts_details` (`detail_id`, `account_id`, `detail_first_name`, `detail_last_name`, `detail_middle_name`, `created_at`, `updated_at`) VALUES
 	(_binary 0xEFBFBDCFAA74EFBFBD4CEFBFBDEFBFBD, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'John', 'Doe', NULL, '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
@@ -23,13 +31,13 @@ INSERT IGNORE INTO `fb_emails` (`email_id`, `account_id`, `email_address`, `emai
 	(_binary 0xBAEFEC20192741CEA7E0AE74BD641B9C, _binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'bruce.wane@fastybird.com', 1, 1, NULL, NULL, '2017-09-06 22:56:44', 'public', '2017-09-06 22:56:44', '2019-04-21 19:49:32'),
 	(_binary 0xED987404F14C40B4915015B6590DEB8C, _binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'clark.kent@fastybird.com', 1, 1, NULL, NULL, '2019-09-22 21:09:56', 'public', '2019-09-22 21:09:56', '2019-09-22 21:09:56');
 
-INSERT IGNORE INTO `fb_identities` (`identity_id`, `account_id`, `identity_uid`, `identity_email`, `identity_status`, `created_at`, `updated_at`, `identity_type`, `identity_token`, `params`) VALUES
-	(_binary 0x77331268EFBFBD3449EFBFBDEFBFBD04, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'john.doe@fastybird.com', 'john.doe@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
-	(_binary 0xF2AB51A80B6F4ADBB51E1C648D41F24E, _binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, 'peter.parker@fastybird.com', 'peter.parker@fastybird.com', 'active', '2017-01-25 12:42:26', '2019-12-10 20:19:01', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
-	(_binary 0xFAF7A863A49C4428A7571DE537773355, _binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, 'jane.doe@fastybird.com', 'jane.doe@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
-	(_binary 0xFD3385A5D8D744FBB7F1151C62A4A7B4, _binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, 'peter.pan@fastybird.com', 'peter.pan@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
-	(_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, _binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'bruce.wane@fastybird.com', 'bruce.wane@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
-	(_binary 0xFF99F3C470B943F99EF6C9B33B43ABCB, _binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'clark.kent@fastybird.com', 'clark.kent@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}');
+INSERT IGNORE INTO `fb_identities` (`identity_id`, `account_id`, `identity_uid`, `identity_status`, `created_at`, `updated_at`, `identity_type`, `identity_token`, `params`) VALUES
+	(_binary 0x77331268EFBFBD3449EFBFBDEFBFBD04, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'john.doe@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
+	(_binary 0xF2AB51A80B6F4ADBB51E1C648D41F24E, _binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, 'peter.parker@fastybird.com', 'active', '2017-01-25 12:42:26', '2019-12-10 20:19:01', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
+	(_binary 0xFAF7A863A49C4428A7571DE537773355, _binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, 'jane.doe@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
+	(_binary 0xFD3385A5D8D744FBB7F1151C62A4A7B4, _binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, 'peter.pan@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
+	(_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, _binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'bruce.wane@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
+	(_binary 0xFF99F3C470B943F99EF6C9B33B43ABCB, _binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'clark.kent@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'system', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}');
 
 INSERT IGNORE INTO `fb_security_questions` (`question_id`, `account_id`, `question_question`, `question_answer`, `question_custom`, `created_at`, `updated_at`) VALUES
 	(_binary 0x4774B7C38B2140C7B8D7E4242A962B71, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'firstPetName', 'super secret pet name', 0, '2017-09-25 20:45:34', '2017-10-29 12:26:40'),
@@ -49,22 +57,22 @@ INSERT IGNORE INTO `fb_security_tokens_refresh` (`token_id`) VALUES
 	(_binary 0x00E79DA3E4BE4F289C49082E724BBADE),
 	(_binary 0xC0EF0AAF9EDE4B54A2B48E9D9005865A);
 
-INSERT IGNORE INTO `fb_acl_roles` (`role_id`, `parent_id`, `role_key_name`, `role_name`, `role_comment`, `role_priority`, `created_at`, `updated_at`) VALUES
-	(_binary 0xEFBFBD040158EFBFBDEFBFBD4DEFBFBD, NULL, 'guest', 'Guest', NULL, 0, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
-	(_binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0xEFBFBD040158EFBFBDEFBFBD4DEFBFBD, 'authenticated', 'Authenticated', NULL, 1, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
-	(_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, 'administrator', 'Administrator', NULL, 2, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
-	(_binary 0x89F4A14F7F78421699B8584AB9229F1C, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, 'user-defined', 'User defined', NULL, 3, '2020-06-03 12:00:00', '2020-06-03 12:00:00');
+INSERT IGNORE INTO `fb_acl_roles` (`role_id`, `parent_id`, `role_name`, `role_comment`, `created_at`, `updated_at`) VALUES
+	(_binary 0xEFBFBD040158EFBFBDEFBFBD4DEFBFBD, NULL, 'guest', 'Guest', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0xEFBFBD040158EFBFBDEFBFBD4DEFBFBD, 'authenticated', 'Authenticated', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, 'administrator', 'Administrator', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0x89F4A14F7F78421699B8584AB9229F1C, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, 'user-defined', 'User defined', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
 
 INSERT IGNORE INTO `fb_accounts_roles` (`role_id`, `account_id`) VALUES
 	(_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34);
 
-INSERT IGNORE INTO `fb_acl_privileges` (`privilege_id`, `resource_id`, `privilege_key_name`, `privilege_name`, `privilege_comment`, `created_at`, `updated_at`) VALUES
-	(_binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, _binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, 'access', 'Access to node', NULL, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
-	(_binary 0x3DEFBFBD2E1AEFBFBDEFBFBD49EFBFBD, _binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, 'manage emails', 'Manage emails', 'Warning: Give to trusted roles only; this permission has security implications.', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
+INSERT IGNORE INTO `fb_acl_resources` (`resource_id`, `parent_id`, `resource_name`, `resource_comment`, `created_at`, `updated_at`) VALUES
+	(_binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, NULL, 'fb/auth-node', NULL, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, NULL, 'fb/other-node', NULL, '2020-06-03 12:00:00', '2020-06-03 12:00:00');
 
-INSERT IGNORE INTO `fb_acl_resources` (`resource_id`, `parent_id`, `resource_key_name`, `resource_name`, `resource_comment`, `created_at`, `updated_by`) VALUES
-	(_binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, NULL, 'fb/accounts-node', 'fb/accounts-node', NULL, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
-	(_binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, NULL, 'fb/other-node', 'fb/other-node', NULL, '2020-06-03 12:00:00', '2020-06-03 12:00:00');
+INSERT IGNORE INTO `fb_acl_privileges` (`privilege_id`, `resource_id`, `privilege_name`, `privilege_comment`, `created_at`, `updated_at`) VALUES
+	(_binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, _binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, 'access', 'Access to node', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0x3DEFBFBD2E1AEFBFBDEFBFBD49EFBFBD, _binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, 'manage emails', 'Manage emails. Warning: Give to trusted roles only; this permission has security implications.', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
 
 INSERT IGNORE INTO `fb_acl_rules` (`rule_id`, `role_id`, `privilege_id`, `resource_id`, `access`, `created_at`, `updated_at`) VALUES
 	(_binary 0x317CEFBFBD377E1743EFBFBDC99AEFBF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, _binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, 1, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),

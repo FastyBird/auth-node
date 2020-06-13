@@ -6,17 +6,17 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Rules;
+namespace FastyBird\AuthNode\Entities\Rules;
 
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -58,13 +58,13 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\Column(type="boolean", name="access", nullable=false, options={"default": true})
 	 */
-	private $access = true;
+	private $access = self::ALLOWED;
 
 	/**
 	 * @var Entities\Roles\IRole
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Roles\Role")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Roles\Role")
 	 * @ORM\JoinColumn(name="role_id", referencedColumnName="role_id", onDelete="cascade")
 	 */
 	private $role;
@@ -73,7 +73,7 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	 * @var Entities\Privileges\IPrivilege
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Privileges\Privilege")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Privileges\Privilege")
 	 * @ORM\JoinColumn(name="privilege_id", referencedColumnName="privilege_id", onDelete="cascade")
 	 */
 	private $privilege;
@@ -82,7 +82,7 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	 * @var Entities\Resources\IResource
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Resources\Resource")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Resources\Resource")
 	 * @ORM\JoinColumn(name="resource_id", referencedColumnName="resource_id", onDelete="cascade")
 	 */
 	private $resource;
@@ -106,6 +106,7 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 		$this->role = $role;
 		$this->resource = $resource;
 		$this->privilege = $privilege;
+
 		$this->access = $access;
 	}
 
@@ -136,14 +137,6 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setRole(Entities\Roles\IRole $role): void
-	{
-		$this->role = $role;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getRole(): Entities\Roles\IRole
 	{
 		return $this->role;
@@ -152,25 +145,9 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setPrivilege(Entities\Privileges\IPrivilege $privilege): void
-	{
-		$this->privilege = $privilege;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getPrivilege(): Entities\Privileges\IPrivilege
 	{
 		return $this->privilege;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setResource(Entities\Resources\IResource $resource): void
-	{
-		$this->resource = $resource;
 	}
 
 	/**

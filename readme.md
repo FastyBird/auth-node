@@ -1,32 +1,32 @@
-# FastyBird accounts node
+# FastyBird auth node
 
-[![Build Status](https://img.shields.io/travis/FastyBird/accounts-node.svg?style=flat-square)](https://travis-ci.org/FastyBird/accounts-node)
-[![Code coverage](https://img.shields.io/coveralls/FastyBird/accounts-node.svg?style=flat-square)](https://coveralls.io/r/FastyBird/accounts-node)
-![PHP from Travis config](https://img.shields.io/travis/php-v/fastybird/accounts-node?style=flat-square)
-[![Licence](https://img.shields.io/packagist/l/FastyBird/accounts-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/accounts-node)
-[![Downloads total](https://img.shields.io/packagist/dt/FastyBird/accounts-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/accounts-node)
-[![Latest stable](https://img.shields.io/packagist/v/FastyBird/accounts-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/accounts-node)
+[![Build Status](https://img.shields.io/travis/FastyBird/auth-node.svg?style=flat-square)](https://travis-ci.org/FastyBird/auth-node)
+[![Code coverage](https://img.shields.io/coveralls/FastyBird/auth-node.svg?style=flat-square)](https://coveralls.io/r/FastyBird/auth-node)
+![PHP from Travis config](https://img.shields.io/travis/php-v/fastybird/auth-node?style=flat-square)
+[![Licence](https://img.shields.io/packagist/l/FastyBird/auth-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/auth-node)
+[![Downloads total](https://img.shields.io/packagist/dt/FastyBird/auth-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/auth-node)
+[![Latest stable](https://img.shields.io/packagist/v/FastyBird/auth-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/auth-node)
 [![PHPStan](https://img.shields.io/badge/PHPStan-enabled-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)
 
-## What is FastyBird accounts node?
+## What is FastyBird auth node?
 
-Accounts node is a microservice for managing user accounts & sessions for user interface.
+Auth node is a microservice for managing application accounts & sessions.
 
-FastyBird accounts node is an Apache2 licensed distributed user accounts storage microservice, developed in PHP with [Nette framework](https://nette.org).
+FastyBird auth node is an Apache2 licensed distributed accounts storage microservice, developed in PHP with [Nette framework](https://nette.org).
 
 ## Requirements
 
-FastyBird accounts node is tested against PHP 7.3 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server
+FastyBird auth node is tested against PHP 7.3 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server
 
 ## Getting started
 
 > **NOTE:** If you don't want to install it manually, try [docker image](#install-with-docker)
 
-The best way to install **fastybird/accounts-node** is using [Composer](http://getcomposer.org/). If you don't have Composer yet, [download it](https://getcomposer.org/download/) following the instructions.
+The best way to install **fastybird/auth-node** is using [Composer](http://getcomposer.org/). If you don't have Composer yet, [download it](https://getcomposer.org/download/) following the instructions.
 Then use command:
 
 ```sh
-$ composer create-project --no-dev fastybird/accounts-node path/to/install
+$ composer create-project --no-dev fastybird/auth-node path/to/install
 $ cd path/to/install
 ```
 
@@ -45,23 +45,23 @@ And also is listening for new data from exchange bus from other microservices.
 
 ## Install with docker
 
-![Docker Image Version (latest by date)](https://img.shields.io/docker/v/fastybird/accounts-node?style=flat-square)
-![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/fastybird/accounts-node?style=flat-square)
-![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fastybird/accounts-node?style=flat-square)
+![Docker Image Version (latest by date)](https://img.shields.io/docker/v/fastybird/auth-node?style=flat-square)
+![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/fastybird/auth-node?style=flat-square)
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/fastybird/auth-node?style=flat-square)
 
-Docker image: [fastybird/accounts-node](https://hub.docker.com/r/fastybird/accounts-node/)
+Docker image: [fastybird/auth-node](https://hub.docker.com/r/fastybird/auth-node/)
 
 ### Use docker hub image
 
 ```bash
-$ docker run -d -it --name accounts fastybird/accounts-node:latest
+$ docker run -d -it --name auth fastybird/auth-node:latest
 ```
 
 ### Generate local image
 
 ```bash
-$ docker build --tag=accounts-node .
-$ docker run -d -it --name accounts-node accounts-node
+$ docker build --tag=auth-node .
+$ docker run -d -it --name auth-node auth-node
 ```
 
 ## Configuration
@@ -75,7 +75,7 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
 | `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
 | `FB_NODE_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
-| `FB_NODE_PARAMETER__DATABASE_DBNAME=accounts_node` | MySQL database name |
+| `FB_NODE_PARAMETER__DATABASE_DBNAME=auth_node` | MySQL database name |
 | `FB_NODE_PARAMETER__DATABASE_USERNAME=root` | Username |
 | `FB_NODE_PARAMETER__DATABASE_PASSWORD=` | Password |
 | | |
@@ -97,7 +97,7 @@ $ php vendor/bin/doctrine orm:schema-tool:create
 After schema is created, you should create first user account:
 
 ```sh
-$ vendor/bin/fb-console fb:accounts-node:accounts:create
+$ vendor/bin/fb-console fb:auth-node:accounts:create
 ```
 
 Console command will ask you for all required information.
@@ -106,13 +106,13 @@ After this steps, microservice could be started with [server command](#http-serv
 
 ## Feedback
 
-Use the [issue tracker](https://github.com/FastyBird/accounts-node/issues) for bugs or [mail](mailto:info@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
+Use the [issue tracker](https://github.com/FastyBird/auth-node/issues) for bugs or [mail](mailto:info@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
 
 Thank you for testing, reporting and contributing.
 
 ## Changelog
 
-For release info check [release page](https://github.com/FastyBird/accounts-node/releases)
+For release info check [release page](https://github.com/FastyBird/auth-node/releases)
 
 ## Maintainers
 
@@ -131,4 +131,4 @@ For release info check [release page](https://github.com/FastyBird/accounts-node
 </table>
 
 ***
-Homepage [http://www.fastybird.com](http://www.fastybird.com) and repository [http://github.com/fastybird/accounts-node](http://github.com/fastybird/accounts-node).
+Homepage [http://www.fastybird.com](http://www.fastybird.com) and repository [http://github.com/fastybird/auth-node](http://github.com/fastybird/auth-node).

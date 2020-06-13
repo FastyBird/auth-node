@@ -4,7 +4,7 @@
 # @license		More in license.md
 # @copyright	https://www.fastybird.com
 # @author		Adam Kadlec <adam.kadlec@fastybird.com>
-# @package		FastyBird:AccountsNode!
+# @package		FastyBird:AuthNode!
 # @subpackage	config
 # @since		0.1.0
 #
@@ -15,10 +15,10 @@
 ##############################
 
 parameters:
-	origin: com.fastybird.accounts-node
+	origin: com.fastybird.auth-node
 
 	rabbitmq:
-		queueName: fb.accounts.node.exchange
+		queueName: fb.auth.node.exchange
 
 #########################
 # Used Nette extensions #
@@ -107,7 +107,7 @@ nettrineOrm:
 
 nettrineOrmAnnotations:
 	namespaces:
-		- FastyBird\AccountsNode\Entities
+		- FastyBird\AuthNode\Entities
 	paths:
 		- %appDir%/src/Entities
 
@@ -119,16 +119,16 @@ services:
 	# Security
 	##########
 
-	- {factory: FastyBird\AccountsNode\Security\Authenticator}
+	- {factory: FastyBird\AuthNode\Helpers\SecurityHash}
 
-	- {factory: FastyBird\AccountsNode\Security\Authorizator}
+	- {factory: FastyBird\AuthNode\Security\Authenticator}
 
-	- {factory: FastyBird\AccountsNode\Security\TokenReader}
+	- {factory: FastyBird\AuthNode\Security\Authorizator}
 
-	- {factory: FastyBird\AccountsNode\Helpers\SecurityHash}
+	- {factory: FastyBird\AuthNode\Security\TokenReader}
 
 	-
-		factory: FastyBird\AccountsNode\Security\TokenBuilder
+		factory: FastyBird\AuthNode\Security\TokenBuilder
 		arguments:
 			tokenSignature: %node.token.signature%
 
@@ -142,108 +142,116 @@ services:
 	# Nette services overwrite
 	##########################
 
-	security.user: FastyBird\AccountsNode\Security\User
-	security.userStorage: FastyBird\AccountsNode\Security\UserStorage
+	security.user: FastyBird\AuthNode\Security\User
+	security.userStorage: FastyBird\AuthNode\Security\UserStorage
 
 	# Http router
 	#############
 
-	- {factory: FastyBird\AccountsNode\Middleware\AccountMiddleware, tags: [middleware: {priority: 15}]}
+	- {factory: FastyBird\AuthNode\Middleware\AccountMiddleware, tags: [middleware: {priority: 15}]}
+
+	- {factory: FastyBird\AuthNode\Middleware\AccessMiddleware, tags: [middleware: {priority: 10}]}
 
 	-
-		factory: FastyBird\AccountsNode\Router\Router
+		factory: FastyBird\AuthNode\Router\Router
 		setup:
 			- registerRoutes
 
 	# Console commands
 	##################
 
-	- {factory: FastyBird\AccountsNode\Commands\Accounts\CreateCommand}
+	- {factory: FastyBird\AuthNode\Commands\Accounts\CreateCommand}
 
-	- {factory: FastyBird\AccountsNode\Commands\Roles\CreateCommand}
+	- {factory: FastyBird\AuthNode\Commands\Roles\CreateCommand}
 
 	# Events subscribers
 	####################
 
-	- {factory: FastyBird\AccountsNode\Subscribers\EmailEntitySubscriber}
+	- {factory: FastyBird\AuthNode\Subscribers\EmailEntitySubscriber}
+
+	- {factory: FastyBird\AuthNode\Subscribers\UserAccountIdentityEntitySubscriber}
 
 	# Database repositories
 	#######################
 
-	- {factory: FastyBird\AccountsNode\Models\Accounts\AccountRepository}
+	- {factory: FastyBird\AuthNode\Models\Accounts\AccountRepository}
 
-	- {factory: FastyBird\AccountsNode\Models\Emails\EmailRepository}
+	- {factory: FastyBird\AuthNode\Models\Emails\EmailRepository}
 
-	- {factory: FastyBird\AccountsNode\Models\Identities\IdentityRepository}
+	- {factory: FastyBird\AuthNode\Models\Identities\IdentityRepository}
 
-	- {factory: FastyBird\AccountsNode\Models\Privileges\PrivilegeRepository}
+	- {factory: FastyBird\AuthNode\Models\Privileges\PrivilegeRepository}
 
-	- {factory: FastyBird\AccountsNode\Models\Resources\ResourceRepository}
+	- {factory: FastyBird\AuthNode\Models\Resources\ResourceRepository}
 
-	- {factory: FastyBird\AccountsNode\Models\Roles\RoleRepository}
+	- {factory: FastyBird\AuthNode\Models\Roles\RoleRepository}
 
-	- {factory: FastyBird\AccountsNode\Models\Tokens\TokenRepository}
+	- {factory: FastyBird\AuthNode\Models\Tokens\TokenRepository}
+
+	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountRepository}
 
 	# Database managers
 	###################
 
-	- {factory: FastyBird\AccountsNode\Models\Accounts\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Accounts\Account))}
+	- {factory: FastyBird\AuthNode\Models\Accounts\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Accounts\Account))}
 
-	- {factory: FastyBird\AccountsNode\Models\Emails\EmailsManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Emails\Email))}
+	- {factory: FastyBird\AuthNode\Models\Emails\EmailsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Emails\Email))}
 
-	- {factory: FastyBird\AccountsNode\Models\Identities\IdentitiesManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Identities\Identity))}
+	- {factory: FastyBird\AuthNode\Models\Identities\IdentitiesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Identities\Identity))}
 
-	- {factory: FastyBird\AccountsNode\Models\Privileges\PrivilegesManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Privileges\Privilege))}
+	- {factory: FastyBird\AuthNode\Models\Privileges\PrivilegesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Privileges\Privilege))}
 
-	- {factory: FastyBird\AccountsNode\Models\Resources\ResourcesManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Resources\Resource))}
+	- {factory: FastyBird\AuthNode\Models\Resources\ResourcesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Resources\Resource))}
 
-	- {factory: FastyBird\AccountsNode\Models\Roles\RolesManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Roles\Role))}
+	- {factory: FastyBird\AuthNode\Models\Roles\RolesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Roles\Role))}
 
-	- {factory: FastyBird\AccountsNode\Models\SecurityQuestions\QuestionsManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\SecurityQuestions\Question))}
+	- {factory: FastyBird\AuthNode\Models\SecurityQuestions\QuestionsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\SecurityQuestions\Question))}
 
-	- {factory: FastyBird\AccountsNode\Models\Tokens\TokensManager(@ipubDoctrineCrud.crud::create(FastyBird\AccountsNode\Entities\Tokens\Token))}
+	- {factory: FastyBird\AuthNode\Models\Tokens\TokensManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Tokens\Token))}
+
+	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account))}
 
 	# API controllers
 	#################
 
-	- {factory: FastyBird\AccountsNode\Controllers\AccountV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\AccountV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AccountsNode\Controllers\EmailsV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\EmailsV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AccountsNode\Controllers\SecurityQuestionV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\SecurityQuestionV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AccountsNode\Controllers\SessionV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\SessionV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AccountsNode\Controllers\SystemIdentityV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\UserAccountIdentityV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AccountsNode\Controllers\RolesV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\RolesV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AccountsNode\Controllers\RoleChildrenV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\RoleChildrenV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AccountsNode\Controllers\AuthenticateV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\AuthenticateV1Controller, tags: [nette.inject]}
 
 	# API schemas
 	#############
 
-	- {factory: FastyBird\AccountsNode\Schemas\AccountSchema}
+	- {factory: FastyBird\AuthNode\Schemas\Accounts\UserAccountSchema}
 
-	- {factory: FastyBird\AccountsNode\Schemas\EmailSchema}
+	- {factory: FastyBird\AuthNode\Schemas\EmailSchema}
 
-	- {factory: FastyBird\AccountsNode\Schemas\SecurityQuestionSchema}
+	- {factory: FastyBird\AuthNode\Schemas\SecurityQuestionSchema}
 
-	- {factory: FastyBird\AccountsNode\Schemas\SessionSchema}
+	- {factory: FastyBird\AuthNode\Schemas\SessionSchema}
 
-	- {factory: FastyBird\AccountsNode\Schemas\SystemIdentitySchema}
+	- {factory: FastyBird\AuthNode\Schemas\Identities\UserAccountIdentitySchema}
 
-	- {factory: FastyBird\AccountsNode\Schemas\Roles\RoleSchema}
+	- {factory: FastyBird\AuthNode\Schemas\Roles\RoleSchema}
 
 	# API hydrators
 	###############
 
-	- {factory: FastyBird\AccountsNode\Hydrators\AccountHydrator}
+	- {factory: FastyBird\AuthNode\Hydrators\Accounts\UserAccountHydrator}
 
-	- {factory: FastyBird\AccountsNode\Hydrators\EmailHydrator}
+	- {factory: FastyBird\AuthNode\Hydrators\EmailHydrator}
 
-	- {factory: FastyBird\AccountsNode\Hydrators\SecurityQuestionHydrator}
+	- {factory: FastyBird\AuthNode\Hydrators\SecurityQuestionHydrator}
 
-	- {factory: FastyBird\AccountsNode\Hydrators\Roles\RoleHydrator}
+	- {factory: FastyBird\AuthNode\Hydrators\Roles\RoleHydrator}

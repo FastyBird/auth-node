@@ -2,7 +2,7 @@
 
 namespace Tests\Cases;
 
-use FastyBird\AccountsNode\Router;
+use FastyBird\AuthNode\Router;
 use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;
 use React\Http\Io\ServerRequest;

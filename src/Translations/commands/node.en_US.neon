@@ -3,12 +3,12 @@
 #
 # @language		en_US
 #
-# @copyright	More in license.md
-# @license		https://www.ipublikuj.eu
-# @author		Adam Kadlec <adam.kadlec@ipublikuj.eu>
-# @package		iPublikuj:UserProfileModule!
+# @license		More in license.md
+# @copyright	https://www.fastybird.com
+# @author		Adam Kadlec <adam.kadlec@fastybird.com>
+# @package		FastyBird:AuthNode!
 # @subpackage	Translations
-# @since		1.0.0
+# @since		0.1.0
 #
 # @date			25.01.17
 #

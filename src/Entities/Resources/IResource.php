@@ -6,16 +6,16 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Resources;
+namespace FastyBird\AuthNode\Entities\Resources;
 
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineTimestampable;
 use Nette\Security as NS;
@@ -23,7 +23,7 @@ use Nette\Security as NS;
 /**
  * ACL resource entity interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -42,9 +42,9 @@ interface IResource extends NS\IResource,
 	public function setName(string $name): void;
 
 	/**
-	 * @return string|null
+	 * @return string
 	 */
-	public function getName(): ?string;
+	public function getName(): string;
 
 	/**
 	 * @param string $comment

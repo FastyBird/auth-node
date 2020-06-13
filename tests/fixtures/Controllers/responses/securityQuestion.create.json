@@ -12,7 +12,7 @@
       "account" : {
         "data" : {
           "id" : "efbfbdef-bfbd-68ef-bfbd-770b40efbfbd",
-          "type" : "accounts-node/account"
+          "type" : "auth-node/user-account"
         },
         "links" : {
           "related" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd",
@@ -20,7 +20,7 @@
         }
       }
     },
-    "type" : "accounts-node/security-question"
+    "type" : "auth-node/security-question"
   },
   "jsonapi" : {
     "version" : "1.1"

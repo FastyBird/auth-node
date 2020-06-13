@@ -6,18 +6,18 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Resources;
+namespace FastyBird\AuthNode\Entities\Resources;
 
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -33,8 +33,8 @@ use Throwable;
  *       "charset"="utf8mb4",
  *       "comment"="ACL resources"
  *     },
- *     indexes={
- *       @ORM\Index(name="resource_key_name_idx", columns={"resource_key_name"})
+ *     uniqueConstraints={
+ *       @ORM\UniqueConstraint(name="resource_name_unique", columns={"resource_name"})
  *     }
  * )
  */
@@ -56,15 +56,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="resource_key_name", length=100, nullable=false)
-	 */
-	protected $keyName;
-
-	/**
-	 * @var string
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="resource_name", length=100, nullable=false)
 	 */
 	protected $name;
@@ -81,7 +73,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 * @var Entities\Resources\IResource|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Resources\Resource", inversedBy="children")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Resources\Resource", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="resource_id", nullable=true, onDelete="set null")
 	 */
 	protected $parent = null;
@@ -89,32 +81,27 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	/**
 	 * @var Common\Collections\Collection<int, IResource>
 	 *
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Resources\Resource", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Resources\Resource", mappedBy="parent")
 	 */
 	protected $children;
 
 	/**
 	 * @var Common\Collections\Collection<int, Entities\Privileges\IPrivilege>
 	 *
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Privileges\Privilege", mappedBy="resource", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Privileges\Privilege", mappedBy="resource", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	protected $privileges;
 
 	/**
-	 * @param string $keyName
 	 * @param string $name
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
-		string $keyName,
 		string $name
 	) {
-		$id = Uuid\Uuid::uuid4();
+		$this->id = Uuid\Uuid::uuid4();
 
-		$this->id = $id;
-
-		$this->keyName = $keyName;
 		$this->name = $name;
 
 		$this->children = new Common\Collections\ArrayCollection();
@@ -126,7 +113,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 */
 	public function getResourceId(): string
 	{
-		return $this->keyName;
+		return $this->getName();
 	}
 
 	/**
@@ -140,7 +127,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getName(): ?string
+	public function getName(): string
 	{
 		return $this->name;
 	}
@@ -274,7 +261,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 */
 	public function __toString(): string
 	{
-		return $this->keyName;
+		return $this->name;
 	}
 
 }

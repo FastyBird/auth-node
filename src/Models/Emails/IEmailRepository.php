@@ -6,37 +6,30 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Emails;
+namespace FastyBird\AuthNode\Models\Emails;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Queries;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
 use IPub\DoctrineOrmQuery;
 
 /**
  * Account email address repository interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 interface IEmailRepository
 {
-
-	/**
-	 * @param string $identifier
-	 *
-	 * @return Entities\Emails\IEmail|null
-	 */
-	public function findOneByIdentifier(string $identifier): ?Entities\Emails\IEmail;
 
 	/**
 	 * @param string $address

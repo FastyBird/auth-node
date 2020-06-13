@@ -6,17 +6,19 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Tokens;
+namespace FastyBird\AuthNode\Entities\Tokens;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Exceptions;
+use FastyBird\AuthNode\Exceptions;
+use Ramsey\Uuid;
 use Throwable;
 
 /**
@@ -36,14 +38,18 @@ class RefreshToken extends Token implements IRefreshToken
 	/**
 	 * @param IAccessToken $accessToken
 	 * @param string $token
+	 * @param DateTimeInterface|null $validTill
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		IAccessToken $accessToken,
-		string $token
+		string $token,
+		?DateTimeInterface $validTill,
+		?Uuid\UuidInterface $id = null
 	) {
-		parent::__construct($token);
+		parent::__construct($token, $validTill, $id);
 
 		$this->setParent($accessToken);
 	}

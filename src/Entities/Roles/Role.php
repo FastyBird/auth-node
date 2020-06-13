@@ -6,18 +6,18 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Roles;
+namespace FastyBird\AuthNode\Entities\Roles;
 
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
+use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -34,11 +34,7 @@ use Throwable;
  *       "comment"="ACL roles"
  *     },
  *     uniqueConstraints={
- *       @ORM\UniqueConstraint(name="role_key_name_unique", columns={"parent_id", "role_key_name"}),
  *       @ORM\UniqueConstraint(name="role_name_unique", columns={"parent_id", "role_name"})
- *     },
- *     indexes={
- *       @ORM\Index(name="role_key_name_idx", columns={"role_key_name"})
  *     }
  * )
  */
@@ -60,14 +56,6 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string", name="role_key_name", length=100, nullable=false)
-	 */
-	private $keyName;
-
-	/**
-	 * @var string
-	 *
 	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="role_name", length=100, nullable=false)
 	 */
@@ -85,7 +73,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 * @var IRole|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Roles\Role", inversedBy="children")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Roles\Role", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="role_id", nullable=true, onDelete="set null")
 	 */
 	private $parent;
@@ -93,41 +81,30 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	/**
 	 * @var Common\Collections\Collection<int, IRole>
 	 *
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Roles\Role", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Roles\Role", mappedBy="parent")
 	 */
 	private $children;
-
-	/**
-	 * @var int
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="integer", name="role_priority", length=15, nullable=false, options={"default" = 0})
-	 */
-	private $priority = 0;
 
 	/**
 	 * @var Common\Collections\Collection<int, Entities\Rules\IRule>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\AccountsNode\Entities\Rules\Rule", mappedBy="role", cascade={"persist", "remove"}, orphanRemoval=true)
+	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Rules\Rule", mappedBy="role", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $rules;
 
 	/**
-	 * @param string $keyName
 	 * @param string $name
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
-		string $keyName,
 		string $name,
 		?Uuid\UuidInterface $id = null
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
-		$this->keyName = $keyName;
 		$this->name = $name;
 
 		$this->children = new Common\Collections\ArrayCollection();
@@ -139,7 +116,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 */
 	public function getRoleId(): string
 	{
-		return $this->keyName;
+		return $this->getName();
 	}
 
 	/**
@@ -153,7 +130,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getName(): ?string
+	public function getName(): string
 	{
 		return $this->name;
 	}
@@ -172,22 +149,6 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	public function getComment(): ?string
 	{
 		return $this->comment;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setPriority(int $priority): void
-	{
-		$this->priority = $priority;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getPriority(): int
-	{
-		return $this->priority;
 	}
 
 	/**
@@ -328,7 +289,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 */
 	public function isLocked(): bool
 	{
-		return in_array($this->keyName, [IRole::ROLE_ANONYMOUS, IRole::ROLE_AUTHENTICATED, IRole::ROLE_ADMINISTRATOR], true);
+		return in_array($this->name, [IRole::ROLE_ANONYMOUS, IRole::ROLE_AUTHENTICATED, IRole::ROLE_ADMINISTRATOR], true);
 	}
 
 	/**
@@ -336,7 +297,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 */
 	public function isAnonymous(): bool
 	{
-		return $this->keyName === IRole::ROLE_ANONYMOUS;
+		return $this->name === IRole::ROLE_ANONYMOUS;
 	}
 
 	/**
@@ -344,7 +305,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 */
 	public function isAuthenticated(): bool
 	{
-		return $this->keyName === IRole::ROLE_AUTHENTICATED;
+		return $this->name === IRole::ROLE_AUTHENTICATED;
 	}
 
 	/**
@@ -352,7 +313,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 */
 	public function isAdministrator(): bool
 	{
-		return $this->keyName === IRole::ROLE_ADMINISTRATOR;
+		return $this->name === IRole::ROLE_ADMINISTRATOR;
 	}
 
 	/**
@@ -362,7 +323,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 */
 	public function __toString(): string
 	{
-		return $this->keyName;
+		return $this->name;
 	}
 
 }

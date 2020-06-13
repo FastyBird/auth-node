@@ -6,27 +6,28 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Accounts;
+namespace FastyBird\AuthNode\Models\Accounts;
 
 use Doctrine\Common;
-use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Queries;
+use Doctrine\Persistence;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Queries;
+use IPub\DoctrineOrmQuery;
 use Nette;
-use Ramsey\Uuid;
 use Throwable;
 
 /**
  * Account repository
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -39,8 +40,8 @@ final class AccountRepository implements IAccountRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Accounts\Account>|null */
-	private $repository;
+	/** @var Persistence\ObjectRepository<Entities\Accounts\Account>[] */
+	private $repository = [];
 
 	public function __construct(
 		Common\Persistence\ManagerRegistry $managerRegistry
@@ -51,32 +52,12 @@ final class AccountRepository implements IAccountRepository
 	/**
 	 * {@inheritDoc}
 	 */
-	public function findOneByIdentifier(string $identifier): ?Entities\Accounts\IAccount
-	{
-		$findQuery = new Queries\FindAccountsQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($identifier));
-
-		return $this->findOneBy($findQuery);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function findOneByHash(string $hash): ?Entities\Accounts\IAccount
-	{
-		$findQuery = new Queries\FindAccountsQuery();
-		$findQuery->byHash($hash);
-
-		return $this->findOneBy($findQuery);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function findOneBy(Queries\FindAccountsQuery $queryObject): ?Entities\Accounts\IAccount
-	{
+	public function findOneBy(
+		Queries\FindAccountsQuery $queryObject,
+		string $type = Entities\Accounts\Account::class
+	): ?Entities\Accounts\IAccount {
 		/** @var Entities\Accounts\IAccount|null $account */
-		$account = $queryObject->fetchOne($this->getRepository());
+		$account = $queryObject->fetchOne($this->getRepository($type));
 
 		return $account;
 	}
@@ -86,23 +67,48 @@ final class AccountRepository implements IAccountRepository
 	 *
 	 * @throws Throwable
 	 */
-	public function findAllBy(Queries\FindAccountsQuery $queryObject): array
-	{
-		$result = $queryObject->fetch($this->getRepository());
+	public function findAllBy(
+		Queries\FindAccountsQuery $queryObject,
+		string $type = Entities\Accounts\Account::class
+	): array {
+		$result = $queryObject->fetch($this->getRepository($type));
 
 		return is_array($result) ? $result : $result->toArray();
 	}
 
 	/**
-	 * @return ORM\EntityRepository<Entities\Accounts\Account>
+	 * {@inheritDoc}
+	 *
+	 * @throws Throwable
 	 */
-	private function getRepository(): ORM\EntityRepository
-	{
-		if ($this->repository === null) {
-			$this->repository = $this->managerRegistry->getRepository(Entities\Accounts\Account::class);
+	public function getResultSet(
+		Queries\FindAccountsQuery $queryObject,
+		string $type = Entities\Accounts\Account::class
+	): DoctrineOrmQuery\ResultSet {
+		$result = $queryObject->fetch($this->getRepository($type));
+
+		if (!$result instanceof DoctrineOrmQuery\ResultSet) {
+			throw new Exceptions\InvalidStateException('Result set for given query could not be loaded.');
 		}
 
-		return $this->repository;
+		return $result;
+	}
+
+	/**
+	 * @param string $type
+	 *
+	 * @return Persistence\ObjectRepository<Entities\Accounts\Account>
+	 *
+	 * @phpstan-template T of Entities\Accounts\Account
+	 * @phpstan-param    class-string<T> $type
+	 */
+	private function getRepository(string $type): Persistence\ObjectRepository
+	{
+		if (!isset($this->repository[$type])) {
+			$this->repository[$type] = $this->managerRegistry->getRepository($type);
+		}
+
+		return $this->repository[$type];
 	}
 
 }

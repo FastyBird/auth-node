@@ -15,7 +15,7 @@
         "account" : {
           "data" : {
             "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "type" : "accounts-node/account"
+            "type" : "auth-node/user-account"
           },
           "links" : {
             "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
@@ -23,7 +23,7 @@
           }
         }
       },
-      "type" : "accounts-node/email"
+      "type" : "auth-node/email"
     },
     {
       "attributes" : {
@@ -40,7 +40,7 @@
         "account" : {
           "data" : {
             "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "type" : "accounts-node/account"
+            "type" : "auth-node/user-account"
           },
           "links" : {
             "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
@@ -48,7 +48,7 @@
           }
         }
       },
-      "type" : "accounts-node/email"
+      "type" : "auth-node/email"
     }
   ],
   "jsonapi" : {

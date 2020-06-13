@@ -6,19 +6,19 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
  * @since          0.1.0
  *
  * @date           03.06.20
  */
 
-namespace FastyBird\AccountsNode\Controllers;
+namespace FastyBird\AuthNode\Controllers;
 
-use FastyBird\AccountsNode\Controllers;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Queries;
-use FastyBird\AccountsNode\Router;
+use FastyBird\AuthNode\Controllers;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
+use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Psr\Http\Message;
@@ -26,7 +26,7 @@ use Psr\Http\Message;
 /**
  * Role children API controller
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

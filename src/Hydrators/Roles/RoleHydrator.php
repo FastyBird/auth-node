@@ -6,17 +6,17 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Hydrators
  * @since          0.1.0
  *
  * @date           03.06.20
  */
 
-namespace FastyBird\AccountsNode\Hydrators\Roles;
+namespace FastyBird\AuthNode\Hydrators\Roles;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Schemas;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 use IPub\JsonAPIDocument;
 use Nette\Utils;
@@ -24,7 +24,7 @@ use Nette\Utils;
 /**
  * Role entity hydrator
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Hydrators
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -37,11 +37,8 @@ final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 
 	/** @var string[] */
 	protected $attributes = [
-		0 => 'name',
-		1 => 'comment',
-		2 => 'priority',
-
-		'key_name' => 'keyName',
+		'name',
+		'comment',
 	];
 
 	/** @var string[] */
@@ -62,13 +59,13 @@ final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 	 *
 	 * @return string
 	 */
-	protected function hydrateKeyNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
+	protected function hydrateNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
 	{
-		if ($attributes->get('key_name') === null || (string) $attributes->get('key_name') === '') {
+		if ($attributes->get('name') === null || (string) $attributes->get('name') === '') {
 			return Utils\Strings::webalize((string) $attributes->get('name'));
 		}
 
-		return Utils\Strings::webalize((string) $attributes->get('key_name'));
+		return Utils\Strings::webalize((string) $attributes->get('name'));
 	}
 
 	/**
@@ -83,20 +80,6 @@ final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 		}
 
 		return (string) $attributes->get('comment');
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 *
-	 * @return int
-	 */
-	protected function hydratePriorityAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): int
-	{
-		if ($attributes->get('priority') === null || (string) $attributes->get('priority') === '') {
-			return 0;
-		}
-
-		return (int) $attributes->get('priority');
 	}
 
 }

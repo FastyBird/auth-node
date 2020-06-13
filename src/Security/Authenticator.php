@@ -6,25 +6,25 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Security
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Security;
+namespace FastyBird\AuthNode\Security;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Exceptions;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Types;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Types;
 use Nette\Security as NS;
 
 /**
  * Account authentication
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Security
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -56,7 +56,7 @@ final class Authenticator implements NS\IAuthenticator
 	 *
 	 * @param mixed[] $credentials
 	 *
-	 * @return Entities\Identities\System
+	 * @return Entities\Identities\UserAccountIdentity
 	 *
 	 * @throws Exceptions\AccountNotFoundException
 	 * @throws Exceptions\AuthenticationFailedException
@@ -65,32 +65,16 @@ final class Authenticator implements NS\IAuthenticator
 	{
 		[$username, $password] = $credentials + [null, null];
 
-		if (strpos($username, '@') === false) {
-			/** @var Entities\Identities\System|null $identity */
-			$identity = $this->identityRepository->findOneByUid($username, Entities\Identities\System::class);
-
-		} else {
-			/** @var Entities\Identities\System|null $identity */
-			$identity = $this->identityRepository->findOneByEmail($username, Entities\Identities\System::class);
-		}
+		/** @var Entities\Identities\UserAccountIdentity|null $identity */
+		$identity = $this->identityRepository->findOneByUid($username, Entities\Identities\UserAccountIdentity::class);
 
 		if ($identity === null) {
-			if (strpos($username, '@') === false) {
-				throw new Exceptions\AccountNotFoundException('The username is incorrect', self::IDENTITY_USERNAME_NOT_FOUND);
-
-			} else {
-				throw new Exceptions\AccountNotFoundException('The email address is incorrect', self::IDENTITY_EMAIL_NOT_FOUND);
-			}
+			throw new Exceptions\AccountNotFoundException('The identity identifier is incorrect', self::IDENTITY_USERNAME_NOT_FOUND);
 		}
 
 		// Check if password is ok
 		if (!$identity->verifyPassword((string) $password)) {
-			if (strpos($username, '@') === false) {
-				throw new Exceptions\AuthenticationFailedException('The password is incorrect', self::INVALID_CREDENTIAL_FOR_USERNAME);
-
-			} else {
-				throw new Exceptions\AuthenticationFailedException('The password is incorrect', self::INVALID_CREDENTIAL_FOR_EMAIL);
-			}
+			throw new Exceptions\AuthenticationFailedException('The password is incorrect', self::INVALID_CREDENTIAL_FOR_USERNAME);
 		}
 
 		$account = $identity->getAccount();

@@ -6,17 +6,17 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Middleware
  * @since          0.1.0
  *
  * @date           01.04.20
  */
 
-namespace FastyBird\AccountsNode\Middleware;
+namespace FastyBird\AuthNode\Middleware;
 
 use Contributte\Translation;
-use FastyBird\AccountsNode\Security;
+use FastyBird\AuthNode\Security;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Security as NS;
@@ -26,12 +26,12 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
- * API key check middleware
+ * Access token check middleware
  *
- * @package        iPublikuj:UserProfileModule!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Middleware
  *
- * @author         Adam Kadlec <adam.kadlec@ipublikuj.eu>
+ * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 final class AccountMiddleware implements MiddlewareInterface
 {
@@ -70,7 +70,7 @@ final class AccountMiddleware implements MiddlewareInterface
 	public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
 	{
 		// Request has to have Authorization header
-		if ($request->hasHeader('Authorization')) {
+		if ($request->hasHeader(Security\TokenReader::TOKEN_HEADER_NAME)) {
 			$token = $this->tokenReader->read($request);
 
 			if (

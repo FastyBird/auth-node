@@ -6,27 +6,27 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Tokens;
+namespace FastyBird\AuthNode\Models\Tokens;
 
 use Doctrine\Common;
-use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Queries;
-use FastyBird\AccountsNode\Types;
+use Doctrine\Persistence;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Queries;
+use FastyBird\AuthNode\Types;
 use Nette;
 use Ramsey\Uuid;
 
 /**
  * Access token repository
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -39,7 +39,7 @@ final class TokenRepository implements ITokenRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Tokens\Token>[] */
+	/** @var Persistence\ObjectRepository<Entities\Tokens\Token>[] */
 	private $repository = [];
 
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
@@ -91,12 +91,12 @@ final class TokenRepository implements ITokenRepository
 	/**
 	 * @param string $type
 	 *
-	 * @return ORM\EntityRepository<Entities\Tokens\Token>
+	 * @return Persistence\ObjectRepository<Entities\Tokens\Token>
 	 *
 	 * @phpstan-template T of Entities\Tokens\Token
 	 * @phpstan-param    class-string<T> $type
 	 */
-	private function getRepository(string $type): ORM\EntityRepository
+	private function getRepository(string $type): Persistence\ObjectRepository
 	{
 		if (!isset($this->repository[$type])) {
 			$this->repository[$type] = $this->managerRegistry->getRepository($type);

@@ -3,7 +3,7 @@
 namespace Tests\Cases;
 
 use DateTimeImmutable;
-use FastyBird\AccountsNode\Helpers;
+use FastyBird\AuthNode\Helpers;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;

@@ -6,23 +6,23 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Router
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Router;
+namespace FastyBird\AuthNode\Router;
 
-use FastyBird\AccountsNode\Controllers;
+use FastyBird\AuthNode\Controllers;
 use IPub\SlimRouter\Routing;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 /**
  * Node router configuration
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Router
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -48,8 +48,8 @@ class Router extends Routing\Router
 	/** @var Controllers\SecurityQuestionV1Controller */
 	private $securityQuestionV1Controller;
 
-	/** @var Controllers\SystemIdentityV1Controller */
-	private $systemIdentityV1Controller;
+	/** @var Controllers\UserAccountIdentityV1Controller */
+	private $userAccountIdentityV1Controller;
 
 	/** @var Controllers\RolesV1Controller */
 	private $rolesV1Controller;
@@ -57,18 +57,14 @@ class Router extends Routing\Router
 	/** @var Controllers\RoleChildrenV1Controller */
 	private $roleChildrenV1Controller;
 
-	/** @var Controllers\AuthenticateV1Controller */
-	private $authenticateV1Controller;
-
 	public function __construct(
 		Controllers\SessionV1Controller $sessionV1Controller,
 		Controllers\AccountV1Controller $accountV1Controller,
 		Controllers\EmailsV1Controller $emailsV1Controller,
 		Controllers\SecurityQuestionV1Controller $securityQuestionV1Controller,
-		Controllers\SystemIdentityV1Controller $systemIdentityV1Controller,
+		Controllers\UserAccountIdentityV1Controller $userAccountIdentityV1Controller,
 		Controllers\RolesV1Controller $rolesV1Controller,
 		Controllers\RoleChildrenV1Controller $roleChildrenV1Controller,
-		Controllers\AuthenticateV1Controller $authenticateV1Controller,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
@@ -77,10 +73,9 @@ class Router extends Routing\Router
 		$this->accountV1Controller = $accountV1Controller;
 		$this->emailsV1Controller = $emailsV1Controller;
 		$this->securityQuestionV1Controller = $securityQuestionV1Controller;
-		$this->systemIdentityV1Controller = $systemIdentityV1Controller;
+		$this->userAccountIdentityV1Controller = $userAccountIdentityV1Controller;
 		$this->rolesV1Controller = $rolesV1Controller;
 		$this->roleChildrenV1Controller = $roleChildrenV1Controller;
-		$this->authenticateV1Controller = $authenticateV1Controller;
 	}
 
 	/**
@@ -91,7 +86,7 @@ class Router extends Routing\Router
 		$this->group('/v1', function (Routing\RouteCollector $group): void {
 			$group->post('/register', [$this->accountV1Controller, 'create']);
 
-			$group->post('/password-reset', [$this->systemIdentityV1Controller, 'requestPassword']);
+			$group->post('/password-reset', [$this->userAccountIdentityV1Controller, 'requestPassword']);
 
 			$group->post('/validate-email', [$this->emailsV1Controller, 'validate']);
 
@@ -111,19 +106,17 @@ class Router extends Routing\Router
 				$route->setName('session.relationship');
 			});
 
-			$group->group('/accounts', function (Routing\RouteCollector $group): void {
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->accountV1Controller, 'read']);
+			$group->group('/accounts/{' . self::URL_ACCOUNT_ID . '}', function (Routing\RouteCollector $group): void {
+				$route = $group->get('', [$this->accountV1Controller, 'read']);
 				$route->setName('account');
 
-				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->accountV1Controller, 'update']);
+				$group->patch('', [$this->accountV1Controller, 'update']);
 
-				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->accountV1Controller, 'delete']);
+				$group->delete('', [$this->accountV1Controller, 'delete']);
 
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountV1Controller, 'readRelationship']);
+				$route = $group->get('/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountV1Controller, 'readRelationship']);
 				$route->setName('account.relationship');
-			});
 
-			$group->group('/accounts/{' . self::URL_ACCOUNT_ID . '}', function (Routing\RouteCollector $group): void {
 				$group->group('/emails', function (Routing\RouteCollector $group): void {
 					$route = $group->get('', [$this->emailsV1Controller, 'index']);
 					$route->setName('account.emails');
@@ -156,17 +149,17 @@ class Router extends Routing\Router
 				});
 
 				$group->group('/identities', function (Routing\RouteCollector $group): void {
-					$route = $group->get('', [$this->systemIdentityV1Controller, 'index']);
+					$route = $group->get('', [$this->userAccountIdentityV1Controller, 'index']);
 					$route->setName('account.identities');
 
-					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->systemIdentityV1Controller, 'read']);
+					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->userAccountIdentityV1Controller, 'read']);
 					$route->setName('account.identity');
 
-					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->systemIdentityV1Controller, 'update']);
+					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->userAccountIdentityV1Controller, 'update']);
 
-					$group->post('/{' . self::URL_ITEM_ID . '}/validate', [$this->systemIdentityV1Controller, 'validate']);
+					$group->post('/{' . self::URL_ITEM_ID . '}/validate', [$this->userAccountIdentityV1Controller, 'validate']);
 
-					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->systemIdentityV1Controller, 'readRelationship']);
+					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->userAccountIdentityV1Controller, 'readRelationship']);
 					$route->setName('account.identity.relationship');
 				});
 			});
@@ -192,10 +185,6 @@ class Router extends Routing\Router
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rolesV1Controller, 'readRelationship']);
 				$route->setName('role.relationship');
-			});
-
-			$group->group('/authenticate', function (Routing\RouteCollector $group): void {
-				$group->post('/vernemq', [$this->authenticateV1Controller, 'vernemq']);
 			});
 		});
 	}

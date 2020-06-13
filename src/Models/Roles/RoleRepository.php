@@ -6,20 +6,20 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Roles;
+namespace FastyBird\AuthNode\Models\Roles;
 
 use Doctrine\Common;
-use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Exceptions;
-use FastyBird\AccountsNode\Queries;
+use Doctrine\Persistence;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Queries;
 use IPub\DoctrineOrmQuery;
 use Nette;
 use Throwable;
@@ -27,7 +27,7 @@ use Throwable;
 /**
  * ACL role repository
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -40,7 +40,7 @@ final class RoleRepository implements IRoleRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Roles\Role>|null */
+	/** @var Persistence\ObjectRepository<Entities\Roles\Role>|null */
 	private $repository;
 
 	public function __construct(
@@ -52,10 +52,10 @@ final class RoleRepository implements IRoleRepository
 	/**
 	 * {@inheritDoc}
 	 */
-	public function findOneByKeyName(string $keyName): ?Entities\Roles\IRole
+	public function findOneByName(string $keyName): ?Entities\Roles\IRole
 	{
 		$findQuery = new Queries\FindRolesQuery();
-		$findQuery->byKeyName($keyName);
+		$findQuery->byName($keyName);
 
 		return $this->findOneBy($findQuery);
 	}
@@ -115,9 +115,9 @@ final class RoleRepository implements IRoleRepository
 	}
 
 	/**
-	 * @return ORM\EntityRepository<Entities\Roles\Role>
+	 * @return Persistence\ObjectRepository<Entities\Roles\Role>
 	 */
-	private function getRepository(): ORM\EntityRepository
+	private function getRepository(): Persistence\ObjectRepository
 	{
 		if ($this->repository === null) {
 			$this->repository = $this->managerRegistry->getRepository(Entities\Roles\Role::class);

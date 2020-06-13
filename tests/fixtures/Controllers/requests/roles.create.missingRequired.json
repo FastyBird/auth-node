@@ -1,16 +1,15 @@
 {
   "data" : {
     "id" : "86f623df-276a-46c0-adbe-fb9ac8ddeb02",
-    "type" : "accounts-node/role",
+    "type" : "auth-node/role",
     "attributes" : {
-      "key_name" : "custom_role",
-      "priority" : 10
+      "comment" : "Some comment"
     },
     "relationships" : {
       "parent" : {
         "data" : {
           "id" : "efbfbd04-0158-efbf-bdef-bfbd4defbfbd",
-          "type" : "accounts-node/role"
+          "type" : "auth-node/role"
         }
       }
     }

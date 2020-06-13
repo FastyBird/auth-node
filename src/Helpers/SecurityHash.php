@@ -6,14 +6,14 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Helpers;
+namespace FastyBird\AuthNode\Helpers;
 
 use DateTimeImmutable;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
@@ -23,7 +23,7 @@ use Nette\Utils;
 /**
  * Verification hash helper
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Helpers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

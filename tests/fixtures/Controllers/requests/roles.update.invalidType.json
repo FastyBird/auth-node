@@ -1,10 +1,9 @@
 {
   "data" : {
     "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
-    "type" : "accounts-node/unknown",
+    "type" : "auth-node/unknown",
     "attributes" : {
-      "name" : "Authenticated with update",
-      "priority" : 1
+      "comment" : "Authenticated with update"
     }
   }
 }

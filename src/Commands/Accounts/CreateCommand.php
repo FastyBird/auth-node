@@ -6,21 +6,21 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Commands
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Commands\Accounts;
+namespace FastyBird\AuthNode\Commands\Accounts;
 
 use Contributte\Translation;
 use Doctrine\Common;
 use Doctrine\DBAL\Connection;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Exceptions;
-use FastyBird\AccountsNode\Models;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Models;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
@@ -32,7 +32,7 @@ use Throwable;
 /**
  * Account creation command
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Commands
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -89,7 +89,7 @@ class CreateCommand extends Console\Command\Command
 	protected function configure(): void
 	{
 		$this
-			->setName('fb:accounts-node:accounts:create')
+			->setName('fb:auth-node:accounts:create')
 			->addArgument('lastName', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.lastName.title'))
 			->addArgument('firstName', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.firstName.title'))
 			->addArgument('email', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.email.title'))
@@ -104,7 +104,7 @@ class CreateCommand extends Console\Command\Command
 	{
 		$io = new Style\SymfonyStyle($input, $output);
 
-		$io->title('FB accounts node - create account');
+		$io->title('FB auth node - create account');
 
 		if ($input->hasOption('lastName') && $input->getOption('lastName') !== '') {
 			$lastName = $input->getOption('lastName');
@@ -154,6 +154,7 @@ class CreateCommand extends Console\Command\Command
 			$this->getOrmConnection()->beginTransaction();
 
 			$create = new Utils\ArrayHash();
+			$create->offsetSet('entity', Entities\Accounts\UserAccount::class);
 
 			$details = new Utils\ArrayHash();
 			$details->offsetSet('entity', Entities\Details\Details::class);
@@ -162,6 +163,7 @@ class CreateCommand extends Console\Command\Command
 
 			$create->offsetSet('details', $details);
 
+			/** @var Entities\Accounts\IUserAccount $account */
 			$account = $this->accountsManager->create($create);
 
 			// Create new email entity for user

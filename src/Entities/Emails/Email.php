@@ -6,21 +6,21 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Emails;
+namespace FastyBird\AuthNode\Entities\Emails;
 
 use Consistence\Doctrine\Enum\EnumAnnotation as Enum;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Exceptions;
-use FastyBird\AccountsNode\Types;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
@@ -61,9 +61,9 @@ class Email extends NodeDatabaseEntities\Entity implements IEmail
 	protected $id;
 
 	/**
-	 * @var Entities\Accounts\IAccount
+	 * @var Entities\Accounts\IUserAccount
 	 *
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AccountsNode\Entities\Accounts\Account", inversedBy="emails")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\UserAccount", inversedBy="emails")
 	 * @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", onDelete="cascade", nullable=false)
 	 */
 	private $account;
@@ -125,14 +125,14 @@ class Email extends NodeDatabaseEntities\Entity implements IEmail
 	private $visibility;
 
 	/**
-	 * @param Entities\Accounts\IAccount $account
+	 * @param Entities\Accounts\IUserAccount $account
 	 * @param string $address
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
-		Entities\Accounts\IAccount $account,
+		Entities\Accounts\IUserAccount $account,
 		string $address,
 		?Uuid\UuidInterface $id = null
 	) {
@@ -149,7 +149,7 @@ class Email extends NodeDatabaseEntities\Entity implements IEmail
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getAccount(): Entities\Accounts\IAccount
+	public function getAccount(): Entities\Accounts\IUserAccount
 	{
 		return $this->account;
 	}

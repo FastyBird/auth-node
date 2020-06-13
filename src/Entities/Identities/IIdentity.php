@@ -6,17 +6,18 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Entities\Identities;
+namespace FastyBird\AuthNode\Entities\Identities;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Types;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Types;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineCrud;
 use IPub\DoctrineTimestampable;
 use Nette\Security as NS;
@@ -24,12 +25,13 @@ use Nette\Security as NS;
 /**
  * Identity entity interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 interface IIdentity extends NS\IIdentity,
+	NodeDatabaseEntities\IEntityParams,
 	DoctrineCrud\Entities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineTimestampable\Entities\IEntityUpdated
@@ -44,18 +46,6 @@ interface IIdentity extends NS\IIdentity,
 	 * @return string
 	 */
 	public function getUid(): string;
-
-	/**
-	 * @param string|null $email
-	 *
-	 * @return void
-	 */
-	public function setEmail(?string $email = null): void;
-
-	/**
-	 * @return string|null
-	 */
-	public function getEmail(): ?string;
 
 	/**
 	 * @param Types\IdentityStatusType $status

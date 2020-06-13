@@ -1,6 +1,6 @@
 {
   "data" : {
-    "type" : "accounts-node/email",
+    "type" : "auth-node/email",
     "attributes" : {
       "address" : "john@doe.com"
     }

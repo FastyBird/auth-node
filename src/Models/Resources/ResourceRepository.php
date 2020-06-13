@@ -6,26 +6,26 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Resources;
+namespace FastyBird\AuthNode\Models\Resources;
 
 use Doctrine\Common;
-use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Queries;
+use Doctrine\Persistence;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Queries;
 use Nette;
 use Throwable;
 
 /**
  * ACL resource repository
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -38,24 +38,13 @@ final class ResourceRepository implements IResourceRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Resources\Resource>|null */
+	/** @var Persistence\ObjectRepository<Entities\Resources\Resource>|null */
 	private $repository;
 
 	public function __construct(
 		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->managerRegistry = $managerRegistry;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function findOneByKeyName(string $keyName): ?Entities\Resources\IResource
-	{
-		$findQuery = new Queries\FindResourcesQuery();
-		$findQuery->byKeyName($keyName);
-
-		return $this->findOneBy($findQuery);
 	}
 
 	/**
@@ -84,9 +73,9 @@ final class ResourceRepository implements IResourceRepository
 	}
 
 	/**
-	 * @return ORM\EntityRepository<Entities\Resources\Resource>
+	 * @return Persistence\ObjectRepository<Entities\Resources\Resource>
 	 */
-	private function getRepository(): ORM\EntityRepository
+	private function getRepository(): Persistence\ObjectRepository
 	{
 		if ($this->repository === null) {
 			$this->repository = $this->managerRegistry->getRepository(Entities\Resources\Resource::class);

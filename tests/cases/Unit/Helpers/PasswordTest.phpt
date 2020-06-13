@@ -2,7 +2,7 @@
 
 namespace Tests\Cases;
 
-use FastyBird\AccountsNode\Helpers;
+use FastyBird\AuthNode\Helpers;
 use Ninjify\Nunjuck\TestCase\BaseTestCase;
 use Tester\Assert;
 

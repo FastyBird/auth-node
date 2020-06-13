@@ -6,31 +6,29 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Identities;
+namespace FastyBird\AuthNode\Models\Identities;
 
 use Doctrine\Common;
-use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Exceptions;
-use FastyBird\AccountsNode\Queries;
-use FastyBird\AccountsNode\Types;
+use Doctrine\Persistence;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Queries;
+use FastyBird\AuthNode\Types;
 use IPub\DoctrineOrmQuery;
 use Nette;
-use Nette\Utils;
-use Ramsey\Uuid;
 use Throwable;
 
 /**
  * Account identity facade
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -43,7 +41,7 @@ final class IdentityRepository implements IIdentityRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Identities\Identity>[] */
+	/** @var Persistence\ObjectRepository<Entities\Identities\Identity>[] */
 	private $repository = [];
 
 	public function __construct(Common\Persistence\ManagerRegistry $managerRegistry)
@@ -60,38 +58,6 @@ final class IdentityRepository implements IIdentityRepository
 	): ?Entities\Identities\IIdentity {
 		$findQuery = new Queries\FindIdentitiesQuery();
 		$findQuery->forAccount($account);
-		$findQuery->inStatus(Types\IdentityStatusType::STATE_ACTIVE);
-
-		return $this->findOneBy($findQuery, $type);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function findOneByIdentifier(
-		string $identifier,
-		string $type = Entities\Identities\Identity::class
-	): ?Entities\Identities\IIdentity {
-		$findQuery = new Queries\FindIdentitiesQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($identifier));
-		$findQuery->inStatus(Types\IdentityStatusType::STATE_ACTIVE);
-
-		return $this->findOneBy($findQuery, $type);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function findOneByEmail(
-		string $email,
-		string $type = Entities\Identities\Identity::class
-	): ?Entities\Identities\IIdentity {
-		if (!Utils\Validators::isEmail($email)) {
-			throw new Exceptions\EmailIsNotValidException('Provided email address is not valid.');
-		}
-
-		$findQuery = new Queries\FindIdentitiesQuery();
-		$findQuery->byEmail($email);
 		$findQuery->inStatus(Types\IdentityStatusType::STATE_ACTIVE);
 
 		return $this->findOneBy($findQuery, $type);
@@ -145,12 +111,12 @@ final class IdentityRepository implements IIdentityRepository
 	/**
 	 * @param string $type
 	 *
-	 * @return ORM\EntityRepository<Entities\Identities\Identity>
+	 * @return Persistence\ObjectRepository<Entities\Identities\Identity>
 	 *
 	 * @phpstan-template T of Entities\Identities\Identity
 	 * @phpstan-param    class-string<T> $type
 	 */
-	private function getRepository(string $type): ORM\EntityRepository
+	private function getRepository(string $type): Persistence\ObjectRepository
 	{
 		if (!isset($this->repository[$type])) {
 			$this->repository[$type] = $this->managerRegistry->getRepository($type);

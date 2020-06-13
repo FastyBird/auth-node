@@ -6,36 +6,29 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Resources;
+namespace FastyBird\AuthNode\Models\Resources;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Queries;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
 
 /**
  * ACL resource repository interface
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 interface IResourceRepository
 {
-
-	/**
-	 * @param string $keyName
-	 *
-	 * @return Entities\Resources\IResource|null
-	 */
-	public function findOneByKeyName(string $keyName): ?Entities\Resources\IResource;
 
 	/**
 	 * @param Queries\FindResourcesQuery $queryObject

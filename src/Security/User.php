@@ -6,23 +6,23 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Security
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Security;
+namespace FastyBird\AuthNode\Security;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
 use Nette\Security as NS;
 
 /**
  * Application user
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Security
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -62,7 +62,7 @@ class User extends NS\User
 		if ($this->isLoggedIn()) {
 			$account = $this->getAccount();
 
-			return $account !== null ? $account->getName() : 'Registered';
+			return $account !== null ? ($account instanceof Entities\Accounts\IUserAccount ? $account->getName() : 'Machine') : 'Registered';
 		}
 
 		return 'Guest';
@@ -74,7 +74,7 @@ class User extends NS\User
 	public function getRoles(): array
 	{
 		if (!$this->isLoggedIn()) {
-			$role = $this->roleRepository->findOneByKeyName(Entities\Roles\IRole::ROLE_ANONYMOUS);
+			$role = $this->roleRepository->findOneByName(Entities\Roles\IRole::ROLE_ANONYMOUS);
 
 			return $role !== null ? [$role] : [];
 		}
@@ -99,7 +99,7 @@ class User extends NS\User
 	public function isAllowed($resource = NS\IAuthorizator::ALL, $privilege = NS\IAuthorizator::ALL): bool
 	{
 		// User is logged in but application is without ACL system
-		if ($this->isLoggedIn() && $this->getRoles() === []) {
+		if ($this->getRoles() === []) {
 			return true;
 		}
 

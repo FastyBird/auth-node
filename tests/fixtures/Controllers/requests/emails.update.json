@@ -1,6 +1,6 @@
 {
   "data" : {
-    "type" : "accounts-node/email",
+    "type" : "auth-node/email",
     "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
     "attributes" : {
       "address" : "john@doe.com",

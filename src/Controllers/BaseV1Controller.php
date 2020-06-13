@@ -6,19 +6,19 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
  * @since          0.1.0
  *
  * @date           31.03.20
  */
 
-namespace FastyBird\AccountsNode\Controllers;
+namespace FastyBird\AuthNode\Controllers;
 
 use Contributte\Translation;
 use Doctrine\DBAL\Connection;
-use FastyBird\AccountsNode\Exceptions;
-use FastyBird\AccountsNode\Security;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Security;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Fig\Http\Message\StatusCodeInterface;
@@ -32,7 +32,7 @@ use Psr\Log\LoggerInterface;
 /**
  * API base controller
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

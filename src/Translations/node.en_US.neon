@@ -6,7 +6,7 @@
 # @license		More in license.md
 # @copyright	https://www.fastybird.com
 # @author		Adam Kadlec <adam.kadlec@fastybird.com>
-# @package		FastyBird:AccountsNode!
+# @package		FastyBird:AuthNode!
 # @subpackage	Translations
 # @since		0.1.0
 #
@@ -133,7 +133,7 @@ securityQuestion:
 			heading	: "Not processed"
 			message	: "Provided answer to current question is incorrect"
 
-systemIdentity:
+userAccountIdentity:
 	messages:
 		invalidType:
 			heading	: "Invalid type"

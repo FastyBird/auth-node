@@ -6,29 +6,28 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\Emails;
+namespace FastyBird\AuthNode\Models\Emails;
 
 use Doctrine\Common;
-use Doctrine\ORM;
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Exceptions;
-use FastyBird\AccountsNode\Queries;
+use Doctrine\Persistence;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Queries;
 use IPub\DoctrineOrmQuery;
 use Nette;
-use Ramsey\Uuid;
 use Throwable;
 
 /**
  * Account email address repository
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
@@ -41,24 +40,13 @@ final class EmailRepository implements IEmailRepository
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
-	/** @var ORM\EntityRepository<Entities\Emails\Email>|null */
+	/** @var Persistence\ObjectRepository<Entities\Emails\Email>|null */
 	private $repository;
 
 	public function __construct(
 		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->managerRegistry = $managerRegistry;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function findOneByIdentifier(string $identifier): ?Entities\Emails\IEmail
-	{
-		$findQuery = new Queries\FindEmailsQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($identifier));
-
-		return $this->findOneBy($findQuery);
 	}
 
 	/**
@@ -112,9 +100,9 @@ final class EmailRepository implements IEmailRepository
 	}
 
 	/**
-	 * @return ORM\EntityRepository<Entities\Emails\Email>
+	 * @return Persistence\ObjectRepository<Entities\Emails\Email>
 	 */
-	private function getRepository(): ORM\EntityRepository
+	private function getRepository(): Persistence\ObjectRepository
 	{
 		if ($this->repository === null) {
 			$this->repository = $this->managerRegistry->getRepository(Entities\Emails\Email::class);

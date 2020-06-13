@@ -2,7 +2,7 @@
   "data" : [
     {
       "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
-      "type" : "accounts-node/role"
+      "type" : "auth-node/role"
     }
   ],
   "jsonapi" : {

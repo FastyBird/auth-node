@@ -1,6 +1,6 @@
 {
   "data" : {
-    "type" : "accounts-node/session",
+    "type" : "auth-node/session",
     "attributes" : {
       "uid" : "john.doe@fastybird.com",
       "password" : "123456789"

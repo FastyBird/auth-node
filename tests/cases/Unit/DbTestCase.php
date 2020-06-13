@@ -4,7 +4,7 @@ namespace Tests\Cases;
 
 use Doctrine\DBAL;
 use Doctrine\ORM;
-use FastyBird\AccountsNode\Exceptions;
+use FastyBird\AuthNode\Exceptions;
 use FastyBird\NodeLibs\Boot;
 use Mockery;
 use Nette\DI;

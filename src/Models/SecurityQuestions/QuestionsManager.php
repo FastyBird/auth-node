@@ -6,17 +6,17 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  * @since          0.1.0
  *
  * @date           30.03.20
  */
 
-namespace FastyBird\AccountsNode\Models\SecurityQuestions;
+namespace FastyBird\AuthNode\Models\SecurityQuestions;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
 use IPub\DoctrineCrud\Crud;
 use Nette;
 use Nette\Utils;
@@ -24,7 +24,7 @@ use Nette\Utils;
 /**
  * Account profile security questions entities manager
  *
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Models
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>

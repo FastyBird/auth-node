@@ -6,19 +6,19 @@
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- * @package        FastyBird:AccountsNode!
+ * @package        FastyBird:AuthNode!
  * @subpackage     Schemas
  * @since          0.1.0
  *
  * @date           26.05.20
  */
 
-namespace FastyBird\AccountsNode\Schemas\Roles;
+namespace FastyBird\AuthNode\Schemas\Roles;
 
-use FastyBird\AccountsNode\Entities;
-use FastyBird\AccountsNode\Models;
-use FastyBird\AccountsNode\Queries;
-use FastyBird\AccountsNode\Router;
+use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
+use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
 use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
@@ -26,7 +26,7 @@ use Neomerx\JsonApi;
 /**
  * Role entity schema
  *
- * @package          FastyBird:AccountsNode!
+ * @package          FastyBird:AuthNode!
  * @subpackage       Schemas
  *
  * @author           Adam Kadlec <adam.kadlec@fastybird.com>
@@ -40,7 +40,7 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 	/**
 	 * Define entity schema type string
 	 */
-	public const SCHEMA_TYPE = 'accounts-node/role';
+	public const SCHEMA_TYPE = 'auth-node/role';
 
 	/**
 	 * Define relationships names
@@ -94,10 +94,8 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 	public function getAttributes($role, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		return [
-			'name'     => $role->getName(),
-			'key_name' => $role->getRoleId(),
-			'comment'  => $role->getComment(),
-			'priority' => $role->getPriority(),
+			'name'    => $role->getName(),
+			'comment' => $role->getComment(),
 
 			'locked'        => $role->isLocked(),
 			'anonymous'     => $role->isAnonymous(),

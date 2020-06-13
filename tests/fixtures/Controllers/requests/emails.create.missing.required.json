@@ -1,6 +1,6 @@
 {
   "data" : {
-    "type" : "accounts-node/email",
+    "type" : "auth-node/email",
     "id" : "66295a83-0f85-4e8f-9c3d-9d9f5a947737",
     "attributes" : {
       "is_default" : false,
