@@ -21,7 +21,7 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use Nette;
-use Nette\Utils;
+use Throwable;
 
 /**
  * Doctrine entities events
@@ -39,9 +39,6 @@ final class UserAccountIdentityEntitySubscriber implements Common\EventSubscribe
 	/** @var Models\Vernemq\IAccountRepository */
 	private $accountRepository;
 
-	/** @var Models\Vernemq\IAccountsManager */
-	private $accountsManager;
-
 	/**
 	 * Register events
 	 *
@@ -56,20 +53,19 @@ final class UserAccountIdentityEntitySubscriber implements Common\EventSubscribe
 
 	/**
 	 * @param Models\Vernemq\IAccountRepository $accountRepository
-	 * @param Models\Vernemq\IAccountsManager $accountsManager
 	 */
 	public function __construct(
-		Models\Vernemq\IAccountRepository $accountRepository,
-		Models\Vernemq\IAccountsManager $accountsManager
+		Models\Vernemq\IAccountRepository $accountRepository
 	) {
 		$this->accountRepository = $accountRepository;
-		$this->accountsManager = $accountsManager;
 	}
 
 	/**
 	 * @param ORM\Event\OnFlushEventArgs $eventArgs
 	 *
 	 * @return void
+	 *
+	 * @throws Throwable
 	 */
 	public function onFlush(ORM\Event\OnFlushEventArgs $eventArgs): void
 	{
@@ -80,7 +76,7 @@ final class UserAccountIdentityEntitySubscriber implements Common\EventSubscribe
 		foreach (array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledEntityUpdates()) as $object) {
 			if (
 				$object instanceof Entities\Identities\IUserAccountIdentity
-				&& $object->getPassword() !== null
+				&& $object->getPassword()->getPassword() !== null
 			) {
 				$findAccount = new Queries\FindVerneMqAccountsQuery();
 				$findAccount->forAccount($object->getAccount());
@@ -88,20 +84,26 @@ final class UserAccountIdentityEntitySubscriber implements Common\EventSubscribe
 				$verneMqAccount = $this->accountRepository->findOneBy($findAccount);
 
 				if ($verneMqAccount === null) {
-					$create = Utils\ArrayHash::from([
-						'account'  => $object->getAccount(),
-						'username' => $object->getUid(),
-						'password' => $object->getPassword(),
-					]);
+					$verneMqAccount = new Entities\Vernemq\Account(
+						$object->getUid(),
+						$object->getPassword()->getPassword(),
+						$object->getAccount()
+					);
 
-					$this->accountsManager->create($create);
+					$uow->scheduleForInsert($verneMqAccount);
 
 				} else {
-					$update = Utils\ArrayHash::from([
-						'password' => $object->getPassword(),
-					]);
+					$classMetadata = $em->getClassMetadata(get_class($verneMqAccount));
 
-					$this->accountsManager->update($verneMqAccount, $update);
+					$property = $classMetadata->getReflectionProperty('password');
+
+					$oldValue = $property->getValue($verneMqAccount);
+
+					$uow->propertyChanged($verneMqAccount, 'password', $oldValue, true);
+
+					$uow->scheduleExtraUpdate($verneMqAccount, [
+						'password' => [$oldValue, false],
+					]);
 				}
 			}
 		}
