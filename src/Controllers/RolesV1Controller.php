@@ -405,6 +405,10 @@ final class RolesV1Controller extends BaseV1Controller
 		} elseif ($relationEntity === Schemas\Roles\RoleSchema::RELATIONSHIPS_CHILDREN) {
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($role->getChildren()));
+
+		} elseif ($relationEntity === Schemas\Roles\RoleSchema::RELATIONSHIPS_RULES) {
+			return $response
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($role->getRules()));
 		}
 
 		$this->throwUnknownRelation($relationEntity);

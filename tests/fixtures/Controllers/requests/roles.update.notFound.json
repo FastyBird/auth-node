@@ -3,7 +3,7 @@
     "id" : "0046d3d6-c980-494a-8b40-f19e6095e610",
     "type" : "auth-node/role",
     "attributes" : {
-      "comment" : "Authenticated with update"
+      "description" : "Authenticated with update"
     }
   }
 }

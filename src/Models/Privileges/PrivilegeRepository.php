@@ -18,7 +18,9 @@ namespace FastyBird\AuthNode\Models\Privileges;
 use Doctrine\Common;
 use Doctrine\Persistence;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Queries;
+use IPub\DoctrineOrmQuery;
 use Nette;
 use Throwable;
 
@@ -70,6 +72,35 @@ final class PrivilegeRepository implements IPrivilegeRepository
 		$result = $queryObject->fetch($this->getRepository());
 
 		return is_array($result) ? $result : $result->toArray();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws Throwable
+	 */
+	public function findAllBy(Queries\FindPrivilegesQuery $queryObject): array
+	{
+		$result = $queryObject->fetch($this->getRepository());
+
+		return is_array($result) ? $result : $result->toArray();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws Throwable
+	 */
+	public function getResultSet(
+		Queries\FindPrivilegesQuery $queryObject
+	): DoctrineOrmQuery\ResultSet {
+		$result = $queryObject->fetch($this->getRepository());
+
+		if (!$result instanceof DoctrineOrmQuery\ResultSet) {
+			throw new Exceptions\InvalidStateException('Result set for given query could not be loaded.');
+		}
+
+		return $result;
 	}
 
 	/**

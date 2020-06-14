@@ -51,12 +51,12 @@ interface IResource extends NS\IResource,
 	 *
 	 * @return void
 	 */
-	public function setComment(string $comment): void;
+	public function setDescription(string $comment): void;
 
 	/**
-	 * @return string|null
+	 * @return string
 	 */
-	public function getComment(): ?string;
+	public function getDescription(): string;
 
 	/**
 	 * @param IResource|null $parent

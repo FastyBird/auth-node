@@ -186,6 +186,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Models\Roles\RoleRepository}
 
+	- {factory: FastyBird\AuthNode\Models\Rules\RuleRepository}
+
 	- {factory: FastyBird\AuthNode\Models\Tokens\TokenRepository}
 
 	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountRepository}
@@ -204,6 +206,8 @@ services:
 	- {factory: FastyBird\AuthNode\Models\Resources\ResourcesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Resources\Resource))}
 
 	- {factory: FastyBird\AuthNode\Models\Roles\RolesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Roles\Role))}
+
+	- {factory: FastyBird\AuthNode\Models\Rules\RulesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Rules\Rule))}
 
 	- {factory: FastyBird\AuthNode\Models\SecurityQuestions\QuestionsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\SecurityQuestions\Question))}
 
@@ -228,7 +232,17 @@ services:
 
 	- {factory: FastyBird\AuthNode\Controllers\RoleChildrenV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AuthNode\Controllers\AuthenticateV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\RoleRulesV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AuthNode\Controllers\ResourcesV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AuthNode\Controllers\ResourceChildrenV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AuthNode\Controllers\ResourcePrivilegesV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AuthNode\Controllers\PrivilegesV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AuthNode\Controllers\RulesV1Controller, tags: [nette.inject]}
 
 	# API schemas
 	#############
@@ -245,6 +259,12 @@ services:
 
 	- {factory: FastyBird\AuthNode\Schemas\Roles\RoleSchema}
 
+	- {factory: FastyBird\AuthNode\Schemas\Resources\ResourceSchema}
+
+	- {factory: FastyBird\AuthNode\Schemas\Privileges\PrivilegeSchema}
+
+	- {factory: FastyBird\AuthNode\Schemas\Rules\RuleSchema}
+
 	# API hydrators
 	###############
 
@@ -255,3 +275,9 @@ services:
 	- {factory: FastyBird\AuthNode\Hydrators\SecurityQuestionHydrator}
 
 	- {factory: FastyBird\AuthNode\Hydrators\Roles\RoleHydrator}
+
+	- {factory: FastyBird\AuthNode\Hydrators\Resources\ResourceHydrator}
+
+	- {factory: FastyBird\AuthNode\Hydrators\Privileges\PrivilegeHydrator}
+
+	- {factory: FastyBird\AuthNode\Hydrators\Rules\RuleHydrator}

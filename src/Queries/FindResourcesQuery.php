@@ -42,6 +42,30 @@ class FindResourcesQuery extends DoctrineOrmQuery\QueryObject
 	private $select = [];
 
 	/**
+	 * @param Uuid\UuidInterface $id
+	 *
+	 * @return void
+	 */
+	public function byId(Uuid\UuidInterface $id): void
+	{
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($id): void {
+			$qb->andWhere('r.id = :id')->setParameter('id', $id->getBytes());
+		};
+	}
+
+	/**
+	 * @param string $name
+	 *
+	 * @return void
+	 */
+	public function byName(string $name): void
+	{
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($name): void {
+			$qb->andWhere('r.name = :name')->setParameter('name', $name);
+		};
+	}
+
+	/**
 	 * @param Entities\Resources\IResource $resource
 	 *
 	 * @return void
@@ -66,13 +90,7 @@ class FindResourcesQuery extends DoctrineOrmQuery\QueryObject
 	 */
 	protected function doCreateQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
-		$qb = $this->createBasicDql($repository);
-
-		foreach ($this->select as $modifier) {
-			$modifier($qb);
-		}
-
-		return $qb;
+		return $this->createBasicDql($repository);
 	}
 
 	/**
@@ -84,13 +102,7 @@ class FindResourcesQuery extends DoctrineOrmQuery\QueryObject
 	 */
 	protected function doCreateCountQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
-		$qb = $this->createBasicDql($repository)->select('COUNT(r.id)');
-
-		foreach ($this->select as $modifier) {
-			$modifier($qb);
-		}
-
-		return $qb;
+		return $this->createBasicDql($repository)->select('COUNT(r.id)');
 	}
 
 	/**
@@ -103,6 +115,10 @@ class FindResourcesQuery extends DoctrineOrmQuery\QueryObject
 	private function createBasicDql(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
 		$qb = $repository->createQueryBuilder('r');
+
+		foreach ($this->select as $modifier) {
+			$modifier($qb);
+		}
 
 		foreach ($this->filter as $modifier) {
 			$modifier($qb);

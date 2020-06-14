@@ -38,7 +38,7 @@ final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 	/** @var string[] */
 	protected $attributes = [
 		'name',
-		'comment',
+		'description',
 	];
 
 	/** @var string[] */
@@ -73,13 +73,13 @@ final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 	 *
 	 * @return string|null
 	 */
-	protected function hydrateCommentAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): ?string
+	protected function hydrateDescriptionAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): ?string
 	{
-		if ($attributes->get('comment') === null || (string) $attributes->get('comment') === '') {
+		if ($attributes->get('description') === null || (string) $attributes->get('description') === '') {
 			return null;
 		}
 
-		return (string) $attributes->get('comment');
+		return (string) $attributes->get('description');
 	}
 
 }

@@ -94,13 +94,7 @@ class FindTokensQuery extends DoctrineOrmQuery\QueryObject
 	 */
 	protected function doCreateQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
-		$qb = $this->createBasicDql($repository);
-
-		foreach ($this->select as $modifier) {
-			$modifier($qb);
-		}
-
-		return $qb;
+		return $this->createBasicDql($repository);
 	}
 
 	/**
@@ -112,13 +106,7 @@ class FindTokensQuery extends DoctrineOrmQuery\QueryObject
 	 */
 	protected function doCreateCountQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
-		$qb = $this->createBasicDql($repository)->select('COUNT(t.id)');
-
-		foreach ($this->select as $modifier) {
-			$modifier($qb);
-		}
-
-		return $qb;
+		return $this->createBasicDql($repository)->select('COUNT(t.id)');
 	}
 
 	/**
@@ -131,6 +119,10 @@ class FindTokensQuery extends DoctrineOrmQuery\QueryObject
 	private function createBasicDql(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
 		$qb = $repository->createQueryBuilder('t');
+
+		foreach ($this->select as $modifier) {
+			$modifier($qb);
+		}
 
 		foreach ($this->filter as $modifier) {
 			$modifier($qb);

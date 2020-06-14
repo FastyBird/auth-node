@@ -57,6 +57,24 @@ class Router extends Routing\Router
 	/** @var Controllers\RoleChildrenV1Controller */
 	private $roleChildrenV1Controller;
 
+	/** @var Controllers\RoleRulesV1Controller */
+	private $roleRulesV1Controller;
+
+	/** @var Controllers\ResourcesV1Controller */
+	private $resourcesV1Controller;
+
+	/** @var Controllers\ResourceChildrenV1Controller */
+	private $resourceChildrenV1Controller;
+
+	/** @var Controllers\ResourcePrivilegesV1Controller */
+	private $resourcePrivilegesV1Controller;
+
+	/** @var Controllers\PrivilegesV1Controller */
+	private $privilegesV1Controller;
+
+	/** @var Controllers\RulesV1Controller */
+	private $rulesV1Controller;
+
 	public function __construct(
 		Controllers\SessionV1Controller $sessionV1Controller,
 		Controllers\AccountV1Controller $accountV1Controller,
@@ -65,6 +83,12 @@ class Router extends Routing\Router
 		Controllers\UserAccountIdentityV1Controller $userAccountIdentityV1Controller,
 		Controllers\RolesV1Controller $rolesV1Controller,
 		Controllers\RoleChildrenV1Controller $roleChildrenV1Controller,
+		Controllers\RoleRulesV1Controller $roleRulesV1Controller,
+		Controllers\ResourcesV1Controller $resourcesV1Controller,
+		Controllers\ResourceChildrenV1Controller $resourceChildrenV1Controller,
+		Controllers\ResourcePrivilegesV1Controller $resourcePrivilegesV1Controller,
+		Controllers\PrivilegesV1Controller $privilegesV1Controller,
+		Controllers\RulesV1Controller $rulesV1Controller,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
@@ -76,6 +100,12 @@ class Router extends Routing\Router
 		$this->userAccountIdentityV1Controller = $userAccountIdentityV1Controller;
 		$this->rolesV1Controller = $rolesV1Controller;
 		$this->roleChildrenV1Controller = $roleChildrenV1Controller;
+		$this->roleRulesV1Controller = $roleRulesV1Controller;
+		$this->resourcesV1Controller = $resourcesV1Controller;
+		$this->resourceChildrenV1Controller = $resourceChildrenV1Controller;
+		$this->resourcePrivilegesV1Controller = $resourcePrivilegesV1Controller;
+		$this->privilegesV1Controller = $privilegesV1Controller;
+		$this->rulesV1Controller = $rulesV1Controller;
 	}
 
 	/**
@@ -171,6 +201,12 @@ class Router extends Routing\Router
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/children', [$this->roleChildrenV1Controller, 'index']);
 				$route->setName('role.children');
 
+				/**
+				 * RULES
+				 */
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/rules', [$this->roleRulesV1Controller, 'index']);
+				$route->setName('role.rules');
+
 				$route = $group->get('', [$this->rolesV1Controller, 'index']);
 				$route->setName('roles');
 
@@ -185,6 +221,69 @@ class Router extends Routing\Router
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rolesV1Controller, 'readRelationship']);
 				$route->setName('role.relationship');
+			});
+
+			$group->group('/resources', function (Routing\RouteCollector $group): void {
+				/**
+				 * CHILDREN
+				 */
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/children', [$this->resourceChildrenV1Controller, 'index']);
+				$route->setName('resource.children');
+
+				/**
+				 * PRIVILEGES
+				 */
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/privileges', [$this->resourcePrivilegesV1Controller, 'index']);
+				$route->setName('resource.privileges');
+
+				$route = $group->get('', [$this->resourcesV1Controller, 'index']);
+				$route->setName('resources');
+
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->resourcesV1Controller, 'read']);
+				$route->setName('resource');
+
+				$group->post('', [$this->resourcesV1Controller, 'create']);
+
+				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->resourcesV1Controller, 'update']);
+
+				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->resourcesV1Controller, 'delete']);
+
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->resourcesV1Controller, 'readRelationship']);
+				$route->setName('resource.relationship');
+			});
+
+			$group->group('/privileges', function (Routing\RouteCollector $group): void {
+				$route = $group->get('', [$this->privilegesV1Controller, 'index']);
+				$route->setName('privileges');
+
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->privilegesV1Controller, 'read']);
+				$route->setName('privilege');
+
+				$group->post('', [$this->privilegesV1Controller, 'create']);
+
+				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->privilegesV1Controller, 'update']);
+
+				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->privilegesV1Controller, 'delete']);
+
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->privilegesV1Controller, 'readRelationship']);
+				$route->setName('privilege.relationship');
+			});
+
+			$group->group('/rules', function (Routing\RouteCollector $group): void {
+				$route = $group->get('', [$this->rulesV1Controller, 'index']);
+				$route->setName('rules');
+
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->rulesV1Controller, 'read']);
+				$route->setName('rule');
+
+				$group->post('', [$this->rulesV1Controller, 'create']);
+
+				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->rulesV1Controller, 'update']);
+
+				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->rulesV1Controller, 'delete']);
+
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rulesV1Controller, 'readRelationship']);
+				$route->setName('rule.relationship');
 			});
 		});
 	}

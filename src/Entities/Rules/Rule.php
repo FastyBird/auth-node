@@ -63,8 +63,8 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	/**
 	 * @var Entities\Roles\IRole
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Roles\Role")
+	 * @IPubDoctrine\Crud(is="required")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Roles\Role", inversedBy="rules")
 	 * @ORM\JoinColumn(name="role_id", referencedColumnName="role_id", onDelete="cascade")
 	 */
 	private $role;
@@ -72,39 +72,29 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	/**
 	 * @var Entities\Privileges\IPrivilege
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Privileges\Privilege")
 	 * @ORM\JoinColumn(name="privilege_id", referencedColumnName="privilege_id", onDelete="cascade")
 	 */
 	private $privilege;
 
 	/**
-	 * @var Entities\Resources\IResource
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Resources\Resource")
-	 * @ORM\JoinColumn(name="resource_id", referencedColumnName="resource_id", onDelete="cascade")
-	 */
-	private $resource;
-
-	/**
 	 * @param Entities\Roles\IRole $role
-	 * @param Entities\Resources\IResource $resource
 	 * @param Entities\Privileges\IPrivilege $privilege
 	 * @param bool $access
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Roles\IRole $role,
-		Entities\Resources\IResource $resource,
 		Entities\Privileges\IPrivilege $privilege,
-		bool $access
+		bool $access,
+		?Uuid\UuidInterface $id = null
 	) {
-		$this->id = Uuid\Uuid::uuid4();
+		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->role = $role;
-		$this->resource = $resource;
 		$this->privilege = $privilege;
 
 		$this->access = $access;
@@ -116,14 +106,6 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	public function setAccess(bool $access): void
 	{
 		$this->access = $access ? self::ALLOWED : self::DISALLOWED;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getAccess(): bool
-	{
-		return $this->access;
 	}
 
 	/**
@@ -145,17 +127,17 @@ class Rule extends NodeDatabaseEntities\Entity implements IRule
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getPrivilege(): Entities\Privileges\IPrivilege
+	public function getResource(): Entities\Resources\IResource
 	{
-		return $this->privilege;
+		return $this->privilege->getResource();
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getResource(): Entities\Resources\IResource
+	public function getPrivilege(): Entities\Privileges\IPrivilege
 	{
-		return $this->resource;
+		return $this->privilege;
 	}
 
 }

@@ -5,9 +5,9 @@
         "administrator" : true,
         "anonymous" : false,
         "authenticated" : false,
-        "name" : "administrator",
+        "description" : "Administrator",
         "locked" : true,
-        "comment" : "Administrator"
+        "name" : "administrator"
       },
       "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef",
       "links" : {
@@ -35,6 +35,18 @@
             "related" : "/v1/roles/337a0518-664b-40ef-bfbd-efbfbd7914ef",
             "self" : "/v1/roles/337a0518-664b-40ef-bfbd-efbfbd7914ef/relationships/parent"
           }
+        },
+        "rules" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/roles/337a0518-664b-40ef-bfbd-efbfbd7914ef/rules",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/roles/337a0518-664b-40ef-bfbd-efbfbd7914ef/relationships/rules"
+          }
         }
       },
       "type" : "auth-node/role"
@@ -44,9 +56,9 @@
         "administrator" : false,
         "anonymous" : false,
         "authenticated" : false,
-        "name" : "user-defined",
+        "description" : "User defined",
         "locked" : false,
-        "comment" : "User defined"
+        "name" : "user-defined"
       },
       "id" : "89f4a14f-7f78-4216-99b8-584ab9229f1c",
       "links" : {
@@ -74,6 +86,18 @@
             "related" : "/v1/roles/89f4a14f-7f78-4216-99b8-584ab9229f1c",
             "self" : "/v1/roles/89f4a14f-7f78-4216-99b8-584ab9229f1c/relationships/parent"
           }
+        },
+        "rules" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/roles/89f4a14f-7f78-4216-99b8-584ab9229f1c/rules",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/roles/89f4a14f-7f78-4216-99b8-584ab9229f1c/relationships/rules"
+          }
         }
       },
       "type" : "auth-node/role"
@@ -83,9 +107,9 @@
         "administrator" : false,
         "anonymous" : true,
         "authenticated" : false,
-        "name" : "guest",
+        "description" : "Guest",
         "locked" : true,
-        "comment" : "Guest"
+        "name" : "guest"
       },
       "id" : "efbfbd04-0158-efbf-bdef-bfbd4defbfbd",
       "links" : {
@@ -108,6 +132,18 @@
             },
             "self" : "/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/relationships/children"
           }
+        },
+        "rules" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/rules",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/relationships/rules"
+          }
         }
       },
       "type" : "auth-node/role"
@@ -117,9 +153,9 @@
         "administrator" : false,
         "anonymous" : false,
         "authenticated" : true,
-        "name" : "authenticated",
+        "description" : "Authenticated",
         "locked" : true,
-        "comment" : "Authenticated"
+        "name" : "authenticated"
       },
       "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
       "links" : {
@@ -155,6 +191,27 @@
           "links" : {
             "related" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
             "self" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/relationships/parent"
+          }
+        },
+        "rules" : {
+          "data" : [
+            {
+              "id" : "317cefbf-bd37-7e17-43ef-bfbdc99aefbf",
+              "type" : "auth-node/rule"
+            },
+            {
+              "id" : "365defbf-bd09-efbf-bd7e-4f29efbfbdef",
+              "type" : "auth-node/rule"
+            }
+          ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/rules",
+              "meta" : {
+                "count" : 2
+              }
+            },
+            "self" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/relationships/rules"
           }
         }
       },

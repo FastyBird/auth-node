@@ -4,9 +4,9 @@
       "administrator" : false,
       "anonymous" : false,
       "authenticated" : false,
-      "name" : "custom-role",
+      "description" : "Custom role",
       "locked" : false,
-      "comment" : "Custom role"
+      "name" : "custom-role"
     },
     "id" : "86f623df-276a-46c0-adbe-fb9ac8ddeb02",
     "links" : {
@@ -33,6 +33,18 @@
         "links" : {
           "related" : "/v1/roles/86f623df-276a-46c0-adbe-fb9ac8ddeb02",
           "self" : "/v1/roles/86f623df-276a-46c0-adbe-fb9ac8ddeb02/relationships/parent"
+        }
+      },
+      "rules" : {
+        "data" : [ ],
+        "links" : {
+          "related" : {
+            "href" : "/v1/roles/86f623df-276a-46c0-adbe-fb9ac8ddeb02/rules",
+            "meta" : {
+              "count" : 0
+            }
+          },
+          "self" : "/v1/roles/86f623df-276a-46c0-adbe-fb9ac8ddeb02/relationships/rules"
         }
       }
     },

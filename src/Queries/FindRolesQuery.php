@@ -90,13 +90,7 @@ class FindRolesQuery extends DoctrineOrmQuery\QueryObject
 	 */
 	protected function doCreateQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
-		$qb = $this->createBasicDql($repository);
-
-		foreach ($this->select as $modifier) {
-			$modifier($qb);
-		}
-
-		return $qb;
+		return $this->createBasicDql($repository);
 	}
 
 	/**
@@ -108,13 +102,7 @@ class FindRolesQuery extends DoctrineOrmQuery\QueryObject
 	 */
 	protected function doCreateCountQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
-		$qb = $this->createBasicDql($repository)->select('COUNT(r.id)');
-
-		foreach ($this->select as $modifier) {
-			$modifier($qb);
-		}
-
-		return $qb;
+		return $this->createBasicDql($repository)->select('COUNT(r.id)');
 	}
 
 	/**
@@ -127,6 +115,10 @@ class FindRolesQuery extends DoctrineOrmQuery\QueryObject
 	private function createBasicDql(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
 		$qb = $repository->createQueryBuilder('r');
+
+		foreach ($this->select as $modifier) {
+			$modifier($qb);
+		}
 
 		foreach ($this->filter as $modifier) {
 			$modifier($qb);

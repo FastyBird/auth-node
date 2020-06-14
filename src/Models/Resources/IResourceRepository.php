@@ -18,6 +18,7 @@ namespace FastyBird\AuthNode\Models\Resources;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
+use IPub\DoctrineOrmQuery;
 
 /**
  * ACL resource repository interface
@@ -44,5 +45,26 @@ interface IResourceRepository
 	 * @return Entities\Resources\IResource[]
 	 */
 	public function findAll(): array;
+
+	/**
+	 * @param Queries\FindResourcesQuery $queryObject
+	 *
+	 * @return Entities\Resources\IResource[]
+	 *
+	 * @phpstan-template T of Entities\Resources\Resource
+	 * @phpstan-param    Queries\FindResourcesQuery<T> $queryObject
+	 */
+	public function findAllBy(Queries\FindResourcesQuery $queryObject): array;
+
+	/**
+	 * @param Queries\FindResourcesQuery $queryObject
+	 *
+	 * @return DoctrineOrmQuery\ResultSet
+	 *
+	 * @phpstan-template T of Entities\Resources\Resource
+	 * @phpstan-param    Queries\FindResourcesQuery<T> $queryObject
+	 * @phpstan-return   DoctrineOrmQuery\ResultSet<T>
+	 */
+	public function getResultSet(Queries\FindResourcesQuery $queryObject): DoctrineOrmQuery\ResultSet;
 
 }

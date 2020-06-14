@@ -61,12 +61,12 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 	private $name;
 
 	/**
-	 * @var string|null
+	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="text", name="privilege_comment", nullable=true, options={"default": null})
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
+	 * @ORM\Column(type="text", name="privilege_description", nullable=false)
 	 */
-	private $comment = null;
+	private $description;
 
 	/**
 	 * @var Entities\Resources\IResource
@@ -79,17 +79,23 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 	/**
 	 * @param Entities\Resources\IResource $resource
 	 * @param string $name
+	 * @param string $description
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Resources\IResource $resource,
-		string $name
+		string $name,
+		string $description,
+		?Uuid\UuidInterface $id = null
 	) {
-		$this->id = Uuid\Uuid::uuid4();
+		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->resource = $resource;
+
 		$this->name = $name;
+		$this->description = $description;
 	}
 
 	/**
@@ -119,17 +125,17 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setComment(string $comment): void
+	public function setDescription(string $description): void
 	{
-		$this->comment = $comment;
+		$this->description = $description;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getComment(): ?string
+	public function getDescription(): string
 	{
-		return $this->comment;
+		return $this->description;
 	}
 
 	/**

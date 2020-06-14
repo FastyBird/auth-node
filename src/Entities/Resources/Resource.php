@@ -62,12 +62,12 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	protected $name;
 
 	/**
-	 * @var string|null
+	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="text", name="resource_comment", nullable=true, options={"default": null})
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
+	 * @ORM\Column(type="text", name="resource_description", nullable=false)
 	 */
-	protected $comment = null;
+	protected $description;
 
 	/**
 	 * @var Entities\Resources\IResource|null
@@ -94,15 +94,20 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 
 	/**
 	 * @param string $name
+	 * @param string $description
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
-		string $name
+		string $name,
+		string $description,
+		?Uuid\UuidInterface $id = null
 	) {
-		$this->id = Uuid\Uuid::uuid4();
+		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->name = $name;
+		$this->description = $description;
 
 		$this->children = new Common\Collections\ArrayCollection();
 		$this->privileges = new Common\Collections\ArrayCollection();
@@ -135,17 +140,17 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setComment(string $comment): void
+	public function setDescription(string $description): void
 	{
-		$this->comment = $comment;
+		$this->description = $description;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getComment(): ?string
+	public function getDescription(): string
 	{
-		return $this->comment;
+		return $this->description;
 	}
 
 	/**

@@ -4,9 +4,9 @@
       "administrator" : false,
       "anonymous" : false,
       "authenticated" : true,
-      "name" : "authenticated",
+      "description" : "Authenticated with update",
       "locked" : true,
-      "comment" : "Authenticated with update"
+      "name" : "authenticated"
     },
     "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
     "links" : {
@@ -42,6 +42,27 @@
         "links" : {
           "related" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
           "self" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/relationships/parent"
+        }
+      },
+      "rules" : {
+        "data" : [
+          {
+            "id" : "317cefbf-bd37-7e17-43ef-bfbdc99aefbf",
+            "type" : "auth-node/rule"
+          },
+          {
+            "id" : "365defbf-bd09-efbf-bd7e-4f29efbfbdef",
+            "type" : "auth-node/rule"
+          }
+        ],
+        "links" : {
+          "related" : {
+            "href" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/rules",
+            "meta" : {
+              "count" : 2
+            }
+          },
+          "self" : "/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/relationships/rules"
         }
       }
     },

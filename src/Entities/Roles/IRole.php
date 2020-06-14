@@ -54,16 +54,16 @@ interface IRole extends NS\IRole,
 	public function getName(): string;
 
 	/**
-	 * @param string|null $comment
+	 * @param string $comment
 	 *
 	 * @return void
 	 */
-	public function setComment(?string $comment): void;
+	public function setDescription(string $comment): void;
 
 	/**
-	 * @return string|null
+	 * @return string
 	 */
-	public function getComment(): ?string;
+	public function getDescription(): string;
 
 	/**
 	 * @param IRole|null $parent

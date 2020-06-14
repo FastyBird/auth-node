@@ -33,6 +33,12 @@ return [
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/roles.children.json',
 	],
+	'readRules'              => [
+		'/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/rules',
+		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg',
+		StatusCodeInterface::STATUS_OK,
+		__DIR__ . '/responses/roles.rules.json',
+	],
 	'readRelationshipsChildren' => [
 		'/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/relationships/children',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg',
@@ -44,6 +50,12 @@ return [
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/roles.readRelationships.parent.json',
+	],
+	'readRelationshipsRules'   => [
+		'/v1/roles/efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61/relationships/rules',
+		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg',
+		StatusCodeInterface::STATUS_OK,
+		__DIR__ . '/responses/roles.readRelationships.rules.json',
 	],
 	'readRelationshipsUnknown'  => [
 		'/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/relationships/unknown',

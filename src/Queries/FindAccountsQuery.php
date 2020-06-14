@@ -74,13 +74,7 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	 */
 	protected function doCreateQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
-		$qb = $this->createBasicDql($repository);
-
-		foreach ($this->select as $modifier) {
-			$modifier($qb);
-		}
-
-		return $qb;
+		return $this->createBasicDql($repository);
 	}
 
 	/**
@@ -92,13 +86,7 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	 */
 	protected function doCreateCountQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
-		$qb = $this->createBasicDql($repository)->select('COUNT(a.id)');
-
-		foreach ($this->select as $modifier) {
-			$modifier($qb);
-		}
-
-		return $qb;
+		return $this->createBasicDql($repository)->select('COUNT(a.id)');
 	}
 
 	/**
@@ -111,8 +99,13 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	private function createBasicDql(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
 		$qb = $repository->createQueryBuilder('a');
+
 		$qb->addSelect('details');
 		$qb->join('a.details', 'details');
+
+		foreach ($this->select as $modifier) {
+			$modifier($qb);
+		}
 
 		foreach ($this->filter as $modifier) {
 			$modifier($qb);

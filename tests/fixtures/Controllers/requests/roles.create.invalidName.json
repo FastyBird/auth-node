@@ -4,7 +4,7 @@
     "type" : "auth-node/role",
     "attributes" : {
       "name" : "administrator",
-      "comment" : "Administrator"
+      "description" : "Administrator"
     },
     "relationships" : {
       "parent" : {

@@ -3,7 +3,7 @@
     "id" : "86f623df-276a-46c0-adbe-fb9ac8ddeb02",
     "type" : "auth-node/role",
     "attributes" : {
-      "comment" : "Some comment"
+      "description" : "Some description"
     },
     "relationships" : {
       "parent" : {

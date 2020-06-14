@@ -47,22 +47,29 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 */
 	public const RELATIONSHIPS_PARENT = 'parent';
 	public const RELATIONSHIPS_CHILDREN = 'children';
+	public const RELATIONSHIPS_RULES = 'rules';
 
 	/** @var Models\Roles\IRoleRepository */
-	protected $roleRepository;
+	private $roleRepository;
+
+	/** @var Models\Rules\IRuleRepository */
+	private $ruleRepository;
 
 	/** @var Routing\IRouter */
-	protected $router;
+	private $router;
 
 	/**
 	 * @param Models\Roles\IRoleRepository $roleRepository
+	 * @param Models\Rules\IRuleRepository $ruleRepository
 	 * @param Routing\IRouter $router
 	 */
 	public function __construct(
 		Models\Roles\IRoleRepository $roleRepository,
+		Models\Rules\IRuleRepository $ruleRepository,
 		Routing\IRouter $router
 	) {
 		$this->roleRepository = $roleRepository;
+		$this->ruleRepository = $ruleRepository;
 
 		$this->router = $router;
 	}
@@ -94,8 +101,8 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 	public function getAttributes($role, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		return [
-			'name'    => $role->getName(),
-			'comment' => $role->getComment(),
+			'name'        => $role->getName(),
+			'description' => $role->getDescription(),
 
 			'locked'        => $role->isLocked(),
 			'anonymous'     => $role->isAnonymous(),
@@ -138,6 +145,11 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 		$relationships = [
 			self::RELATIONSHIPS_CHILDREN => [
 				self::RELATIONSHIP_DATA          => $this->getChildren($role),
+				self::RELATIONSHIP_LINKS_SELF    => true,
+				self::RELATIONSHIP_LINKS_RELATED => true,
+			],
+			self::RELATIONSHIPS_RULES => [
+				self::RELATIONSHIP_DATA          => $this->getRules($role),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
@@ -190,6 +202,21 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 					'count' => count($role->getChildren()),
 				]
 			);
+
+		} elseif ($name === self::RELATIONSHIPS_RULES) {
+			return new JsonApi\Schema\Link(
+				false,
+				$this->router->urlFor(
+					'role.rules',
+					[
+						Router\Router::URL_ITEM_ID => $role->getPlainId(),
+					]
+				),
+				true,
+				[
+					'count' => count($role->getRules()),
+				]
+			);
 		}
 
 		return parent::getRelationshipRelatedLink($role, $name);
@@ -210,6 +237,7 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 		if (
 			$name === self::RELATIONSHIPS_CHILDREN
 			|| ($name === self::RELATIONSHIPS_PARENT && $role->getParent() !== null)
+			|| $name === self::RELATIONSHIPS_RULES
 		) {
 			return new JsonApi\Schema\Link(
 				false,
@@ -229,16 +257,29 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 	}
 
 	/**
-	 * @param Entities\Roles\IRole $device
+	 * @param Entities\Roles\IRole $role
 	 *
 	 * @return Entities\Roles\IRole[]
 	 */
-	private function getChildren(Entities\Roles\IRole $device): array
+	private function getChildren(Entities\Roles\IRole $role): array
 	{
 		$findQuery = new Queries\FindRolesQuery();
-		$findQuery->forParent($device);
+		$findQuery->forParent($role);
 
 		return $this->roleRepository->findAllBy($findQuery);
+	}
+
+	/**
+	 * @param Entities\Roles\IRole $role
+	 *
+	 * @return Entities\Rules\IRule[]
+	 */
+	private function getRules(Entities\Roles\IRole $role): array
+	{
+		$findQuery = new Queries\FindRulesQuery();
+		$findQuery->forRole($role);
+
+		return $this->ruleRepository->findAllBy($findQuery);
 	}
 
 }

@@ -18,6 +18,7 @@ namespace FastyBird\AuthNode\Models\Privileges;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
+use IPub\DoctrineOrmQuery;
 
 /**
  * ACL privileges repository interface
@@ -44,5 +45,26 @@ interface IPrivilegeRepository
 	 * @return Entities\Privileges\IPrivilege[]
 	 */
 	public function findAll(): array;
+
+	/**
+	 * @param Queries\FindPrivilegesQuery $queryObject
+	 *
+	 * @return Entities\Privileges\IPrivilege[]
+	 *
+	 * @phpstan-template T of Entities\Privileges\Privilege
+	 * @phpstan-param    Queries\FindPrivilegesQuery<T> $queryObject
+	 */
+	public function findAllBy(Queries\FindPrivilegesQuery $queryObject): array;
+
+	/**
+	 * @param Queries\FindPrivilegesQuery $queryObject
+	 *
+	 * @return DoctrineOrmQuery\ResultSet
+	 *
+	 * @phpstan-template T of Entities\Privileges\Privilege
+	 * @phpstan-param    Queries\FindPrivilegesQuery<T> $queryObject
+	 * @phpstan-return   DoctrineOrmQuery\ResultSet<T>
+	 */
+	public function getResultSet(Queries\FindPrivilegesQuery $queryObject): DoctrineOrmQuery\ResultSet;
 
 }

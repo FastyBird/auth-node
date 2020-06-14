@@ -45,11 +45,6 @@ interface IRule extends NodeDatabaseEntities\IEntity,
 	/**
 	 * @return bool
 	 */
-	public function getAccess(): bool;
-
-	/**
-	 * @return bool
-	 */
 	public function hasAccess(): bool;
 
 	/**

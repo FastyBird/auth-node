@@ -45,6 +45,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Models\Resources\ResourceRepository::class));
 		Assert::notNull($container->getByType(Models\Roles\RoleRepository::class));
 		Assert::notNull($container->getByType(Models\Tokens\TokenRepository::class));
+		Assert::notNull($container->getByType(Models\Vernemq\AccountRepository::class));
 
 		Assert::notNull($container->getByType(Models\Accounts\AccountsManager::class));
 		Assert::notNull($container->getByType(Models\Emails\EmailsManager::class));
@@ -63,6 +64,12 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Controllers\UserAccountIdentityV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RolesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RoleChildrenV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\RoleRulesV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\ResourcesV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\ResourceChildrenV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\ResourcePrivilegesV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\PrivilegesV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\RulesV1Controller::class));
 
 		Assert::notNull($container->getByType(Schemas\Accounts\UserAccountSchema::class));
 		Assert::notNull($container->getByType(Schemas\EmailSchema::class));
@@ -75,6 +82,8 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Hydrators\EmailHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\SecurityQuestionHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Roles\RoleHydrator::class));
+		Assert::notNull($container->getByType(Hydrators\Resources\ResourceHydrator::class));
+		Assert::notNull($container->getByType(Hydrators\Privileges\PrivilegeHydrator::class));
 	}
 
 }

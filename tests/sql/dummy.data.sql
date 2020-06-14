@@ -57,23 +57,24 @@ INSERT IGNORE INTO `fb_security_tokens_refresh` (`token_id`) VALUES
 	(_binary 0x00E79DA3E4BE4F289C49082E724BBADE),
 	(_binary 0xC0EF0AAF9EDE4B54A2B48E9D9005865A);
 
-INSERT IGNORE INTO `fb_acl_roles` (`role_id`, `parent_id`, `role_name`, `role_comment`, `created_at`, `updated_at`) VALUES
+INSERT IGNORE INTO `fb_acl_roles` (`role_id`, `parent_id`, `role_name`, `role_description`, `created_at`, `updated_at`) VALUES
 	(_binary 0xEFBFBD040158EFBFBDEFBFBD4DEFBFBD, NULL, 'guest', 'Guest', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0xEFBFBD040158EFBFBDEFBFBD4DEFBFBD, 'authenticated', 'Authenticated', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, 'administrator', 'Administrator', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0x89F4A14F7F78421699B8584AB9229F1C, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, 'user-defined', 'User defined', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
 
 INSERT IGNORE INTO `fb_accounts_roles` (`role_id`, `account_id`) VALUES
-	(_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34);
+	(_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34),
+	(_binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD);
 
-INSERT IGNORE INTO `fb_acl_resources` (`resource_id`, `parent_id`, `resource_name`, `resource_comment`, `created_at`, `updated_at`) VALUES
+INSERT IGNORE INTO `fb_acl_resources` (`resource_id`, `parent_id`, `resource_name`, `resource_description`, `created_at`, `updated_at`) VALUES
 	(_binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, NULL, 'fb/auth-node', NULL, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, NULL, 'fb/other-node', NULL, '2020-06-03 12:00:00', '2020-06-03 12:00:00');
 
-INSERT IGNORE INTO `fb_acl_privileges` (`privilege_id`, `resource_id`, `privilege_name`, `privilege_comment`, `created_at`, `updated_at`) VALUES
+INSERT IGNORE INTO `fb_acl_privileges` (`privilege_id`, `resource_id`, `privilege_name`, `privilege_description`, `created_at`, `updated_at`) VALUES
 	(_binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, _binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, 'access', 'Access to node', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0x3DEFBFBD2E1AEFBFBDEFBFBD49EFBFBD, _binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, 'manage emails', 'Manage emails. Warning: Give to trusted roles only; this permission has security implications.', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
 
-INSERT IGNORE INTO `fb_acl_rules` (`rule_id`, `role_id`, `privilege_id`, `resource_id`, `access`, `created_at`, `updated_at`) VALUES
-	(_binary 0x317CEFBFBD377E1743EFBFBDC99AEFBF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, _binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, 1, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
-	(_binary 0x365DEFBFBD09EFBFBD7E4F29EFBFBDEF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0x3DEFBFBD2E1AEFBFBDEFBFBD49EFBFBD, _binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, 1, '2020-06-03 12:00:00', '2020-06-03 12:00:00');
+INSERT IGNORE INTO `fb_acl_rules` (`rule_id`, `role_id`, `privilege_id`, `access`, `created_at`, `updated_at`) VALUES
+	(_binary 0x317CEFBFBD377E1743EFBFBDC99AEFBF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, 1, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0x365DEFBFBD09EFBFBD7E4F29EFBFBDEF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0x3DEFBFBD2E1AEFBFBDEFBFBD49EFBFBD, 1, '2020-06-03 12:00:00', '2020-06-03 12:00:00');

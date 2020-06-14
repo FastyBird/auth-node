@@ -4,7 +4,7 @@
     "type" : "auth-node/role",
     "attributes" : {
       "name" : "custom_role",
-      "comment" : "Custom role"
+      "description" : "Custom role"
     },
     "relationships" : {
       "parent" : {

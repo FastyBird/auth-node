@@ -18,7 +18,9 @@ namespace FastyBird\AuthNode\Models\Resources;
 use Doctrine\Common;
 use Doctrine\Persistence;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Queries;
+use IPub\DoctrineOrmQuery;
 use Nette;
 use Throwable;
 
@@ -65,11 +67,40 @@ final class ResourceRepository implements IResourceRepository
 	 */
 	public function findAll(): array
 	{
-		$queryObject = new Queries\FindPrivilegesQuery();
+		$queryObject = new Queries\FindResourcesQuery();
 
 		$result = $queryObject->fetch($this->getRepository());
 
 		return is_array($result) ? $result : $result->toArray();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws Throwable
+	 */
+	public function findAllBy(Queries\FindResourcesQuery $queryObject): array
+	{
+		$result = $queryObject->fetch($this->getRepository());
+
+		return is_array($result) ? $result : $result->toArray();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws Throwable
+	 */
+	public function getResultSet(
+		Queries\FindResourcesQuery $queryObject
+	): DoctrineOrmQuery\ResultSet {
+		$result = $queryObject->fetch($this->getRepository());
+
+		if (!$result instanceof DoctrineOrmQuery\ResultSet) {
+			throw new Exceptions\InvalidStateException('Result set for given query could not be loaded.');
+		}
+
+		return $result;
 	}
 
 	/**
