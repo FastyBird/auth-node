@@ -33,7 +33,7 @@ use Throwable;
  *       "comment"="ACL roles & resources mappings"
  *     },
  *     uniqueConstraints={
- *       @ORM\UniqueConstraint(name="role_rule_unique", columns={"role_id", "resource_id", "privilege_id"}),
+ *       @ORM\UniqueConstraint(name="role_rule_unique", columns={"role_id", "privilege_id"}),
  *     }
  * )
  */
