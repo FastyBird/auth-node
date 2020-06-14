@@ -36,11 +36,11 @@ final class ResourcePrivilegesV1Controller extends BaseV1Controller
 
 	use Controllers\Finders\TResourceFinder;
 
-	/** @var Models\Resources\IResourceRepository */
-	private $resourceRepository;
-
 	/** @var Models\Privileges\IPrivilegeRepository */
 	private $privilegeRepository;
+
+	/** @var Models\Resources\IResourceRepository */
+	protected $resourceRepository;
 
 	/** @var string */
 	protected $translationDomain = 'node.resources';

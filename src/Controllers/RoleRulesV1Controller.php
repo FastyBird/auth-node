@@ -36,11 +36,11 @@ final class RoleRulesV1Controller extends BaseV1Controller
 
 	use Controllers\Finders\TRoleFinder;
 
-	/** @var Models\Roles\IRoleRepository */
-	private $roleRepository;
-
 	/** @var Models\Rules\IRuleRepository */
 	private $ruleRepository;
+
+	/** @var Models\Roles\IRoleRepository */
+	protected $roleRepository;
 
 	/** @var string */
 	protected $translationDomain = 'node.roles';
