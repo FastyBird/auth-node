@@ -131,8 +131,8 @@ final class AccountV1Controller extends BaseV1Controller
 		if ($document->getResource()->getIdentifier()->getId() !== $this->user->getAccount()->getPlainId()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalid.heading'),
-				$this->translator->translate('//node.base.messages.invalid.message')
+				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
+				$this->translator->translate('//node.base.messages.identifierInvalid.message')
 			);
 		}
 

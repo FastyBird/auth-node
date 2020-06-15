@@ -21,6 +21,9 @@ base:
 		notValidJsonApi:
 			heading	: "Not valid content"
 			message	: "Provided request content is not valid {JSON:API} content"
+		identifierInvalid:
+			heading	: "Entity identifier invalid"
+			message	: "Provided entity identifier is not valid"
 		unknownRelation:
 			heading	: "Relation not found"
 			message	: "Requested unknown relation"
@@ -30,24 +33,21 @@ base:
 		missingRequired:
 			heading	: "Missing required attribute"
 			message	: "Provided request is missing required attribute or relation"
-		invalid:
-			heading	: "Bad request"
-			message	: "Request resource identifier is invalid"
-		identifierInvalid:
-			heading	: "Entity identifier invalid"
-			message	: "Provided entity identifier is not valid"
 		notAuthorized:
 			heading	: "Not authorized"
 			message	: "You are not authorized to perform this action"
 		forbidden:
 			heading	: "Not allowed"
 			message	: "You are not allowed to perform this action"
-		roleNotFound:
-			heading	: "Role not found"
-			message	: "Requested role was not found"
 		uniqueConstraint:
 			heading	: "Attribute not unique"
 			message	: "Provided attribute is not unique"
+		roleNotFound:
+			heading	: "Role not found"
+			message	: "Requested role was not found"
+		resourceNotFound:
+			heading	: "Resource not found"
+			message	: "Requested resource was not found"
 
 session:
 	messages:
@@ -174,3 +174,21 @@ roles:
 		systemNotDeletable:
 			heading	: "Role is system"
 			message	: "System role could not be deleted"
+
+resources:
+	messages:
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided resource entity type is not valid"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, resource could not be updated"
+
+privileges:
+	messages:
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided privilege entity type is not valid"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, privilege could not be updated"

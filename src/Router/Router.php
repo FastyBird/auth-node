@@ -242,11 +242,7 @@ class Router extends Routing\Router
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->resourcesV1Controller, 'read']);
 				$route->setName('resource');
 
-				$group->post('', [$this->resourcesV1Controller, 'create']);
-
 				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->resourcesV1Controller, 'update']);
-
-				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->resourcesV1Controller, 'delete']);
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->resourcesV1Controller, 'readRelationship']);
 				$route->setName('resource.relationship');
@@ -259,11 +255,7 @@ class Router extends Routing\Router
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->privilegesV1Controller, 'read']);
 				$route->setName('privilege');
 
-				$group->post('', [$this->privilegesV1Controller, 'create']);
-
 				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->privilegesV1Controller, 'update']);
-
-				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->privilegesV1Controller, 'delete']);
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->privilegesV1Controller, 'readRelationship']);
 				$route->setName('privilege.relationship');

@@ -1,0 +1,37 @@
+{
+  "data" : [
+    {
+      "attributes" : {
+        "description" : "Manage emails. Warning: Give to trusted roles only; this permission has security implications.",
+        "name" : "manage emails"
+      },
+      "id" : "3defbfbd-2e1a-efbf-bdef-bfbd49efbfbd",
+      "links" : {
+        "self" : "/v1/privileges/3defbfbd-2e1a-efbf-bdef-bfbd49efbfbd"
+      },
+      "relationships" : {
+        "resource" : {
+          "data" : {
+            "id" : "efbfbdef-bfbd-510e-3774-4c64efbfbdef",
+            "type" : "auth-node/resource"
+          },
+          "links" : {
+            "related" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef",
+            "self" : "/v1/privileges/3defbfbd-2e1a-efbf-bdef-bfbd49efbfbd/relationships/resource"
+          }
+        }
+      },
+      "type" : "auth-node/privilege"
+    }
+  ],
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/privileges"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  }
+}

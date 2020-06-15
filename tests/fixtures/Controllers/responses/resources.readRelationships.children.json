@@ -1,0 +1,19 @@
+{
+  "data" : [
+    {
+      "id" : "c3f6947c-1736-42b0-bfd4-73b9070b4491",
+      "type" : "auth-node/resource"
+    }
+  ],
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "related" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/children",
+    "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/relationships/children"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  }
+}

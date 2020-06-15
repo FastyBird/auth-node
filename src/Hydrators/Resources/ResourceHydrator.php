@@ -16,10 +16,8 @@
 namespace FastyBird\AuthNode\Hydrators\Resources;
 
 use FastyBird\AuthNode\Entities;
-use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 use IPub\JsonAPIDocument;
-use Nette\Utils;
 
 /**
  * Resource entity hydrator
@@ -37,13 +35,7 @@ final class ResourceHydrator extends NodeJsonApiHydrators\Hydrator
 
 	/** @var string[] */
 	protected $attributes = [
-		'name',
 		'description',
-	];
-
-	/** @var string[] */
-	protected $relationships = [
-		Schemas\Resources\ResourceSchema::RELATIONSHIPS_PARENT,
 	];
 
 	/**
@@ -52,20 +44,6 @@ final class ResourceHydrator extends NodeJsonApiHydrators\Hydrator
 	protected function getEntityName(): string
 	{
 		return Entities\Resources\Resource::class;
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 *
-	 * @return string
-	 */
-	protected function hydrateNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
-	{
-		if ($attributes->get('name') === null || (string) $attributes->get('name') === '') {
-			return Utils\Strings::webalize((string) $attributes->get('name'));
-		}
-
-		return Utils\Strings::webalize((string) $attributes->get('name'));
 	}
 
 	/**

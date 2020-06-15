@@ -233,8 +233,8 @@ final class RolesV1Controller extends BaseV1Controller
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalid.heading'),
-				$this->translator->translate('//node.base.messages.invalid.message')
+				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
+				$this->translator->translate('//node.base.messages.identifierInvalid.message')
 			);
 		}
 

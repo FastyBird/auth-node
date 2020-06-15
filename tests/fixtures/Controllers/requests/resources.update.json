@@ -1,0 +1,10 @@
+{
+  "data" : {
+    "id" : "efbfbdef-bfbd-510e-3774-4c64efbfbdef",
+    "type" : "auth-node/resource",
+    "attributes" : {
+      "description" : "Resource desc with editation",
+      "name" : "fb/other-node-noEdit"
+    }
+  }
+}
