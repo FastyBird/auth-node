@@ -31,13 +31,17 @@
           {
             "id" : "3defbfbd-2e1a-efbf-bdef-bfbd49efbfbd",
             "type" : "auth-node/privilege"
+          },
+          {
+            "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
+            "type" : "auth-node/privilege"
           }
         ],
         "links" : {
           "related" : {
             "href" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/privileges",
             "meta" : {
-              "count" : 1
+              "count" : 2
             }
           },
           "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/relationships/privileges"

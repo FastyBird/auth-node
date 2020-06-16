@@ -192,3 +192,6 @@ privileges:
 		notUpdated:
 			heading	: "System error"
 			message	: "Something went wrong, privilege could not be updated"
+		notFound:
+			heading	: "Privilege not found"
+			message	: "Requested privilege was not found"

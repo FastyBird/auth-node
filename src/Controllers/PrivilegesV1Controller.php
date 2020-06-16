@@ -417,16 +417,16 @@ final class PrivilegesV1Controller extends BaseV1Controller
 			if ($privilege === null) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_NOT_FOUND,
-					$this->translator->translate('messages.privilegeNotFound.heading'),
-					$this->translator->translate('messages.privilegeNotFound.message')
+					$this->translator->translate('messages.notFound.heading'),
+					$this->translator->translate('messages.notFound.message')
 				);
 			}
 
 		} catch (Uuid\Exception\InvalidUuidStringException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.privilegeNotFound.heading'),
-				$this->translator->translate('messages.privilegeNotFound.message')
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
 			);
 		}
 

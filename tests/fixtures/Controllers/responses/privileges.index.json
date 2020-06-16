@@ -2,6 +2,29 @@
   "data" : [
     {
       "attributes" : {
+        "description" : "Access to node",
+        "name" : "access"
+      },
+      "id" : "22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+      "links" : {
+        "self" : "/v1/privileges/22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd"
+      },
+      "relationships" : {
+        "resource" : {
+          "data" : {
+            "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+            "type" : "auth-node/resource"
+          },
+          "links" : {
+            "related" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+            "self" : "/v1/privileges/22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd/relationships/resource"
+          }
+        }
+      },
+      "type" : "auth-node/privilege"
+    },
+    {
+      "attributes" : {
         "description" : "Manage emails. Warning: Give to trusted roles only; this permission has security implications.",
         "name" : "manage emails"
       },
@@ -51,7 +74,7 @@
     "version" : "1.1"
   },
   "links" : {
-    "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/privileges"
+    "self" : "/v1/privileges"
   },
   "meta" : {
     "author" : "FastyBird dev team",

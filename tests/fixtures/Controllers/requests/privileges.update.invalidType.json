@@ -1,0 +1,10 @@
+{
+  "data" : {
+    "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
+    "type" : "auth-node/invalid",
+    "attributes" : {
+      "description" : "Updated content",
+      "name" : "write"
+    }
+  }
+}

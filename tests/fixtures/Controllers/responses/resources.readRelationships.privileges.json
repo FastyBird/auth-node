@@ -3,6 +3,10 @@
     {
       "id" : "3defbfbd-2e1a-efbf-bdef-bfbd49efbfbd",
       "type" : "auth-node/privilege"
+    },
+    {
+      "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
+      "type" : "auth-node/privilege"
     }
   ],
   "jsonapi" : {
