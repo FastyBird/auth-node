@@ -1,0 +1,54 @@
+{
+  "data" : {
+    "attributes" : {
+      "access" : false
+    },
+    "id" : "4e71431d-b263-49f4-bb9c-438c3ff9bb9b",
+    "links" : {
+      "self" : "/v1/rules/4e71431d-b263-49f4-bb9c-438c3ff9bb9b"
+    },
+    "relationships" : {
+      "privilege" : {
+        "data" : {
+          "id" : "22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+          "type" : "auth-node/privilege"
+        },
+        "links" : {
+          "related" : "/v1/privileges/22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+          "self" : "/v1/rules/4e71431d-b263-49f4-bb9c-438c3ff9bb9b/relationships/privilege"
+        }
+      },
+      "resource" : {
+        "data" : {
+          "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+          "type" : "auth-node/resource"
+        },
+        "links" : {
+          "related" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+          "self" : "/v1/rules/4e71431d-b263-49f4-bb9c-438c3ff9bb9b/relationships/resource"
+        }
+      },
+      "role" : {
+        "data" : {
+          "id" : "89f4a14f-7f78-4216-99b8-584ab9229f1c",
+          "type" : "auth-node/role"
+        },
+        "links" : {
+          "related" : "/v1/roles/89f4a14f-7f78-4216-99b8-584ab9229f1c",
+          "self" : "/v1/rules/4e71431d-b263-49f4-bb9c-438c3ff9bb9b/relationships/role"
+        }
+      }
+    },
+    "type" : "auth-node/rule"
+  },
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "self" : "/v1/rules"
+  },
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  }
+}

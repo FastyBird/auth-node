@@ -1,0 +1,29 @@
+{
+  "data" : {
+    "id" : "4e71431d-b263-49f4-bb9c-438c3ff9bb9b",
+    "type" : "auth-node/rule",
+    "attributes" : {
+      "access" : false
+    },
+    "relationships" : {
+      "privilege" : {
+        "data" : {
+          "id" : "22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+          "type" : "auth-node/privilege"
+        }
+      },
+      "resource" : {
+        "data" : {
+          "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+          "type" : "auth-node/resource"
+        }
+      },
+      "role" : {
+        "data" : {
+          "id" : "89f4a14f-7f78-4216-99b8-584ab9229f1c",
+          "type" : "auth-node/role"
+        }
+      }
+    }
+  }
+}

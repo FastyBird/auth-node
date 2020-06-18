@@ -195,3 +195,15 @@ privileges:
 		notFound:
 			heading	: "Privilege not found"
 			message	: "Requested privilege was not found"
+
+rules:
+	messages:
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided rule entity type is not valid"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, rule could not be updated"
+		notFound:
+			heading	: "Rule not found"
+			message	: "Requested rule was not found"

@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "id" : "317cefbf-bd37-7e17-43ef-bfbdc99aefbf",
+    "type" : "auth-node/invalid",
+    "attributes" : {
+      "access" : false
+    }
+  }
+}

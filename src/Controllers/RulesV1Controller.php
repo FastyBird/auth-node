@@ -425,16 +425,16 @@ final class RulesV1Controller extends BaseV1Controller
 			if ($rule === null) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_NOT_FOUND,
-					$this->translator->translate('messages.ruleNotFound.heading'),
-					$this->translator->translate('messages.ruleNotFound.message')
+					$this->translator->translate('messages.notFound.heading'),
+					$this->translator->translate('messages.notFound.message')
 				);
 			}
 
 		} catch (Uuid\Exception\InvalidUuidStringException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.ruleNotFound.heading'),
-				$this->translator->translate('messages.ruleNotFound.message')
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
 			);
 		}
 
