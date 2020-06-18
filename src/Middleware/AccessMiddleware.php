@@ -15,6 +15,7 @@
 
 namespace FastyBird\AuthNode\Middleware;
 
+use Contributte\Translation;
 use FastyBird\AuthNode;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Security;
@@ -45,6 +46,18 @@ final class AccessMiddleware implements MiddlewareInterface
 	/** @var Security\User */
 	private $user;
 
+	/** @var Translation\Translator */
+	private $translator;
+
+	public function __construct(
+		Security\User $user,
+		Translation\Translator $translator
+	) {
+		$this->user = $user;
+
+		$this->translator = $translator;
+	}
+
 	/**
 	 * @param ServerRequestInterface $request
 	 * @param RequestHandlerInterface $handler
@@ -70,9 +83,9 @@ final class AccessMiddleware implements MiddlewareInterface
 			) {
 				if (!$this->checkAccess(get_class($routeCallable[0]), $routeCallable[1])) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_UNAUTHORIZED,
-						'Forbidden',
-						'The user doesn\'t have access to this resource'
+						StatusCodeInterface::STATUS_FORBIDDEN,
+						$this->translator->translate('//node.base.messages.forbidden.heading'),
+						$this->translator->translate('//node.base.messages.forbidden.message')
 					);
 				}
 			}
@@ -115,7 +128,7 @@ final class AccessMiddleware implements MiddlewareInterface
 	public function isAllowed(Reflector $element): bool
 	{
 		// Check annotations only if element have to be secured
-		if ((bool) $this->parseAnnotation($element, 'Secured')) {
+		if ($this->parseAnnotation($element, 'Secured') !== null) {
 			return $this->checkUser($element)
 				&& $this->checkResources($element)
 				&& $this->checkPrivileges($element)
@@ -317,7 +330,7 @@ final class AccessMiddleware implements MiddlewareInterface
 	 */
 	private function parseAnnotation(Reflector $ref, string $name): ?array
 	{
-		$callable = [$ref, 'getDocument'];
+		$callable = [$ref, 'getDocComment'];
 
 		if (
 			!is_callable($callable)

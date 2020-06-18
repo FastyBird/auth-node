@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Router;
 
 use FastyBird\AuthNode\Controllers;
+use FastyBird\AuthNode\Middleware;
 use IPub\SlimRouter\Routing;
 use Psr\Http\Message\ResponseFactoryInterface;
 
@@ -75,6 +76,9 @@ class Router extends Routing\Router
 	/** @var Controllers\RulesV1Controller */
 	private $rulesV1Controller;
 
+	/** @var Middleware\AccessMiddleware */
+	private $accessControlMiddleware;
+
 	public function __construct(
 		Controllers\SessionV1Controller $sessionV1Controller,
 		Controllers\AccountV1Controller $accountV1Controller,
@@ -89,6 +93,7 @@ class Router extends Routing\Router
 		Controllers\ResourcePrivilegesV1Controller $resourcePrivilegesV1Controller,
 		Controllers\PrivilegesV1Controller $privilegesV1Controller,
 		Controllers\RulesV1Controller $rulesV1Controller,
+		Middleware\AccessMiddleware $accessControlMiddleware,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
@@ -106,6 +111,8 @@ class Router extends Routing\Router
 		$this->resourcePrivilegesV1Controller = $resourcePrivilegesV1Controller;
 		$this->privilegesV1Controller = $privilegesV1Controller;
 		$this->rulesV1Controller = $rulesV1Controller;
+
+		$this->accessControlMiddleware = $accessControlMiddleware;
 	}
 
 	/**
@@ -277,7 +284,8 @@ class Router extends Routing\Router
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rulesV1Controller, 'readRelationship']);
 				$route->setName('rule.relationship');
 			});
-		});
+		})
+			->addMiddleware($this->accessControlMiddleware);
 	}
 
 }

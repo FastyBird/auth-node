@@ -17,6 +17,7 @@ namespace FastyBird\AuthNode\Security;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
 use Nette;
 use Nette\Security as NS;
 
@@ -67,14 +68,14 @@ final class Authorizator extends NS\Permission implements NS\IAuthorizator
 	 */
 	private function initialize(): void
 	{
+		$findResource = new Queries\FindResourcesQuery();
+		$findResource->withoutParent();
+
 		// Get all available resources
-		$resources = $this->resourceRepository->findAll();
+		$resources = $this->resourceRepository->findAllBy($findResource);
 
 		foreach ($resources as $resource) {
-			$resourceParent = $resource->getParent();
-
-			// Assign resource to application permission checker
-			$this->addResource($resource->getResourceId(), $resourceParent !== null ? $resourceParent->getResourceId() : null);
+			$this->registerResource($resource);
 		}
 
 		// Get all available roles
@@ -82,7 +83,7 @@ final class Authorizator extends NS\Permission implements NS\IAuthorizator
 
 		// Register all available roles
 		foreach ($roles as $role) {
-			$this->checkAndAddRole($role);
+			$this->registerRole($role);
 
 			// Allow all privileges for administrator
 			if ($role->isAdministrator()) {
@@ -115,18 +116,36 @@ final class Authorizator extends NS\Permission implements NS\IAuthorizator
 	 *
 	 * @return void
 	 */
-	private function checkAndAddRole(
+	private function registerRole(
 		Entities\Roles\IRole $role
 	): void {
 		$roleParent = $role->getParent();
 
 		if ($roleParent !== null) {
-			$this->checkAndAddRole($roleParent);
+			$this->registerRole($roleParent);
 		}
 
 		// Assign role to application permission checker
 		if (!$this->hasRole($role->getRoleId())) {
 			$this->addRole($role->getRoleId(), $roleParent !== null ? $roleParent->getRoleId() : null);
+		}
+	}
+
+	/**
+	 * @param Entities\Resources\IResource $resource
+	 *
+	 * @return void
+	 */
+	private function registerResource(
+		Entities\Resources\IResource $resource
+	): void {
+		$resourceParent = $resource->getParent();
+
+		// Assign resource to application permission checker
+		$this->addResource($resource->getResourceId(), $resourceParent !== null ? $resourceParent->getResourceId() : null);
+
+		foreach ($resource->getChildren() as $child) {
+			$this->registerResource($child);
 		}
 	}
 

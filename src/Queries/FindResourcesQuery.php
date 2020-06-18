@@ -82,6 +82,16 @@ class FindResourcesQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
+	 * @return void
+	 */
+	public function withoutParent(): void
+	{
+		$this->filter[] = function (ORM\QueryBuilder $qb): void {
+			$qb->andWhere($qb->expr()->isNull('r.parent'));
+		};
+	}
+
+	/**
 	 * @param ORM\EntityRepository<Entities\Resources\Resource> $repository
 	 *
 	 * @return ORM\QueryBuilder

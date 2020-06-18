@@ -150,7 +150,7 @@ services:
 
 	- {factory: FastyBird\AuthNode\Middleware\AccountMiddleware, tags: [middleware: {priority: 15}]}
 
-	- {factory: FastyBird\AuthNode\Middleware\AccessMiddleware, tags: [middleware: {priority: 10}]}
+	- {factory: FastyBird\AuthNode\Middleware\AccessMiddleware}
 
 	-
 		factory: FastyBird\AuthNode\Router\Router
