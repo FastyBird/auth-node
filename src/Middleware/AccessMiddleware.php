@@ -155,7 +155,7 @@ final class AccessMiddleware implements MiddlewareInterface
 			$result = $this->parseAnnotation($element, 'Secured\User');
 
 			if (count($result) > 0) {
-				$user = $result ? end($result) : null;
+				$user = end($result);
 
 				// Annotation is single string
 				if (in_array($user, ['loggedIn', 'guest'], true)) {
@@ -334,11 +334,11 @@ final class AccessMiddleware implements MiddlewareInterface
 
 		if (
 			!is_callable($callable)
-			|| !preg_match_all(
+			|| preg_match_all(
 				'#[\s*]@' . preg_quote($name, '#') . '(?:\(\s*([^)]*)\s*\)|\s|$)#',
 				(string) call_user_func($callable),
 				$m
-			)
+			) === false
 		) {
 			return null;
 		}
@@ -348,10 +348,12 @@ final class AccessMiddleware implements MiddlewareInterface
 		$res = [];
 
 		foreach ($m[1] as $s) {
-			foreach (preg_split('#\s*,\s*#', $s, -1, PREG_SPLIT_NO_EMPTY) ?: ['true'] as $item) {
+			$items = preg_split('#\s*,\s*#', $s, -1, PREG_SPLIT_NO_EMPTY);
+
+			foreach ($items !== false ? $items : ['true'] as $item) {
 				$tmp = strtolower($item);
 
-				if (!array_key_exists($tmp, $tokens) && is_string($item) && $item !== '') {
+				if (!array_key_exists($tmp, $tokens) && $item !== '') {
 					$res[] = $item;
 				}
 			}

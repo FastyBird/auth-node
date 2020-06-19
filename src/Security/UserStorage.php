@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Security;
 
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
 use Nette\Security as NS;
 
 /**
@@ -56,12 +57,16 @@ class UserStorage implements NS\IUserStorage
 	}
 
 	/**
-	 * @param Entities\Identities\IIdentity|null $identity
+	 * @param NS\IIdentity|null $identity
 	 *
 	 * @return static
 	 */
 	public function setIdentity(?NS\IIdentity $identity = null)
 	{
+		if (!$identity instanceof Entities\Identities\IIdentity) {
+			throw new Exceptions\InvalidStateException('Provided identity entity is not valid instance.');
+		}
+
 		$this->identity = $identity;
 
 		return $this;

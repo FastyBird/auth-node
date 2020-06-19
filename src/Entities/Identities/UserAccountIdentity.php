@@ -17,7 +17,6 @@ namespace FastyBird\AuthNode\Entities\Identities;
 
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Entities;
-use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Helpers;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use Throwable;
@@ -76,13 +75,10 @@ class UserAccountIdentity extends Identity implements IUserAccountIdentity
 		if ($password instanceof Helpers\Password) {
 			$this->password = $password->getHash();
 
-		} elseif (is_string($password)) {
+		} else {
 			$password = Helpers\Password::createFromString($password);
 
 			$this->password = $password->getHash();
-
-		} else {
-			throw new Exceptions\InvalidArgumentException(sprintf('Provided password value is not valid type. Expected string or instance of %s, instance of %s provided', Helpers\Password::class, gettype($password)));
 		}
 
 		$this->setSalt($password->getSalt());
