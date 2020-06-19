@@ -90,6 +90,10 @@ final class UserAccountIdentityEntitySubscriber implements Common\EventSubscribe
 						$object->getAccount()
 					);
 
+					$verneMqAccount->addPublishAcl('/fb/+/#');
+					$verneMqAccount->addSubscribeAcl('/fb/+/#');
+					$verneMqAccount->addSubscribeAcl('$SYS/broker/log/#');
+
 					$uow->scheduleForInsert($verneMqAccount);
 
 				} else {
