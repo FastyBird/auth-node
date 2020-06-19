@@ -70,7 +70,8 @@ INSERT IGNORE INTO `fb_accounts_roles` (`role_id`, `account_id`) VALUES
 INSERT IGNORE INTO `fb_acl_resources` (`resource_id`, `parent_id`, `resource_name`, `resource_description`, `created_at`, `updated_at`) VALUES
 	(_binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, NULL, 'fb/auth-node', 'Resource desc', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, NULL, 'fb/other-node', 'Resource desc', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
-	(_binary 0xC3F6947C173642B0BFD473B9070B4491, _binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, 'node entity', 'Specific entity resource', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
+	(_binary 0xC3F6947C173642B0BFD473B9070B4491, _binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, 'node entity', 'Specific entity resource', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0x00892288A6F8485F9F05D47C8890D52A, NULL, 'manage-access-roles', 'Access roles management', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
 
 INSERT IGNORE INTO `fb_acl_privileges` (`privilege_id`, `resource_id`, `privilege_name`, `privilege_description`, `created_at`, `updated_at`) VALUES
 	(_binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, _binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, 'access', 'Access to node', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),

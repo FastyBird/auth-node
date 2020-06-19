@@ -2,6 +2,43 @@
   "data" : [
     {
       "attributes" : {
+        "description" : "Access roles management",
+        "name" : "manage-access-roles"
+      },
+      "id" : "00892288-a6f8-485f-9f05-d47c8890d52a",
+      "links" : {
+        "self" : "/v1/resources/00892288-a6f8-485f-9f05-d47c8890d52a"
+      },
+      "relationships" : {
+        "children" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/resources/00892288-a6f8-485f-9f05-d47c8890d52a/children",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/resources/00892288-a6f8-485f-9f05-d47c8890d52a/relationships/children"
+          }
+        },
+        "privileges" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/resources/00892288-a6f8-485f-9f05-d47c8890d52a/privileges",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/resources/00892288-a6f8-485f-9f05-d47c8890d52a/relationships/privileges"
+          }
+        }
+      },
+      "type" : "auth-node/resource"
+    },
+    {
+      "attributes" : {
         "description" : "Resource desc",
         "name" : "fb/auth-node"
       },

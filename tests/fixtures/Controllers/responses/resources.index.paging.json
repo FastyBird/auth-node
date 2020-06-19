@@ -3,49 +3,40 @@
     {
       "attributes" : {
         "description" : "Resource desc",
-        "name" : "fb/other-node"
+        "name" : "fb/auth-node"
       },
-      "id" : "efbfbdef-bfbd-510e-3774-4c64efbfbdef",
+      "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
       "links" : {
-        "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef"
+        "self" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd"
       },
       "relationships" : {
         "children" : {
-          "data" : [
-            {
-              "id" : "c3f6947c-1736-42b0-bfd4-73b9070b4491",
-              "type" : "auth-node/resource"
-            }
-          ],
+          "data" : [ ],
           "links" : {
             "related" : {
-              "href" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/children",
+              "href" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/children",
               "meta" : {
-                "count" : 1
+                "count" : 0
               }
             },
-            "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/relationships/children"
+            "self" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/relationships/children"
           }
         },
         "privileges" : {
           "data" : [
             {
-              "id" : "3defbfbd-2e1a-efbf-bdef-bfbd49efbfbd",
-              "type" : "auth-node/privilege"
-            },
-            {
-              "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
+              "id" : "22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
               "type" : "auth-node/privilege"
             }
           ],
           "links" : {
             "related" : {
-              "href" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/privileges",
+              "href" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/privileges",
               "meta" : {
-                "count" : 2
+                "count" : 1
               }
             },
-            "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/relationships/privileges"
+            "self" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/relationships/privileges"
           }
         }
       },
@@ -57,7 +48,7 @@
   },
   "links" : {
     "first" : "/v1/resources?page%5Boffset%5D=0&page%5Blimit%5D=1",
-    "last" : "/v1/resources?page%5Boffset%5D=2&page%5Blimit%5D=1",
+    "last" : "/v1/resources?page%5Boffset%5D=3&page%5Blimit%5D=1",
     "next" : "/v1/resources?page%5Boffset%5D=2&page%5Blimit%5D=1",
     "prev" : "/v1/resources?page%5Boffset%5D=0&page%5Blimit%5D=1",
     "self" : "/v1/resources?page%5Boffset%5D=1&page%5Blimit%5D=1"
@@ -65,6 +56,6 @@
   "meta" : {
     "author" : "FastyBird dev team",
     "copyright" : "FastyBird s.r.o",
-    "totalCount" : 3
+    "totalCount" : 4
   }
 }
