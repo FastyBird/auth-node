@@ -60,6 +60,9 @@ final class ResourcePrivilegesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\Permission(manage-access-control:read)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,

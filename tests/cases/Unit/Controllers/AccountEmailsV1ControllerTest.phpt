@@ -12,7 +12,7 @@ use Tests\Tools;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
-final class SecurityQuestionV1ControllerTest extends DbTestCase
+final class AccountEmailsV1ControllerTest extends DbTestCase
 {
 
 	/**
@@ -21,7 +21,7 @@ final class SecurityQuestionV1ControllerTest extends DbTestCase
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
-	 * @dataProvider ./../../../fixtures/Controllers/securityQuestionRead.php
+	 * @dataProvider ./../../../fixtures/Controllers/emailsRead.php
 	 */
 	public function testRead(string $url, string $token, int $statusCode, string $fixture): void
 	{
@@ -53,7 +53,7 @@ final class SecurityQuestionV1ControllerTest extends DbTestCase
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
-	 * @dataProvider ./../../../fixtures/Controllers/securityQuestionCreate.php
+	 * @dataProvider ./../../../fixtures/Controllers/emailsCreate.php
 	 */
 	public function testCreate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
@@ -86,7 +86,7 @@ final class SecurityQuestionV1ControllerTest extends DbTestCase
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
-	 * @dataProvider ./../../../fixtures/Controllers/securityQuestionUpdate.php
+	 * @dataProvider ./../../../fixtures/Controllers/emailsUpdate.php
 	 */
 	public function testUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
@@ -115,13 +115,44 @@ final class SecurityQuestionV1ControllerTest extends DbTestCase
 	/**
 	 * @param string $url
 	 * @param string $token
+	 * @param int $statusCode
+	 * @param string $fixture
+	 *
+	 * @dataProvider ./../../../fixtures/Controllers/emailsDelete.php
+	 */
+	public function testDelete(string $url, string $token, int $statusCode, string $fixture): void
+	{
+		/** @var Router\Router $router */
+		$router = $this->getContainer()->getByType(Router\Router::class);
+
+		$request = new ServerRequest(
+			RequestMethodInterface::METHOD_DELETE,
+			$url,
+			[
+				'authorization' => $token,
+			]
+		);
+
+		$response = $router->handle($request);
+
+		Tools\JsonAssert::assertFixtureMatch(
+			$fixture,
+			(string) $response->getBody()
+		);
+		Assert::same($statusCode, $response->getStatusCode());
+		Assert::type(Http\Response::class, $response);
+	}
+
+	/**
+	 * @param string $url
+	 * @param string|null $token
 	 * @param string $body
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
-	 * @dataProvider ./../../../fixtures/Controllers/securityQuestionValidate.php
+	 * @dataProvider ./../../../fixtures/Controllers/emailsValidate.php
 	 */
-	public function testValidate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function testValidate(string $url, ?string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -129,9 +160,14 @@ final class SecurityQuestionV1ControllerTest extends DbTestCase
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_POST,
 			$url,
-			[
-				'authorization' => $token,
-			],
+			(
+			$token ?
+				[
+					'authorization' => $token,
+				]
+				:
+				[]
+			),
 			$body
 		);
 
@@ -147,5 +183,5 @@ final class SecurityQuestionV1ControllerTest extends DbTestCase
 
 }
 
-$test_case = new SecurityQuestionV1ControllerTest();
+$test_case = new AccountEmailsV1ControllerTest();
 $test_case->run();

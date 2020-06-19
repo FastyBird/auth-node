@@ -77,7 +77,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-roles:read)
+	 * @Secured\Permission(manage-access-control:read)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -100,7 +100,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-roles:read)
+	 * @Secured\Permission(manage-access-control:read)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -122,7 +122,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-roles:create)
+	 * @Secured\Permission(manage-access-control:create)
 	 */
 	public function create(
 		Message\ServerRequestInterface $request,
@@ -234,7 +234,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-roles:update)
+	 * @Secured\Permission(manage-access-control:update)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -340,7 +340,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-roles:delete)
+	 * @Secured\Permission(manage-access-control:delete)
 	 */
 	public function delete(
 		Message\ServerRequestInterface $request,
@@ -406,7 +406,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-roles:read)
+	 * @Secured\Permission(manage-access-control:read)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

@@ -3,7 +3,7 @@
     {
       "attributes" : {
         "description" : "Access roles management",
-        "name" : "manage-access-roles"
+        "name" : "manage-access-control"
       },
       "id" : "00892288-a6f8-485f-9f05-d47c8890d52a",
       "links" : {

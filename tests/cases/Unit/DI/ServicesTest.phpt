@@ -58,8 +58,8 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Models\Vernemq\AccountsManager::class));
 
 		Assert::notNull($container->getByType(Controllers\AccountV1Controller::class));
-		Assert::notNull($container->getByType(Controllers\EmailsV1Controller::class));
-		Assert::notNull($container->getByType(Controllers\SecurityQuestionV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\AccountEmailsV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\AccountSecurityQuestionV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\SessionV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\UserAccountIdentityV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RolesV1Controller::class));

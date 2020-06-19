@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * EmailsV1Controller.php
+ * AccountSecurityQuestionV1Controller.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -17,95 +17,44 @@ namespace FastyBird\AuthNode\Controllers;
 
 use Doctrine;
 use FastyBird\AuthNode\Entities;
-use FastyBird\AuthNode\Exceptions;
-use FastyBird\AuthNode\Helpers;
 use FastyBird\AuthNode\Hydrators;
 use FastyBird\AuthNode\Models;
-use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Router;
 use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
-use Nette\Utils;
 use Psr\Http\Message;
-use Ramsey\Uuid;
 use Throwable;
 
 /**
- * Emails controller
+ * Account security question controller
  *
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class EmailsV1Controller extends BaseV1Controller
+final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 {
 
-	/** @var Hydrators\EmailHydrator */
-	private $emailHydrator;
+	/** @var Hydrators\SecurityQuestionHydrator */
+	private $questionHydrator;
 
-	/** @var Models\Emails\IEmailRepository */
-	private $emailRepository;
-
-	/** @var Models\Emails\IEmailsManager */
-	private $emailsManager;
-
-	/** @var Helpers\SecurityHash */
-	private $securityHash;
+	/** @var Models\SecurityQuestions\IQuestionsManager */
+	private $questionsManager;
 
 	/** @var string */
-	protected $translationDomain = 'node.emails';
+	protected $translationDomain = 'node.securityQuestion';
 
 	public function __construct(
-		Hydrators\EmailHydrator $emailHydrator,
-		Models\Emails\IEmailRepository $emailRepository,
-		Models\Emails\IEmailsManager $emailsManager,
-		Helpers\SecurityHash $securityHash
+		Hydrators\SecurityQuestionHydrator $questionHydrator,
+		Models\SecurityQuestions\IQuestionsManager $questionsManager
 	) {
-		$this->emailHydrator = $emailHydrator;
+		$this->questionHydrator = $questionHydrator;
 
-		$this->emailRepository = $emailRepository;
-		$this->emailsManager = $emailsManager;
-
-		$this->securityHash = $securityHash;
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 *
-	 * @Secured
-	 * @Secured\User(loggedIn)
-	 */
-	public function index(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		if (
-			$this->user->getAccount() === null
-			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
-		$findQuery = new Queries\FindEmailsQuery();
-		$findQuery->forAccount($this->user->getAccount());
-
-		$emails = $this->emailRepository->getResultSet($findQuery);
-
-		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($emails));
+		$this->questionsManager = $questionsManager;
 	}
 
 	/**
@@ -125,6 +74,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -134,11 +84,19 @@ final class EmailsV1Controller extends BaseV1Controller
 			);
 		}
 
-		// Find email
-		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$account = $this->user->getAccount();
 
-		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($email));
+		if ($account->hasSecurityQuestion()) {
+			return $response
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getSecurityQuestion()));
+
+		} else {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
+			);
+		}
 	}
 
 	/**
@@ -159,6 +117,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -168,20 +127,26 @@ final class EmailsV1Controller extends BaseV1Controller
 			);
 		}
 
+		if ($this->user->getAccount()->hasSecurityQuestion()) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_BAD_REQUEST,
+				$this->translator->translate('messages.accountHasQuestion.heading'),
+				$this->translator->translate('messages.accountHasQuestion.message')
+			);
+		}
+
 		$document = $this->createDocument($request);
 
 		try {
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\EmailSchema::SCHEMA_TYPE) {
-				$createData = $this->emailHydrator->hydrate($document);
+			if ($document->getResource()->getType() === Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
+				$createData = $this->questionHydrator->hydrate($document);
 				$createData->offsetSet('account', $this->user->getAccount());
-				$createData->offsetSet('verificationHash', $this->securityHash->createKey());
-				$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
 
-				// Store item into database
-				$email = $this->emailsManager->create($createData);
+				// Create new item in database
+				$question = $this->questionsManager->create($createData);
 
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -196,32 +161,6 @@ final class EmailsV1Controller extends BaseV1Controller
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
-
-		} catch (Exceptions\EmailIsNotValidException $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notValid.heading'),
-				$this->translator->translate('messages.notValid.message'),
-				[
-					'pointer' => '/data/attributes/address',
-				]
-			);
-
-		} catch (Exceptions\EmailAlreadyTakenException $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.taken.heading'),
-				$this->translator->translate('messages.taken.message'),
-				[
-					'pointer' => '/data/attributes/address',
-				]
-			);
 
 		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
 			// Revert all changes when error occur
@@ -263,7 +202,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		/** @var NodeWebServerHttp\Response $response */
 		$response = $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($email))
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($question))
 			->withStatus(StatusCodeInterface::STATUS_CREATED);
 
 		return $response;
@@ -287,6 +226,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -296,9 +236,21 @@ final class EmailsV1Controller extends BaseV1Controller
 			);
 		}
 
+		$question = $this->user->getAccount()->getSecurityQuestion();
+
+		if ($question === null) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
+			);
+		}
+
 		$document = $this->createDocument($request);
 
-		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
+		$attributes = $document->getResource()->getAttributes();
+
+		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
@@ -306,16 +258,34 @@ final class EmailsV1Controller extends BaseV1Controller
 			);
 		}
 
-		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
+		if (!$attributes->has('question')) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/question',
+				]
+			);
+		}
+
+		if (!$attributes->has('answer')) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => '/data/attributes/answer',
+				]
+			);
+		}
 
 		try {
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\EmailSchema::SCHEMA_TYPE) {
-				$updateEmailData = $this->emailHydrator->hydrate($document, $email);
-
-				$email = $this->emailsManager->update($email, $updateEmailData);
+			if ($document->getResource()->getType() === Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
+				$updateQuestionData = $this->questionHydrator->hydrate($document, $question);
 
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -327,6 +297,8 @@ final class EmailsV1Controller extends BaseV1Controller
 					]
 				);
 			}
+
+			$question = $this->questionsManager->update($question, $updateQuestionData);
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
@@ -358,79 +330,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		/** @var NodeWebServerHttp\Response $response */
 		$response = $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($email));
-
-		return $response;
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 * @throws Doctrine\DBAL\ConnectionException
-	 *
-	 * @Secured
-	 * @Secured\User(loggedIn)
-	 */
-	public function delete(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		if (
-			$this->user->getAccount() === null
-			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
-		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
-
-		if ($email->isDefault()) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.defaultNotDeletable.heading'),
-				$this->translator->translate('messages.defaultNotDeletable.message')
-			);
-		}
-
-		try {
-			// Start transaction connection to the database
-			$this->getOrmConnection()->beginTransaction();
-
-			$this->emailsManager->delete($email);
-
-			// Commit all changes into database
-			$this->getOrmConnection()->commit();
-
-		} catch (Throwable $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			// Log catched exception
-			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
-				'exception' => [
-					'message' => $ex->getMessage(),
-					'code'    => $ex->getCode(),
-				],
-			]);
-
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notDeleted.heading'),
-				$this->translator->translate('messages.notDeleted.message')
-			);
-		}
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response
-			->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($question));
 
 		return $response;
 	}
@@ -452,6 +352,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		if (
 			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
 			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -461,15 +362,19 @@ final class EmailsV1Controller extends BaseV1Controller
 			);
 		}
 
-		// At first, try to load email
-		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
+		if (!$this->user->getAccount()->hasSecurityQuestion()) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
+			);
+		}
 
-		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\EmailSchema::RELATIONSHIPS_ACCOUNT) {
+		if ($relationEntity === Schemas\SecurityQuestionSchema::RELATIONSHIPS_ACCOUNT) {
 			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($email->getAccount()));
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()));
 		}
 
 		$this->throwUnknownRelation($relationEntity);
@@ -484,16 +389,49 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function validate(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
+		if (
+			$this->user->getAccount() === null
+			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
+			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
+		) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
+			);
+		}
+
+		$question = $this->user->getAccount()->getSecurityQuestion();
+
+		if ($question === null) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
+			);
+		}
+
 		$document = $this->createDocument($request);
 
 		$attributes = $document->getResource()->getAttributes();
 
-		if ($document->getResource()->getType() !== Schemas\EmailSchema::SCHEMA_TYPE) {
+		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_BAD_REQUEST,
+				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
+				$this->translator->translate('//node.base.messages.identifierInvalid.message')
+			);
+		}
+
+		if ($document->getResource()->getType() !== Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidType.heading'),
@@ -504,107 +442,33 @@ final class EmailsV1Controller extends BaseV1Controller
 			);
 		}
 
-		if (!$attributes->has('address')) {
+		if (!$attributes->has('current_answer')) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
 				$this->translator->translate('//node.base.messages.missingRequired.message'),
 				[
-					'pointer' => '/data/attributes/address',
-				]
-			);
-
-		} elseif (!Utils\Validators::isEmail((string) $attributes->get('address'))) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notValid.heading'),
-				$this->translator->translate('messages.notValid.message'),
-				[
-					'pointer' => '/data/attributes/address',
+					'pointer' => '/data/attributes/current_answer',
 				]
 			);
 		}
 
-		if ($this->user->isLoggedIn()) {
-			if ($this->user->getAccount() === null) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_FORBIDDEN,
-					$this->translator->translate('//node.base.messages.forbidden.heading'),
-					$this->translator->translate('//node.base.messages.forbidden.message')
-				);
-
-			} elseif (!$this->emailRepository->isEmailAvailable((string) $attributes->get('address'), $this->user->getAccount())) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.taken.heading'),
-					$this->translator->translate('messages.taken.message'),
-					[
-						'pointer' => '/data/attributes/address',
-					]
-				);
-			}
-
-		} else {
-			$email = $this->emailRepository->findOneByAddress((string) $attributes->get('address'));
-
-			if ($email !== null) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.taken.heading'),
-					$this->translator->translate('messages.taken.message'),
-					[
-						'pointer' => '/data/attributes/address',
-					]
-				);
-			}
+		if ($question->getAnswer() !== $attributes->get('current_answer')) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.incorrect.heading'),
+				$this->translator->translate('messages.incorrect.message'),
+				[
+					'pointer' => '/data/attributes/current_answer',
+				]
+			);
 		}
 
 		/** @var NodeWebServerHttp\Response $response */
-		$response = $response->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
+		$response = $response
+			->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
 
 		return $response;
-	}
-
-	/**
-	 * @param string $id
-	 *
-	 * @return Entities\Emails\IEmail
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 */
-	private function findEmail(string $id): Entities\Emails\IEmail
-	{
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
-		if (!Uuid\Uuid::isValid($id)) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
-		}
-
-		$findQuery = new Queries\FindEmailsQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($id));
-		$findQuery->forAccount($this->user->getAccount());
-
-		$email = $this->emailRepository->findOneBy($findQuery);
-
-		if ($email === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
-		}
-
-		return $email;
 	}
 
 }

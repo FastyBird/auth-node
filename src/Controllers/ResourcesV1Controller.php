@@ -75,6 +75,9 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 * @param NodeWebServerHttp\Response $response
 	 *
 	 * @return NodeWebServerHttp\Response
+	 *
+	 * @Secured
+	 * @Secured\Permission(manage-access-control:read)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -95,6 +98,9 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\Permission(manage-access-control:read)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -114,6 +120,9 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Permission(manage-access-control:create)
 	 */
 	public function create(
 		Message\ServerRequestInterface $request,
@@ -223,6 +232,9 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Permission(manage-access-control:update)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -325,62 +337,9 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 * @throws Doctrine\DBAL\ConnectionException
-	 */
-	public function delete(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		$resource = $this->findResource($request->getAttribute(Router\Router::URL_ITEM_ID));
-
-		try {
-			// Start transaction connection to the database
-			$this->getOrmConnection()->beginTransaction();
-
-			// Move device back into warehouse
-			$this->resourcesManager->delete($resource);
-
-			// Commit all changes into database
-			$this->getOrmConnection()->commit();
-
-		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			throw $ex;
-
-		} catch (Throwable $ex) {
-			// Log catched exception
-			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
-				'exception' => [
-					'message' => $ex->getMessage(),
-					'code'    => $ex->getCode(),
-				],
-			]);
-
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notDeleted.heading'),
-				$this->translator->translate('messages.notDeleted.message')
-			);
-		}
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
-
-		return $response;
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
 	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 * @Secured
+	 * @Secured\Permission(manage-access-control:read)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

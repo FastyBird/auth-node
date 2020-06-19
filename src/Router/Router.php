@@ -43,10 +43,10 @@ class Router extends Routing\Router
 	/** @var Controllers\AccountV1Controller */
 	private $accountV1Controller;
 
-	/** @var Controllers\EmailsV1Controller */
+	/** @var Controllers\AccountEmailsV1Controller */
 	private $emailsV1Controller;
 
-	/** @var Controllers\SecurityQuestionV1Controller */
+	/** @var Controllers\AccountSecurityQuestionV1Controller */
 	private $securityQuestionV1Controller;
 
 	/** @var Controllers\UserAccountIdentityV1Controller */
@@ -82,8 +82,8 @@ class Router extends Routing\Router
 	public function __construct(
 		Controllers\SessionV1Controller $sessionV1Controller,
 		Controllers\AccountV1Controller $accountV1Controller,
-		Controllers\EmailsV1Controller $emailsV1Controller,
-		Controllers\SecurityQuestionV1Controller $securityQuestionV1Controller,
+		Controllers\AccountEmailsV1Controller $emailsV1Controller,
+		Controllers\AccountSecurityQuestionV1Controller $securityQuestionV1Controller,
 		Controllers\UserAccountIdentityV1Controller $userAccountIdentityV1Controller,
 		Controllers\RolesV1Controller $rolesV1Controller,
 		Controllers\RoleChildrenV1Controller $roleChildrenV1Controller,

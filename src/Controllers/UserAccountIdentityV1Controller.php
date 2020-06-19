@@ -75,6 +75,9 @@ final class UserAccountIdentityV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -107,6 +110,9 @@ final class UserAccountIdentityV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -146,6 +152,9 @@ final class UserAccountIdentityV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -433,6 +442,9 @@ final class UserAccountIdentityV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
@@ -480,6 +492,9 @@ final class UserAccountIdentityV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function validate(
 		Message\ServerRequestInterface $request,

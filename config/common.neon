@@ -220,9 +220,9 @@ services:
 
 	- {factory: FastyBird\AuthNode\Controllers\AccountV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AuthNode\Controllers\EmailsV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\AccountEmailsV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AuthNode\Controllers\SecurityQuestionV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\AccountSecurityQuestionV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\SessionV1Controller, tags: [nette.inject]}
 
