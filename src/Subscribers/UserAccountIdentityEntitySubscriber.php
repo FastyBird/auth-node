@@ -111,6 +111,19 @@ final class UserAccountIdentityEntitySubscriber implements Common\EventSubscribe
 				}
 			}
 		}
+
+		foreach ($uow->getScheduledEntityDeletions() as $object) {
+			if ($object instanceof Entities\Identities\IUserAccountIdentity) {
+				$findAccount = new Queries\FindVerneMqAccountsQuery();
+				$findAccount->forAccount($object->getAccount());
+
+				$verneMqAccount = $this->accountRepository->findOneBy($findAccount);
+
+				if ($verneMqAccount !== null) {
+					$uow->scheduleForDelete($verneMqAccount);
+				}
+			}
+		}
 	}
 
 }

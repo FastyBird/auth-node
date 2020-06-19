@@ -40,7 +40,7 @@ class MachineAccount extends Account implements IMachineAccount
 	 * @var Entities\Accounts\IMachineAccount|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\Account", inversedBy="children")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\MachineAccount", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="account_id", nullable=true, onDelete="set null")
 	 */
 	private $parent;
@@ -49,7 +49,7 @@ class MachineAccount extends Account implements IMachineAccount
 	 * @var Common\Collections\Collection<int, Entities\Accounts\IMachineAccount>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Accounts\Account", mappedBy="parent")
+	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Accounts\MachineAccount", mappedBy="parent")
 	 */
 	private $children;
 
