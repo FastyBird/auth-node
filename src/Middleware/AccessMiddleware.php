@@ -332,14 +332,17 @@ final class AccessMiddleware implements MiddlewareInterface
 	{
 		$callable = [$ref, 'getDocComment'];
 
-		if (
-			!is_callable($callable)
-			|| preg_match_all(
-				'#[\s*]@' . preg_quote($name, '#') . '(?:\(\s*([^)]*)\s*\)|\s|$)#',
-				(string) call_user_func($callable),
-				$m
-			) === false
-		) {
+		if (!is_callable($callable)) {
+			return null;
+		}
+
+		$result = preg_match_all(
+			'#[\s*]@' . preg_quote($name, '#') . '(?:\(\s*([^)]*)\s*\)|\s|$)#',
+			(string) call_user_func($callable),
+			$m
+		);
+
+		if ($result === false || $result === 0) {
 			return null;
 		}
 

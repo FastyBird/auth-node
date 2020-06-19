@@ -63,7 +63,7 @@ class UserStorage implements NS\IUserStorage
 	 */
 	public function setIdentity(?NS\IIdentity $identity = null)
 	{
-		if (!$identity instanceof Entities\Identities\IIdentity) {
+		if ($identity !== null && !$identity instanceof Entities\Identities\IIdentity) {
 			throw new Exceptions\InvalidStateException('Provided identity entity is not valid instance.');
 		}
 
