@@ -24,23 +24,26 @@ final class AccessMiddlewareTest extends DbTestCase
 
 	/**
 	 * @param string $url
+	 * @param string $method
 	 * @param string $token
+	 * @param string $body
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Middleware/permissionAnnotation.php
 	 */
-	public function testPermissionAnnotation(string $url, string $token, int $statusCode, string $fixture): void
+	public function testPermissionAnnotation(string $url, string $method, string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
 		$request = new ServerRequest(
-			RequestMethodInterface::METHOD_GET,
+			$method,
 			$url,
 			[
 				'authorization' => $token,
-			]
+			],
+			$body
 		);
 
 		$response = $router->handle($request);
