@@ -49,6 +49,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		return [
 			ORM\Events::preFlush,
 			ORM\Events::preUpdate,
+			ORM\Events::preRemove,
 		];
 	}
 
@@ -62,7 +63,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param ORM\Event\PreFlushEventArgs $eventArgs
+	 * @param ORM\Event\PreUpdateEventArgs $eventArgs
 	 *
 	 * @return void
 	 *
@@ -75,7 +76,9 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 
 		// Check all scheduled updates
 		foreach ($uow->getScheduledEntityUpdates() as $object) {
-			$this->processIdentityEntity($object, $em, $uow);
+			if ($object instanceof Entities\Identities\IIdentity) {
+				$this->processIdentityEntity($object, $em, $uow);
+			}
 		}
 	}
 
@@ -93,8 +96,23 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 
 		// Check all scheduled updates
 		foreach ($uow->getScheduledEntityInsertions() as $object) {
-			$this->processIdentityEntity($object, $em, $uow);
+			if ($object instanceof Entities\Identities\IIdentity) {
+				$this->processIdentityEntity($object, $em, $uow);
+			}
 		}
+	}
+
+	/**
+	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	public function preRemove(ORM\Event\LifecycleEventArgs $eventArgs): void
+	{
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
 
 		foreach ($uow->getScheduledEntityDeletions() as $object) {
 			if ($object instanceof Entities\Identities\IUserAccountIdentity) {
