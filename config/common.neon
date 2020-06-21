@@ -255,6 +255,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Schemas\Identities\UserAccountIdentitySchema}
 
+	- {factory: FastyBird\AuthNode\Schemas\Identities\MachineAccountIdentitySchema}
+
 	- {factory: FastyBird\AuthNode\Schemas\Roles\RoleSchema}
 
 	- {factory: FastyBird\AuthNode\Schemas\Resources\ResourceSchema}

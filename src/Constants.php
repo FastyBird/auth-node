@@ -29,4 +29,8 @@ final class Constants
 	// Permissions string delimiter
 	public const PERMISSIONS_DELIMITER = ':';
 
+	// Identity constants
+	public const IDENTITY_UID_MAXIMAL_LENGTH = 50;
+	public const IDENTITY_PASSWORD_MINIMAL_LENGTH = 8;
+
 }

@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * UserAccountIdentity.php
+ * MachineAccountIdentity.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -33,7 +33,7 @@ use Throwable;
  *
  * @ORM\Entity
  */
-class UserAccountIdentity extends Identity implements IUserAccountIdentity
+class MachineAccountIdentity extends Identity implements IMachineAccountIdentity
 {
 
 	/**

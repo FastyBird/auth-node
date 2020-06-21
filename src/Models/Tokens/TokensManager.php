@@ -65,7 +65,7 @@ class TokensManager implements ITokensManager
 
 		if (!$values->offsetExists('token')) {
 			try {
-				$tokenId = Uuid\Uuid::uuid4()->toString();
+				$tokenId = Uuid\Uuid::uuid4();
 
 			} catch (Throwable $ex) {
 				throw new Exceptions\InvalidStateException('Token identifier could not be generated');
@@ -74,7 +74,7 @@ class TokensManager implements ITokensManager
 			$values->id = $tokenId;
 
 			$values->token = $this->tokenBuilder->build(
-				$tokenId,
+				$tokenId->toString(),
 				$values->offsetExists('validTill') ? $values->validTill : null
 			);
 		}
