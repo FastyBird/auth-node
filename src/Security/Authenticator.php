@@ -32,11 +32,9 @@ use Nette\Security as NS;
 final class Authenticator implements NS\IAuthenticator
 {
 
-	public const IDENTITY_USERNAME_NOT_FOUND = 110;
-	public const IDENTITY_EMAIL_NOT_FOUND = 120;
+	public const IDENTITY_UID_NOT_FOUND = 110;
 
-	public const INVALID_CREDENTIAL_FOR_USERNAME = 101;
-	public const INVALID_CREDENTIAL_FOR_EMAIL = 102;
+	public const INVALID_CREDENTIAL_FOR_UID = 120;
 
 	public const ACCOUNT_PROFILE_BLOCKED = 210;
 	public const ACCOUNT_PROFILE_DELETED = 220;
@@ -69,12 +67,12 @@ final class Authenticator implements NS\IAuthenticator
 		$identity = $this->identityRepository->findOneByUid($username, Entities\Identities\UserAccountIdentity::class);
 
 		if ($identity === null) {
-			throw new Exceptions\AccountNotFoundException('The identity identifier is incorrect', self::IDENTITY_USERNAME_NOT_FOUND);
+			throw new Exceptions\AccountNotFoundException('The identity identifier is incorrect', self::IDENTITY_UID_NOT_FOUND);
 		}
 
 		// Check if password is ok
 		if (!$identity->verifyPassword((string) $password)) {
-			throw new Exceptions\AuthenticationFailedException('The password is incorrect', self::INVALID_CREDENTIAL_FOR_USERNAME);
+			throw new Exceptions\AuthenticationFailedException('The password is incorrect', self::INVALID_CREDENTIAL_FOR_UID);
 		}
 
 		$account = $identity->getAccount();

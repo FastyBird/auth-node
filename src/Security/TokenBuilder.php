@@ -19,8 +19,6 @@ use DateTimeInterface;
 use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Lcobucci\JWT;
 use Nette;
-use Ramsey\Uuid;
-use Throwable;
 
 /**
  * JW token builder
@@ -56,20 +54,14 @@ final class TokenBuilder
 	}
 
 	/**
+	 * @param string $id
 	 * @param DateTimeInterface|null $expirationTime
 	 *
 	 * @return string
 	 */
-	public function build(?DateTimeInterface $expirationTime = null): string
+	public function build(string $id, ?DateTimeInterface $expirationTime = null): string
 	{
 		$timestamp = $this->dateTimeFactory->getNow()->getTimestamp();
-
-		try {
-			$tokenId = Uuid\Uuid::uuid4()->toString();
-
-		} catch (Throwable $ex) {
-			$tokenId = $this->generateRandomString();
-		}
 
 		$jwtBuilder = new JWT\Builder();
 		$jwtBuilder->issuedAt($timestamp);
@@ -78,30 +70,9 @@ final class TokenBuilder
 			$jwtBuilder->expiresAt($expirationTime->getTimestamp());
 		}
 
-		$jwtBuilder->identifiedBy($tokenId);
+		$jwtBuilder->identifiedBy($id);
 
 		return (string) $jwtBuilder->getToken($this->signer, new JWT\Signer\Key($this->tokenSignature));
-	}
-
-	/**
-	 * @param int $length
-	 *
-	 * @return string
-	 */
-	private function generateRandomString(
-		int $length = 10
-	): string {
-		$characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-		$charactersLength = strlen($characters);
-
-		$randomString = '';
-
-		for ($i = 0; $i < $length; $i++) {
-			$randomString .= $characters[rand(0, $charactersLength - 1)];
-		}
-
-		return $randomString;
 	}
 
 }

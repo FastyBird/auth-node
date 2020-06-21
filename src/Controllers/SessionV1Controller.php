@@ -133,7 +133,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			if ($ex instanceof Exceptions\AccountNotFoundException) {
-				if ($ex->getCode() === Security\Authenticator::IDENTITY_EMAIL_NOT_FOUND) {
+				if ($ex->getCode() === Security\Authenticator::IDENTITY_UID_NOT_FOUND) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 						$this->translator->translate('messages.unknownAccount.heading'),

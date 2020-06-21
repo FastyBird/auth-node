@@ -16,11 +16,14 @@
 namespace FastyBird\AuthNode\Models\Tokens;
 
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Security;
 use IPub\DoctrineCrud\Crud;
 use Nette;
 use Nette\Utils;
+use Ramsey\Uuid;
+use Throwable;
 
 /**
  * Access tokens entities manager
@@ -61,7 +64,19 @@ class TokensManager implements ITokensManager
 		$creator = $this->entityCrud->getEntityCreator();
 
 		if (!$values->offsetExists('token')) {
-			$values->token = $this->tokenBuilder->build($values->offsetExists('validTill') ? $values->validTill : null);
+			try {
+				$tokenId = Uuid\Uuid::uuid4()->toString();
+
+			} catch (Throwable $ex) {
+				throw new Exceptions\InvalidStateException('Token identifier could not be generated');
+			}
+
+			$values->id = $tokenId;
+
+			$values->token = $this->tokenBuilder->build(
+				$tokenId,
+				$values->offsetExists('validTill') ? $values->validTill : null
+			);
 		}
 
 		/** @var Entities\Tokens\IToken $entity */
