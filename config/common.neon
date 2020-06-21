@@ -169,7 +169,7 @@ services:
 
 	- {factory: FastyBird\AuthNode\Subscribers\EmailEntitySubscriber}
 
-	- {factory: FastyBird\AuthNode\Subscribers\UserAccountIdentityEntitySubscriber}
+	- {factory: FastyBird\AuthNode\Subscribers\IdentityEntitySubscriber}
 
 	# Database repositories
 	#######################
@@ -212,8 +212,6 @@ services:
 	- {factory: FastyBird\AuthNode\Models\SecurityQuestions\QuestionsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\SecurityQuestions\Question))}
 
 	- {factory: FastyBird\AuthNode\Models\Tokens\TokensManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Tokens\Token))}
-
-	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account))}
 
 	# API controllers
 	#################

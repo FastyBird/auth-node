@@ -50,6 +50,9 @@ class UserAccountIdentity extends Identity implements IUserAccountIdentity
 	 */
 	private $password;
 
+	/** @var string|null */
+	private $plainPassword = null;
+
 	/**
 	 * @param Entities\Accounts\IUserAccount $account
 	 * @param string $uid
@@ -79,6 +82,7 @@ class UserAccountIdentity extends Identity implements IUserAccountIdentity
 			$password = Helpers\Password::createFromString($password);
 
 			$this->password = $password->getHash();
+			$this->plainPassword = $password->getPassword();
 		}
 
 		$this->setSalt($password->getSalt());
@@ -89,7 +93,9 @@ class UserAccountIdentity extends Identity implements IUserAccountIdentity
 	 */
 	public function getPassword(): Helpers\Password
 	{
-		return new Helpers\Password($this->password, null, $this->getSalt());
+		return $this->plainPassword !== null ?
+			new Helpers\Password(null, $this->plainPassword, $this->getSalt()) :
+			new Helpers\Password($this->password, null, $this->getSalt());
 	}
 
 	/**

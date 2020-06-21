@@ -48,7 +48,7 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 	 * @var Uuid\UuidInterface
 	 *
 	 * @ORM\Id
-	 * @ORM\Column(type="uuid_binary", name="rule_id")
+	 * @ORM\Column(type="uuid_binary", name="id")
 	 * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
 	 */
 	protected $id;
@@ -125,9 +125,13 @@ class Account extends NodeDatabaseEntities\Entity implements IAccount
 		$this->id = Uuid\Uuid::uuid4();
 
 		$this->username = $username;
-		$this->password = $password;
+		$this->setPassword($password);
 
 		$this->account = $account;
+
+		// Fill defaults
+		$this->mountpoint = '';
+		$this->clientId = '';
 	}
 
 	/**

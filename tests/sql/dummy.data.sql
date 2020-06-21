@@ -81,3 +81,6 @@ INSERT IGNORE INTO `fb_acl_privileges` (`privilege_id`, `resource_id`, `privileg
 INSERT IGNORE INTO `fb_acl_rules` (`rule_id`, `role_id`, `privilege_id`, `access`, `created_at`, `updated_at`) VALUES
 	(_binary 0x317CEFBFBD377E1743EFBFBDC99AEFBF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, 1, '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0x365DEFBFBD09EFBFBD7E4F29EFBFBDEF, _binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0x3DEFBFBD2E1AEFBFBDEFBFBD49EFBFBD, 1, '2020-06-03 12:00:00', '2020-06-03 12:00:00');
+
+INSERT IGNORE INTO `fb_vernemq_acl` (`id`, `account_id`, `mountpoint`, `client_id`, `username`, `password`, `publish_acl`, `subscribe_acl`) VALUES
+	(_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, _binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, '', '', 'jane.doe@fastybird.com', 'passwd', '[]', '[]');
