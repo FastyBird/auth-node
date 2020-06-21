@@ -4,7 +4,6 @@ namespace Tests\Cases;
 
 use FastyBird\AuthNode\Router;
 use FastyBird\NodeWebServer\Http;
-use Fig\Http\Message\RequestMethodInterface;
 use React\Http\Io\ServerRequest;
 use Tester\Assert;
 use Tests\Tools;
