@@ -58,11 +58,6 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 	/** @var Routing\IRouter */
 	private $router;
 
-	/**
-	 * @param Models\Roles\IRoleRepository $roleRepository
-	 * @param Models\Rules\IRuleRepository $ruleRepository
-	 * @param Routing\IRouter $router
-	 */
 	public function __construct(
 		Models\Roles\IRoleRepository $roleRepository,
 		Models\Rules\IRuleRepository $ruleRepository,

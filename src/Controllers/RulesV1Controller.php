@@ -54,11 +54,6 @@ final class RulesV1Controller extends BaseV1Controller
 	/** @var string */
 	protected $translationDomain = 'node.rules';
 
-	/**
-	 * @param Models\Rules\IRuleRepository $ruleRepository
-	 * @param Models\Rules\IRulesManager $rulesManager
-	 * @param Hydrators\Rules\RuleHydrator $ruleHydrator
-	 */
 	public function __construct(
 		Models\Rules\IRuleRepository $ruleRepository,
 		Models\Rules\IRulesManager $rulesManager,

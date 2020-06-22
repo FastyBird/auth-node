@@ -53,9 +53,6 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		];
 	}
 
-	/**
-	 * @param Models\Vernemq\IAccountRepository $accountRepository
-	 */
 	public function __construct(
 		Models\Vernemq\IAccountRepository $accountRepository
 	) {

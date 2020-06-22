@@ -43,7 +43,7 @@ final class RoleRulesV1Controller extends BaseV1Controller
 	protected $roleRepository;
 
 	/** @var string */
-	protected $translationDomain = 'node.roles';
+	protected $translationDomain = 'node.rules';
 
 	public function __construct(
 		Models\Roles\IRoleRepository $roleRepository,

@@ -25,7 +25,6 @@ use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
-use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
 use Nette\Utils;
 use Psr\Http\Message;
 use Ramsey\Uuid;
@@ -54,11 +53,6 @@ final class PrivilegesV1Controller extends BaseV1Controller
 	/** @var string */
 	protected $translationDomain = 'node.privileges';
 
-	/**
-	 * @param Models\Privileges\IPrivilegeRepository $privilegeRepository
-	 * @param Models\Privileges\IPrivilegesManager $privilegesManager
-	 * @param Hydrators\Privileges\PrivilegeHydrator $privilegeHydrator
-	 */
 	public function __construct(
 		Models\Privileges\IPrivilegeRepository $privilegeRepository,
 		Models\Privileges\IPrivilegesManager $privilegesManager,
@@ -109,118 +103,6 @@ final class PrivilegesV1Controller extends BaseV1Controller
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($privilege));
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 * @throws Doctrine\DBAL\ConnectionException
-	 *
-	 * @Secured
-	 * @Secured\Permission(manage-access-control:create)
-	 */
-	public function create(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		$document = $this->createDocument($request);
-
-		if ($document->getResource()->getType() === Schemas\Privileges\PrivilegeSchema::SCHEMA_TYPE) {
-			try {
-				// Start transaction connection to the database
-				$this->getOrmConnection()->beginTransaction();
-
-				$privilege = $this->privilegesManager->create($this->privilegeHydrator->hydrate($document));
-
-				// Commit all changes into database
-				$this->getOrmConnection()->commit();
-
-			} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
-
-				throw $ex;
-
-			} catch (DoctrineCrudExceptions\EntityCreationException | DoctrineCrudExceptions\MissingRequiredFieldException $ex) {
-				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
-
-				$pointer = 'data/attributes/' . $ex->getField();
-
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.missingRequired.heading'),
-					$this->translator->translate('//node.base.messages.missingRequired.message'),
-					[
-						'pointer' => $pointer,
-					]
-				);
-
-			} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
-				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
-
-				if (
-					preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false
-					&& array_key_exists('key', $match)
-				) {
-					if (Utils\Strings::startsWith($match['key'], 'privilege_')) {
-						throw new NodeJsonApiExceptions\JsonApiErrorException(
-							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-							$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
-							$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
-							[
-								'pointer' => '/data/attributes/' . Utils\Strings::substring($match['key'], 5),
-							]
-						);
-					}
-				}
-
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
-					$this->translator->translate('//node.base.messages.uniqueConstraint.message')
-				);
-
-			} catch (Throwable $ex) {
-				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
-
-				// Log catched exception
-				$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
-					'exception' => [
-						'message' => $ex->getMessage(),
-						'code'    => $ex->getCode(),
-					],
-				]);
-
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.notCreated.heading'),
-					$this->translator->translate('messages.notCreated.message')
-				);
-			}
-
-			/** @var NodeWebServerHttp\Response $response */
-			$response = $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($privilege))
-				->withStatus(StatusCodeInterface::STATUS_CREATED);
-
-			return $response;
-		}
-
-		throw new NodeJsonApiExceptions\JsonApiErrorException(
-			StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-			$this->translator->translate('messages.invalidType.heading'),
-			$this->translator->translate('messages.invalidType.message'),
-			[
-				'pointer' => '/data/type',
-			]
-		);
 	}
 
 	/**

@@ -39,6 +39,43 @@
     },
     {
       "attributes" : {
+        "description" : "Accounts emails management",
+        "name" : "manage-emails"
+      },
+      "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
+      "links" : {
+        "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610"
+      },
+      "relationships" : {
+        "children" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/children",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/relationships/children"
+          }
+        },
+        "privileges" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/privileges",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/relationships/privileges"
+          }
+        }
+      },
+      "type" : "auth-node/resource"
+    },
+    {
+      "attributes" : {
         "description" : "Resource desc",
         "name" : "fb/auth-node"
       },
@@ -74,6 +111,43 @@
               }
             },
             "self" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/relationships/privileges"
+          }
+        }
+      },
+      "type" : "auth-node/resource"
+    },
+    {
+      "attributes" : {
+        "description" : "Accounts management",
+        "name" : "manage-accounts"
+      },
+      "id" : "baefec20-1927-41ce-a7e0-ae74bd641b9c",
+      "links" : {
+        "self" : "/v1/resources/baefec20-1927-41ce-a7e0-ae74bd641b9c"
+      },
+      "relationships" : {
+        "children" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/resources/baefec20-1927-41ce-a7e0-ae74bd641b9c/children",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/resources/baefec20-1927-41ce-a7e0-ae74bd641b9c/relationships/children"
+          }
+        },
+        "privileges" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/resources/baefec20-1927-41ce-a7e0-ae74bd641b9c/privileges",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/resources/baefec20-1927-41ce-a7e0-ae74bd641b9c/relationships/privileges"
           }
         }
       },
@@ -121,6 +195,43 @@
               }
             },
             "self" : "/v1/resources/c3f6947c-1736-42b0-bfd4-73b9070b4491/relationships/privileges"
+          }
+        }
+      },
+      "type" : "auth-node/resource"
+    },
+    {
+      "attributes" : {
+        "description" : "Accounts identities management",
+        "name" : "manage-identities"
+      },
+      "id" : "ed987404-f14c-40b4-9150-15b6590deb8c",
+      "links" : {
+        "self" : "/v1/resources/ed987404-f14c-40b4-9150-15b6590deb8c"
+      },
+      "relationships" : {
+        "children" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/resources/ed987404-f14c-40b4-9150-15b6590deb8c/children",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/resources/ed987404-f14c-40b4-9150-15b6590deb8c/relationships/children"
+          }
+        },
+        "privileges" : {
+          "data" : [ ],
+          "links" : {
+            "related" : {
+              "href" : "/v1/resources/ed987404-f14c-40b4-9150-15b6590deb8c/privileges",
+              "meta" : {
+                "count" : 0
+              }
+            },
+            "self" : "/v1/resources/ed987404-f14c-40b4-9150-15b6590deb8c/relationships/privileges"
           }
         }
       },

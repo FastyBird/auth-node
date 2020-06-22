@@ -71,7 +71,10 @@ INSERT IGNORE INTO `fb_acl_resources` (`resource_id`, `parent_id`, `resource_nam
 	(_binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, NULL, 'fb/auth-node', 'Resource desc', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, NULL, 'fb/other-node', 'Resource desc', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
 	(_binary 0xC3F6947C173642B0BFD473B9070B4491, _binary 0xEFBFBDEFBFBD510E37744C64EFBFBDEF, 'node entity', 'Specific entity resource', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
-	(_binary 0x00892288A6F8485F9F05D47C8890D52A, NULL, 'manage-access-control', 'Access roles management', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
+	(_binary 0x00892288A6F8485F9F05D47C8890D52A, NULL, 'manage-access-control', 'Access roles management', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0xBAEFEC20192741CEA7E0AE74BD641B9C, NULL, 'manage-accounts', 'Accounts management', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0x0B46D3D6C980494A8B40F19E6095E610, NULL, 'manage-emails', 'Accounts emails management', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),
+	(_binary 0xED987404F14C40B4915015B6590DEB8C, NULL, 'manage-identities', 'Accounts identities management', '2020-06-03 12:00:00', '2020-06-03 12:00:00');
 
 INSERT IGNORE INTO `fb_acl_privileges` (`privilege_id`, `resource_id`, `privilege_name`, `privilege_description`, `created_at`, `updated_at`) VALUES
 	(_binary 0x22EFBFBDEFBFBDEFBFBDEFBFBDEFBFBD, _binary 0x58EFBFBD2FEFBFBD78EFBFBD4FEFBFBD, 'access', 'Access to node', '2020-06-03 12:00:00', '2020-06-03 12:00:00'),

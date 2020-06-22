@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Controllers;
 
 use Doctrine;
+use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Helpers;
@@ -44,6 +45,8 @@ use Throwable;
 final class AccountEmailsV1Controller extends BaseV1Controller
 {
 
+	use Controllers\Finders\TAccountFinder;
+
 	/** @var Hydrators\Emails\EmailHydrator */
 	private $emailHydrator;
 
@@ -56,6 +59,9 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	/** @var Helpers\SecurityHash */
 	private $securityHash;
 
+	/** @var Models\Accounts\IAccountRepository */
+	protected $accountRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.emails';
 
@@ -63,12 +69,15 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		Hydrators\Emails\EmailHydrator $emailHydrator,
 		Models\Emails\IEmailRepository $emailRepository,
 		Models\Emails\IEmailsManager $emailsManager,
+		Models\Accounts\IAccountRepository $accountRepository,
 		Helpers\SecurityHash $securityHash
 	) {
 		$this->emailHydrator = $emailHydrator;
 
 		$this->emailRepository = $emailRepository;
 		$this->emailsManager = $emailsManager;
+
+		$this->accountRepository = $accountRepository;
 
 		$this->securityHash = $securityHash;
 	}
@@ -88,16 +97,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
 		$findQuery = new Queries\FindEmailsQuery();
-		$findQuery->forAccount($this->user->getAccount());
+		$findQuery->forAccount($this->findAccount($request));
 
 		$emails = $this->emailRepository->getResultSet($findQuery);
 
@@ -120,16 +121,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
 		// Find email
-		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$email = $this->findEmail($request);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($email));
@@ -151,13 +144,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+		// Get user profile account or url defined account
+		$account = $this->findAccount($request);
 
 		$document = $this->createDocument($request);
 
@@ -167,7 +155,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
 				$createData = $this->emailHydrator->hydrate($document);
-				$createData->offsetSet('account', $this->user->getAccount());
+				$createData->offsetSet('account', $account);
 				$createData->offsetSet('verificationHash', $this->securityHash->createKey());
 				$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
 
@@ -276,14 +264,6 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
 		$document = $this->createDocument($request);
 
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
@@ -294,7 +274,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			);
 		}
 
-		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$email = $this->findEmail($request);
 
 		try {
 			// Start transaction connection to the database
@@ -367,15 +347,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
-		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$email = $this->findEmail($request);
 
 		if ($email->isDefault()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -435,16 +407,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
 		// At first, try to load email
-		$email = $this->findEmail($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$email = $this->findEmail($request);
 
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
@@ -548,23 +512,19 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	}
 
 	/**
-	 * @param string $id
+	 * @param Message\ServerRequestInterface $request
 	 *
 	 * @return Entities\Emails\IEmail
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
-	private function findEmail(string $id): Entities\Emails\IEmail
-	{
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+	private function findEmail(
+		Message\ServerRequestInterface $request
+	): Entities\Emails\IEmail {
+		// Get user account from request header of from url
+		$account = $this->findAccount($request);
 
-		if (!Uuid\Uuid::isValid($id)) {
+		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
@@ -573,8 +533,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		}
 
 		$findQuery = new Queries\FindEmailsQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($id));
-		$findQuery->forAccount($this->user->getAccount());
+		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID, null)));
+		$findQuery->forAccount($account);
 
 		$email = $this->emailRepository->findOneBy($findQuery);
 

@@ -55,11 +55,6 @@ final class RolesV1Controller extends BaseV1Controller
 	/** @var string */
 	protected $translationDomain = 'node.roles';
 
-	/**
-	 * @param Models\Roles\IRoleRepository $roleRepository
-	 * @param Models\Roles\IRolesManager $rolesManager
-	 * @param Hydrators\Roles\RoleHydrator $roleHydrator
-	 */
 	public function __construct(
 		Models\Roles\IRoleRepository $roleRepository,
 		Models\Roles\IRolesManager $rolesManager,

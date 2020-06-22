@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Controllers;
 
 use Doctrine;
+use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Hydrators;
 use FastyBird\AuthNode\Models;
@@ -39,20 +40,28 @@ use Throwable;
 final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 {
 
+	use Controllers\Finders\TAccountFinder;
+
 	/** @var Hydrators\SecurityQuestions\QuestionHydrator */
 	private $questionHydrator;
 
 	/** @var Models\SecurityQuestions\IQuestionsManager */
 	private $questionsManager;
 
+	/** @var Models\Accounts\IAccountRepository */
+	protected $accountRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.securityQuestion';
 
 	public function __construct(
 		Hydrators\SecurityQuestions\QuestionHydrator $questionHydrator,
+		Models\Accounts\IAccountRepository $accountRepository,
 		Models\SecurityQuestions\IQuestionsManager $questionsManager
 	) {
 		$this->questionHydrator = $questionHydrator;
+
+		$this->accountRepository = $accountRepository;
 
 		$this->questionsManager = $questionsManager;
 	}
@@ -72,22 +81,11 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if (
-			$this->user->getAccount() === null
-			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+		$question = $this->findQuestion($request);
 
-		$account = $this->user->getAccount();
-
-		if ($account->hasSecurityQuestion()) {
+		if ($question !== null) {
 			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getSecurityQuestion()));
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($question));
 
 		} else {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -114,24 +112,17 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if (
-			$this->user->getAccount() === null
-			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+		$question = $this->findQuestion($request);
 
-		if ($this->user->getAccount()->hasSecurityQuestion()) {
+		if ($question !== null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('messages.accountHasQuestion.heading'),
 				$this->translator->translate('messages.accountHasQuestion.message')
 			);
 		}
+
+		$account = $this->findAccount($request);
 
 		$document = $this->createDocument($request);
 
@@ -141,7 +132,7 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\SecurityQuestions\QuestionSchema::SCHEMA_TYPE) {
 				$createData = $this->questionHydrator->hydrate($document);
-				$createData->offsetSet('account', $this->user->getAccount());
+				$createData->offsetSet('account', $account);
 
 				// Create new item in database
 				$question = $this->questionsManager->create($createData);
@@ -222,18 +213,7 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if (
-			$this->user->getAccount() === null
-			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
-		$question = $this->user->getAccount()->getSecurityQuestion();
+		$question = $this->findQuestion($request);
 
 		if ($question === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -347,18 +327,9 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if (
-			$this->user->getAccount() === null
-			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+		$question = $this->findQuestion($request);
 
-		if (!$this->user->getAccount()->hasSecurityQuestion()) {
+		if ($question === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
@@ -380,90 +351,26 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 
 	/**
 	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
 	 *
-	 * @return NodeWebServerHttp\Response
+	 * @return Entities\SecurityQuestions\IQuestion|null
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 *
-	 * @Secured
-	 * @Secured\User(loggedIn)
 	 */
-	public function validate(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		if (
-			$this->user->getAccount() === null
-			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+	private function findQuestion(
+		Message\ServerRequestInterface $request
+	): ?Entities\SecurityQuestions\IQuestion {
+		// Get user account from request header of from url
+		$account = $this->findAccount($request);
 
-		$question = $this->user->getAccount()->getSecurityQuestion();
-
-		if ($question === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
-		}
-
-		$document = $this->createDocument($request);
-
-		$attributes = $document->getResource()->getAttributes();
-
-		if ($document->getResource()->getIdentifier()->getId() !== $question->getPlainId()) {
+		if (!$account instanceof Entities\Accounts\IUserAccount) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
-				$this->translator->translate('//node.base.messages.identifierInvalid.message')
+				$this->translator->translate('//node.base.messages.invalid.heading'),
+				$this->translator->translate('//node.base.messages.invalid.message')
 			);
 		}
 
-		if ($document->getResource()->getType() !== Schemas\SecurityQuestions\QuestionSchema::SCHEMA_TYPE) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidType.heading'),
-				$this->translator->translate('messages.invalidType.message'),
-				[
-					'pointer' => '/data/type',
-				]
-			);
-		}
-
-		if (!$attributes->has('current_answer')) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
-				[
-					'pointer' => '/data/attributes/current_answer',
-				]
-			);
-		}
-
-		if ($question->getAnswer() !== $attributes->get('current_answer')) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.incorrect.heading'),
-				$this->translator->translate('messages.incorrect.message'),
-				[
-					'pointer' => '/data/attributes/current_answer',
-				]
-			);
-		}
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response
-			->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
-
-		return $response;
+		return $account->getSecurityQuestion();
 	}
 
 }

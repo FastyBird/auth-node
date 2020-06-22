@@ -48,9 +48,6 @@ final class PrivilegeSchema extends NodeJsonApiSchemas\JsonApiSchema
 	/** @var Routing\IRouter */
 	private $router;
 
-	/**
-	 * @param Routing\IRouter $router
-	 */
 	public function __construct(
 		Routing\IRouter $router
 	) {

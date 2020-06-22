@@ -21,6 +21,12 @@ base:
 		notValidJsonApi:
 			heading	: "Not valid content"
 			message	: "Provided request content is not valid {JSON:API} content"
+		failed:
+			heading	: "Request failed"
+			message	: "Provided request failed and can't be finished"
+		invalid:
+			heading	: "Request failed"
+			message	: "Provided request is invalid and can't be finished"
 		identifierInvalid:
 			heading	: "Entity identifier invalid"
 			message	: "Provided entity identifier is not valid"
@@ -48,9 +54,6 @@ base:
 		resourceNotFound:
 			heading	: "Resource not found"
 			message	: "Requested resource was not found"
-		failed:
-			heading	: "Request failed"
-			message	: "Request failed and can't be finished"
 
 session:
 	messages:

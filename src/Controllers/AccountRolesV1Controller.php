@@ -15,9 +15,10 @@
 
 namespace FastyBird\AuthNode\Controllers;
 
+use FastyBird\AuthNode\Controllers;
+use FastyBird\AuthNode\Models;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
-use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message;
 
 /**
@@ -31,8 +32,19 @@ use Psr\Http\Message;
 final class AccountRolesV1Controller extends BaseV1Controller
 {
 
+	use Controllers\Finders\TAccountFinder;
+
+	/** @var Models\Accounts\IAccountRepository */
+	protected $accountRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.roles';
+
+	public function __construct(
+		Models\Accounts\IAccountRepository $accountRepository
+	) {
+		$this->accountRepository = $accountRepository;
+	}
 
 	/**
 	 * @param Message\ServerRequestInterface $request
@@ -49,16 +61,10 @@ final class AccountRolesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+		$account = $this->findAccount($request);
 
 		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getRoles()));
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getRoles()));
 	}
 
 }

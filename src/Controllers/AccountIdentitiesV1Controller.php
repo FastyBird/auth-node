@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Controllers;
 
 use Doctrine;
+use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Helpers;
 use FastyBird\AuthNode\Models;
@@ -27,10 +28,11 @@ use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Utils;
 use Psr\Http\Message;
+use Ramsey\Uuid;
 use Throwable;
 
 /**
- * System identity controller
+ * Account identity controller
  *
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -39,6 +41,8 @@ use Throwable;
  */
 final class AccountIdentitiesV1Controller extends BaseV1Controller
 {
+
+	use Controllers\Finders\TAccountFinder;
 
 	/** @var Models\Identities\IIdentityRepository */
 	private $identityRepository;
@@ -52,6 +56,9 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 	/** @var Helpers\SecurityHash */
 	private $securityHash;
 
+	/** @var Models\Accounts\IAccountRepository */
+	protected $accountRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.userAccountIdentity';
 
@@ -59,11 +66,14 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		Models\Identities\IIdentityRepository $identityRepository,
 		Models\Identities\IIdentitiesManager $identitiesManager,
 		Models\Accounts\IAccountsManager $accountsManager,
+		Models\Accounts\IAccountRepository $accountRepository,
 		Helpers\SecurityHash $securityHash
 	) {
 		$this->identityRepository = $identityRepository;
 		$this->identitiesManager = $identitiesManager;
 		$this->accountsManager = $accountsManager;
+
+		$this->accountRepository = $accountRepository;
 
 		$this->securityHash = $securityHash;
 	}
@@ -83,16 +93,8 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
 		$findQuery = new Queries\FindIdentitiesQuery();
-		$findQuery->forAccount($this->user->getAccount());
+		$findQuery->forAccount($this->findAccount($request));
 
 		$identities = $this->identityRepository->getResultSet($findQuery);
 
@@ -115,24 +117,8 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
 		// Find identity
-		$identity = $this->findIdentity($request->getAttribute(Router\Router::URL_ITEM_ID));
-
-		if ($identity === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
-		}
+		$identity = $this->findIdentity($request);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($identity));
@@ -154,25 +140,6 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
-		/** @var Entities\Identities\UserAccountIdentity|null $identity */
-		$identity = $this->identityRepository->findOneForAccount($this->user->getAccount(), Entities\Identities\UserAccountIdentity::class);
-
-		if ($identity === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
-		}
-
 		$document = $this->createDocument($request);
 
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
@@ -183,52 +150,57 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 			);
 		}
 
-		$attributes = $document->getResource()->getAttributes();
-
-		if (
-			!$attributes->has('password')
-			|| !$attributes->get('password')->has('current')
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
-				[
-					'pointer' => '/data/attributes/password/current',
-				]
-			);
-		}
-
-		if (
-			!$attributes->has('password')
-			|| !$attributes->get('password')->has('new')
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
-				[
-					'pointer' => '/data/attributes/password/new',
-				]
-			);
-		}
-
-		if (!$identity->verifyPassword((string) $attributes->get('password')->get('current'))) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidPassword.heading'),
-				$this->translator->translate('messages.invalidPassword.message'),
-				[
-					'pointer' => '/data/attributes/password/current',
-				]
-			);
-		}
+		$identity = $this->findIdentity($request);
 
 		try {
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE) {
+			if (
+				$document->getResource()->getType() === Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE
+				&& $identity instanceof Entities\Identities\IUserAccountIdentity
+			) {
+				$attributes = $document->getResource()->getAttributes();
+
+				if (
+					!$attributes->has('password')
+					|| !$attributes->get('password')->has('current')
+				) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('//node.base.messages.missingRequired.heading'),
+						$this->translator->translate('//node.base.messages.missingRequired.message'),
+						[
+							'pointer' => '/data/attributes/password/current',
+						]
+					);
+				}
+
+				if (
+					!$attributes->has('password')
+					|| !$attributes->get('password')->has('new')
+				) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('//node.base.messages.missingRequired.heading'),
+						$this->translator->translate('//node.base.messages.missingRequired.message'),
+						[
+							'pointer' => '/data/attributes/password/new',
+						]
+					);
+				}
+
+				if (!$identity->verifyPassword((string) $attributes->get('password')->get('current'))) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('messages.invalidPassword.heading'),
+						$this->translator->translate('messages.invalidPassword.message'),
+						[
+							'pointer' => '/data/attributes/password/current',
+						]
+					);
+				}
+
 				$update = new Utils\ArrayHash();
 				$update->offsetSet('password', (string) $attributes->get('password')->get('new'));
 
@@ -288,7 +260,40 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
+	 */
+	public function readRelationship(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		$identity = $this->findIdentity($request);
+
+		// & relation entity name
+		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
+
+		if ($relationEntity === Schemas\Identities\IdentitySchema::RELATIONSHIPS_ACCOUNT) {
+			return $response
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($identity->getAccount()));
+		}
+
+		$this->throwUnknownRelation($relationEntity);
+
+		return $response;
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\User(guest)
 	 */
 	public function requestPassword(
 		Message\ServerRequestInterface $request,
@@ -320,7 +325,10 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 			);
 		}
 
-		$identity = $this->findIdentity((string) $attributes->get('uid'));
+		$findQuery = new Queries\FindIdentitiesQuery();
+		$findQuery->byUid($attributes->get('uid'));
+
+		$identity = $this->identityRepository->findOneBy($findQuery);
 
 		if ($identity === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -334,6 +342,17 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		}
 
 		$account = $identity->getAccount();
+
+		if (!$account instanceof Entities\Accounts\IUserAccount) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message'),
+				[
+					'pointer' => '/data/attributes/uid',
+				]
+			);
+		}
 
 		if ($account->isDeleted()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -428,29 +447,30 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 
 	/**
 	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
 	 *
-	 * @return NodeWebServerHttp\Response
+	 * @return Entities\Identities\IIdentity
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 *
-	 * @Secured
-	 * @Secured\User(loggedIn)
 	 */
-	public function readRelationship(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
+	private function findIdentity(
+		Message\ServerRequestInterface $request
+	): Entities\Identities\IIdentity {
+		// Get user account from request header of from url
+		$account = $this->findAccount($request);
+
+		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('messages.notFound.heading'),
+				$this->translator->translate('messages.notFound.message')
 			);
 		}
 
-		// At first, try to load identity
-		$identity = $this->findIdentity($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$findQuery = new Queries\FindIdentitiesQuery();
+		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID, null)));
+		$findQuery->forAccount($account);
+
+		$identity = $this->identityRepository->findOneBy($findQuery);
 
 		if ($identity === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -459,118 +479,6 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.notFound.message')
 			);
 		}
-
-		// & relation entity name
-		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
-
-		if ($relationEntity === Schemas\Identities\UserAccountIdentitySchema::RELATIONSHIPS_ACCOUNT) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($identity->getAccount()));
-		}
-
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 *
-	 * @Secured
-	 * @Secured\User(loggedIn)
-	 */
-	public function validate(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
-		/** @var Entities\Identities\UserAccountIdentity|null $identity */
-		$identity = $this->identityRepository->findOneForAccount($this->user->getAccount(), Entities\Identities\UserAccountIdentity::class);
-
-		if ($identity === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
-		}
-
-		$document = $this->createDocument($request);
-
-		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
-				$this->translator->translate('//node.base.messages.identifierInvalid.message')
-			);
-		}
-
-		$attributes = $document->getResource()->getAttributes();
-
-		if ($document->getResource()->getType() !== Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidType.heading'),
-				$this->translator->translate('messages.invalidType.message'),
-				[
-					'pointer' => '/data/type',
-				]
-			);
-		}
-
-		if (
-			!$attributes->has('password')
-			|| !$attributes->get('password')->has('current')
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
-				[
-					'pointer' => '/data/attributes/password/current',
-				]
-			);
-		}
-
-		if (!$identity->verifyPassword((string) $attributes->get('password')->get('current'))) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidPassword.heading'),
-				$this->translator->translate('messages.invalidPassword.message'),
-				[
-					'pointer' => '/data/attributes/password/current',
-				]
-			);
-		}
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response
-			->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
-
-		return $response;
-	}
-
-	/**
-	 * @param string $uid
-	 *
-	 * @return Entities\Identities\UserAccountIdentity|null
-	 */
-	private function findIdentity(string $uid): ?Entities\Identities\UserAccountIdentity
-	{
-		/** @var Entities\Identities\UserAccountIdentity|null $identity */
-		$identity = $this->identityRepository->findOneByUid($uid, Entities\Identities\UserAccountIdentity::class);
 
 		return $identity;
 	}

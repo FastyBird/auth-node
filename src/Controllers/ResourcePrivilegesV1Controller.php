@@ -43,7 +43,7 @@ final class ResourcePrivilegesV1Controller extends BaseV1Controller
 	protected $resourceRepository;
 
 	/** @var string */
-	protected $translationDomain = 'node.resources';
+	protected $translationDomain = 'node.privileges';
 
 	public function __construct(
 		Models\Resources\IResourceRepository $resourceRepository,

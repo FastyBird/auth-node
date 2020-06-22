@@ -58,11 +58,6 @@ final class ResourceSchema extends NodeJsonApiSchemas\JsonApiSchema
 	/** @var Routing\IRouter */
 	private $router;
 
-	/**
-	 * @param Models\Resources\IResourceRepository $resourceRepository
-	 * @param Models\Privileges\IPrivilegeRepository $privilegeRepository
-	 * @param Routing\IRouter $router
-	 */
 	public function __construct(
 		Models\Resources\IResourceRepository $resourceRepository,
 		Models\Privileges\IPrivilegeRepository $privilegeRepository,

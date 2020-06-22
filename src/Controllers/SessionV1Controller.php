@@ -48,9 +48,6 @@ final class SessionV1Controller extends BaseV1Controller
 	/** @var Models\Tokens\ITokensManager */
 	private $tokensManager;
 
-	/** @var Models\Identities\IIdentityRepository */
-	private $identityRepository;
-
 	/** @var Security\TokenReader */
 	private $tokenReader;
 
@@ -60,12 +57,10 @@ final class SessionV1Controller extends BaseV1Controller
 	public function __construct(
 		Models\Tokens\ITokenRepository $tokenRepository,
 		Models\Tokens\ITokensManager $tokensManager,
-		Models\Identities\IIdentityRepository $identityRepository,
 		Security\TokenReader $tokenReader
 	) {
 		$this->tokenRepository = $tokenRepository;
 		$this->tokensManager = $tokensManager;
-		$this->identityRepository = $identityRepository;
 
 		$this->tokenReader = $tokenReader;
 	}
@@ -463,63 +458,6 @@ final class SessionV1Controller extends BaseV1Controller
 	}
 
 	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 */
-	public function validate(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		$document = $this->createDocument($request);
-
-		$attributes = $document->getResource()->getAttributes();
-
-		if (!$attributes->has('uid')) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
-				[
-					'pointer' => '/data/attributes/uid',
-				]
-			);
-		}
-
-		$account = $this->findIdentityAccount((string) $attributes->get('uid'));
-
-		if ($account === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.unknownAccount.heading'),
-				$this->translator->translate('messages.unknownAccount.message'),
-				[
-					'pointer' => '/data/attributes/uid',
-				]
-			);
-
-		} elseif ($account->isDeleted()) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.unknownAccount.heading'),
-				$this->translator->translate('messages.unknownAccount.message'),
-				[
-					'pointer' => '/data/attributes/uid',
-				]
-			);
-		}
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response
-			->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
-
-		return $response;
-	}
-
-	/**
 	 * @return DateTimeImmutable
 	 */
 	private function getNow(): DateTimeImmutable
@@ -528,19 +466,6 @@ final class SessionV1Controller extends BaseV1Controller
 		$now = $this->dateFactory->getNow();
 
 		return $now;
-	}
-
-	/**
-	 * @param string $uid
-	 *
-	 * @return Entities\Accounts\IAccount|null
-	 */
-	private function findIdentityAccount(string $uid): ?Entities\Accounts\IAccount
-	{
-		/** @var Entities\Identities\UserAccountIdentity|null $identity */
-		$identity = $this->identityRepository->findOneByUid($uid, Entities\Identities\UserAccountIdentity::class);
-
-		return $identity !== null ? $identity->getAccount() : null;
 	}
 
 	/**

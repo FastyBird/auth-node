@@ -2,41 +2,36 @@
   "data" : [
     {
       "attributes" : {
-        "description" : "Resource desc",
-        "name" : "fb/auth-node"
+        "description" : "Accounts emails management",
+        "name" : "manage-emails"
       },
-      "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+      "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
       "links" : {
-        "self" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd"
+        "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610"
       },
       "relationships" : {
         "children" : {
           "data" : [ ],
           "links" : {
             "related" : {
-              "href" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/children",
+              "href" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/children",
               "meta" : {
                 "count" : 0
               }
             },
-            "self" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/relationships/children"
+            "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/relationships/children"
           }
         },
         "privileges" : {
-          "data" : [
-            {
-              "id" : "22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
-              "type" : "auth-node/privilege"
-            }
-          ],
+          "data" : [ ],
           "links" : {
             "related" : {
-              "href" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/privileges",
+              "href" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/privileges",
               "meta" : {
-                "count" : 1
+                "count" : 0
               }
             },
-            "self" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd/relationships/privileges"
+            "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/relationships/privileges"
           }
         }
       },
@@ -48,7 +43,7 @@
   },
   "links" : {
     "first" : "/v1/resources?page%5Boffset%5D=0&page%5Blimit%5D=1",
-    "last" : "/v1/resources?page%5Boffset%5D=3&page%5Blimit%5D=1",
+    "last" : "/v1/resources?page%5Boffset%5D=6&page%5Blimit%5D=1",
     "next" : "/v1/resources?page%5Boffset%5D=2&page%5Blimit%5D=1",
     "prev" : "/v1/resources?page%5Boffset%5D=0&page%5Blimit%5D=1",
     "self" : "/v1/resources?page%5Boffset%5D=1&page%5Blimit%5D=1"
@@ -56,6 +51,6 @@
   "meta" : {
     "author" : "FastyBird dev team",
     "copyright" : "FastyBird s.r.o",
-    "totalCount" : 4
+    "totalCount" : 7
   }
 }
