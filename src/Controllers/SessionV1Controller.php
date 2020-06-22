@@ -452,7 +452,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\SessionSchema::RELATIONSHIPS_ACCOUNT) {
+		if ($relationEntity === Schemas\Sessions\SessionSchema::RELATIONSHIPS_ACCOUNT) {
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()));
 		}

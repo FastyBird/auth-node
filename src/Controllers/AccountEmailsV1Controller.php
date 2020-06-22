@@ -44,7 +44,7 @@ use Throwable;
 final class AccountEmailsV1Controller extends BaseV1Controller
 {
 
-	/** @var Hydrators\EmailHydrator */
+	/** @var Hydrators\Emails\EmailHydrator */
 	private $emailHydrator;
 
 	/** @var Models\Emails\IEmailRepository */
@@ -60,7 +60,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	protected $translationDomain = 'node.emails';
 
 	public function __construct(
-		Hydrators\EmailHydrator $emailHydrator,
+		Hydrators\Emails\EmailHydrator $emailHydrator,
 		Models\Emails\IEmailRepository $emailRepository,
 		Models\Emails\IEmailsManager $emailsManager,
 		Helpers\SecurityHash $securityHash
@@ -165,7 +165,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\EmailSchema::SCHEMA_TYPE) {
+			if ($document->getResource()->getType() === Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
 				$createData = $this->emailHydrator->hydrate($document);
 				$createData->offsetSet('account', $this->user->getAccount());
 				$createData->offsetSet('verificationHash', $this->securityHash->createKey());
@@ -300,7 +300,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\EmailSchema::SCHEMA_TYPE) {
+			if ($document->getResource()->getType() === Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
 				$updateEmailData = $this->emailHydrator->hydrate($document, $email);
 
 				$email = $this->emailsManager->update($email, $updateEmailData);
@@ -449,7 +449,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\EmailSchema::RELATIONSHIPS_ACCOUNT) {
+		if ($relationEntity === Schemas\Emails\EmailSchema::RELATIONSHIPS_ACCOUNT) {
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($email->getAccount()));
 		}
@@ -475,7 +475,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 		$attributes = $document->getResource()->getAttributes();
 
-		if ($document->getResource()->getType() !== Schemas\EmailSchema::SCHEMA_TYPE) {
+		if ($document->getResource()->getType() !== Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidType.heading'),

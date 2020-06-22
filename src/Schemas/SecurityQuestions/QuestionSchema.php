@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * SecurityQuestionSchema.php
+ * QuestionSchema.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -13,7 +13,7 @@
  * @date           31.03.20
  */
 
-namespace FastyBird\AuthNode\Schemas;
+namespace FastyBird\AuthNode\Schemas\SecurityQuestions;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Router;
@@ -31,7 +31,7 @@ use Neomerx\JsonApi;
  *
  * @phpstan-extends NodeJsonApiSchemas\JsonApiSchema<Entities\SecurityQuestions\IQuestion>
  */
-final class SecurityQuestionSchema extends NodeJsonApiSchemas\JsonApiSchema
+final class QuestionSchema extends NodeJsonApiSchemas\JsonApiSchema
 {
 
 	/**

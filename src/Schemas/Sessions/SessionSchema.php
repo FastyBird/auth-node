@@ -13,7 +13,7 @@
  * @date           31.03.20
  */
 
-namespace FastyBird\AuthNode\Schemas;
+namespace FastyBird\AuthNode\Schemas\Sessions;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Router;

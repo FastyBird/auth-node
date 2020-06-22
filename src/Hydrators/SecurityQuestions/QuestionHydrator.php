@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * SecurityQuestionHydrator.php
+ * QuestionHydrator.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -13,7 +13,7 @@
  * @date           31.03.20
  */
 
-namespace FastyBird\AuthNode\Hydrators;
+namespace FastyBird\AuthNode\Hydrators\SecurityQuestions;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
@@ -27,7 +27,7 @@ use IPub\JsonAPIDocument;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class SecurityQuestionHydrator extends NodeJsonApiHydrators\Hydrator
+final class QuestionHydrator extends NodeJsonApiHydrators\Hydrator
 {
 
 	/** @var string */

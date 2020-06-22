@@ -463,7 +463,7 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\EmailSchema::RELATIONSHIPS_ACCOUNT) {
+		if ($relationEntity === Schemas\Identities\UserAccountIdentitySchema::RELATIONSHIPS_ACCOUNT) {
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($identity->getAccount()));
 		}

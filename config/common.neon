@@ -228,6 +228,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Controllers\AccountIdentitiesV1Controller, tags: [nette.inject]}
 
+	- {factory: FastyBird\AuthNode\Controllers\AccountRolesV1Controller, tags: [nette.inject]}
+
 	- {factory: FastyBird\AuthNode\Controllers\AccountsV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\RolesV1Controller, tags: [nette.inject]}
@@ -251,11 +253,11 @@ services:
 
 	- {factory: FastyBird\AuthNode\Schemas\Accounts\UserAccountSchema}
 
-	- {factory: FastyBird\AuthNode\Schemas\EmailSchema}
+	- {factory: FastyBird\AuthNode\Schemas\Emails\EmailSchema}
 
-	- {factory: FastyBird\AuthNode\Schemas\SecurityQuestionSchema}
+	- {factory: FastyBird\AuthNode\Schemas\SecurityQuestions\QuestionSchema}
 
-	- {factory: FastyBird\AuthNode\Schemas\SessionSchema}
+	- {factory: FastyBird\AuthNode\Schemas\Sessions\SessionSchema}
 
 	- {factory: FastyBird\AuthNode\Schemas\Identities\UserAccountIdentitySchema}
 
@@ -274,9 +276,9 @@ services:
 
 	- {factory: FastyBird\AuthNode\Hydrators\Accounts\UserAccountHydrator}
 
-	- {factory: FastyBird\AuthNode\Hydrators\EmailHydrator}
+	- {factory: FastyBird\AuthNode\Hydrators\Emails\EmailHydrator}
 
-	- {factory: FastyBird\AuthNode\Hydrators\SecurityQuestionHydrator}
+	- {factory: FastyBird\AuthNode\Hydrators\SecurityQuestions\QuestionHydrator}
 
 	- {factory: FastyBird\AuthNode\Hydrators\Roles\RoleHydrator}
 

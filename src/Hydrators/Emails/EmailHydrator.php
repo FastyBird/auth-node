@@ -13,7 +13,7 @@
  * @date           31.03.20
  */
 
-namespace FastyBird\AuthNode\Hydrators;
+namespace FastyBird\AuthNode\Hydrators\Emails;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Types;

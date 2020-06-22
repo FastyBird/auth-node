@@ -74,6 +74,12 @@
           }
         ],
         "links" : {
+          "related" : {
+            "href" : "/v1/me/roles",
+            "meta" : {
+              "count" : 1
+            }
+          },
           "self" : "/v1/me/relationships/roles"
         }
       },

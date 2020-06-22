@@ -39,7 +39,7 @@ use Throwable;
 final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 {
 
-	/** @var Hydrators\SecurityQuestionHydrator */
+	/** @var Hydrators\SecurityQuestions\QuestionHydrator */
 	private $questionHydrator;
 
 	/** @var Models\SecurityQuestions\IQuestionsManager */
@@ -49,7 +49,7 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 	protected $translationDomain = 'node.securityQuestion';
 
 	public function __construct(
-		Hydrators\SecurityQuestionHydrator $questionHydrator,
+		Hydrators\SecurityQuestions\QuestionHydrator $questionHydrator,
 		Models\SecurityQuestions\IQuestionsManager $questionsManager
 	) {
 		$this->questionHydrator = $questionHydrator;
@@ -139,7 +139,7 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
+			if ($document->getResource()->getType() === Schemas\SecurityQuestions\QuestionSchema::SCHEMA_TYPE) {
 				$createData = $this->questionHydrator->hydrate($document);
 				$createData->offsetSet('account', $this->user->getAccount());
 
@@ -281,7 +281,7 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
+			if ($document->getResource()->getType() === Schemas\SecurityQuestions\QuestionSchema::SCHEMA_TYPE) {
 				$updateQuestionData = $this->questionHydrator->hydrate($document, $question);
 
 			} else {
@@ -368,7 +368,7 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\SecurityQuestionSchema::RELATIONSHIPS_ACCOUNT) {
+		if ($relationEntity === Schemas\SecurityQuestions\QuestionSchema::RELATIONSHIPS_ACCOUNT) {
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()));
 		}
@@ -426,7 +426,7 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 			);
 		}
 
-		if ($document->getResource()->getType() !== Schemas\SecurityQuestionSchema::SCHEMA_TYPE) {
+		if ($document->getResource()->getType() !== Schemas\SecurityQuestions\QuestionSchema::SCHEMA_TYPE) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.invalidType.heading'),
