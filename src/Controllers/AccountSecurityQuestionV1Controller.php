@@ -75,7 +75,6 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		if (
 			$this->user->getAccount() === null
 			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
@@ -118,7 +117,6 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		if (
 			$this->user->getAccount() === null
 			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
@@ -227,7 +225,6 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		if (
 			$this->user->getAccount() === null
 			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
@@ -353,7 +350,6 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		if (
 			$this->user->getAccount() === null
 			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
@@ -400,7 +396,6 @@ final class AccountSecurityQuestionV1Controller extends BaseV1Controller
 		if (
 			$this->user->getAccount() === null
 			|| !$this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-			|| $this->user->getAccount()->getPlainId() !== $request->getAttribute(Router\Router::URL_ACCOUNT_ID)
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,

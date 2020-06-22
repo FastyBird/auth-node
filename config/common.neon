@@ -150,6 +150,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Middleware\AccountMiddleware, tags: [middleware: {priority: 15}]}
 
+	- {factory: FastyBird\AuthNode\Middleware\UrlFormatMiddleware, tags: [middleware: {priority: 150}]}
+
 	- {factory: FastyBird\AuthNode\Middleware\AccessMiddleware}
 
 	-
@@ -216,15 +218,17 @@ services:
 	# API controllers
 	#################
 
+	- {factory: FastyBird\AuthNode\Controllers\SessionV1Controller, tags: [nette.inject]}
+
 	- {factory: FastyBird\AuthNode\Controllers\AccountV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\AccountEmailsV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\AccountSecurityQuestionV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AuthNode\Controllers\SessionV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\AccountIdentitiesV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AuthNode\Controllers\UserAccountIdentityV1Controller, tags: [nette.inject]}
+	- {factory: FastyBird\AuthNode\Controllers\AccountsV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\RolesV1Controller, tags: [nette.inject]}
 

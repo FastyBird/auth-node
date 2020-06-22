@@ -1,34 +1,32 @@
 {
   "data" : {
     "attributes" : {
-      "expiration" : "2020-04-01T18:00:00+00:00",
-      "refresh" : "__REFRESH_TOKEN__",
-      "token" : "__ACCESS_TOKEN__",
-      "token_type" : "Bearer"
+      "is_custom" : false,
+      "question" : "firstPetName"
     },
-    "id" : "__ENTITY_ID__",
+    "id" : "4eaed254-161e-4ba0-8bd6-33f611c06b9d",
     "links" : {
-      "self" : "/v1/session"
+      "self" : "/v1/me/security-question"
     },
     "relationships" : {
       "account" : {
         "data" : {
-          "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
+          "id" : "efbfbdef-bfbd-68ef-bfbd-770b40efbfbd",
           "type" : "auth-node/user-account"
         },
         "links" : {
           "related" : "/v1/me",
-          "self" : "/v1/session/relationships/account"
+          "self" : "/v1/me/security-question/relationships/account"
         }
       }
     },
-    "type" : "auth-node/session"
+    "type" : "auth-node/security-question"
   },
   "jsonapi" : {
     "version" : "1.1"
   },
   "links" : {
-    "self" : "/v1/session"
+    "self" : "/v1/me/security-question"
   },
   "meta" : {
     "author" : "FastyBird dev team",

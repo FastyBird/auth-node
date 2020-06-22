@@ -48,6 +48,9 @@ base:
 		resourceNotFound:
 			heading	: "Resource not found"
 			message	: "Requested resource was not found"
+		failed:
+			heading	: "Request failed"
+			message	: "Request failed and can't be finished"
 
 session:
 	messages:

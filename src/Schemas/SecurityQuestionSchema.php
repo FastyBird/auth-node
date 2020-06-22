@@ -141,7 +141,7 @@ final class SecurityQuestionSchema extends NodeJsonApiSchemas\JsonApiSchema
 				$this->router->urlFor(
 					'account',
 					[
-						Router\Router::URL_ACCOUNT_ID => $question->getAccount()->getPlainId(),
+						Router\Router::URL_ITEM_ID => $question->getAccount()->getPlainId(),
 					]
 				),
 				false

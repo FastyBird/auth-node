@@ -143,7 +143,7 @@ final class MachineAccountIdentitySchema extends NodeJsonApiSchemas\JsonApiSchem
 				$this->router->urlFor(
 					'account',
 					[
-						Router\Router::URL_ACCOUNT_ID => $identity->getAccount()->getPlainId(),
+						Router\Router::URL_ITEM_ID => $identity->getAccount()->getPlainId(),
 					]
 				),
 				false

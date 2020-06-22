@@ -139,7 +139,7 @@ final class SessionSchema extends NodeJsonApiSchemas\JsonApiSchema
 				$this->router->urlFor(
 					'account',
 					[
-						Router\Router::URL_ACCOUNT_ID => $accessToken->getIdentity()->getAccount()->getPlainId(),
+						Router\Router::URL_ITEM_ID => $accessToken->getIdentity()->getAccount()->getPlainId(),
 					]
 				),
 				false

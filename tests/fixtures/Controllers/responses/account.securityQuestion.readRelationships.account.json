@@ -8,7 +8,7 @@
   },
   "links" : {
     "related" : "/v1/me",
-    "self" : "/v1/session/relationships/account"
+    "self" : "/v1/me/security-question/relationships/account"
   },
   "meta" : {
     "author" : "FastyBird dev team",

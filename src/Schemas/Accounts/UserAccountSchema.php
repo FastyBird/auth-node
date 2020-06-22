@@ -117,7 +117,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			$this->router->urlFor(
 				'account',
 				[
-					Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
+					Router\Router::URL_ITEM_ID => $account->getPlainId(),
 				]
 			),
 			false
@@ -250,7 +250,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 				$this->router->urlFor(
 					'account.relationship',
 					[
-						Router\Router::URL_ACCOUNT_ID  => $account->getPlainId(),
+						Router\Router::URL_ITEM_ID     => $account->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,
 					]
 				),

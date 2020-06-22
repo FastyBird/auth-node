@@ -3,20 +3,20 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
-	'read'     => [
-		'/v1/me',
+	'delete'       => [
+		'/v1/me/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg',
-		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/account.read.json',
+		StatusCodeInterface::STATUS_NO_CONTENT,
+		__DIR__ . '/responses/account.emails.delete.json',
 	],
-	'included' => [
-		'/v1/me?include=emails,security-question',
+	'default'      => [
+		'/v1/me/emails/0b46d3d6-c980-494a-8b40-f19e6095e610',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg',
-		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/account.read.included.json',
+		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+		__DIR__ . '/responses/account.emails.delete.default.json',
 	],
-	'invalid'  => [
-		'/v1/me',
+	'unauthorized' => [
+		'/v1/me/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c',
 		'Bearer ayJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg',
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',

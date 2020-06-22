@@ -25,7 +25,7 @@
     },
     "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
     "links" : {
-      "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
+      "self" : "/v1/me"
     },
     "relationships" : {
       "emails" : {
@@ -41,12 +41,12 @@
         ],
         "links" : {
           "related" : {
-            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/emails",
+            "href" : "/v1/me/emails",
             "meta" : {
               "count" : 2
             }
           },
-          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/emails"
+          "self" : "/v1/me/relationships/emails"
         }
       },
       "identities" : {
@@ -58,12 +58,12 @@
         ],
         "links" : {
           "related" : {
-            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities",
+            "href" : "/v1/me/identities",
             "meta" : {
               "count" : 1
             }
           },
-          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/identities"
+          "self" : "/v1/me/relationships/identities"
         }
       },
       "roles" : {
@@ -74,7 +74,7 @@
           }
         ],
         "links" : {
-          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/roles"
+          "self" : "/v1/me/relationships/roles"
         }
       },
       "security-question" : {
@@ -83,8 +83,8 @@
           "type" : "auth-node/security-question"
         },
         "links" : {
-          "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/security-question",
-          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/security-question"
+          "related" : "/v1/me/security-question",
+          "self" : "/v1/me/relationships/security-question"
         }
       }
     },
@@ -100,7 +100,7 @@
       },
       "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
       "links" : {
-        "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/emails/0b46d3d6-c980-494a-8b40-f19e6095e610"
+        "self" : "/v1/me/emails/0b46d3d6-c980-494a-8b40-f19e6095e610"
       },
       "relationships" : {
         "account" : {
@@ -109,8 +109,8 @@
             "type" : "auth-node/user-account"
           },
           "links" : {
-            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/emails/0b46d3d6-c980-494a-8b40-f19e6095e610/relationships/account"
+            "related" : "/v1/me",
+            "self" : "/v1/me/emails/0b46d3d6-c980-494a-8b40-f19e6095e610/relationships/account"
           }
         }
       },
@@ -125,7 +125,7 @@
       },
       "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c",
       "links" : {
-        "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c"
+        "self" : "/v1/me/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c"
       },
       "relationships" : {
         "account" : {
@@ -134,8 +134,8 @@
             "type" : "auth-node/user-account"
           },
           "links" : {
-            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c/relationships/account"
+            "related" : "/v1/me",
+            "self" : "/v1/me/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c/relationships/account"
           }
         }
       },
@@ -148,7 +148,7 @@
       },
       "id" : "4774b7c3-8b21-40c7-b8d7-e4242a962b71",
       "links" : {
-        "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/security-question"
+        "self" : "/v1/me/security-question"
       },
       "relationships" : {
         "account" : {
@@ -157,8 +157,8 @@
             "type" : "auth-node/user-account"
           },
           "links" : {
-            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/security-question/relationships/account"
+            "related" : "/v1/me",
+            "self" : "/v1/me/security-question/relationships/account"
           }
         }
       },
@@ -169,7 +169,7 @@
     "version" : "1.1"
   },
   "links" : {
-    "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34?include=emails,security-question"
+    "self" : "/v1/me?include=emails,security-question"
   },
   "meta" : {
     "author" : "FastyBird dev team",
