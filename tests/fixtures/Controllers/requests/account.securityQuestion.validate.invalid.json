@@ -1,9 +1,0 @@
-{
-  "data" : {
-    "type" : "auth-node/security-question",
-    "id" : "4774b7c3-8b21-40c7-b8d7-e4242a962b71",
-    "attributes" : {
-      "current_answer" : "wrong answer"
-    }
-  }
-}
