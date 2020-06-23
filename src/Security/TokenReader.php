@@ -17,6 +17,8 @@ namespace FastyBird\AuthNode\Security;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
+use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
+use Lcobucci\JWT;
 use Nette;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -39,10 +41,16 @@ final class TokenReader
 	/** @var Models\Tokens\ITokenRepository */
 	private $tokenRepository;
 
+	/** @var NodeLibsHelpers\IDateFactory */
+	private $dateTimeFactory;
+
 	public function __construct(
-		Models\Tokens\ITokenRepository $tokenRepository
+		Models\Tokens\ITokenRepository $tokenRepository,
+		NodeLibsHelpers\IDateFactory $dateTimeFactory
 	) {
 		$this->tokenRepository = $tokenRepository;
+
+		$this->dateTimeFactory = $dateTimeFactory;
 	}
 
 	/**
@@ -56,10 +64,25 @@ final class TokenReader
 		$headerJWT = is_array($headerJWT) ? reset($headerJWT) : $headerJWT;
 
 		if (is_string($headerJWT) && preg_match(self::TOKEN_HEADER_REGEXP, $headerJWT, $matches) !== false) {
-			/** @var Entities\Tokens\IAccessToken|null $token */
-			$token = $this->tokenRepository->findOneByToken($matches[1], Entities\Tokens\AccessToken::class);
+			/** @var Entities\Tokens\IAccessToken|null $accessToken */
+			$accessToken = $this->tokenRepository->findOneByToken($matches[1], Entities\Tokens\AccessToken::class);
 
-			return $token;
+			if ($accessToken !== null) {
+				$jwtParser = new JWT\Parser();
+
+				$token = $jwtParser->parse($accessToken->getToken());
+
+				$validationData = new JWT\ValidationData($this->dateTimeFactory->getNow()->getTimestamp());
+				$validationData->setId($accessToken->getPlainId());
+
+				$validationData->setSubject($accessToken->getIdentity()->getAccount()->getPlainId());
+
+				if ($token->validate($validationData)) {
+					return $accessToken;
+				}
+			}
+
+			return null;
 		}
 
 		return null;

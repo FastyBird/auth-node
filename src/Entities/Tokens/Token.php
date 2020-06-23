@@ -16,7 +16,6 @@
 namespace FastyBird\AuthNode\Entities\Tokens;
 
 use Consistence\Doctrine\Enum\EnumAnnotation as Enum;
-use DateTime;
 use DateTimeInterface;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
@@ -221,15 +220,13 @@ abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 	/**
 	 * {@inheritDoc}
 	 */
-	public function isValid(): bool
+	public function isValid(DateTimeInterface $dateTime): bool
 	{
 		if ($this->validTill === null) {
 			return true;
 		}
 
-		$datetime = new DateTime();
-
-		return $this->validTill >= $datetime;
+		return $this->validTill >= $dateTime;
 	}
 
 	/**

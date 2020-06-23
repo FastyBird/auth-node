@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Controllers;
 
 use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
@@ -29,6 +30,7 @@ use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Utils;
 use Psr\Http\Message;
+use Ramsey\Uuid;
 use Throwable;
 
 /**
@@ -51,18 +53,23 @@ final class SessionV1Controller extends BaseV1Controller
 	/** @var Security\TokenReader */
 	private $tokenReader;
 
+	/** @var Security\TokenBuilder */
+	private $tokenBuilder;
+
 	/** @var string */
 	protected $translationDomain = 'node.session';
 
 	public function __construct(
 		Models\Tokens\ITokenRepository $tokenRepository,
 		Models\Tokens\ITokensManager $tokensManager,
-		Security\TokenReader $tokenReader
+		Security\TokenReader $tokenReader,
+		Security\TokenBuilder $tokenBuilder
 	) {
 		$this->tokenRepository = $tokenRepository;
 		$this->tokensManager = $tokensManager;
 
 		$this->tokenReader = $tokenReader;
+		$this->tokenBuilder = $tokenBuilder;
 	}
 
 	/**
@@ -187,19 +194,31 @@ final class SessionV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
+			$validTill = $this->getNow()->modify(Entities\Tokens\IAccessToken::TOKEN_EXPIRATION);
+
+			$accessTokenId = Uuid\Uuid::uuid4();
+
 			$values = Utils\ArrayHash::from([
+				'id'        => $accessTokenId,
 				'entity'    => Entities\Tokens\AccessToken::class,
-				'validTill' => $this->getNow()->modify(Entities\Tokens\IAccessToken::TOKEN_EXPIRATION),
+				'token'     => $this->createToken($accessTokenId, Security\TokenBuilder::TOKEN_TYPE_ACCESS, $validTill),
+				'validTill' => $validTill,
 				'status'    => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
 				'identity'  => $this->user->getIdentity(),
 			]);
 
 			$accessToken = $this->tokensManager->create($values);
 
+			$validTill = $this->getNow()->modify(Entities\Tokens\IRefreshToken::TOKEN_EXPIRATION);
+
+			$refreshTokenId = Uuid\Uuid::uuid4();
+
 			$values = Utils\ArrayHash::from([
+				'id'          => $refreshTokenId,
 				'entity'      => Entities\Tokens\RefreshToken::class,
 				'accessToken' => $accessToken,
-				'validTill'   => $this->getNow()->modify(Entities\Tokens\IRefreshToken::TOKEN_EXPIRATION),
+				'token'       => $this->createToken($refreshTokenId, Security\TokenBuilder::TOKEN_TYPE_REFRESH, $validTill),
+				'validTill'   => $validTill,
 				'status'      => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
 			]);
 
@@ -300,19 +319,31 @@ final class SessionV1Controller extends BaseV1Controller
 			// Auto-login user
 			$this->user->login($accessToken->getIdentity());
 
+			$validTill = $this->getNow()->modify(Entities\Tokens\IAccessToken::TOKEN_EXPIRATION);
+
+			$accessTokenId = Uuid\Uuid::uuid4();
+
 			$values = Utils\ArrayHash::from([
+				'id'        => $accessTokenId,
 				'entity'    => Entities\Tokens\AccessToken::class,
-				'validTill' => $this->getNow()->modify(Entities\Tokens\IAccessToken::TOKEN_EXPIRATION),
+				'token'     => $this->createToken($accessTokenId, Security\TokenBuilder::TOKEN_TYPE_ACCESS, $validTill),
+				'validTill' => $validTill,
 				'status'    => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
 				'identity'  => $this->user->getIdentity(),
 			]);
 
 			$newAccessToken = $this->tokensManager->create($values);
 
+			$validTill = $this->getNow()->modify(Entities\Tokens\IRefreshToken::TOKEN_EXPIRATION);
+
+			$refreshTokenId = Uuid\Uuid::uuid4();
+
 			$values = Utils\ArrayHash::from([
+				'id'          => $refreshTokenId,
 				'entity'      => Entities\Tokens\RefreshToken::class,
 				'accessToken' => $newAccessToken,
-				'validTill'   => $this->getNow()->modify(Entities\Tokens\IRefreshToken::TOKEN_EXPIRATION),
+				'token'       => $this->createToken($refreshTokenId, Security\TokenBuilder::TOKEN_TYPE_REFRESH, $validTill),
+				'validTill'   => $validTill,
 				'status'      => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
 			]);
 
@@ -479,10 +510,7 @@ final class SessionV1Controller extends BaseV1Controller
 	{
 		$token = $this->tokenReader->read($request);
 
-		if (
-			$token === null
-			|| !$token->isValid()
-		) {
+		if ($token === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),
@@ -502,6 +530,21 @@ final class SessionV1Controller extends BaseV1Controller
 			$this->translator->translate('//node.base.messages.forbidden.heading'),
 			$this->translator->translate('//node.base.messages.forbidden.message')
 		);
+	}
+
+	/**
+	 * @param Uuid\UuidInterface $id
+	 * @param string $type
+	 * @param DateTimeInterface|null $validTill
+	 *
+	 * @return string
+	 */
+	private function createToken(
+		Uuid\UuidInterface $id,
+		string $type,
+		?DateTimeInterface $validTill
+	): string {
+		return (string) $this->tokenBuilder->build($id->toString(), $type, $validTill);
 	}
 
 }

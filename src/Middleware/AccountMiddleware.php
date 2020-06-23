@@ -73,10 +73,7 @@ final class AccountMiddleware implements MiddlewareInterface
 		if ($request->hasHeader(Security\TokenReader::TOKEN_HEADER_NAME)) {
 			$token = $this->tokenReader->read($request);
 
-			if (
-				$token === null
-				|| !$token->isValid()
-			) {
+			if ($token === null) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNAUTHORIZED,
 					$this->translator->translate('//node.base.messages.notAuthorized.heading'),

@@ -88,9 +88,11 @@ interface IToken extends NodeDatabaseEntities\IEntity,
 	public function getValidTill(): ?DateTimeInterface;
 
 	/**
+	 * @param DateTimeInterface $dateTime
+	 *
 	 * @return bool
 	 */
-	public function isValid(): bool;
+	public function isValid(DateTimeInterface $dateTime): bool;
 
 	/**
 	 * @param Types\TokenStatusType $status

@@ -2,13 +2,9 @@
 
 namespace Tests\Cases;
 
-use DateTimeImmutable;
-use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Router;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;
-use Mockery;
 use Nette\Utils;
 use React\Http\Io\ServerRequest;
 use Tester\Assert;
@@ -41,20 +37,6 @@ final class SessionV1ControllerTest extends DbTestCase
 			]
 		);
 
-		$dateTimeFactory = Mockery::mock(NodeLibsHelpers\DateFactory::class);
-		$dateTimeFactory
-			->shouldReceive('getNow')
-			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
-
-		$this->mockContainerService(
-			NodeLibsHelpers\IDateFactory::class,
-			$dateTimeFactory
-		);
-
-		/** @var Controllers\SessionV1Controller $controller */
-		$controller = $this->getContainer()->getByType(Controllers\SessionV1Controller::class);
-		$controller->injectDateFactory($dateTimeFactory);
-
 		$response = $router->handle($request);
 
 		$body = (string) $response->getBody();
@@ -83,20 +65,6 @@ final class SessionV1ControllerTest extends DbTestCase
 			[],
 			$body
 		);
-
-		$dateTimeFactory = Mockery::mock(NodeLibsHelpers\DateFactory::class);
-		$dateTimeFactory
-			->shouldReceive('getNow')
-			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
-
-		$this->mockContainerService(
-			NodeLibsHelpers\IDateFactory::class,
-			$dateTimeFactory
-		);
-
-		/** @var Controllers\SessionV1Controller $controller */
-		$controller = $this->getContainer()->getByType(Controllers\SessionV1Controller::class);
-		$controller->injectDateFactory($dateTimeFactory);
 
 		$response = $router->handle($request);
 
@@ -140,20 +108,6 @@ final class SessionV1ControllerTest extends DbTestCase
 			[],
 			$body
 		);
-
-		$dateTimeFactory = Mockery::mock(NodeLibsHelpers\DateFactory::class);
-		$dateTimeFactory
-			->shouldReceive('getNow')
-			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
-
-		$this->mockContainerService(
-			NodeLibsHelpers\IDateFactory::class,
-			$dateTimeFactory
-		);
-
-		/** @var Controllers\SessionV1Controller $controller */
-		$controller = $this->getContainer()->getByType(Controllers\SessionV1Controller::class);
-		$controller->injectDateFactory($dateTimeFactory);
 
 		$response = $router->handle($request);
 
@@ -199,20 +153,6 @@ final class SessionV1ControllerTest extends DbTestCase
 			]
 		);
 
-		$dateTimeFactory = Mockery::mock(NodeLibsHelpers\DateFactory::class);
-		$dateTimeFactory
-			->shouldReceive('getNow')
-			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
-
-		$this->mockContainerService(
-			NodeLibsHelpers\IDateFactory::class,
-			$dateTimeFactory
-		);
-
-		/** @var Controllers\SessionV1Controller $controller */
-		$controller = $this->getContainer()->getByType(Controllers\SessionV1Controller::class);
-		$controller->injectDateFactory($dateTimeFactory);
-
 		$response = $router->handle($request);
 
 		$body = (string) $response->getBody();
@@ -242,20 +182,6 @@ final class SessionV1ControllerTest extends DbTestCase
 				'authorization' => $token,
 			]
 		);
-
-		$dateTimeFactory = Mockery::mock(NodeLibsHelpers\DateFactory::class);
-		$dateTimeFactory
-			->shouldReceive('getNow')
-			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
-
-		$this->mockContainerService(
-			NodeLibsHelpers\IDateFactory::class,
-			$dateTimeFactory
-		);
-
-		/** @var Controllers\SessionV1Controller $controller */
-		$controller = $this->getContainer()->getByType(Controllers\SessionV1Controller::class);
-		$controller->injectDateFactory($dateTimeFactory);
 
 		$response = $router->handle($request);
 

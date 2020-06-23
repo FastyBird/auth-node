@@ -6,7 +6,7 @@
       "token" : "__ACCESS_TOKEN__",
       "token_type" : "Bearer"
     },
-    "id": "__ENTITY_ID__",
+    "id" : "__ENTITY_ID__",
     "links" : {
       "self" : "/v1/session"
     },

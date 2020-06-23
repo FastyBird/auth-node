@@ -45,7 +45,7 @@ abstract class BaseV1Controller
 	/** @var Security\User */
 	protected $user;
 
-	/** @var NodeLibsHelpers\DateFactory */
+	/** @var NodeLibsHelpers\IDateFactory */
 	protected $dateFactory;
 
 	/** @var Translation\PrefixedTranslator */
@@ -71,11 +71,11 @@ abstract class BaseV1Controller
 	}
 
 	/**
-	 * @param NodeLibsHelpers\DateFactory $dateFactory
+	 * @param NodeLibsHelpers\IDateFactory $dateFactory
 	 *
 	 * @return void
 	 */
-	public function injectDateFactory(NodeLibsHelpers\DateFactory $dateFactory): void
+	public function injectDateFactory(NodeLibsHelpers\IDateFactory $dateFactory): void
 	{
 		$this->dateFactory = $dateFactory;
 	}
