@@ -98,6 +98,7 @@ final class ResourceSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return [
 			'name'        => $resource->getName(),
 			'description' => $resource->getDescription(),
+			'origin'      => $resource->getOrigin(),
 		];
 	}
 
@@ -133,7 +134,7 @@ final class ResourceSchema extends NodeJsonApiSchemas\JsonApiSchema
 	public function getRelationships($resource, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		$relationships = [
-			self::RELATIONSHIPS_CHILDREN => [
+			self::RELATIONSHIPS_CHILDREN   => [
 				self::RELATIONSHIP_DATA          => $this->getChildren($resource),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,

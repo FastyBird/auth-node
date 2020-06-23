@@ -3,7 +3,8 @@
     {
       "attributes" : {
         "description" : "Accounts emails management",
-        "name" : "manage-emails"
+        "name" : "manage-emails",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
       "links" : {

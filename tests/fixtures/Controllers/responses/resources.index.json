@@ -3,7 +3,8 @@
     {
       "attributes" : {
         "description" : "Access roles management",
-        "name" : "manage-access-control"
+        "name" : "manage-access-control",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "00892288-a6f8-485f-9f05-d47c8890d52a",
       "links" : {
@@ -40,7 +41,8 @@
     {
       "attributes" : {
         "description" : "Accounts emails management",
-        "name" : "manage-emails"
+        "name" : "manage-emails",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
       "links" : {
@@ -77,7 +79,8 @@
     {
       "attributes" : {
         "description" : "Resource desc",
-        "name" : "fb/auth-node"
+        "name" : "fb/auth-node",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
       "links" : {
@@ -119,7 +122,8 @@
     {
       "attributes" : {
         "description" : "Accounts management",
-        "name" : "manage-accounts"
+        "name" : "manage-accounts",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "baefec20-1927-41ce-a7e0-ae74bd641b9c",
       "links" : {
@@ -156,7 +160,8 @@
     {
       "attributes" : {
         "description" : "Specific entity resource",
-        "name" : "node entity"
+        "name" : "node entity",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "c3f6947c-1736-42b0-bfd4-73b9070b4491",
       "links" : {
@@ -203,7 +208,8 @@
     {
       "attributes" : {
         "description" : "Accounts identities management",
-        "name" : "manage-identities"
+        "name" : "manage-identities",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "ed987404-f14c-40b4-9150-15b6590deb8c",
       "links" : {
@@ -240,7 +246,8 @@
     {
       "attributes" : {
         "description" : "Resource desc",
-        "name" : "fb/other-node"
+        "name" : "fb/other-node",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "efbfbdef-bfbd-510e-3774-4c64efbfbdef",
       "links" : {

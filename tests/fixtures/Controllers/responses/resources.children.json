@@ -3,7 +3,8 @@
     {
       "attributes" : {
         "description" : "Specific entity resource",
-        "name" : "node entity"
+        "name" : "node entity",
+        "origin" : "com.fastybird.auth-node"
       },
       "id" : "c3f6947c-1736-42b0-bfd4-73b9070b4491",
       "links" : {

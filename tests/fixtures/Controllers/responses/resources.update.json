@@ -2,7 +2,8 @@
   "data" : {
     "attributes" : {
       "description" : "Resource desc with editation",
-      "name" : "fb/other-node"
+      "name" : "fb/other-node",
+      "origin" : "com.fastybird.auth-node"
     },
     "id" : "efbfbdef-bfbd-510e-3774-4c64efbfbdef",
     "links" : {

@@ -59,7 +59,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="resource_name", length=100, nullable=false)
 	 */
-	protected $name;
+	private $name;
 
 	/**
 	 * @var string
@@ -67,7 +67,15 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="text", name="resource_description", nullable=false)
 	 */
-	protected $description;
+	private $description;
+
+	/**
+	 * @var string
+	 *
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
+	 * @ORM\Column(type="string", name="resource_origin", length=100, nullable=false)
+	 */
+	private $origin;
 
 	/**
 	 * @var Entities\Resources\IResource|null
@@ -76,25 +84,26 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Resources\Resource", inversedBy="children")
 	 * @ORM\JoinColumn(name="parent_id", referencedColumnName="resource_id", nullable=true, onDelete="set null")
 	 */
-	protected $parent = null;
+	private $parent = null;
 
 	/**
 	 * @var Common\Collections\Collection<int, IResource>
 	 *
 	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Resources\Resource", mappedBy="parent")
 	 */
-	protected $children;
+	private $children;
 
 	/**
 	 * @var Common\Collections\Collection<int, Entities\Privileges\IPrivilege>
 	 *
 	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Privileges\Privilege", mappedBy="resource", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
-	protected $privileges;
+	private $privileges;
 
 	/**
 	 * @param string $name
 	 * @param string $description
+	 * @param string $origin
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
@@ -102,12 +111,14 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	public function __construct(
 		string $name,
 		string $description,
+		string $origin,
 		?Uuid\UuidInterface $id = null
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->name = $name;
 		$this->description = $description;
+		$this->origin = $origin;
 
 		$this->children = new Common\Collections\ArrayCollection();
 		$this->privileges = new Common\Collections\ArrayCollection();
@@ -151,6 +162,22 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	public function getDescription(): string
 	{
 		return $this->description;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setOrigin(string $origin): void
+	{
+		$this->origin = $origin;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getOrigin(): string
+	{
+		return $this->origin;
 	}
 
 	/**

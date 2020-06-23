@@ -59,6 +59,18 @@ interface IResource extends NS\IResource,
 	public function getDescription(): string;
 
 	/**
+	 * @param string $origin
+	 *
+	 * @return void
+	 */
+	public function setOrigin(string $origin): void;
+
+	/**
+	 * @return string
+	 */
+	public function getOrigin(): string;
+
+	/**
 	 * @param IResource|null $parent
 	 *
 	 * @return void
