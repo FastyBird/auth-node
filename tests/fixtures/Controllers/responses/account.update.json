@@ -82,16 +82,6 @@
           },
           "self" : "/v1/me/relationships/roles"
         }
-      },
-      "security-question" : {
-        "data" : {
-          "id" : "4774b7c3-8b21-40c7-b8d7-e4242a962b71",
-          "type" : "auth-node/security-question"
-        },
-        "links" : {
-          "related" : "/v1/me/security-question",
-          "self" : "/v1/me/relationships/security-question"
-        }
       }
     },
     "type" : "auth-node/user-account"

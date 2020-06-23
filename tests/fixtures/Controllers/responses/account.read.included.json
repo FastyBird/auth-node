@@ -82,16 +82,6 @@
           },
           "self" : "/v1/me/relationships/roles"
         }
-      },
-      "security-question" : {
-        "data" : {
-          "id" : "4774b7c3-8b21-40c7-b8d7-e4242a962b71",
-          "type" : "auth-node/security-question"
-        },
-        "links" : {
-          "related" : "/v1/me/security-question",
-          "self" : "/v1/me/relationships/security-question"
-        }
       }
     },
     "type" : "auth-node/user-account"
@@ -146,36 +136,13 @@
         }
       },
       "type" : "auth-node/email"
-    },
-    {
-      "attributes" : {
-        "is_custom" : false,
-        "question" : "firstPetName"
-      },
-      "id" : "4774b7c3-8b21-40c7-b8d7-e4242a962b71",
-      "links" : {
-        "self" : "/v1/me/security-question"
-      },
-      "relationships" : {
-        "account" : {
-          "data" : {
-            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-            "type" : "auth-node/user-account"
-          },
-          "links" : {
-            "related" : "/v1/me",
-            "self" : "/v1/me/security-question/relationships/account"
-          }
-        }
-      },
-      "type" : "auth-node/security-question"
     }
   ],
   "jsonapi" : {
     "version" : "1.1"
   },
   "links" : {
-    "self" : "/v1/me?include=emails,security-question"
+    "self" : "/v1/me?include=emails"
   },
   "meta" : {
     "author" : "FastyBird dev team",
