@@ -89,8 +89,6 @@ trait TAccountFinder
 			case AuthNode\Constants::ROUTE_NAME_ACCOUNT:
 			case AuthNode\Constants::ROUTE_NAME_ACCOUNT_RELATIONSHIPS:
 			case AuthNode\Constants::ROUTE_NAME_ACCOUNT_ROLES:
-			case AuthNode\Constants::ROUTE_NAME_ACCOUNT_SECURITY_QUESTION:
-			case AuthNode\Constants::ROUTE_NAME_ACCOUNT_SECURITY_QUESTION_RELATIONSHIPS:
 				$resource = AuthNode\Constants::ACL_RESOURCE_MANAGE_ACCOUNTS;
 				break;
 

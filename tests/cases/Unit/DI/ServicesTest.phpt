@@ -53,12 +53,10 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Models\Privileges\PrivilegesManager::class));
 		Assert::notNull($container->getByType(Models\Resources\ResourcesManager::class));
 		Assert::notNull($container->getByType(Models\Roles\RolesManager::class));
-		Assert::notNull($container->getByType(Models\SecurityQuestions\QuestionsManager::class));
 		Assert::notNull($container->getByType(Models\Tokens\TokensManager::class));
 
 		Assert::notNull($container->getByType(Controllers\AccountV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\AccountEmailsV1Controller::class));
-		Assert::notNull($container->getByType(Controllers\AccountSecurityQuestionV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\SessionV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\AccountIdentitiesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RolesV1Controller::class));
@@ -72,14 +70,12 @@ final class ServicesTest extends BaseTestCase
 
 		Assert::notNull($container->getByType(Schemas\Accounts\UserAccountSchema::class));
 		Assert::notNull($container->getByType(Schemas\Emails\EmailSchema::class));
-		Assert::notNull($container->getByType(Schemas\SecurityQuestions\QuestionSchema::class));
 		Assert::notNull($container->getByType(Schemas\Sessions\SessionSchema::class));
 		Assert::notNull($container->getByType(Schemas\Identities\UserAccountIdentitySchema::class));
 		Assert::notNull($container->getByType(Schemas\Roles\RoleSchema::class));
 
 		Assert::notNull($container->getByType(Hydrators\Accounts\UserAccountHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Emails\EmailHydrator::class));
-		Assert::notNull($container->getByType(Hydrators\SecurityQuestions\QuestionHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Roles\RoleHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Resources\ResourceHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Privileges\PrivilegeHydrator::class));

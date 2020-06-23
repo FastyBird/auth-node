@@ -211,8 +211,6 @@ services:
 
 	- {factory: FastyBird\AuthNode\Models\Rules\RulesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Rules\Rule))}
 
-	- {factory: FastyBird\AuthNode\Models\SecurityQuestions\QuestionsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\SecurityQuestions\Question))}
-
 	- {factory: FastyBird\AuthNode\Models\Tokens\TokensManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Tokens\Token))}
 
 	# API controllers
@@ -223,8 +221,6 @@ services:
 	- {factory: FastyBird\AuthNode\Controllers\AccountV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\AccountEmailsV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\AccountSecurityQuestionV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\AccountIdentitiesV1Controller, tags: [nette.inject]}
 
@@ -255,8 +251,6 @@ services:
 
 	- {factory: FastyBird\AuthNode\Schemas\Emails\EmailSchema}
 
-	- {factory: FastyBird\AuthNode\Schemas\SecurityQuestions\QuestionSchema}
-
 	- {factory: FastyBird\AuthNode\Schemas\Sessions\SessionSchema}
 
 	- {factory: FastyBird\AuthNode\Schemas\Identities\UserAccountIdentitySchema}
@@ -277,8 +271,6 @@ services:
 	- {factory: FastyBird\AuthNode\Hydrators\Accounts\UserAccountHydrator}
 
 	- {factory: FastyBird\AuthNode\Hydrators\Emails\EmailHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\SecurityQuestions\QuestionHydrator}
 
 	- {factory: FastyBird\AuthNode\Hydrators\Roles\RoleHydrator}
 

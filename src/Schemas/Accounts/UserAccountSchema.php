@@ -43,7 +43,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 * Define relationships names
 	 */
 	public const RELATIONSHIPS_EMAILS = 'emails';
-	public const RELATIONSHIPS_QUESTION = 'security-question';
 	public const RELATIONSHIPS_IDENTITIES = 'identities';
 	public const RELATIONSHIPS_ROLES = 'roles';
 
@@ -140,11 +139,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
-			self::RELATIONSHIPS_QUESTION   => [
-				self::RELATIONSHIP_DATA          => $account->getSecurityQuestion(),
-				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
-			],
 			self::RELATIONSHIPS_IDENTITIES => [
 				self::RELATIONSHIP_DATA          => $account->getIdentities(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
@@ -181,18 +175,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 				[
 					'count' => count($account->getEmails()),
 				]
-			);
-
-		} elseif ($name === self::RELATIONSHIPS_QUESTION) {
-			return new JsonApi\Schema\Link(
-				false,
-				$this->router->urlFor(
-					'account.security.question',
-					[
-						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
-					]
-				),
-				false
 			);
 
 		} elseif ($name === self::RELATIONSHIPS_IDENTITIES) {
@@ -241,7 +223,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 	{
 		if (
 			$name === self::RELATIONSHIPS_EMAILS
-			|| $name === self::RELATIONSHIPS_QUESTION
 			|| $name === self::RELATIONSHIPS_IDENTITIES
 			|| $name === self::RELATIONSHIPS_ROLES
 		) {

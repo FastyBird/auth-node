@@ -89,23 +89,6 @@ interface IUserAccount extends IAccount
 	public function getRequestHash(): ?string;
 
 	/**
-	 * @param Entities\SecurityQuestions\IQuestion|null $securityQuestion
-	 *
-	 * @return void
-	 */
-	public function setSecurityQuestion(?Entities\SecurityQuestions\IQuestion $securityQuestion): void;
-
-	/**
-	 * @return Entities\SecurityQuestions\IQuestion|null
-	 */
-	public function getSecurityQuestion(): ?Entities\SecurityQuestions\IQuestion;
-
-	/**
-	 * @return bool
-	 */
-	public function hasSecurityQuestion(): bool;
-
-	/**
 	 * @param Entities\Emails\IEmail[] $emails
 	 *
 	 * @return void

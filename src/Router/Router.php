@@ -47,9 +47,6 @@ class Router extends Routing\Router
 	/** @var Controllers\AccountEmailsV1Controller */
 	private $accountEmailsV1Controller;
 
-	/** @var Controllers\AccountSecurityQuestionV1Controller */
-	private $accountSecurityQuestionV1Controller;
-
 	/** @var Controllers\AccountIdentitiesV1Controller */
 	private $accountIdentitiesV1Controller;
 
@@ -90,7 +87,6 @@ class Router extends Routing\Router
 		Controllers\SessionV1Controller $sessionV1Controller,
 		Controllers\AccountV1Controller $accountV1Controller,
 		Controllers\AccountEmailsV1Controller $accountEmailsV1Controller,
-		Controllers\AccountSecurityQuestionV1Controller $accountSecurityQuestionV1Controller,
 		Controllers\AccountIdentitiesV1Controller $accountIdentitiesV1Controller,
 		Controllers\AccountRolesV1Controller $accountRolesV1Controller,
 		Controllers\AccountsV1Controller $accountsV1Controller,
@@ -111,7 +107,6 @@ class Router extends Routing\Router
 
 		$this->accountV1Controller = $accountV1Controller;
 		$this->accountEmailsV1Controller = $accountEmailsV1Controller;
-		$this->accountSecurityQuestionV1Controller = $accountSecurityQuestionV1Controller;
 		$this->accountIdentitiesV1Controller = $accountIdentitiesV1Controller;
 		$this->accountRolesV1Controller = $accountRolesV1Controller;
 
@@ -186,21 +181,6 @@ class Router extends Routing\Router
 				});
 
 				/**
-				 * PROFILE SECURITY QUESTION
-				 */
-				$group->group('/security-question', function (Routing\RouteCollector $group): void {
-					$route = $group->get('', [$this->accountSecurityQuestionV1Controller, 'read']);
-					$route->setName(AuthNode\Constants::ROUTE_NAME_ME_SECURITY_QUESTION);
-
-					$group->post('', [$this->accountSecurityQuestionV1Controller, 'create']);
-
-					$group->patch('', [$this->accountSecurityQuestionV1Controller, 'update']);
-
-					$route = $group->get('/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountSecurityQuestionV1Controller, 'readRelationship']);
-					$route->setName(AuthNode\Constants::ROUTE_NAME_ME_SECURITY_QUESTION_RELATIONSHIPS);
-				});
-
-				/**
 				 * PROFILE IDENTITIES
 				 */
 				$group->group('/identities', function (Routing\RouteCollector $group): void {
@@ -258,21 +238,6 @@ class Router extends Routing\Router
 
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountEmailsV1Controller, 'readRelationship']);
 					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL_RELATIONSHIPS);
-				});
-
-				/**
-				 * ACCOUNT SECURITY QUESTION
-				 */
-				$group->group('/security-question', function (Routing\RouteCollector $group): void {
-					$route = $group->get('', [$this->accountSecurityQuestionV1Controller, 'read']);
-					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_SECURITY_QUESTION);
-
-					$group->post('', [$this->accountSecurityQuestionV1Controller, 'create']);
-
-					$group->patch('', [$this->accountSecurityQuestionV1Controller, 'update']);
-
-					$route = $group->get('/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountSecurityQuestionV1Controller, 'readRelationship']);
-					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_SECURITY_QUESTION_RELATIONSHIPS);
 				});
 
 				/**

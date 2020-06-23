@@ -39,10 +39,6 @@ INSERT IGNORE INTO `fb_identities` (`identity_id`, `account_id`, `identity_uid`,
 	(_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, _binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'bruce.wane@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
 	(_binary 0xFF99F3C470B943F99EF6C9B33B43ABCB, _binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'clark.kent@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}');
 
-INSERT IGNORE INTO `fb_security_questions` (`question_id`, `account_id`, `question_question`, `question_answer`, `question_custom`, `created_at`, `updated_at`) VALUES
-	(_binary 0x4774B7C38B2140C7B8D7E4242A962B71, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'firstPetName', 'super secret pet name', 0, '2017-09-25 20:45:34', '2017-10-29 12:26:40'),
-	(_binary 0xC3F6947C173642B0BFD473B9070B4491, _binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, 'firstPetName', 'my first pet', 0, '2019-04-22 07:03:20', '2019-04-22 07:03:20');
-
 INSERT IGNORE INTO `fb_security_tokens` (`token_id`, `parent_id`, `token_token`, `token_valid_till`, `token_status`, `params`, `created_at`, `updated_at`, `token_type`) VALUES
 	(_binary 0x00892288A6F8485F9F05D47C8890D52A, NULL, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NzU5MzIxMTgsImV4cCI6MTU3NTk1MzcxOCwianRpIjoiYWI5Y2MwNjktM2QzZS00Mzk3LWFmYjItNjY2ZDIyOTFlZWUwIn0.G507WDqVFp_mIaHE8eyg1LEywTDV1OGgWtYgFwoyCQg', NULL, 'active', NULL, '2019-12-09 22:55:18', '2019-12-09 22:55:18', 'access_token'),
 	(_binary 0x00E79DA3E4BE4F289C49082E724BBADE, _binary 0x00892288A6F8485F9F05D47C8890D52A, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjU4OTc2ODMsImV4cCI6MTU2NjE1Njg4MywianRpIjoiNTA1NTIyY2MtMzg1Ni00OGIzLWI0MzUtMDk3MDQ4MWY1MWMyIn0.f3xN8CY5x5cM8htYp8v4hqEFqBpGu-zNOCSUcAOdiwY', NULL, 'active', NULL, '2019-08-15 19:34:43', '2019-08-15 19:34:43', 'refresh_token'),

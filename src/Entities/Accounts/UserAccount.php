@@ -73,14 +73,6 @@ class UserAccount extends Account implements IUserAccount
 	private $requestHash = null;
 
 	/**
-	 * @var Entities\SecurityQuestions\IQuestion|null
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToOne(targetEntity="FastyBird\AuthNode\Entities\SecurityQuestions\Question", mappedBy="account", cascade={"persist", "remove"})
-	 */
-	private $securityQuestion = null;
-
-	/**
 	 * @var Common\Collections\Collection<int, Entities\Emails\IEmail>
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
@@ -197,30 +189,6 @@ class UserAccount extends Account implements IUserAccount
 	public function getRequestHash(): ?string
 	{
 		return $this->requestHash;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function setSecurityQuestion(?Entities\SecurityQuestions\IQuestion $securityQuestion): void
-	{
-		$this->securityQuestion = $securityQuestion;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getSecurityQuestion(): ?Entities\SecurityQuestions\IQuestion
-	{
-		return $this->securityQuestion;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function hasSecurityQuestion(): bool
-	{
-		return $this->securityQuestion !== null;
 	}
 
 	/**

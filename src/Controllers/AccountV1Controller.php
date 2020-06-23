@@ -259,15 +259,6 @@ final class AccountV1Controller extends BaseV1Controller
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getEmails()));
 
-		} elseif (
-			$relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_QUESTION
-			&& $this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-		) {
-			if ($this->user->getAccount()->hasSecurityQuestion()) {
-				return $response
-					->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getSecurityQuestion()));
-			}
-
 		} elseif ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_IDENTITIES) {
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getIdentities()));
