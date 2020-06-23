@@ -17,6 +17,7 @@ namespace FastyBird\AuthNode\Entities\Roles;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
+use IPub\DoctrineBlameable;
 use IPub\DoctrineTimestampable;
 use Nette\Security as NS;
 
@@ -31,7 +32,9 @@ use Nette\Security as NS;
 interface IRole extends NS\IRole,
 	NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
-	DoctrineTimestampable\Entities\IEntityUpdated
+	DoctrineBlameable\Entities\IEntityCreator,
+	DoctrineTimestampable\Entities\IEntityUpdated,
+	DoctrineBlameable\Entities\IEntityEditor
 {
 
 	// The identifier of the anonymous role

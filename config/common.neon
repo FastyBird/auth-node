@@ -173,6 +173,10 @@ services:
 
 	- {factory: FastyBird\AuthNode\Subscribers\IdentityEntitySubscriber}
 
+	- {factory: FastyBird\AuthNode\Subscribers\EntityAuthorSubscriber}
+
+	- {factory: FastyBird\AuthNode\Subscribers\EntityEditorSubscriber}
+
 	# Database repositories
 	#######################
 

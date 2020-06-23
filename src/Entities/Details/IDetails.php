@@ -17,6 +17,7 @@ namespace FastyBird\AuthNode\Entities\Details;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
+use IPub\DoctrineBlameable;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -29,7 +30,9 @@ use IPub\DoctrineTimestampable;
  */
 interface IDetails extends NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
-	DoctrineTimestampable\Entities\IEntityUpdated
+	DoctrineBlameable\Entities\IEntityCreator,
+	DoctrineTimestampable\Entities\IEntityUpdated,
+	DoctrineBlameable\Entities\IEntityEditor
 {
 
 	/**

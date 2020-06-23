@@ -19,6 +19,7 @@ use DateTimeInterface;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
+use IPub\DoctrineBlameable;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -32,7 +33,9 @@ use IPub\DoctrineTimestampable;
 interface IAccount extends NodeDatabaseEntities\IEntity,
 	NodeDatabaseEntities\IEntityParams,
 	DoctrineTimestampable\Entities\IEntityCreated,
-	DoctrineTimestampable\Entities\IEntityUpdated
+	DoctrineBlameable\Entities\IEntityCreator,
+	DoctrineTimestampable\Entities\IEntityUpdated,
+	DoctrineBlameable\Entities\IEntityEditor
 {
 
 	/**

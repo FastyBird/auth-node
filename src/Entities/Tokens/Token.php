@@ -21,6 +21,7 @@ use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
+use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -54,6 +55,8 @@ abstract class Token extends NodeDatabaseEntities\Entity implements IToken
 	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
+	use DoctrineBlameable\Entities\TEntityCreator;
+	use DoctrineBlameable\Entities\TEntityEditor;
 
 	/**
 	 * @var Uuid\UuidInterface
