@@ -26,25 +26,29 @@ namespace FastyBird\AuthNode;
 final class Constants
 {
 
+	/**
+	 * Node ACL
+	 */
+
 	// Permissions string delimiter
 	public const PERMISSIONS_DELIMITER = ':';
 
-	// Identity constants
-	public const IDENTITY_UID_MAXIMAL_LENGTH = 50;
-	public const IDENTITY_PASSWORD_MINIMAL_LENGTH = 8;
-
-	// Node ACL
+	// Default resources
 	public const ACL_RESOURCE_MANAGE_ACCESS = 'manage-access-control';
 	public const ACL_RESOURCE_MANAGE_ACCOUNTS = 'manage-accounts';
 	public const ACL_RESOURCE_MANAGE_EMAILS = 'manage-emails';
 	public const ACL_RESOURCE_MANAGE_IDENTITIES = 'manage-identities';
 
+	// Default privileges for resources
 	public const ACL_PRIVILEGE_READ = 'read';
 	public const ACL_PRIVILEGE_CREATE = 'create';
 	public const ACL_PRIVILEGE_UPDATE = 'update';
 	public const ACL_PRIVILEGE_DELETE = 'delete';
 
-	// Routing
+	/**
+	 * Node routing
+	 */
+
 	public const ROUTE_NAME_ME = 'me';
 	public const ROUTE_NAME_ME_RELATIONSHIPS = 'me.relationship';
 	public const ROUTE_NAME_ME_EMAILS = 'me.emails';
@@ -64,5 +68,12 @@ final class Constants
 	public const ROUTE_NAME_ACCOUNT_IDENTITY = 'account.identity';
 	public const ROUTE_NAME_ACCOUNT_IDENTITY_RELATIONSHIPS = 'account.identity.relationship';
 	public const ROUTE_NAME_ACCOUNT_ROLES = 'account.roles';
+
+	/**
+	 * Account identities
+	 */
+
+	public const IDENTITY_UID_MAXIMAL_LENGTH = 50;
+	public const IDENTITY_PASSWORD_MINIMAL_LENGTH = 8;
 
 }

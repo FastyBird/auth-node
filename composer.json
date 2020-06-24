@@ -43,6 +43,7 @@
     "fastybird/node-json-api": "^0.1",
     "fastybird/node-libs": "^0.5",
     "fastybird/node-web-server": "^0.4",
+    "fastybird/nodes-metadata": "^0.1.0",
     "ipub/doctrine-blameable": "^1.4",
     "ipub/doctrine-consistence": "^0.3",
     "ipub/doctrine-crud": "^2.3",

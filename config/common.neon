@@ -39,6 +39,7 @@ extensions:
 	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
 	nodeDatabase				: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
 	nodeJsonApi					: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
+	nodesMetadata				: FastyBird\NodesMetadata\DI\NodesMetadataExtension
 
 ##################################
 # Nette extensions configuration #
@@ -165,6 +166,8 @@ services:
 	- {factory: FastyBird\AuthNode\Commands\Accounts\CreateCommand}
 
 	- {factory: FastyBird\AuthNode\Commands\Roles\CreateCommand}
+
+	- {factory: FastyBird\AuthNode\Commands\SyncCommand}
 
 	# Events subscribers
 	####################
