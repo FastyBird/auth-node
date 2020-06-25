@@ -118,7 +118,7 @@ emails:
 			heading	: "Email is default"
 			message	: "Default email address could not be deleted"
 
-userAccountIdentity:
+identities:
 	messages:
 		invalidType:
 			heading	: "Invalid type"

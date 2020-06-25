@@ -2,8 +2,8 @@
   "data" : [
     {
       "attributes" : {
-        "description" : "Access roles management",
-        "name" : "manage-access-control",
+        "description" : "fastybird/manage-access-control",
+        "name" : "fastybird/manage-access-control",
         "origin" : "com.fastybird.auth-node"
       },
       "id" : "00892288-a6f8-485f-9f05-d47c8890d52a",
@@ -40,8 +40,8 @@
     },
     {
       "attributes" : {
-        "description" : "Accounts emails management",
-        "name" : "manage-emails",
+        "description" : "fastybird/manage-emails",
+        "name" : "fastybird/manage-emails",
         "origin" : "com.fastybird.auth-node"
       },
       "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
@@ -121,8 +121,8 @@
     },
     {
       "attributes" : {
-        "description" : "Accounts management",
-        "name" : "manage-accounts",
+        "description" : "fastybird/manage-accounts",
+        "name" : "fastybird/manage-accounts",
         "origin" : "com.fastybird.auth-node"
       },
       "id" : "baefec20-1927-41ce-a7e0-ae74bd641b9c",
@@ -207,8 +207,8 @@
     },
     {
       "attributes" : {
-        "description" : "Accounts identities management",
-        "name" : "manage-identities",
+        "description" : "fastybird/manage-identities",
+        "name" : "fastybird/manage-identities",
         "origin" : "com.fastybird.auth-node"
       },
       "id" : "ed987404-f14c-40b4-9150-15b6590deb8c",

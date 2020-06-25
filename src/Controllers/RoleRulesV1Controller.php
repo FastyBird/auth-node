@@ -30,6 +30,9 @@ use Psr\Http\Message;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\Permission(fastybird/auth-node:access)
  */
 final class RoleRulesV1Controller extends BaseV1Controller
 {
@@ -62,7 +65,7 @@ final class RoleRulesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-control:read)
+	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,

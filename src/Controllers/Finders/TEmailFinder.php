@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * TAccountFinder.php
+ * TEmailFinder.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -10,7 +10,7 @@
  * @subpackage     Controllers
  * @since          0.1.0
  *
- * @date           22.06.20
+ * @date           25.06.20
  */
 
 namespace FastyBird\AuthNode\Controllers\Finders;
@@ -19,7 +19,6 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Router;
-use FastyBird\AuthNode\Security;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Localization;
@@ -28,23 +27,24 @@ use Ramsey\Uuid;
 
 /**
  * @property-read Localization\ITranslator $translator
- * @property-read Security\User $user
- * @property-read Models\Accounts\IAccountRepository $accountRepository
+ * @property-read Models\Emails\IEmailRepository $emailRepository
  */
-trait TAccountFinder
+trait TEmailFinder
 {
 
 	/**
 	 * @param Message\ServerRequestInterface $request
+	 * @param Entities\Accounts\IAccount $account
 	 *
-	 * @return Entities\Accounts\IAccount
+	 * @return Entities\Emails\IEmail
 	 *
-	 * @throws NodeJsonApiExceptions\JsonApiErrorException
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
-	protected function findAccount(
-		Message\ServerRequestInterface $request
-	): Entities\Accounts\IAccount {
-		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ACCOUNT_ID, null))) {
+	private function findEmail(
+		Message\ServerRequestInterface $request,
+		Entities\Accounts\IAccount $account
+	): Entities\Emails\IEmail {
+		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
@@ -52,12 +52,13 @@ trait TAccountFinder
 			);
 		}
 
-		$findQuery = new Queries\FindAccountsQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ACCOUNT_ID, null)));
+		$findQuery = new Queries\FindEmailsQuery();
+		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID, null)));
+		$findQuery->forAccount($account);
 
-		$account = $this->accountRepository->findOneBy($findQuery);
+		$email = $this->emailRepository->findOneBy($findQuery);
 
-		if ($account === null) {
+		if ($email === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('messages.notFound.heading'),
@@ -65,7 +66,7 @@ trait TAccountFinder
 			);
 		}
 
-		return $account;
+		return $email;
 	}
 
 }

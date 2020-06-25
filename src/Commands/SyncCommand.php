@@ -126,44 +126,53 @@ class SyncCommand extends Console\Command\Command
 		$resources = new Utils\ArrayHash();
 
 		// Collect all privileges & resources combinations from modules
-		foreach ($this->metadataLoader->load() as $origin => $metadata) {
-			$nodePermissions = $metadata->offsetExists('metadata') && $metadata->offsetGet('metadata')->offsetExists('permissions') ?
-				$metadata->offsetGet('metadata')->offsetGet('permissions') : [];
+		foreach ($this->metadataLoader->load() as $origin => $metadatas) {
+			/** @var Utils\ArrayHash $metadata */
+			foreach ($metadatas as $metadata) {
+				if ($metadata->offsetExists('version') && $metadata->offsetGet('version') === '*') {
+					$nodePermissions = $metadata->offsetExists('metadata') && $metadata->offsetGet('metadata')->offsetExists('permissions') ?
+						$metadata->offsetGet('metadata')->offsetGet('permissions') : [];
 
-			foreach ($nodePermissions as $nodePermission) {
-				// Parse resource & privilege from permission
-				[$resource, $privilege] = explode(AuthNode\Constants::PERMISSIONS_DELIMITER, $nodePermission->offsetGet('permission'));
+					foreach ($nodePermissions as $nodePermission) {
+						// Parse resource & privilege from permission
+						[$resource, $privilege] = explode(AuthNode\Constants::PERMISSIONS_DELIMITER, $nodePermission->offsetGet('permission'));
 
-				// Remove white spaces
-				$resource = Utils\Strings::trim($resource);
-				$privilege = Utils\Strings::trim($privilege);
+						// Remove white spaces
+						$resource = Utils\Strings::trim($resource);
+						$privilege = Utils\Strings::trim($privilege);
 
-				$privilege = $privilege === '' ? NS\IAuthorizator::ALL : $privilege;
+						$privilege = $privilege === '' ? NS\IAuthorizator::ALL : $privilege;
 
-				if (!$resources->offsetExists($resource)) {
-					$resources->offsetSet($resource, new Utils\ArrayHash());
+						if (!$resources->offsetExists($resource)) {
+							$resources->offsetSet($resource, new Utils\ArrayHash());
+							$resources->offsetGet($resource)->offsetSet('origin', $origin);
+							$resources->offsetGet($resource)->offsetSet('privileges', new Utils\ArrayHash());
+						}
+
+						$resources->offsetGet($resource)->offsetGet('privileges')->offsetSet($privilege, $nodePermission->offsetGet('title'));
+					}
 				}
-
-				$resources->offsetGet($resource)->offsetSet($privilege, $nodePermission->offsetGet('title'));
 			}
 		}
 
 		$actualPrivileges = $actualResources = new SplObjectStorage();
 
-		foreach ($resources as $resourceName => $privileges) {
+		foreach ($resources as $resourceName => $resourceConfiguration) {
 			$findResource = new Queries\FindResourcesQuery();
 			$findResource->byName($resourceName);
 
 			$resource = $this->resourceRepository->findOneBy($findResource);
 
-			foreach ($privileges as $privilegeName => $details) {
+			foreach ($resourceConfiguration->offsetGet('privileges') as $privilegeName => $title) {
 				try {
 					// Start transaction connection to the database
 					$this->getOrmConnection()->beginTransaction();
 
 					if ($resource === null) {
 						$create = new Utils\ArrayHash();
+						$create->origin = $resourceConfiguration->offsetGet('origin');
 						$create->name = $resourceName;
+						$create->description = $resourceName;
 
 						$resource = $this->resourcesManager->create($create);
 					}
@@ -178,10 +187,7 @@ class SyncCommand extends Console\Command\Command
 						$create = new Utils\ArrayHash();
 						$create->name = $privilegeName;
 						$create->resource = $resource;
-
-						if (isset($details['title'])) {
-							$create->description = $details['title'];
-						}
+						$create->description = $title;
 
 						$privilege = $this->privilegesManager->create($create);
 
@@ -189,23 +195,11 @@ class SyncCommand extends Console\Command\Command
 
 					} else {
 						$update = new Utils\ArrayHash();
+						$update->description = $title;
 
-						$doUpdate = false;
+						$privilege = $this->privilegesManager->update($privilege, $update);
 
-						if (isset($details['title'])) {
-							$update->description = $details['title'];
-
-							$doUpdate = true;
-						}
-
-						if ($doUpdate) {
-							$privilege = $this->privilegesManager->update($privilege, $update);
-
-							$io->text(sprintf('<bg=green;options=bold> Updated </> <info>%s : %s</info>', $resource->getResourceId(), $privilege->getPrivilegeId()));
-
-						} else {
-							$io->text(sprintf('<bg=yellow;options=bold> Skipped </> <info>%s : %s</info>', $resource->getResourceId(), $privilege->getPrivilegeId()));
-						}
+						$io->text(sprintf('<bg=green;options=bold> Updated </> <info>%s : %s</info>', $resource->getResourceId(), $privilege->getPrivilegeId()));
 					}
 
 					// Commit all changes into database

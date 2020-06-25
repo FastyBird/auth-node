@@ -147,7 +147,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			self::RELATIONSHIPS_ROLES      => [
 				self::RELATIONSHIP_DATA          => $account->getRoles(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
+				self::RELATIONSHIP_LINKS_RELATED => false,
 			],
 		];
 	}
@@ -189,21 +189,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 				true,
 				[
 					'count' => count($account->getIdentities()),
-				]
-			);
-
-		} elseif ($name === self::RELATIONSHIPS_ROLES) {
-			return new JsonApi\Schema\Link(
-				false,
-				$this->router->urlFor(
-					'account.roles',
-					[
-						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
-					]
-				),
-				true,
-				[
-					'count' => count($account->getRoles()),
 				]
 			);
 		}

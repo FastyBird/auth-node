@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * PrivilegesV1Controller.php
+ * IdentitiesV1Controller.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -10,14 +10,14 @@
  * @subpackage     Controllers
  * @since          0.1.0
  *
- * @date           02.04.20
+ * @date           25.06.20
  */
 
 namespace FastyBird\AuthNode\Controllers;
 
 use Doctrine;
+use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Entities;
-use FastyBird\AuthNode\Hydrators;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Router;
@@ -27,11 +27,10 @@ use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Utils;
 use Psr\Http\Message;
-use Ramsey\Uuid;
 use Throwable;
 
 /**
- * ACL privileges controller
+ * Account identity controller
  *
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -41,50 +40,33 @@ use Throwable;
  * @Secured
  * @Secured\Permission(fastybird/auth-node:access)
  */
-final class PrivilegesV1Controller extends BaseV1Controller
+final class IdentitiesV1Controller extends BaseV1Controller
 {
 
-	/** @var Hydrators\Privileges\PrivilegeHydrator */
-	private $privilegeHydrator;
+	use Controllers\Finders\TAccountFinder;
+	use Controllers\Finders\TIdentityFinder;
 
-	/** @var Models\Privileges\IPrivilegeRepository */
-	private $privilegeRepository;
+	/** @var Models\Identities\IIdentitiesManager */
+	private $identitiesManager;
 
-	/** @var Models\Privileges\IPrivilegesManager */
-	private $privilegesManager;
+	/** @var Models\Identities\IIdentityRepository */
+	protected $identityRepository;
+
+	/** @var Models\Accounts\IAccountRepository */
+	protected $accountRepository;
 
 	/** @var string */
-	protected $translationDomain = 'node.privileges';
+	protected $translationDomain = 'node.identities';
 
 	public function __construct(
-		Models\Privileges\IPrivilegeRepository $privilegeRepository,
-		Models\Privileges\IPrivilegesManager $privilegesManager,
-		Hydrators\Privileges\PrivilegeHydrator $privilegeHydrator
+		Models\Identities\IIdentityRepository $identityRepository,
+		Models\Identities\IIdentitiesManager $identitiesManager,
+		Models\Accounts\IAccountRepository $accountRepository
 	) {
-		$this->privilegeRepository = $privilegeRepository;
-		$this->privilegesManager = $privilegesManager;
-		$this->privilegeHydrator = $privilegeHydrator;
-	}
+		$this->identityRepository = $identityRepository;
+		$this->identitiesManager = $identitiesManager;
 
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
-	 */
-	public function index(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		$findQuery = new Queries\FindPrivilegesQuery();
-
-		$privileges = $this->privilegeRepository->getResultSet($findQuery);
-
-		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($privileges));
+		$this->accountRepository = $accountRepository;
 	}
 
 	/**
@@ -96,16 +78,41 @@ final class PrivilegesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
+	 * @Secured\Permission(fastybird/manage-identities:read identities)
+	 */
+	public function index(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		$findQuery = new Queries\FindIdentitiesQuery();
+		$findQuery->forAccount($this->findAccount($request));
+
+		$identities = $this->identityRepository->getResultSet($findQuery);
+
+		return $response
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($identities));
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\Permission(fastybird/manage-identities:read identities)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$privilege = $this->findPrivilege($request->getAttribute(Router\Router::URL_ITEM_ID));
+		// Find identity
+		$identity = $this->findIdentity($request, $this->findAccount($request));
 
 		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($privilege));
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($identity));
 	}
 
 	/**
@@ -118,7 +125,7 @@ final class PrivilegesV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:update configuration)
+	 * @Secured\Permission(fastybird/manage-identities:update identity)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -134,14 +141,62 @@ final class PrivilegesV1Controller extends BaseV1Controller
 			);
 		}
 
-		$privilege = $this->findPrivilege($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$identity = $this->findIdentity($request, $this->findAccount($request));
 
 		try {
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\Privileges\PrivilegeSchema::SCHEMA_TYPE) {
-				$updatePrivilegeData = $this->privilegeHydrator->hydrate($document, $privilege);
+			if (
+				$document->getResource()->getType() === Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE
+				&& $identity instanceof Entities\Identities\IUserAccountIdentity
+			) {
+				$attributes = $document->getResource()->getAttributes();
+
+				if (
+					!$attributes->has('password')
+					|| !$attributes->get('password')->has('current')
+				) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('//node.base.messages.missingRequired.heading'),
+						$this->translator->translate('//node.base.messages.missingRequired.message'),
+						[
+							'pointer' => '/data/attributes/password/current',
+						]
+					);
+				}
+
+				if (
+					!$attributes->has('password')
+					|| !$attributes->get('password')->has('new')
+				) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('//node.base.messages.missingRequired.heading'),
+						$this->translator->translate('//node.base.messages.missingRequired.message'),
+						[
+							'pointer' => '/data/attributes/password/new',
+						]
+					);
+				}
+
+				if (!$identity->verifyPassword((string) $attributes->get('password')->get('current'))) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('messages.invalidPassword.heading'),
+						$this->translator->translate('messages.invalidPassword.message'),
+						[
+							'pointer' => '/data/attributes/password/current',
+						]
+					);
+				}
+
+				$update = new Utils\ArrayHash();
+				$update->offsetSet('password', (string) $attributes->get('password')->get('new'));
+
+				// Update item in database
+				$this->identitiesManager->update($identity, $update);
 
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -154,8 +209,6 @@ final class PrivilegesV1Controller extends BaseV1Controller
 				);
 			}
 
-			$privilege = $this->privilegesManager->update($privilege, $updatePrivilegeData);
-
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
@@ -164,32 +217,6 @@ final class PrivilegesV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->rollBack();
 
 			throw $ex;
-
-		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			if (
-				preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false
-				&& array_key_exists('key', $match)
-			) {
-				if (Utils\Strings::startsWith($match['key'], 'privilege_')) {
-					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
-						$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
-						[
-							'pointer' => '/data/attributes/' . Utils\Strings::substring($match['key'], 5),
-						]
-					);
-				}
-			}
-
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
-				$this->translator->translate('//node.base.messages.uniqueConstraint.message')
-			);
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
@@ -210,8 +237,11 @@ final class PrivilegesV1Controller extends BaseV1Controller
 			);
 		}
 
-		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($privilege));
+		/** @var NodeWebServerHttp\Response $response */
+		$response = $response
+			->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
+
+		return $response;
 	}
 
 	/**
@@ -223,58 +253,25 @@ final class PrivilegesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
+	 * @Secured\Permission(fastybird/manage-identities:read identities)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$privilege = $this->findPrivilege($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$identity = $this->findIdentity($request, $this->findAccount($request));
 
+		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
-		if ($relationEntity === Schemas\Privileges\PrivilegeSchema::RELATIONSHIPS_RESOURCE) {
+		if ($relationEntity === Schemas\Identities\IdentitySchema::RELATIONSHIPS_ACCOUNT) {
 			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($privilege->getResource()));
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($identity->getAccount()));
 		}
 
 		$this->throwUnknownRelation($relationEntity);
 
 		return $response;
-	}
-
-	/**
-	 * @param string $id
-	 *
-	 * @return Entities\Privileges\IPrivilege
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 */
-	protected function findPrivilege(string $id): Entities\Privileges\IPrivilege
-	{
-		try {
-			$findQuery = new Queries\FindPrivilegesQuery();
-			$findQuery->byId(Uuid\Uuid::fromString($id));
-
-			$privilege = $this->privilegeRepository->findOneBy($findQuery);
-
-			if ($privilege === null) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_NOT_FOUND,
-					$this->translator->translate('messages.notFound.heading'),
-					$this->translator->translate('messages.notFound.message')
-				);
-			}
-
-		} catch (Uuid\Exception\InvalidUuidStringException $ex) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
-		}
-
-		return $privilege;
 	}
 
 }

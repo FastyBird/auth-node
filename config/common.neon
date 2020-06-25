@@ -231,9 +231,11 @@ services:
 
 	- {factory: FastyBird\AuthNode\Controllers\AccountIdentitiesV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AuthNode\Controllers\AccountRolesV1Controller, tags: [nette.inject]}
-
 	- {factory: FastyBird\AuthNode\Controllers\AccountsV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AuthNode\Controllers\EmailsV1Controller, tags: [nette.inject]}
+
+	- {factory: FastyBird\AuthNode\Controllers\IdentitiesV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\RolesV1Controller, tags: [nette.inject]}
 

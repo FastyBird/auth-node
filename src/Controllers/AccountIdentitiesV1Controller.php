@@ -28,7 +28,6 @@ use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Utils;
 use Psr\Http\Message;
-use Ramsey\Uuid;
 use Throwable;
 
 /**
@@ -42,10 +41,7 @@ use Throwable;
 final class AccountIdentitiesV1Controller extends BaseV1Controller
 {
 
-	use Controllers\Finders\TAccountFinder;
-
-	/** @var Models\Identities\IIdentityRepository */
-	private $identityRepository;
+	use Controllers\Finders\TIdentityFinder;
 
 	/** @var Models\Identities\IIdentitiesManager */
 	private $identitiesManager;
@@ -56,24 +52,21 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 	/** @var Helpers\SecurityHash */
 	private $securityHash;
 
-	/** @var Models\Accounts\IAccountRepository */
-	protected $accountRepository;
+	/** @var Models\Identities\IIdentityRepository */
+	protected $identityRepository;
 
 	/** @var string */
-	protected $translationDomain = 'node.userAccountIdentity';
+	protected $translationDomain = 'node.identities';
 
 	public function __construct(
 		Models\Identities\IIdentityRepository $identityRepository,
 		Models\Identities\IIdentitiesManager $identitiesManager,
 		Models\Accounts\IAccountsManager $accountsManager,
-		Models\Accounts\IAccountRepository $accountRepository,
 		Helpers\SecurityHash $securityHash
 	) {
 		$this->identityRepository = $identityRepository;
 		$this->identitiesManager = $identitiesManager;
 		$this->accountsManager = $accountsManager;
-
-		$this->accountRepository = $accountRepository;
 
 		$this->securityHash = $securityHash;
 	}
@@ -94,7 +87,7 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		$findQuery = new Queries\FindIdentitiesQuery();
-		$findQuery->forAccount($this->findAccount($request));
+		$findQuery->forAccount($this->findAccount());
 
 		$identities = $this->identityRepository->getResultSet($findQuery);
 
@@ -118,7 +111,7 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// Find identity
-		$identity = $this->findIdentity($request);
+		$identity = $this->findIdentity($request, $this->findAccount());
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($identity));
@@ -150,7 +143,7 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 			);
 		}
 
-		$identity = $this->findIdentity($request);
+		$identity = $this->findIdentity($request, $this->findAccount());
 
 		try {
 			// Start transaction connection to the database
@@ -268,7 +261,7 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$identity = $this->findIdentity($request);
+		$identity = $this->findIdentity($request, $this->findAccount());
 
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
@@ -446,41 +439,23 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 	}
 
 	/**
-	 * @param Message\ServerRequestInterface $request
+	 * @return Entities\Accounts\IAccount
 	 *
-	 * @return Entities\Identities\IIdentity
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 * @throws NodeJsonApiExceptions\JsonApiErrorException
 	 */
-	private function findIdentity(
-		Message\ServerRequestInterface $request
-	): Entities\Identities\IIdentity {
-		// Get user account from request header of from url
-		$account = $this->findAccount($request);
-
-		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
+	private function findAccount(): Entities\Accounts\IAccount
+	{
+		if (
+			$this->user->getAccount() === null
+		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
+				StatusCodeInterface::STATUS_FORBIDDEN,
+				$this->translator->translate('//node.base.messages.forbidden.heading'),
+				$this->translator->translate('//node.base.messages.forbidden.message')
 			);
 		}
 
-		$findQuery = new Queries\FindIdentitiesQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID, null)));
-		$findQuery->forAccount($account);
-
-		$identity = $this->identityRepository->findOneBy($findQuery);
-
-		if ($identity === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
-			);
-		}
-
-		return $identity;
+		return $this->user->getAccount();
 	}
 
 }

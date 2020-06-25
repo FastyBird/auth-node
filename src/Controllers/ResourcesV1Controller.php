@@ -36,6 +36,9 @@ use Throwable;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\Permission(fastybird/auth-node:access)
  */
 final class ResourcesV1Controller extends BaseV1Controller
 {
@@ -71,7 +74,7 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-control:read)
+	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -94,7 +97,7 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-control:read)
+	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -116,7 +119,7 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-control:update)
+	 * @Secured\Permission(fastybird/manage-access-control:update configuration)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -221,7 +224,7 @@ final class ResourcesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(manage-access-control:read)
+	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

@@ -33,18 +33,6 @@ final class Constants
 	// Permissions string delimiter
 	public const PERMISSIONS_DELIMITER = ':';
 
-	// Default resources
-	public const ACL_RESOURCE_MANAGE_ACCESS = 'manage-access-control';
-	public const ACL_RESOURCE_MANAGE_ACCOUNTS = 'manage-accounts';
-	public const ACL_RESOURCE_MANAGE_EMAILS = 'manage-emails';
-	public const ACL_RESOURCE_MANAGE_IDENTITIES = 'manage-identities';
-
-	// Default privileges for resources
-	public const ACL_PRIVILEGE_READ = 'read';
-	public const ACL_PRIVILEGE_CREATE = 'create';
-	public const ACL_PRIVILEGE_UPDATE = 'update';
-	public const ACL_PRIVILEGE_DELETE = 'delete';
-
 	/**
 	 * Node routing
 	 */

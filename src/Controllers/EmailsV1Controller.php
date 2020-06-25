@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * AccountEmailsV1Controller.php
+ * EmailsV1Controller.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -10,14 +10,13 @@
  * @subpackage     Controllers
  * @since          0.1.0
  *
- * @date           31.03.20
+ * @date           25.06.20
  */
 
 namespace FastyBird\AuthNode\Controllers;
 
 use Doctrine;
 use FastyBird\AuthNode\Controllers;
-use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Helpers;
 use FastyBird\AuthNode\Hydrators;
@@ -29,7 +28,6 @@ use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
-use Nette\Utils;
 use Psr\Http\Message;
 use Throwable;
 
@@ -40,10 +38,14 @@ use Throwable;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\Permission(fastybird/auth-node:access)
  */
-final class AccountEmailsV1Controller extends BaseV1Controller
+final class EmailsV1Controller extends BaseV1Controller
 {
 
+	use Controllers\Finders\TAccountFinder;
 	use Controllers\Finders\TEmailFinder;
 
 	/** @var Hydrators\Emails\EmailHydrator */
@@ -58,6 +60,9 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	/** @var Models\Emails\IEmailRepository */
 	protected $emailRepository;
 
+	/** @var Models\Accounts\IAccountRepository */
+	protected $accountRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.emails';
 
@@ -65,12 +70,15 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		Hydrators\Emails\EmailHydrator $emailHydrator,
 		Models\Emails\IEmailRepository $emailRepository,
 		Models\Emails\IEmailsManager $emailsManager,
+		Models\Accounts\IAccountRepository $accountRepository,
 		Helpers\SecurityHash $securityHash
 	) {
 		$this->emailHydrator = $emailHydrator;
 
 		$this->emailRepository = $emailRepository;
 		$this->emailsManager = $emailsManager;
+
+		$this->accountRepository = $accountRepository;
 
 		$this->securityHash = $securityHash;
 	}
@@ -84,14 +92,14 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\User(loggedIn)
+	 * @Secured\Permission(fastybird/manage-emails:read emails)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		$findQuery = new Queries\FindEmailsQuery();
-		$findQuery->forAccount($this->findAccount());
+		$findQuery->forAccount($this->findAccount($request));
 
 		$emails = $this->emailRepository->getResultSet($findQuery);
 
@@ -108,14 +116,14 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\User(loggedIn)
+	 * @Secured\Permission(fastybird/manage-emails:read emails)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// Find email
-		$email = $this->findEmail($request, $this->findAccount());
+		$email = $this->findEmail($request, $this->findAccount($request));
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($email));
@@ -131,14 +139,14 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\User(loggedIn)
+	 * @Secured\Permission(fastybird/manage-emails:create email)
 	 */
 	public function create(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// Get user profile account or url defined account
-		$account = $this->findAccount();
+		$account = $this->findAccount($request);
 
 		$document = $this->createDocument($request);
 
@@ -251,7 +259,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\User(loggedIn)
+	 * @Secured\Permission(fastybird/manage-emails:edit email)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -267,7 +275,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			);
 		}
 
-		$email = $this->findEmail($request, $this->findAccount());
+		$email = $this->findEmail($request, $this->findAccount($request));
 
 		try {
 			// Start transaction connection to the database
@@ -334,13 +342,13 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\User(loggedIn)
+	 * @Secured\Permission(fastybird/manage-emails:delete email)
 	 */
 	public function delete(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$email = $this->findEmail($request, $this->findAccount());
+		$email = $this->findEmail($request, $this->findAccount($request));
 
 		if ($email->isDefault()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -394,14 +402,14 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\User(loggedIn)
+	 * @Secured\Permission(fastybird/manage-emails:read emails)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// At first, try to load email
-		$email = $this->findEmail($request, $this->findAccount());
+		$email = $this->findEmail($request, $this->findAccount($request));
 
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
@@ -414,114 +422,6 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		$this->throwUnknownRelation($relationEntity);
 
 		return $response;
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 */
-	public function validate(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		$document = $this->createDocument($request);
-
-		$attributes = $document->getResource()->getAttributes();
-
-		if ($document->getResource()->getType() !== Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidType.heading'),
-				$this->translator->translate('messages.invalidType.message'),
-				[
-					'pointer' => '/data/type',
-				]
-			);
-		}
-
-		if (!$attributes->has('address')) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
-				[
-					'pointer' => '/data/attributes/address',
-				]
-			);
-
-		} elseif (!Utils\Validators::isEmail((string) $attributes->get('address'))) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notValid.heading'),
-				$this->translator->translate('messages.notValid.message'),
-				[
-					'pointer' => '/data/attributes/address',
-				]
-			);
-		}
-
-		if ($this->user->isLoggedIn()) {
-			if ($this->user->getAccount() === null) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_FORBIDDEN,
-					$this->translator->translate('//node.base.messages.forbidden.heading'),
-					$this->translator->translate('//node.base.messages.forbidden.message')
-				);
-
-			} elseif (!$this->emailRepository->isEmailAvailable((string) $attributes->get('address'), $this->user->getAccount())) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.taken.heading'),
-					$this->translator->translate('messages.taken.message'),
-					[
-						'pointer' => '/data/attributes/address',
-					]
-				);
-			}
-
-		} else {
-			$email = $this->emailRepository->findOneByAddress((string) $attributes->get('address'));
-
-			if ($email !== null) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.taken.heading'),
-					$this->translator->translate('messages.taken.message'),
-					[
-						'pointer' => '/data/attributes/address',
-					]
-				);
-			}
-		}
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
-
-		return $response;
-	}
-
-	/**
-	 * @return Entities\Accounts\IAccount
-	 *
-	 * @throws NodeJsonApiExceptions\JsonApiErrorException
-	 */
-	private function findAccount(): Entities\Accounts\IAccount
-	{
-		if (
-			$this->user->getAccount() === null
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
-
-		return $this->user->getAccount();
 	}
 
 }

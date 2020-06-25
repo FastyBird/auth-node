@@ -22,6 +22,9 @@ namespace FastyBird\AuthNode\Controllers;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\Permission(fastybird/auth-node:access)
  */
 final class AccountsV1Controller extends BaseV1Controller
 {

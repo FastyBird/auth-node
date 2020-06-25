@@ -34,7 +34,7 @@ use Throwable;
  *       "comment"="ACL privileges"
  *     },
  *     uniqueConstraints={
- *       @ORM\UniqueConstraint(name="privilege_name_unique", columns={"privilege_name"})
+ *       @ORM\UniqueConstraint(name="privilege_name_unique", columns={"privilege_name", "resource_id"})
  *     }
  * )
  */
