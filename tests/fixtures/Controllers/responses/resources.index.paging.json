@@ -2,37 +2,54 @@
   "data" : [
     {
       "attributes" : {
-        "description" : "fastybird/manage-emails",
-        "name" : "fastybird/manage-emails",
+        "description" : "fastybird/manage-identities",
+        "name" : "fastybird/manage-identities",
         "origin" : "com.fastybird.auth-node"
       },
-      "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
+      "id" : "2d19491b-e821-486e-badd-6681e61c9950",
       "links" : {
-        "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610"
+        "self" : "/v1/resources/2d19491b-e821-486e-badd-6681e61c9950"
       },
       "relationships" : {
         "children" : {
           "data" : [ ],
           "links" : {
             "related" : {
-              "href" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/children",
+              "href" : "/v1/resources/2d19491b-e821-486e-badd-6681e61c9950/children",
               "meta" : {
                 "count" : 0
               }
             },
-            "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/relationships/children"
+            "self" : "/v1/resources/2d19491b-e821-486e-badd-6681e61c9950/relationships/children"
           }
         },
         "privileges" : {
-          "data" : [ ],
+          "data" : [
+            {
+              "id" : "1a46cf0a-cce9-4ab5-8b75-75e2965f2957",
+              "type" : "auth-node/privilege"
+            },
+            {
+              "id" : "1a7a3442-425f-4d00-ae76-ad0320b4895d",
+              "type" : "auth-node/privilege"
+            },
+            {
+              "id" : "3208fd6e-669a-42dc-b045-f3273d2a393a",
+              "type" : "auth-node/privilege"
+            },
+            {
+              "id" : "54c6c043-a5d7-4ebc-b9e5-fbb45a81fc8e",
+              "type" : "auth-node/privilege"
+            }
+          ],
           "links" : {
             "related" : {
-              "href" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/privileges",
+              "href" : "/v1/resources/2d19491b-e821-486e-badd-6681e61c9950/privileges",
               "meta" : {
-                "count" : 0
+                "count" : 4
               }
             },
-            "self" : "/v1/resources/0b46d3d6-c980-494a-8b40-f19e6095e610/relationships/privileges"
+            "self" : "/v1/resources/2d19491b-e821-486e-badd-6681e61c9950/relationships/privileges"
           }
         }
       },
@@ -44,7 +61,7 @@
   },
   "links" : {
     "first" : "/v1/resources?page%5Boffset%5D=0&page%5Blimit%5D=1",
-    "last" : "/v1/resources?page%5Boffset%5D=7&page%5Blimit%5D=1",
+    "last" : "/v1/resources?page%5Boffset%5D=13&page%5Blimit%5D=1",
     "next" : "/v1/resources?page%5Boffset%5D=2&page%5Blimit%5D=1",
     "prev" : "/v1/resources?page%5Boffset%5D=0&page%5Blimit%5D=1",
     "self" : "/v1/resources?page%5Boffset%5D=1&page%5Blimit%5D=1"
@@ -52,6 +69,6 @@
   "meta" : {
     "author" : "FastyBird dev team",
     "copyright" : "FastyBird s.r.o",
-    "totalCount" : 8
+    "totalCount" : 14
   }
 }

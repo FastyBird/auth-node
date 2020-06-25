@@ -9,8 +9,8 @@
     "version" : "1.1"
   },
   "links" : {
-    "related" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/children",
-    "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/relationships/children"
+    "related" : "/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/children",
+    "self" : "/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/relationships/children"
   },
   "meta" : {
     "author" : "FastyBird dev team",

@@ -2,7 +2,7 @@
   "data" : [
     {
       "attributes" : {
-        "description" : "Specific entity resource",
+        "description" : "node entity",
         "name" : "node entity",
         "origin" : "com.fastybird.auth-node"
       },
@@ -25,7 +25,7 @@
         },
         "parent" : {
           "data" : {
-            "id" : "efbfbdef-bfbd-510e-3774-4c64efbfbdef",
+            "id" : "ff32ac4e-f010-4c85-9cb3-d310f6708a4e",
             "type" : "auth-node/resource"
           },
           "links" : {
@@ -53,7 +53,7 @@
     "version" : "1.1"
   },
   "links" : {
-    "self" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/children"
+    "self" : "/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/children"
   },
   "meta" : {
     "author" : "FastyBird dev team",

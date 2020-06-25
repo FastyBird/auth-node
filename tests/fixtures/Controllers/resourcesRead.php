@@ -16,7 +16,7 @@ return [
 		__DIR__ . '/responses/resources.index.paging.json',
 	],
 	'readOne'                     => [
-		'/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef',
+		'/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NTc2NDAwMCwianRpIjoiNGY2NzEwYTEtMzhhYS00MjY0LTljMGMtYjQ1Mjg1MTgxMjcwIiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6ImFjY2VzcyIsInJvbGVzIjpbImFkbWluaXN0cmF0b3IiXX0.Ijw2E1hhDvqzyDpNExUm0vAE0IK08UeZJUcDO5QMTOI',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/resources.read.json',
@@ -28,19 +28,19 @@ return [
 		__DIR__ . '/responses/resources.notFound.json',
 	],
 	'readChildren'                => [
-		'/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/children',
+		'/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/children',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NTc2NDAwMCwianRpIjoiNGY2NzEwYTEtMzhhYS00MjY0LTljMGMtYjQ1Mjg1MTgxMjcwIiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6ImFjY2VzcyIsInJvbGVzIjpbImFkbWluaXN0cmF0b3IiXX0.Ijw2E1hhDvqzyDpNExUm0vAE0IK08UeZJUcDO5QMTOI',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/resources.children.json',
 	],
 	'readPrivileges'              => [
-		'/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/privileges',
+		'/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/privileges',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NTc2NDAwMCwianRpIjoiNGY2NzEwYTEtMzhhYS00MjY0LTljMGMtYjQ1Mjg1MTgxMjcwIiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6ImFjY2VzcyIsInJvbGVzIjpbImFkbWluaXN0cmF0b3IiXX0.Ijw2E1hhDvqzyDpNExUm0vAE0IK08UeZJUcDO5QMTOI',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/resources.privileges.json',
 	],
 	'readRelationshipsChildren'   => [
-		'/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/relationships/children',
+		'/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/relationships/children',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NTc2NDAwMCwianRpIjoiNGY2NzEwYTEtMzhhYS00MjY0LTljMGMtYjQ1Mjg1MTgxMjcwIiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6ImFjY2VzcyIsInJvbGVzIjpbImFkbWluaXN0cmF0b3IiXX0.Ijw2E1hhDvqzyDpNExUm0vAE0IK08UeZJUcDO5QMTOI',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/resources.readRelationships.children.json',
@@ -52,13 +52,13 @@ return [
 		__DIR__ . '/responses/resources.readRelationships.parent.json',
 	],
 	'readRelationshipsPrivileges' => [
-		'/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/relationships/privileges',
+		'/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/relationships/privileges',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NTc2NDAwMCwianRpIjoiNGY2NzEwYTEtMzhhYS00MjY0LTljMGMtYjQ1Mjg1MTgxMjcwIiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6ImFjY2VzcyIsInJvbGVzIjpbImFkbWluaXN0cmF0b3IiXX0.Ijw2E1hhDvqzyDpNExUm0vAE0IK08UeZJUcDO5QMTOI',
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/resources.readRelationships.privileges.json',
 	],
 	'readRelationshipsUnknown'    => [
-		'/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef/relationships/unknown',
+		'/v1/resources/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/relationships/unknown',
 		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NTc2NDAwMCwianRpIjoiNGY2NzEwYTEtMzhhYS00MjY0LTljMGMtYjQ1Mjg1MTgxMjcwIiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6ImFjY2VzcyIsInJvbGVzIjpbImFkbWluaXN0cmF0b3IiXX0.Ijw2E1hhDvqzyDpNExUm0vAE0IK08UeZJUcDO5QMTOI',
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/relation.unknown.json',
