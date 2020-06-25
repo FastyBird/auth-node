@@ -1,13 +1,13 @@
 {
   "data" : {
-    "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+    "id" : "e5d54b81-504f-48ec-b5eb-5df691ec10ed",
     "type" : "auth-node/resource"
   },
   "jsonapi" : {
     "version" : "1.1"
   },
   "links" : {
-    "related" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+    "related" : "/v1/resources/e5d54b81-504f-48ec-b5eb-5df691ec10ed",
     "self" : "/v1/rules/317cefbf-bd37-7e17-43ef-bfbdc99aefbf/relationships/resource"
   },
   "meta" : {

@@ -11,21 +11,21 @@
       "relationships" : {
         "privilege" : {
           "data" : {
-            "id" : "22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+            "id" : "53b78886-41c0-446e-9a40-f781f2d6fe8f",
             "type" : "auth-node/privilege"
           },
           "links" : {
-            "related" : "/v1/privileges/22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+            "related" : "/v1/privileges/53b78886-41c0-446e-9a40-f781f2d6fe8f",
             "self" : "/v1/rules/317cefbf-bd37-7e17-43ef-bfbdc99aefbf/relationships/privilege"
           }
         },
         "resource" : {
           "data" : {
-            "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+            "id" : "e5d54b81-504f-48ec-b5eb-5df691ec10ed",
             "type" : "auth-node/resource"
           },
           "links" : {
-            "related" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+            "related" : "/v1/resources/e5d54b81-504f-48ec-b5eb-5df691ec10ed",
             "self" : "/v1/rules/317cefbf-bd37-7e17-43ef-bfbdc99aefbf/relationships/resource"
           }
         },
@@ -44,7 +44,7 @@
     },
     {
       "attributes" : {
-        "access" : true
+        "access" : false
       },
       "id" : "365defbf-bd09-efbf-bd7e-4f29efbfbdef",
       "links" : {
@@ -53,21 +53,21 @@
       "relationships" : {
         "privilege" : {
           "data" : {
-            "id" : "3defbfbd-2e1a-efbf-bdef-bfbd49efbfbd",
+            "id" : "1832747b-2890-4982-a48b-6291444db89d",
             "type" : "auth-node/privilege"
           },
           "links" : {
-            "related" : "/v1/privileges/3defbfbd-2e1a-efbf-bdef-bfbd49efbfbd",
+            "related" : "/v1/privileges/1832747b-2890-4982-a48b-6291444db89d",
             "self" : "/v1/rules/365defbf-bd09-efbf-bd7e-4f29efbfbdef/relationships/privilege"
           }
         },
         "resource" : {
           "data" : {
-            "id" : "efbfbdef-bfbd-510e-3774-4c64efbfbdef",
+            "id" : "e5d54b81-504f-48ec-b5eb-5df691ec10ed",
             "type" : "auth-node/resource"
           },
           "links" : {
-            "related" : "/v1/resources/efbfbdef-bfbd-510e-3774-4c64efbfbdef",
+            "related" : "/v1/resources/e5d54b81-504f-48ec-b5eb-5df691ec10ed",
             "self" : "/v1/rules/365defbf-bd09-efbf-bd7e-4f29efbfbdef/relationships/resource"
           }
         },

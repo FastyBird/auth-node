@@ -10,21 +10,21 @@
     "relationships" : {
       "privilege" : {
         "data" : {
-          "id" : "22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+          "id" : "53b78886-41c0-446e-9a40-f781f2d6fe8f",
           "type" : "auth-node/privilege"
         },
         "links" : {
-          "related" : "/v1/privileges/22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+          "related" : "/v1/privileges/53b78886-41c0-446e-9a40-f781f2d6fe8f",
           "self" : "/v1/rules/317cefbf-bd37-7e17-43ef-bfbdc99aefbf/relationships/privilege"
         }
       },
       "resource" : {
         "data" : {
-          "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+          "id" : "e5d54b81-504f-48ec-b5eb-5df691ec10ed",
           "type" : "auth-node/resource"
         },
         "links" : {
-          "related" : "/v1/resources/58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+          "related" : "/v1/resources/e5d54b81-504f-48ec-b5eb-5df691ec10ed",
           "self" : "/v1/rules/317cefbf-bd37-7e17-43ef-bfbdc99aefbf/relationships/resource"
         }
       },

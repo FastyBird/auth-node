@@ -8,13 +8,13 @@
     "relationships" : {
       "privilege" : {
         "data" : {
-          "id" : "22efbfbd-efbf-bdef-bfbd-efbfbdefbfbd",
+          "id" : "063ba1fa-0515-478c-8434-dbee62329ada",
           "type" : "auth-node/privilege"
         }
       },
       "resource" : {
         "data" : {
-          "id" : "58efbfbd-2fef-bfbd-78ef-bfbd4fefbfbd",
+          "id" : "72d26676-d7d4-4546-af22-cbba4965c42a",
           "type" : "auth-node/resource"
         }
       },
