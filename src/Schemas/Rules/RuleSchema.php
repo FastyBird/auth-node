@@ -15,6 +15,7 @@
 
 namespace FastyBird\AuthNode\Schemas\Rules;
 
+use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
@@ -99,7 +100,7 @@ final class RuleSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'rule',
+				AuthNode\Constants::ROUTE_NAME_RULE,
 				[
 					Router\Router::URL_ITEM_ID => $rule->getPlainId(),
 				]
@@ -151,7 +152,7 @@ final class RuleSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'role',
+					AuthNode\Constants::ROUTE_NAME_ROLE,
 					[
 						Router\Router::URL_ITEM_ID => $rule->getRole()->getPlainId(),
 					]
@@ -163,7 +164,7 @@ final class RuleSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'resource',
+					AuthNode\Constants::ROUTE_NAME_RESOURCE,
 					[
 						Router\Router::URL_ITEM_ID => $rule->getResource()->getPlainId(),
 					]
@@ -175,7 +176,7 @@ final class RuleSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'privilege',
+					AuthNode\Constants::ROUTE_NAME_PRIVILEGE,
 					[
 						Router\Router::URL_ITEM_ID => $rule->getPrivilege()->getPlainId(),
 					]
@@ -207,7 +208,7 @@ final class RuleSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'rule.relationship',
+					AuthNode\Constants::ROUTE_NAME_RULE_RELATIONSHIP,
 					[
 						Router\Router::URL_ITEM_ID     => $rule->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,

@@ -15,6 +15,7 @@
 
 namespace FastyBird\AuthNode\Schemas\Emails;
 
+use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
@@ -99,7 +100,7 @@ final class EmailSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'account.email',
+				AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL,
 				[
 					Router\Router::URL_ITEM_ID    => $email->getPlainId(),
 					Router\Router::URL_ACCOUNT_ID => $email->getAccount()->getPlainId(),
@@ -142,7 +143,7 @@ final class EmailSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'account',
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT,
 					[
 						Router\Router::URL_ITEM_ID => $email->getAccount()->getPlainId(),
 					]
@@ -168,7 +169,7 @@ final class EmailSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'account.email.relationship',
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL_RELATIONSHIP,
 					[
 						Router\Router::URL_ITEM_ID     => $email->getPlainId(),
 						Router\Router::URL_ACCOUNT_ID  => $email->getAccount()->getPlainId(),

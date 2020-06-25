@@ -15,6 +15,7 @@
 
 namespace FastyBird\AuthNode\Schemas\Resources;
 
+use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
@@ -114,7 +115,7 @@ final class ResourceSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'resource',
+				AuthNode\Constants::ROUTE_NAME_RESOURCE,
 				[
 					Router\Router::URL_ITEM_ID => $resource->getPlainId(),
 				]
@@ -171,7 +172,7 @@ final class ResourceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'resource',
+					AuthNode\Constants::ROUTE_NAME_RESOURCE,
 					[
 						Router\Router::URL_ITEM_ID => $resource->getPlainId(),
 					]
@@ -183,7 +184,7 @@ final class ResourceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'resource.privileges',
+					AuthNode\Constants::ROUTE_NAME_RESOURCE_PRIVILEGES,
 					[
 						Router\Router::URL_ITEM_ID => $resource->getPlainId(),
 					]
@@ -198,7 +199,7 @@ final class ResourceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'resource.children',
+					AuthNode\Constants::ROUTE_NAME_RESOURCE_CHILDREN,
 					[
 						Router\Router::URL_ITEM_ID => $resource->getPlainId(),
 					]
@@ -233,7 +234,7 @@ final class ResourceSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'resource.relationship',
+					AuthNode\Constants::ROUTE_NAME_RESOURCE_RELATIONSHIP,
 					[
 						Router\Router::URL_ITEM_ID     => $resource->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,

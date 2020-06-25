@@ -15,6 +15,7 @@
 
 namespace FastyBird\AuthNode\Schemas\Sessions;
 
+use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
@@ -99,7 +100,7 @@ final class SessionSchema extends NodeJsonApiSchemas\JsonApiSchema
 	{
 		return new JsonApi\Schema\Link(
 			false,
-			$this->router->urlFor('session'),
+			$this->router->urlFor(AuthNode\Constants::ROUTE_NAME_SESSION),
 			false
 		);
 	}
@@ -137,7 +138,7 @@ final class SessionSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'account',
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT,
 					[
 						Router\Router::URL_ITEM_ID => $accessToken->getIdentity()->getAccount()->getPlainId(),
 					]
@@ -163,7 +164,7 @@ final class SessionSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'session.relationship',
+					AuthNode\Constants::ROUTE_NAME_SESSION,
 					[
 						Router\Router::RELATION_ENTITY => $name,
 					]

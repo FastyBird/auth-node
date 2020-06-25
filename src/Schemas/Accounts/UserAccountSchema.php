@@ -15,6 +15,7 @@
 
 namespace FastyBird\AuthNode\Schemas\Accounts;
 
+use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
@@ -114,7 +115,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 		return new JsonApi\Schema\Link(
 			false,
 			$this->router->urlFor(
-				'account',
+				AuthNode\Constants::ROUTE_NAME_ACCOUNT,
 				[
 					Router\Router::URL_ITEM_ID => $account->getPlainId(),
 				]
@@ -166,7 +167,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'account.emails',
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAILS,
 					[
 						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
 					]
@@ -181,7 +182,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'account.identities',
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITIES,
 					[
 						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
 					]
@@ -214,7 +215,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					'account.relationship',
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT_RELATIONSHIP,
 					[
 						Router\Router::URL_ITEM_ID     => $account->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,
