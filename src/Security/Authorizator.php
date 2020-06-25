@@ -68,6 +68,8 @@ final class Authorizator extends NS\Permission implements NS\IAuthorizator
 	 */
 	private function initialize(): void
 	{
+		$this->initialized = true;
+
 		$findResource = new Queries\FindResourcesQuery();
 		$findResource->withoutParent();
 

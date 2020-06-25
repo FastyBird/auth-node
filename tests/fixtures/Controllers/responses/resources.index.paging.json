@@ -44,7 +44,7 @@
   },
   "links" : {
     "first" : "/v1/resources?page%5Boffset%5D=0&page%5Blimit%5D=1",
-    "last" : "/v1/resources?page%5Boffset%5D=6&page%5Blimit%5D=1",
+    "last" : "/v1/resources?page%5Boffset%5D=7&page%5Blimit%5D=1",
     "next" : "/v1/resources?page%5Boffset%5D=2&page%5Blimit%5D=1",
     "prev" : "/v1/resources?page%5Boffset%5D=0&page%5Blimit%5D=1",
     "self" : "/v1/resources?page%5Boffset%5D=1&page%5Blimit%5D=1"
@@ -52,6 +52,6 @@
   "meta" : {
     "author" : "FastyBird dev team",
     "copyright" : "FastyBird s.r.o",
-    "totalCount" : 7
+    "totalCount" : 8
   }
 }
