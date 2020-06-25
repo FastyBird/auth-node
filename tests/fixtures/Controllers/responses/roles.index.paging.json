@@ -48,11 +48,11 @@
         "rules" : {
           "data" : [
             {
-              "id" : "317cefbf-bd37-7e17-43ef-bfbdc99aefbf",
+              "id" : "365defbf-bd09-efbf-bd7e-4f29efbfbdef",
               "type" : "auth-node/rule"
             },
             {
-              "id" : "365defbf-bd09-efbf-bd7e-4f29efbfbdef",
+              "id" : "317cefbf-bd37-7e17-43ef-bfbdc99aefbf",
               "type" : "auth-node/rule"
             }
           ],
