@@ -164,7 +164,7 @@ final class SessionSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_SESSION,
+					AuthNode\Constants::ROUTE_NAME_SESSION_RELATIONSHIP,
 					[
 						Router\Router::RELATION_ENTITY => $name,
 					]
