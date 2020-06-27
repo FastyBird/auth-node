@@ -431,7 +431,7 @@
             "related" : {
               "href" : "/v1/resources/c3f6947c-1736-42b0-bfd4-73b9070b4491/privileges",
               "meta" : {
-                "count" : 0
+                "count" : 4
               }
             },
             "self" : "/v1/resources/c3f6947c-1736-42b0-bfd4-73b9070b4491/relationships/privileges"
