@@ -15,7 +15,7 @@ require_once __DIR__ . '/../DbTestCase.php';
 final class IdentityEntitySubscriberTest extends DbTestCase
 {
 
-	private const ACCOUNT_TEST_ID = '5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34';
+	private const ACCOUNT_TEST_ID = '16e5db29-0006-4484-ac38-5cdea5a008f5';
 
 	public function testCreateEntity(): void
 	{
@@ -25,10 +25,10 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$findAccount = new Queries\FindAccountsQuery();
 		$findAccount->byId(Uuid\Uuid::fromString(self::ACCOUNT_TEST_ID));
 
-		$account = $accountRepository->findOneBy($findAccount, Entities\Accounts\UserAccount::class);
+		$account = $accountRepository->findOneBy($findAccount, Entities\Accounts\MachineAccount::class);
 
 		$createIdentity = Utils\ArrayHash::from([
-			'entity'   => Entities\Identities\UserAccountIdentity::class,
+			'entity'   => Entities\Identities\MachineAccountIdentity::class,
 			'account'  => $account,
 			'password' => 'randomPassword',
 			'uid'      => 'newUsername',
@@ -37,7 +37,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		/** @var Models\Identities\IIdentitiesManager $identitiesManager */
 		$identitiesManager = $this->getContainer()->getByType(Models\Identities\IdentitiesManager::class);
 
-		/** @var Entities\Identities\UserAccountIdentity $identity */
+		/** @var Entities\Identities\MachineAccountIdentity $identity */
 		$identity = $identitiesManager->create($createIdentity);
 
 		/** @var Models\Vernemq\IAccountRepository $verneMQRepository */
@@ -50,7 +50,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 
 		Assert::notNull($verneMQAccount);
 		Assert::same($account->getId()->toString(), $verneMQAccount->getAccount()->getId()->toString());
-		Assert::same(hash('sha256', $identity->getPassword()->getPassword(), false), $verneMQAccount->getPassword());
+		Assert::same(hash('sha256', $identity->getPassword(), false), $verneMQAccount->getPassword());
 		Assert::same('newUsername', $verneMQAccount->getUsername());
 	}
 
@@ -62,7 +62,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$findIdentity = new Queries\FindIdentitiesQuery();
 		$findIdentity->byUid('jane.doe@fastybird.com');
 
-		$identity = $identityRepository->findOneBy($findIdentity, Entities\Identities\UserAccountIdentity::class);
+		$identity = $identityRepository->findOneBy($findIdentity, Entities\Identities\MachineAccountIdentity::class);
 
 		$updateIdentity = Utils\ArrayHash::from([
 			'password' => 'randomPassword',
@@ -72,7 +72,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		/** @var Models\Identities\IIdentitiesManager $identitiesManager */
 		$identitiesManager = $this->getContainer()->getByType(Models\Identities\IdentitiesManager::class);
 
-		/** @var Entities\Identities\UserAccountIdentity $identity */
+		/** @var Entities\Identities\MachineAccountIdentity $identity */
 		$identity = $identitiesManager->update($identity, $updateIdentity);
 
 		/** @var Models\Vernemq\IAccountRepository $verneMQRepository */
@@ -85,7 +85,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 
 		Assert::notNull($verneMQAccount);
 		Assert::same($identity->getAccount()->getId()->toString(), $verneMQAccount->getAccount()->getId()->toString());
-		Assert::same(hash('sha256', $identity->getPassword()->getPassword(), false), $verneMQAccount->getPassword());
+		Assert::same(hash('sha256', $identity->getPassword(), false), $verneMQAccount->getPassword());
 		Assert::same('newUsername', $verneMQAccount->getUsername());
 	}
 
@@ -106,7 +106,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		/** @var Models\Identities\IIdentitiesManager $identitiesManager */
 		$identitiesManager = $this->getContainer()->getByType(Models\Identities\IdentitiesManager::class);
 
-		/** @var Entities\Identities\UserAccountIdentity $identity */
+		/** @var Entities\Identities\MachineAccountIdentity $identity */
 		$identity = $identitiesManager->update($identity, $updateIdentity);
 
 		/** @var Models\Vernemq\IAccountRepository $verneMQRepository */
@@ -119,7 +119,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 
 		Assert::notNull($verneMQAccount);
 		Assert::same($identity->getAccount()->getId()->toString(), $verneMQAccount->getAccount()->getId()->toString());
-		Assert::same(hash('sha256', $identity->getPassword()->getPassword(), false), $verneMQAccount->getPassword());
+		Assert::same(hash('sha256', $identity->getPassword(), false), $verneMQAccount->getPassword());
 		Assert::same('jane.doe@fastybird.com', $verneMQAccount->getUsername());
 	}
 
