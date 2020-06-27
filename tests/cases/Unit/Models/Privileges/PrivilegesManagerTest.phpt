@@ -20,7 +20,7 @@ final class PrivilegesManagerTest extends DbTestCase
 	/**
 	 * @throws FastyBird\AuthNode\Exceptions\InvalidStateException  Privilege could be assigned only to top level resources
 	 */
-	public function XtestCreateInvalid(): void
+	public function testCreateInvalid(): void
 	{
 		/** @var Models\Privileges\IPrivilegesManager $manager */
 		$manager = $this->getContainer()->getByType(Models\Privileges\IPrivilegesManager::class);

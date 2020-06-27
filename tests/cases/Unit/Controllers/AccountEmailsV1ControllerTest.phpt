@@ -23,7 +23,7 @@ final class AccountEmailsV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/account.emailsRead.php
 	 */
-	public function XtestRead(string $url, string $token, int $statusCode, string $fixture): void
+	public function testRead(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -55,7 +55,7 @@ final class AccountEmailsV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/account.emailsCreate.php
 	 */
-	public function XtestCreate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function testCreate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -88,7 +88,7 @@ final class AccountEmailsV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/account.emailsUpdate.php
 	 */
-	public function XtestUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function testUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -120,7 +120,7 @@ final class AccountEmailsV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/account.emailsDelete.php
 	 */
-	public function XtestDelete(string $url, string $token, int $statusCode, string $fixture): void
+	public function testDelete(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -152,7 +152,7 @@ final class AccountEmailsV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/account.emailsValidate.php
 	 */
-	public function XtestValidate(string $url, ?string $token, string $body, int $statusCode, string $fixture): void
+	public function testValidate(string $url, ?string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);

@@ -26,7 +26,7 @@ final class SynchroniseVernemqTest extends DbTestCase
 		parent::setUp();
 	}
 
-	public function XtestExecute(): void
+	public function testExecute(): void
 	{
 		/** @var Models\Accounts\IAccountRepository $accountRepository */
 		$accountRepository = $this->getContainer()->getByType(Models\Accounts\AccountRepository::class);

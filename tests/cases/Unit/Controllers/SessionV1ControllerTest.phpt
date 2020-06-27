@@ -24,7 +24,7 @@ final class SessionV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionRead.php
 	 */
-	public function XtestRead(string $url, string $token, int $statusCode, string $fixture): void
+	public function testRead(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -54,7 +54,7 @@ final class SessionV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionCreate.php
 	 */
-	public function XtestCreate(string $url, string $body, int $statusCode, string $fixture): void
+	public function testCreate(string $url, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -97,7 +97,7 @@ final class SessionV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionUpdate.php
 	 */
-	public function XtestUpdate(string $url, string $body, int $statusCode, string $fixture): void
+	public function testUpdate(string $url, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -140,7 +140,7 @@ final class SessionV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionDelete.php
 	 */
-	public function XtestDelete(string $url, string $token, int $statusCode, string $fixture): void
+	public function testDelete(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -170,7 +170,7 @@ final class SessionV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionRelationships.php
 	 */
-	public function XtestReadRelationship(string $url, string $token, int $statusCode, string $fixture): void
+	public function testReadRelationship(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);

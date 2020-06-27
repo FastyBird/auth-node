@@ -11,7 +11,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 final class PasswordTest extends BaseTestCase
 {
 
-	public function XtestPassword(): void
+	public function testPassword(): void
 	{
 		$password = new Helpers\Password(null, 'somePassword');
 		$hashedPassword = new Helpers\Password($password->getHash(), null, $password->getSalt());

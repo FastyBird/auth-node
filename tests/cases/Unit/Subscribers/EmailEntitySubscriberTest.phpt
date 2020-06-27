@@ -14,7 +14,7 @@ require_once __DIR__ . '/../DbTestCase.php';
 final class EmailEntitySubscriberTest extends DbTestCase
 {
 
-	public function XtestChangeDefault(): void
+	public function testChangeDefault(): void
 	{
 		/** @var Models\Emails\IEmailRepository $repository */
 		$repository = $this->getContainer()->getByType(Models\Emails\EmailRepository::class);

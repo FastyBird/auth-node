@@ -14,7 +14,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 final class SecurityHashTest extends BaseMockeryTestCase
 {
 
-	public function XtestPassword(): void
+	public function testPassword(): void
 	{
 		$dateFactory = Mockery::mock(NodeLibsHelpers\IDateFactory::class);
 		$dateFactory
