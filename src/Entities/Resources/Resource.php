@@ -296,7 +296,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	public function getPrivileges(): array
 	{
 		if ($this->parent !== null) {
-			return $this->getParent()->getPrivileges();
+			return $this->parent->getPrivileges();
 		}
 
 		return $this->privileges->toArray();
