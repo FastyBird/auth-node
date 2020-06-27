@@ -44,14 +44,14 @@ class MachineAccountIdentity extends Identity implements IMachineAccountIdentity
 	private $password;
 
 	/**
-	 * @param Entities\Accounts\IUserAccount $account
+	 * @param Entities\Accounts\IMachineAccount $account
 	 * @param string $uid
 	 * @param string $password
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
-		Entities\Accounts\IUserAccount $account,
+		Entities\Accounts\IMachineAccount $account,
 		string $uid,
 		string $password
 	) {

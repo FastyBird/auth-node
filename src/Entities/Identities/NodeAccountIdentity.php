@@ -44,14 +44,14 @@ class NodeAccountIdentity extends Identity implements INodeAccountIdentity
 	private $password;
 
 	/**
-	 * @param Entities\Accounts\IUserAccount $account
+	 * @param Entities\Accounts\INodeAccount $account
 	 * @param string $uid
 	 * @param string $password
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
-		Entities\Accounts\IUserAccount $account,
+		Entities\Accounts\INodeAccount $account,
 		string $uid,
 		string $password
 	) {
