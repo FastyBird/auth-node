@@ -23,7 +23,7 @@ final class PrivilegesV1Controller extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/privilegesRead.php
 	 */
-	public function testRead(string $url, string $token, int $statusCode, string $fixture): void
+	public function XtestRead(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -55,7 +55,7 @@ final class PrivilegesV1Controller extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/privilegesUpdate.php
 	 */
-	public function testUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function XtestUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);

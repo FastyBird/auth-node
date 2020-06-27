@@ -62,8 +62,9 @@ abstract class DbTestCase extends BaseMockeryTestCase
 	 */
 	protected function registerDatabaseSchemaFile(string $file): void
 	{
-		$this->sqlFiles[] = $file;
-		$this->sqlFiles = array_unique($this->sqlFiles);
+		if (!in_array($file, $this->sqlFiles, true)) {
+			$this->sqlFiles[] = $file;
+		}
 	}
 
 	/**
@@ -185,7 +186,7 @@ abstract class DbTestCase extends BaseMockeryTestCase
 				}
 			}
 
-			foreach ($this->sqlFiles as $file) {
+			foreach (array_reverse($this->sqlFiles) as $file) {
 				$this->loadFromFile($db, $file);
 			}
 

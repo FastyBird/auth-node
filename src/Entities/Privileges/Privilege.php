@@ -75,6 +75,7 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 	/**
 	 * @var Entities\Resources\IResource
 	 *
+	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Resources\Resource", inversedBy="privileges")
 	 * @ORM\JoinColumn(name="resource_id", referencedColumnName="resource_id", onDelete="cascade", nullable=false)
 	 */

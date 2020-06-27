@@ -27,7 +27,7 @@ final class AccountV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/accountRead.php
 	 */
-	public function testRead(string $url, string $token, int $statusCode, string $fixture): void
+	public function XtestRead(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -72,7 +72,7 @@ final class AccountV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/accountUpdate.php
 	 */
-	public function testUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function XtestUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -117,7 +117,7 @@ final class AccountV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/accountRelationships.php
 	 */
-	public function testReadRelationship(string $url, string $token, int $statusCode, string $fixture): void
+	public function XtestReadRelationship(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);

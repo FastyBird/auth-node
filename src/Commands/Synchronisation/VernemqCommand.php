@@ -147,7 +147,13 @@ class VernemqCommand extends Console\Command\Command
 						]);
 
 						try {
+							// Start transaction connection to the database
+							$this->getOrmConnection()->beginTransaction();
+
 							$verneMqAccount = $this->verneAccountsManager->create($create);
+
+							// Commit all changes into database
+							$this->getOrmConnection()->commit();
 
 							$io->text(sprintf('<bg=green;options=bold> Created </> <info>%s</info>', $verneMqAccount->getUsername()));
 
@@ -167,7 +173,13 @@ class VernemqCommand extends Console\Command\Command
 						]);
 
 						try {
+							// Start transaction connection to the database
+							$this->getOrmConnection()->beginTransaction();
+
 							$this->verneAccountsManager->update($verneMqAccount, $update);
+
+							// Commit all changes into database
+							$this->getOrmConnection()->commit();
 
 							$io->text(sprintf('<bg=green;options=bold> Updated </> <info>%s</info>', $verneMqAccount->getUsername()));
 

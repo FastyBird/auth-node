@@ -23,7 +23,7 @@ final class RulesV1Controller extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/rulesRead.php
 	 */
-	public function testRead(string $url, string $token, int $statusCode, string $fixture): void
+	public function XtestRead(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -55,7 +55,7 @@ final class RulesV1Controller extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/rulesCreate.php
 	 */
-	public function testCreate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function XtestCreate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -88,7 +88,7 @@ final class RulesV1Controller extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/rulesUpdate.php
 	 */
-	public function testUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function XtestUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -120,7 +120,7 @@ final class RulesV1Controller extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/rulesDelete.php
 	 */
-	public function testDelete(string $url, string $token, int $statusCode, string $fixture): void
+	public function XtestDelete(string $url, string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);

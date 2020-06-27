@@ -24,7 +24,7 @@ final class AccountIdentitiesV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/account.identitiesUpdate.php
 	 */
-	public function testUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function XtestUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
@@ -56,7 +56,7 @@ final class AccountIdentitiesV1ControllerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/account.identitiesRequestPassword.php
 	 */
-	public function testRequestPassword(string $url, string $body, int $statusCode, string $fixture): void
+	public function XtestRequestPassword(string $url, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);

@@ -100,6 +100,7 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	/**
 	 * @var Common\Collections\Collection<int, Entities\Privileges\IPrivilege>
 	 *
+	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Privileges\Privilege", mappedBy="resource", cascade={"persist", "remove"}, orphanRemoval=true)
 	 */
 	private $privileges;

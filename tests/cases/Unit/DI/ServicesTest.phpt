@@ -18,7 +18,7 @@ require_once __DIR__ . '/../../../bootstrap.php';
 final class ServicesTest extends BaseTestCase
 {
 
-	public function testServicesRegistration(): void
+	public function XtestServicesRegistration(): void
 	{
 		$configurator = Boot\Bootstrap::boot();
 		$configurator->addParameters([
