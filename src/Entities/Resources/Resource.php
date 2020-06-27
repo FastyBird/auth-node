@@ -18,6 +18,7 @@ namespace FastyBird\AuthNode\Entities\Resources;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
@@ -249,6 +250,10 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 */
 	public function setPrivileges(array $privileges): void
 	{
+		if ($this->parent !== null) {
+			throw new Exceptions\InvalidStateException('Privileges could be assigned to top level resource only');
+		}
+
 		$this->privileges = new Common\Collections\ArrayCollection();
 
 		// Process all passed entities...
@@ -274,6 +279,10 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 */
 	public function addPrivilege(Entities\Privileges\IPrivilege $privilege): void
 	{
+		if ($this->parent !== null) {
+			throw new Exceptions\InvalidStateException('Privilege could be assigned to top level resource only');
+		}
+
 		// Check if collection does not contain inserting entity
 		if (!$this->privileges->contains($privilege)) {
 			// ...and assign it to collection
@@ -286,6 +295,10 @@ class Resource extends NodeDatabaseEntities\Entity implements IResource
 	 */
 	public function getPrivileges(): array
 	{
+		if ($this->parent !== null) {
+			return $this->getParent()->getPrivileges();
+		}
+
 		return $this->privileges->toArray();
 	}
 

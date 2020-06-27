@@ -17,6 +17,7 @@ namespace FastyBird\AuthNode\Entities\Privileges;
 
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
@@ -94,6 +95,10 @@ class Privilege extends NodeDatabaseEntities\Entity implements IPrivilege
 		?Uuid\UuidInterface $id = null
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
+
+		if ($resource->getParent() !== null) {
+			throw new Exceptions\InvalidStateException('Privilege could be assigned only to top level resources');
+		}
 
 		$this->resource = $resource;
 
