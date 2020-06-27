@@ -97,7 +97,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$findIdentity = new Queries\FindIdentitiesQuery();
 		$findIdentity->byUid('deviceUsername');
 
-		$identity = $identityRepository->findOneBy($findIdentity);
+		$identity = $identityRepository->findOneBy($findIdentity, Entities\Identities\MachineAccountIdentity::class);
 
 		$updateIdentity = Utils\ArrayHash::from([
 			'password' => 'randomPassword',
@@ -131,7 +131,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$findIdentity = new Queries\FindIdentitiesQuery();
 		$findIdentity->byUid('deviceUsername');
 
-		$identity = $identityRepository->findOneBy($findIdentity);
+		$identity = $identityRepository->findOneBy($findIdentity, Entities\Identities\MachineAccountIdentity::class);
 
 		/** @var Models\Identities\IIdentitiesManager $identitiesManager */
 		$identitiesManager = $this->getContainer()->getByType(Models\Identities\IdentitiesManager::class);
