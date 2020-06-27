@@ -43,7 +43,8 @@ use Throwable;
  * @ORM\DiscriminatorMap({
  *      "account"   = "FastyBird\AuthNode\Entities\Accounts\Account",
  *      "user"      = "FastyBird\AuthNode\Entities\Accounts\UserAccount",
- *      "machine"   = "FastyBird\AuthNode\Entities\Accounts\MachineAccount"
+ *      "machine"   = "FastyBird\AuthNode\Entities\Accounts\MachineAccount",
+ *      "node"      = "FastyBird\AuthNode\Entities\Accounts\NodeAccount"
  * })
  * @ORM\MappedSuperclass
  */

@@ -167,7 +167,7 @@ services:
 
 	- {factory: FastyBird\AuthNode\Commands\Roles\CreateCommand}
 
-	- {factory: FastyBird\AuthNode\Commands\SyncCommand}
+	- {factory: FastyBird\AuthNode\Commands\Synchronisation\PermissionsCommand}
 
 	# Events subscribers
 	####################
@@ -219,6 +219,8 @@ services:
 	- {factory: FastyBird\AuthNode\Models\Rules\RulesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Rules\Rule))}
 
 	- {factory: FastyBird\AuthNode\Models\Tokens\TokensManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Tokens\Token))}
+
+	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account))}
 
 	# API controllers
 	#################

@@ -50,3 +50,7 @@ commands:
 				wasNotCreated	: "Role could not be created. Error was logged."
 
 		success	: "Created role : \"%name%\" with key: \"%key%\"."
+
+	sync:
+		validation:
+			notFinished	: "Synchronisation could not be finished: %s"

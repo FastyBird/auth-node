@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * SyncCommand.php
+ * PermissionsCommand.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -13,7 +13,7 @@
  * @date           24.06.20
  */
 
-namespace FastyBird\AuthNode\Commands;
+namespace FastyBird\AuthNode\Commands\Synchronisation;
 
 use Contributte\Translation;
 use Doctrine\Common;
@@ -42,7 +42,7 @@ use Throwable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class SyncCommand extends Console\Command\Command
+class PermissionsCommand extends Console\Command\Command
 {
 
 	/** @var Models\Privileges\IPrivilegeRepository */
@@ -108,7 +108,7 @@ class SyncCommand extends Console\Command\Command
 		parent::configure();
 
 		$this
-			->setName('fb:auth-node:sync')
+			->setName('fb:auth-node:sync:permissions')
 			->addOption('noconfirm', null, Input\InputOption::VALUE_NONE, 'do not ask for any confirmation')
 			->setDescription('Synchronize resources & privileges.')
 			->setHelp('This command synchronize all resources:privileges from all installed modules');
@@ -121,7 +121,7 @@ class SyncCommand extends Console\Command\Command
 	{
 		$io = new Style\SymfonyStyle($input, $output);
 
-		$io->title('FB auth node - synchronization');
+		$io->title('FB auth node - Permissions synchronization');
 
 		$resources = new Utils\ArrayHash();
 
@@ -214,7 +214,7 @@ class SyncCommand extends Console\Command\Command
 
 					$this->logger->error($ex->getMessage());
 
-					$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.sync.notFinished', ['error' => $ex->getMessage()])));
+					$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.notFinished', ['error' => $ex->getMessage()])));
 				}
 			}
 		}

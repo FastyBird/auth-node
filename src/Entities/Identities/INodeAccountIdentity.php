@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * IMachineAccountIdentity.php
+ * INodeAccountIdentity.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -10,20 +10,20 @@
  * @subpackage     Entities
  * @since          0.1.0
  *
- * @date           21.06.20
+ * @date           26.06.20
  */
 
 namespace FastyBird\AuthNode\Entities\Identities;
 
 /**
- * Machine identity entity interface
+ * Node account identity entity interface
  *
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IMachineAccountIdentity extends IIdentity
+interface INodeAccountIdentity extends IIdentity
 {
 
 	/**

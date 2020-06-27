@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * MachineAccountIdentity.php
+ * NodeAccountIdentity.php
  *
  * @license        More in license.md
  * @copyright      https://www.fastybird.com
@@ -21,7 +21,7 @@ use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use Throwable;
 
 /**
- * Machine account identity entity
+ * Node account identity entity
  *
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -32,7 +32,7 @@ use Throwable;
  *
  * @ORM\Entity
  */
-class MachineAccountIdentity extends Identity implements IMachineAccountIdentity
+class NodeAccountIdentity extends Identity implements INodeAccountIdentity
 {
 
 	/**

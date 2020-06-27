@@ -140,8 +140,8 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		ORM\UnitOfWork $uow
 	): void {
 		if (
-			$identity instanceof Entities\Identities\IUserAccountIdentity
-			&& $identity->getPassword()->getPassword() !== null
+			$identity instanceof Entities\Identities\INodeAccountIdentity
+			|| $identity instanceof Entities\Identities\IMachineAccountIdentity
 		) {
 			$findAccount = new Queries\FindVerneMqAccountsQuery();
 			$findAccount->forAccount($identity->getAccount());
@@ -151,13 +151,16 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 			if ($verneMqAccount === null) {
 				$verneMqAccount = new Entities\Vernemq\Account(
 					$identity->getUid(),
-					$identity->getPassword()->getPassword(),
+					$identity->getPassword(),
 					$identity->getAccount()
 				);
 
-				$verneMqAccount->addPublishAcl('/fb/+/#');
-				$verneMqAccount->addSubscribeAcl('/fb/+/#');
-				$verneMqAccount->addSubscribeAcl('$SYS/broker/log/#');
+				$verneMqAccount->addPublishAcl('/fb/' . $identity->getUid() . '/#');
+				$verneMqAccount->addSubscribeAcl('/fb/' . $identity->getUid() . '/#');
+
+				if ($identity instanceof Entities\Identities\INodeAccountIdentity) {
+					$verneMqAccount->addSubscribeAcl('$SYS/broker/log/#');
+				}
 
 				$uow->scheduleForInsert($verneMqAccount);
 
@@ -167,14 +170,14 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 				$passwordProperty = $classMetadata->getReflectionProperty('password');
 				$usernameProperty = $classMetadata->getReflectionProperty('username');
 
-				$verneMqAccount->setPassword($identity->getPassword()->getPassword());
+				$verneMqAccount->setPassword($identity->getPassword());
 				$verneMqAccount->setUsername($identity->getUid());
 
 				$uow->propertyChanged(
 					$verneMqAccount,
 					'password',
 					$passwordProperty->getValue($verneMqAccount),
-					$identity->getPassword()->getPassword()
+					$identity->getPassword()
 				);
 
 				$uow->propertyChanged(
@@ -187,7 +190,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 				$uow->scheduleExtraUpdate($verneMqAccount, [
 					'password' => [
 						$passwordProperty->getValue($verneMqAccount),
-						$identity->getPassword()->getPassword(),
+						$identity->getPassword(),
 					],
 					'username' => [
 						$usernameProperty->getValue($verneMqAccount),
