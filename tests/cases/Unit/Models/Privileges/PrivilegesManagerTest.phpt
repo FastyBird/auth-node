@@ -4,12 +4,7 @@ namespace Tests\Cases;
 
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use FastyBird\AuthNode\Router;
-use FastyBird\NodeWebServer\Http;
 use Nette\Utils;
-use React\Http\Io\ServerRequest;
-use Tester\Assert;
-use Tests\Tools;
 
 require_once __DIR__ . '/../../../../bootstrap.php';
 require_once __DIR__ . '/../../DbTestCase.php';

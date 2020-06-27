@@ -7,7 +7,6 @@ use Doctrine\Common;
 use FastyBird\AuthNode\Commands;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use IPub\SlimRouter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
