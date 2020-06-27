@@ -54,18 +54,6 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
-	 * @param string $hash
-	 *
-	 * @return void
-	 */
-	public function byHash(string $hash): void
-	{
-		$this->filter[] = function (ORM\QueryBuilder $qb) use ($hash): void {
-			$qb->andWhere('a.requestHash = :requestHash')->setParameter('requestHash', $hash);
-		};
-	}
-
-	/**
 	 * @param ORM\EntityRepository<Entities\Accounts\Account> $repository
 	 *
 	 * @return ORM\QueryBuilder
@@ -99,9 +87,6 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	private function createBasicDql(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
 		$qb = $repository->createQueryBuilder('a');
-
-		$qb->addSelect('details');
-		$qb->join('a.details', 'details');
 
 		foreach ($this->select as $modifier) {
 			$modifier($qb);
