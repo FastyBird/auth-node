@@ -5,7 +5,8 @@ INSERT IGNORE INTO `fb_accounts` (`account_id`, `account_type`, `account_status`
     (_binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'user', 'notActivated', '2019-05-29 07:38:24', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
     (_binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, 'user', 'deleted', '2019-05-29 07:38:24', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
     (_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, 'user', 'blocked', '2019-05-29 07:38:24', '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}', '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
-    (_binary 0x16E5DB2900064484AC385CDEA5A008F5, 'machine', 'activated', '2019-11-07 22:30:56', '[]', '2017-01-03 11:30:00', '2017-01-03 11:30:00');
+    (_binary 0x16E5DB2900064484AC385CDEA5A008F5, 'machine', 'activated', '2019-11-07 22:30:56', '[]', '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
+    (_binary 0xFF32AC4EF0104C859CB3D310F6708A4E, 'machine', 'activated', '2019-11-07 22:30:56', '[]', '2017-01-03 11:30:00', '2017-01-03 11:30:00');
 
 INSERT IGNORE INTO `fb_accounts_users` (`account_id`, `parent_id`, `account_request_hash`) VALUES
     (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, NULL, 'NGZqMmVxdnhubjJpIyMxNTc0NDUwNDAz'),
@@ -16,7 +17,8 @@ INSERT IGNORE INTO `fb_accounts_users` (`account_id`, `parent_id`, `account_requ
     (_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, NULL, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1');
 
 INSERT IGNORE INTO `fb_accounts_machines` (`account_id`, `parent_id`) VALUES
-    (_binary 0x16E5DB2900064484AC385CDEA5A008F5, NULL);
+    (_binary 0x16E5DB2900064484AC385CDEA5A008F5, NULL),
+    (_binary 0xFF32AC4EF0104C859CB3D310F6708A4E, NULL);
 
 INSERT IGNORE INTO `fb_accounts_details` (`detail_id`, `account_id`, `detail_first_name`, `detail_last_name`, `detail_middle_name`, `created_at`, `updated_at`) VALUES
     (_binary 0xEFBFBDCFAA74EFBFBD4CEFBFBDEFBFBD, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'John', 'Doe', NULL, '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
@@ -41,7 +43,8 @@ INSERT IGNORE INTO `fb_identities` (`identity_id`, `account_id`, `identity_uid`,
     (_binary 0xFAF7A863A49C4428A7571DE537773355, _binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, 'jane.doe@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
     (_binary 0xFD3385A5D8D744FBB7F1151C62A4A7B4, _binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, 'peter.pan@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
     (_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, _binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'bruce.wane@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
-    (_binary 0xFF99F3C470B943F99EF6C9B33B43ABCB, _binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'clark.kent@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}');
+    (_binary 0xFF99F3C470B943F99EF6C9B33B43ABCB, _binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'clark.kent@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '{"salt": "89bwo"}'),
+    (_binary 0x540F6CFC39D1417587FBAAC729D78C0A, _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, 'deviceUsername', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user', '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf', '[]');
 
 INSERT IGNORE INTO `fb_security_tokens` (`token_id`, `parent_id`, `token_token`, `token_valid_till`, `token_status`, `params`, `created_at`, `updated_at`, `token_type`) VALUES
     (_binary 0x4F6710A138AA42649C0CB45285181270, NULL, 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NTc2NDAwMCwianRpIjoiNGY2NzEwYTEtMzhhYS00MjY0LTljMGMtYjQ1Mjg1MTgxMjcwIiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6ImFjY2VzcyIsInJvbGVzIjpbImFkbWluaXN0cmF0b3IiXX0.Ijw2E1hhDvqzyDpNExUm0vAE0IK08UeZJUcDO5QMTOI', '2020-04-01 18:00:00', 'active', '[]', '2020-06-23 19:32:18', '2020-06-23 19:32:18', 'access_token'),

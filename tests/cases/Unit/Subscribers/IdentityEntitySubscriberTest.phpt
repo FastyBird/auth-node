@@ -60,7 +60,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
 
 		$findIdentity = new Queries\FindIdentitiesQuery();
-		$findIdentity->byUid('jane.doe@fastybird.com');
+		$findIdentity->byUid('deviceUsername');
 
 		$identity = $identityRepository->findOneBy($findIdentity, Entities\Identities\MachineAccountIdentity::class);
 
@@ -95,7 +95,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
 
 		$findIdentity = new Queries\FindIdentitiesQuery();
-		$findIdentity->byUid('jane.doe@fastybird.com');
+		$findIdentity->byUid('deviceUsername');
 
 		$identity = $identityRepository->findOneBy($findIdentity);
 
@@ -120,7 +120,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		Assert::notNull($verneMQAccount);
 		Assert::same($identity->getAccount()->getId()->toString(), $verneMQAccount->getAccount()->getId()->toString());
 		Assert::same(hash('sha256', $identity->getPassword(), false), $verneMQAccount->getPassword());
-		Assert::same('jane.doe@fastybird.com', $verneMQAccount->getUsername());
+		Assert::same('deviceUsername', $verneMQAccount->getUsername());
 	}
 
 	public function testDeleteEntity(): void
@@ -129,7 +129,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
 
 		$findIdentity = new Queries\FindIdentitiesQuery();
-		$findIdentity->byUid('jane.doe@fastybird.com');
+		$findIdentity->byUid('deviceUsername');
 
 		$identity = $identityRepository->findOneBy($findIdentity);
 
