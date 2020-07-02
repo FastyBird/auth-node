@@ -19,6 +19,7 @@ parameters:
 
 	rabbitmq:
 		queueName: fb.auth.node.exchange
+		routing: []
 
 #########################
 # Used Nette extensions #
