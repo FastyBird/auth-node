@@ -171,7 +171,7 @@ final class RolesV1Controller extends BaseV1Controller
 					$columnParts = explode('.', $match['key']);
 					$columnKey = end($columnParts);
 
-					if (Utils\Strings::startsWith($columnKey, 'role_')) {
+					if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'role_')) {
 						throw new NodeJsonApiExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 							$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
@@ -294,7 +294,7 @@ final class RolesV1Controller extends BaseV1Controller
 				$columnParts = explode('.', $match['key']);
 				$columnKey = end($columnParts);
 
-				if (Utils\Strings::startsWith($columnKey, 'role_')) {
+				if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'role_')) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 						$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
