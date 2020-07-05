@@ -163,17 +163,21 @@ final class RolesV1Controller extends BaseV1Controller
 				// Revert all changes when error occur
 				$this->getOrmConnection()->rollBack();
 
+				var_dump($ex->getMessage());
 				if (
 					preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false
 					&& array_key_exists('key', $match)
 				) {
-					if (Utils\Strings::startsWith($match['key'], 'role_')) {
+					$columnParts = explode('.', $match['key']);
+					$columnKey = end($columnParts);
+
+					if (Utils\Strings::startsWith($columnKey, 'role_')) {
 						throw new NodeJsonApiExceptions\JsonApiErrorException(
 							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 							$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
 							$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
 							[
-								'pointer' => '/data/attributes/' . Utils\Strings::substring($match['key'], 5),
+								'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 5),
 							]
 						);
 					}
@@ -287,13 +291,16 @@ final class RolesV1Controller extends BaseV1Controller
 				preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false
 				&& array_key_exists('key', $match)
 			) {
-				if (Utils\Strings::startsWith($match['key'], 'role_')) {
+				$columnParts = explode('.', $match['key']);
+				$columnKey = end($columnParts);
+
+				if (Utils\Strings::startsWith($columnKey, 'role_')) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 						$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
 						$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
 						[
-							'pointer' => '/data/attributes/' . Utils\Strings::substring($match['key'], 5),
+							'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 5),
 						]
 					);
 				}
