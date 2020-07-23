@@ -15,6 +15,7 @@
 
 namespace FastyBird\AuthNode\Commands\Tests;
 
+use DateTimeInterface;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
@@ -137,6 +138,10 @@ class GenerateTokenCommand extends Console\Command\Command
 
 		} else {
 			$validTill = Utils\DateTime::createFromFormat(DATE_ATOM, $validTill);
+		}
+
+		if (!$validTill instanceof DateTimeInterface) {
+			$validTill = null;
 		}
 
 		$token = $this->tokenBuilder->build(

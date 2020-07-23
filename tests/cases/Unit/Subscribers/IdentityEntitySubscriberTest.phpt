@@ -57,7 +57,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		Assert::same('newUsername', $verneMQAccount->getUsername());
 	}
 
-	public function XtestUpdateEntityPasswordUsername(): void
+	public function testUpdateEntityPasswordUsername(): void
 	{
 		/** @var Models\Identities\IIdentityRepository $identityRepository */
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
@@ -92,7 +92,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		Assert::same('newUsername', $verneMQAccount->getUsername());
 	}
 
-	public function XtestUpdateEntityPassword(): void
+	public function testUpdateEntityPassword(): void
 	{
 		/** @var Models\Identities\IIdentityRepository $identityRepository */
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
@@ -126,7 +126,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		Assert::same('deviceUsername', $verneMQAccount->getUsername());
 	}
 
-	public function XtestDeleteEntity(): void
+	public function testDeleteEntity(): void
 	{
 		/** @var Models\Identities\IIdentityRepository $identityRepository */
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);

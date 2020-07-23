@@ -69,7 +69,7 @@ class User extends NS\User
 	}
 
 	/**
-	 * @return Entities\Roles\IRole[]
+	 * @return string[]
 	 */
 	public function getRoles(): array
 	{
@@ -108,7 +108,7 @@ class User extends NS\User
 		foreach ($this->getRoles() as $role) {
 			if (
 				$this->getAuthorizator() === null
-				|| $this->getAuthorizator()->isAllowed($role->getRoleId(), $resource, $privilege)
+				|| $this->getAuthorizator()->isAllowed($role, $resource, $privilege)
 			) {
 				return true;
 			}
