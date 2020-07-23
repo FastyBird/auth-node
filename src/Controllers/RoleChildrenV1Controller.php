@@ -4,7 +4,7 @@
  * RoleChildrenV1Controller.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -30,9 +30,6 @@ use Psr\Http\Message;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- *
- * @Secured
- * @Secured\Permission(fastybird/auth-node:access)
  */
 final class RoleChildrenV1Controller extends BaseV1Controller
 {
@@ -60,7 +57,7 @@ final class RoleChildrenV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,

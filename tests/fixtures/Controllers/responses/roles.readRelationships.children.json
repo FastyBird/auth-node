@@ -1,19 +1,19 @@
 {
-  "data" : [
-    {
-      "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
-      "type" : "auth-node/role"
-    }
-  ],
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  },
   "jsonapi" : {
     "version" : "1.1"
   },
   "links" : {
-    "related" : "/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/children",
-    "self" : "/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/relationships/children"
+    "self" : "/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/relationships/children",
+    "related" : "/v1/roles/efbfbd04-0158-efbf-bdef-bfbd4defbfbd/children"
   },
-  "meta" : {
-    "author" : "FastyBird dev team",
-    "copyright" : "FastyBird s.r.o"
-  }
+  "data" : [
+    {
+      "type" : "auth-node/role",
+      "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61"
+    }
+  ]
 }

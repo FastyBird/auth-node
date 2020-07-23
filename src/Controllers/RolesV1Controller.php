@@ -4,7 +4,7 @@
  * RolesV1Controller.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -25,7 +25,6 @@ use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
-use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
 use Nette\Utils;
 use Psr\Http\Message;
 use Throwable;
@@ -37,9 +36,6 @@ use Throwable;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- *
- * @Secured
- * @Secured\Permission(fastybird/auth-node:access)
  */
 final class RolesV1Controller extends BaseV1Controller
 {
@@ -75,7 +71,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -98,7 +94,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -120,123 +116,7 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:create configuration)
-	 */
-	public function create(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		$document = $this->createDocument($request);
-
-		if ($document->getResource()->getType() === Schemas\Roles\RoleSchema::SCHEMA_TYPE) {
-			try {
-				// Start transaction connection to the database
-				$this->getOrmConnection()->beginTransaction();
-
-				$role = $this->rolesManager->create($this->roleHydrator->hydrate($document));
-
-				// Commit all changes into database
-				$this->getOrmConnection()->commit();
-
-			} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
-
-				throw $ex;
-
-			} catch (DoctrineCrudExceptions\EntityCreationException | DoctrineCrudExceptions\MissingRequiredFieldException $ex) {
-				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
-
-				$pointer = 'data/attributes/' . $ex->getField();
-
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.missingRequired.heading'),
-					$this->translator->translate('//node.base.messages.missingRequired.message'),
-					[
-						'pointer' => $pointer,
-					]
-				);
-
-			} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
-				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
-
-				var_dump($ex->getMessage());
-				if (
-					preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false
-					&& array_key_exists('key', $match)
-				) {
-					$columnParts = explode('.', $match['key']);
-					$columnKey = end($columnParts);
-
-					if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'role_')) {
-						throw new NodeJsonApiExceptions\JsonApiErrorException(
-							StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-							$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
-							$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
-							[
-								'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 5),
-							]
-						);
-					}
-				}
-
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
-					$this->translator->translate('//node.base.messages.uniqueConstraint.message')
-				);
-
-			} catch (Throwable $ex) {
-				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
-
-				// Log catched exception
-				$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
-					'exception' => [
-						'message' => $ex->getMessage(),
-						'code'    => $ex->getCode(),
-					],
-				]);
-
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.notCreated.heading'),
-					$this->translator->translate('messages.notCreated.message')
-				);
-			}
-
-			/** @var NodeWebServerHttp\Response $response */
-			$response = $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($role))
-				->withStatus(StatusCodeInterface::STATUS_CREATED);
-
-			return $response;
-		}
-
-		throw new NodeJsonApiExceptions\JsonApiErrorException(
-			StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-			$this->translator->translate('messages.invalidType.heading'),
-			$this->translator->translate('messages.invalidType.message'),
-			[
-				'pointer' => '/data/type',
-			]
-		);
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 * @throws Doctrine\DBAL\ConnectionException
-	 *
-	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:update configuration)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -342,76 +222,9 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:delete configuration)
-	 */
-	public function delete(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		$role = $this->findRole($request->getAttribute(Router\Router::URL_ITEM_ID));
-
-		if ($role->isLocked()) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.systemNotDeletable.heading'),
-				$this->translator->translate('messages.systemNotDeletable.message')
-			);
-		}
-
-		try {
-			// Start transaction connection to the database
-			$this->getOrmConnection()->beginTransaction();
-
-			// Move device back into warehouse
-			$this->rolesManager->delete($role);
-
-			// Commit all changes into database
-			$this->getOrmConnection()->commit();
-
-		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			throw $ex;
-
-		} catch (Throwable $ex) {
-			// Log catched exception
-			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
-				'exception' => [
-					'message' => $ex->getMessage(),
-					'code'    => $ex->getCode(),
-				],
-			]);
-
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notDeleted.heading'),
-				$this->translator->translate('messages.notDeleted.message')
-			);
-		}
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
-
-		return $response;
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 *
-	 * @Secured
-	 * @Secured\Permission(fastybird/manage-access-control:read configuration)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
@@ -428,10 +241,6 @@ final class RolesV1Controller extends BaseV1Controller
 		} elseif ($relationEntity === Schemas\Roles\RoleSchema::RELATIONSHIPS_CHILDREN) {
 			return $response
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($role->getChildren()));
-
-		} elseif ($relationEntity === Schemas\Roles\RoleSchema::RELATIONSHIPS_RULES) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($role->getRules()));
 		}
 
 		$this->throwUnknownRelation($relationEntity);

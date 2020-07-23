@@ -12,11 +12,11 @@
 
 Auth node is a microservice for managing application accounts & sessions.
 
-FastyBird auth node is an Apache2 licensed distributed accounts storage microservice, developed in PHP with [Nette framework](https://nette.org).
+FastyBird auth node is an [Apache2](http://github.com/fastybird/auth-node/blob/master/license.md) licensed distributed accounts storage microservice, developed in PHP with [Nette framework](https://nette.org).
 
 ## Requirements
 
-FastyBird auth node is tested against PHP 7.3 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server
+FastyBird auth node is tested against PHP 7.4 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server
 
 ## Getting started
 
@@ -82,7 +82,7 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 | | |
-| `FB_NODE_PARAMETER__NODE_TOKEN_SIGNATURE=` | Account access token signature string |
+| `FB_NODE_PARAMETER__SECURITY_TOKEN_SIGNATURE=` | Account access token signature string |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
 
@@ -131,4 +131,4 @@ For release info check [release page](https://github.com/FastyBird/auth-node/rel
 </table>
 
 ***
-Homepage [http://www.fastybird.com](http://www.fastybird.com) and repository [http://github.com/fastybird/auth-node](http://github.com/fastybird/auth-node).
+Homepage [http://fastybird.com](http://fastybird.com) and repository [http://github.com/fastybird/auth-node](http://github.com/fastybird/auth-node).

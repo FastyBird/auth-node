@@ -5,7 +5,7 @@ namespace Tests\Cases;
 use DateTimeImmutable;
 use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Router;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
+use FastyBird\DateTimeFactory;
 use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;
 use Mockery;
@@ -16,6 +16,9 @@ use Tests\Tools;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
+/**
+ * @testCase
+ */
 final class AccountV1ControllerTest extends DbTestCase
 {
 
@@ -40,13 +43,13 @@ final class AccountV1ControllerTest extends DbTestCase
 			]
 		);
 
-		$dateTimeFactory = Mockery::mock(NodeLibsHelpers\DateFactory::class);
+		$dateTimeFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
 		$dateTimeFactory
 			->shouldReceive('getNow')
 			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
 
 		$this->mockContainerService(
-			NodeLibsHelpers\IDateFactory::class,
+			DateTimeFactory\DateTimeFactory::class,
 			$dateTimeFactory
 		);
 
@@ -86,13 +89,13 @@ final class AccountV1ControllerTest extends DbTestCase
 			$body
 		);
 
-		$dateTimeFactory = Mockery::mock(NodeLibsHelpers\DateFactory::class);
+		$dateTimeFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
 		$dateTimeFactory
 			->shouldReceive('getNow')
 			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
 
 		$this->mockContainerService(
-			NodeLibsHelpers\IDateFactory::class,
+			DateTimeFactory\DateTimeFactory::class,
 			$dateTimeFactory
 		);
 
@@ -130,13 +133,13 @@ final class AccountV1ControllerTest extends DbTestCase
 			]
 		);
 
-		$dateTimeFactory = Mockery::mock(NodeLibsHelpers\DateFactory::class);
+		$dateTimeFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
 		$dateTimeFactory
 			->shouldReceive('getNow')
 			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
 
 		$this->mockContainerService(
-			NodeLibsHelpers\IDateFactory::class,
+			DateTimeFactory\DateTimeFactory::class,
 			$dateTimeFactory
 		);
 

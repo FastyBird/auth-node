@@ -4,7 +4,7 @@
  * RoleSchema.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Schemas
@@ -48,24 +48,18 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 */
 	public const RELATIONSHIPS_PARENT = 'parent';
 	public const RELATIONSHIPS_CHILDREN = 'children';
-	public const RELATIONSHIPS_RULES = 'rules';
 
 	/** @var Models\Roles\IRoleRepository */
 	private $roleRepository;
-
-	/** @var Models\Rules\IRuleRepository */
-	private $ruleRepository;
 
 	/** @var Routing\IRouter */
 	private $router;
 
 	public function __construct(
 		Models\Roles\IRoleRepository $roleRepository,
-		Models\Rules\IRuleRepository $ruleRepository,
 		Routing\IRouter $router
 	) {
 		$this->roleRepository = $roleRepository;
-		$this->ruleRepository = $ruleRepository;
 
 		$this->router = $router;
 	}
@@ -100,7 +94,6 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 			'name'        => $role->getName(),
 			'description' => $role->getDescription(),
 
-			'locked'        => $role->isLocked(),
 			'anonymous'     => $role->isAnonymous(),
 			'authenticated' => $role->isAuthenticated(),
 			'administrator' => $role->isAdministrator(),
@@ -141,11 +134,6 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 		$relationships = [
 			self::RELATIONSHIPS_CHILDREN => [
 				self::RELATIONSHIP_DATA          => $this->getChildren($role),
-				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
-			],
-			self::RELATIONSHIPS_RULES => [
-				self::RELATIONSHIP_DATA          => $this->getRules($role),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
@@ -198,21 +186,6 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 					'count' => count($role->getChildren()),
 				]
 			);
-
-		} elseif ($name === self::RELATIONSHIPS_RULES) {
-			return new JsonApi\Schema\Link(
-				false,
-				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ROLE_RULES,
-					[
-						Router\Router::URL_ITEM_ID => $role->getPlainId(),
-					]
-				),
-				true,
-				[
-					'count' => count($role->getRules()),
-				]
-			);
 		}
 
 		return parent::getRelationshipRelatedLink($role, $name);
@@ -233,7 +206,6 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 		if (
 			$name === self::RELATIONSHIPS_CHILDREN
 			|| ($name === self::RELATIONSHIPS_PARENT && $role->getParent() !== null)
-			|| $name === self::RELATIONSHIPS_RULES
 		) {
 			return new JsonApi\Schema\Link(
 				false,
@@ -263,19 +235,6 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 		$findQuery->forParent($role);
 
 		return $this->roleRepository->findAllBy($findQuery);
-	}
-
-	/**
-	 * @param Entities\Roles\IRole $role
-	 *
-	 * @return Entities\Rules\IRule[]
-	 */
-	private function getRules(Entities\Roles\IRole $role): array
-	{
-		$findQuery = new Queries\FindRulesQuery();
-		$findQuery->forRole($role);
-
-		return $this->ruleRepository->findAllBy($findQuery);
 	}
 
 }

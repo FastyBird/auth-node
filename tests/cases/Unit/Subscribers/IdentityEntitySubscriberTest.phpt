@@ -12,6 +12,9 @@ use Tester\Assert;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
+/**
+ * @testCase
+ */
 final class IdentityEntitySubscriberTest extends DbTestCase
 {
 
@@ -54,7 +57,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		Assert::same('newUsername', $verneMQAccount->getUsername());
 	}
 
-	public function testUpdateEntityPasswordUsername(): void
+	public function XtestUpdateEntityPasswordUsername(): void
 	{
 		/** @var Models\Identities\IIdentityRepository $identityRepository */
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
@@ -89,7 +92,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		Assert::same('newUsername', $verneMQAccount->getUsername());
 	}
 
-	public function testUpdateEntityPassword(): void
+	public function XtestUpdateEntityPassword(): void
 	{
 		/** @var Models\Identities\IIdentityRepository $identityRepository */
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
@@ -123,7 +126,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		Assert::same('deviceUsername', $verneMQAccount->getUsername());
 	}
 
-	public function testDeleteEntity(): void
+	public function XtestDeleteEntity(): void
 	{
 		/** @var Models\Identities\IIdentityRepository $identityRepository */
 		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);

@@ -1,28 +1,7 @@
 {
-  "data" : {
-    "attributes" : {
-      "expiration" : "2020-04-01T18:00:00+00:00",
-      "refresh" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NjAwMTYwMCwianRpIjoiMzViZTU2MjQtMDE2MC00MzIzLTgzZWUtNmY1OTAwMDkzNGI0Iiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6InJlZnJlc2gifQ.JFlQH71H4FzdO8stTC8AuMNq1YDoCgXY7Ni0pyNX7NY",
-      "token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NTc2NDAwMCwianRpIjoiNGY2NzEwYTEtMzhhYS00MjY0LTljMGMtYjQ1Mjg1MTgxMjcwIiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6ImFjY2VzcyIsInJvbGVzIjpbImFkbWluaXN0cmF0b3IiXX0.Ijw2E1hhDvqzyDpNExUm0vAE0IK08UeZJUcDO5QMTOI",
-      "token_type" : "Bearer"
-    },
-    "id" : "4f6710a1-38aa-4264-9c0c-b45285181270",
-    "links" : {
-      "self" : "/v1/session"
-    },
-    "relationships" : {
-      "account" : {
-        "data" : {
-          "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-          "type" : "auth-node/user-account"
-        },
-        "links" : {
-          "related" : "/v1/me",
-          "self" : "/v1/session/relationships/account"
-        }
-      }
-    },
-    "type" : "auth-node/session"
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
   },
   "jsonapi" : {
     "version" : "1.1"
@@ -30,8 +9,29 @@
   "links" : {
     "self" : "/v1/session"
   },
-  "meta" : {
-    "author" : "FastyBird dev team",
-    "copyright" : "FastyBird s.r.o"
+  "data" : {
+    "type" : "auth-node/session",
+    "id" : "4f6710a1-38aa-4264-9c0c-b45285181270",
+    "attributes" : {
+      "token" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8",
+      "expiration" : "2020-04-01T18:00:00+00:00",
+      "token_type" : "Bearer",
+      "refresh" : "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1ODU3NDI0MDAsImV4cCI6MTU4NjAwMTYwMCwianRpIjoiMzViZTU2MjQtMDE2MC00MzIzLTgzZWUtNmY1OTAwMDkzNGI0Iiwic3ViIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0IiwidHlwZSI6InJlZnJlc2gifQ.JFlQH71H4FzdO8stTC8AuMNq1YDoCgXY7Ni0pyNX7NY"
+    },
+    "relationships" : {
+      "account" : {
+        "links" : {
+          "self" : "/v1/session/relationships/account",
+          "related" : "/v1/me"
+        },
+        "data" : {
+          "type" : "auth-node/user-account",
+          "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
+        }
+      }
+    },
+    "links" : {
+      "self" : "/v1/session"
+    }
   }
 }

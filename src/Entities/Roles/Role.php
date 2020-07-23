@@ -4,7 +4,7 @@
  * Role.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -17,7 +17,7 @@ namespace FastyBird\AuthNode\Entities\Roles;
 
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AuthNode\Entities;
+use FastyBird\NodeAuth\Constants as NodeAuthConstants;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
@@ -39,9 +39,10 @@ use Throwable;
  *     }
  * )
  */
-class Role extends NodeDatabaseEntities\Entity implements IRole
+class Role implements IRole
 {
 
+	use NodeDatabaseEntities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 	use DoctrineBlameable\Entities\TEntityCreator;
@@ -89,14 +90,6 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	private $children;
 
 	/**
-	 * @var Common\Collections\Collection<int, Entities\Rules\IRule>
-	 *
-	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Rules\Rule", mappedBy="role", cascade={"persist", "remove"}, orphanRemoval=true)
-	 */
-	private $rules;
-
-	/**
 	 * @param string $name
 	 * @param string $description
 	 * @param Uuid\UuidInterface|null $id
@@ -114,7 +107,6 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 		$this->description = $description;
 
 		$this->children = new Common\Collections\ArrayCollection();
-		$this->rules = new Common\Collections\ArrayCollection();
 	}
 
 	/**
@@ -223,87 +215,11 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	}
 
 	/**
-	 * @param Entities\Rules\IRule[] $rules
-	 *
-	 * @return void
-	 */
-	public function setRules(array $rules): void
-	{
-		$this->rules = new Common\Collections\ArrayCollection();
-
-		// Process all passed entities...
-		/** @var Entities\Rules\IRule $entity */
-		foreach ($rules as $entity) {
-			if (!$this->rules->contains($entity)) {
-				// ...and assign them to collection
-				$this->rules->add($entity);
-			}
-		}
-
-		/** @var Entities\Rules\IRule $entity */
-		foreach ($this->rules as $entity) {
-			if (!in_array($entity, $rules, true)) {
-				// ...and remove it from collection
-				$this->rules->removeElement($entity);
-			}
-		}
-	}
-
-	/**
-	 * @param Entities\Rules\IRule $rule
-	 *
-	 * @return void
-	 */
-	public function addRule(Entities\Rules\IRule $rule): void
-	{
-		if (!$this->rules->contains($rule)) {
-			$this->rules->add($rule);
-		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRules(): array
-	{
-		return $this->rules->toArray();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function hasAccess(
-		Entities\Resources\IResource $resource,
-		Entities\Privileges\IPrivilege $privilege
-	): bool {
-		/** @var Entities\Rules\IRule $rule */
-		foreach ($this->rules as $rule) {
-			if (
-				$rule->getResource()->getId()->equals($resource->getId())
-				&& $rule->getPrivilege()->getId()->equals($privilege->getId())
-				&& $rule->hasAccess()
-			) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function isLocked(): bool
-	{
-		return in_array($this->name, [IRole::ROLE_ANONYMOUS, IRole::ROLE_AUTHENTICATED, IRole::ROLE_ADMINISTRATOR], true);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	public function isAnonymous(): bool
 	{
-		return $this->name === IRole::ROLE_ANONYMOUS;
+		return $this->name === NodeAuthConstants::ROLE_ANONYMOUS;
 	}
 
 	/**
@@ -311,7 +227,11 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 */
 	public function isAuthenticated(): bool
 	{
-		return $this->name === IRole::ROLE_AUTHENTICATED;
+		return in_array($this->name, [
+			NodeAuthConstants::ROLE_MANAGER,
+			NodeAuthConstants::ROLE_USER,
+			NodeAuthConstants::ROLE_VISITOR,
+		], true);
 	}
 
 	/**
@@ -319,7 +239,7 @@ class Role extends NodeDatabaseEntities\Entity implements IRole
 	 */
 	public function isAdministrator(): bool
 	{
-		return $this->name === IRole::ROLE_ADMINISTRATOR;
+		return $this->name === NodeAuthConstants::ROLE_ADMINISTRATOR;
 	}
 
 	/**

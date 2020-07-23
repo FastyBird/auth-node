@@ -2,7 +2,7 @@
 # Service DI configuration
 #
 # @license		More in license.md
-# @copyright	https://www.fastybird.com
+# @copyright	https://fastybird.com
 # @author		Adam Kadlec <adam.kadlec@fastybird.com>
 # @package		FastyBird:AuthNode!
 # @subpackage	config
@@ -15,36 +15,49 @@
 ##############################
 
 parameters:
-	origin: com.fastybird.auth-node
-
-	rabbitmq:
-		queueName: fb.auth.node.exchange
-		routing: []
+	security:
+		token:
+			issuer:		com.fastybird.auth-node
 
 #########################
 # Used Nette extensions #
 #########################
 
 extensions:
-	contributteTranslation		: Contributte\Translation\DI\TranslationExtension
-	ipubDoctrineConsistence		: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
-	ipubDoctrineCrud			: IPub\DoctrineCrud\DI\DoctrineCrudExtension
-	ipubDoctrineTimestampable	: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
-	nettrineAnnotations			: Nettrine\Annotations\DI\AnnotationsExtension
-	nettrineCache				: Nettrine\Cache\DI\CacheExtension
-	nettrineDbal				: Nettrine\DBAL\DI\DbalExtension
-	nettrineOrm					: Nettrine\ORM\DI\OrmExtension
-	nettrineOrmAnnotations		: Nettrine\ORM\DI\OrmAnnotationsExtension
-	nettrineOrmConsole			: Nettrine\ORM\DI\OrmConsoleExtension
-	nettrineOrmCache			: Nettrine\ORM\DI\OrmCacheExtension
-	nodeWebServer				: FastyBird\NodeWebServer\DI\NodeWebServerExtension
-	nodeDatabase				: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
-	nodeJsonApi					: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
-	nodesMetadata				: FastyBird\NodesMetadata\DI\NodesMetadataExtension
+	contributteTranslation				: Contributte\Translation\DI\TranslationExtension
+	nettrineAnnotations					: Nettrine\Annotations\DI\AnnotationsExtension
+	nettrineCache						: Nettrine\Cache\DI\CacheExtension
+	nettrineDbal						: Nettrine\DBAL\DI\DbalExtension
+	nettrineOrm							: Nettrine\ORM\DI\OrmExtension
+	nettrineOrmAnnotations				: Nettrine\ORM\DI\OrmAnnotationsExtension
+	nettrineOrmConsole					: Nettrine\ORM\DI\OrmConsoleExtension
+	nettrineOrmCache					: Nettrine\ORM\DI\OrmCacheExtension
+	ipubDoctrineConsistence				: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
+	ipubDoctrineCrud					: IPub\DoctrineCrud\DI\DoctrineCrudExtension
+	ipubDoctrineTimestampable			: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
+	ipubDoctrineDynamicDiscriminatorMap	: IPub\DoctrineDynamicDiscriminatorMap\DI\DoctrineDynamicDiscriminatorMapExtension
+	fbDateTimeFactory					: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
+	nodeAuth							: FastyBird\NodeAuth\DI\NodeAuthExtension
+	nodeDatabase						: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
+	nodeJsonApi							: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
+	nodeMetadata						: FastyBird\NodeMetadata\DI\NodeMetadataExtension
+	nodeWebServer						: FastyBird\NodeWebServer\DI\NodeWebServerExtension
 
 ##################################
 # Nette extensions configuration #
 ##################################
+
+# Node authentication
+#####################
+nodeAuth:
+	token:
+		issuer: %security.token.issuer%
+		signature: %security.token.signature%
+	enable:
+		middleware: true
+		doctrine:
+			mapping: true
+			models: true
 
 # Node web server
 #################
@@ -110,8 +123,10 @@ nettrineOrm:
 nettrineOrmAnnotations:
 	namespaces:
 		- FastyBird\AuthNode\Entities
+		- FastyBird\NodeAuth\Entities
 	paths:
 		- %appDir%/src/Entities
+		- %appDir%/vendor/fastybird/node-auth/src/Entities
 
 #############################
 # Node services definitions #
@@ -123,38 +138,20 @@ services:
 
 	- {factory: FastyBird\AuthNode\Helpers\SecurityHash}
 
+	- {factory: FastyBird\AuthNode\Security\IdentityFactory}
+
 	- {factory: FastyBird\AuthNode\Security\Authenticator}
 
-	- {factory: FastyBird\AuthNode\Security\Authorizator}
-
-	- {factory: FastyBird\AuthNode\Security\TokenReader}
-
-	-
-		factory: FastyBird\AuthNode\Security\TokenBuilder
-		arguments:
-			tokenSignature: %node.token.signature%
-
-	# Define JWT services
-	#####################
-
-	- {factory: Lcobucci\JWT\Signer\Hmac\Sha256}
-
-	- {factory: Lcobucci\JWT\Parser}
-
 	# Nette services overwrite
-	##########################
-
 	security.user: FastyBird\AuthNode\Security\User
 	security.userStorage: FastyBird\AuthNode\Security\UserStorage
 
 	# Http router
 	#############
 
-	- {factory: FastyBird\AuthNode\Middleware\AccountMiddleware, tags: [middleware: {priority: 15}]}
+	- {factory: FastyBird\AuthNode\Middleware\AccessMiddleware, tags: [middleware: {priority: 50}]}
 
 	- {factory: FastyBird\AuthNode\Middleware\UrlFormatMiddleware, tags: [middleware: {priority: 150}]}
-
-	- {factory: FastyBird\AuthNode\Middleware\AccessMiddleware}
 
 	-
 		factory: FastyBird\AuthNode\Router\Router
@@ -166,11 +163,9 @@ services:
 
 	- {factory: FastyBird\AuthNode\Commands\Accounts\CreateCommand}
 
-	- {factory: FastyBird\AuthNode\Commands\Roles\CreateCommand}
-
-	- {factory: FastyBird\AuthNode\Commands\Synchronisation\PermissionsCommand}
-
 	- {factory: FastyBird\AuthNode\Commands\Synchronisation\VernemqCommand}
+
+	- {factory: FastyBird\AuthNode\Commands\Tests\GenerateTokenCommand}
 
 	# Events subscribers
 	####################
@@ -192,15 +187,7 @@ services:
 
 	- {factory: FastyBird\AuthNode\Models\Identities\IdentityRepository}
 
-	- {factory: FastyBird\AuthNode\Models\Privileges\PrivilegeRepository}
-
-	- {factory: FastyBird\AuthNode\Models\Resources\ResourceRepository}
-
 	- {factory: FastyBird\AuthNode\Models\Roles\RoleRepository}
-
-	- {factory: FastyBird\AuthNode\Models\Rules\RuleRepository}
-
-	- {factory: FastyBird\AuthNode\Models\Tokens\TokenRepository}
 
 	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountRepository}
 
@@ -213,15 +200,7 @@ services:
 
 	- {factory: FastyBird\AuthNode\Models\Identities\IdentitiesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Identities\Identity))}
 
-	- {factory: FastyBird\AuthNode\Models\Privileges\PrivilegesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Privileges\Privilege))}
-
-	- {factory: FastyBird\AuthNode\Models\Resources\ResourcesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Resources\Resource))}
-
 	- {factory: FastyBird\AuthNode\Models\Roles\RolesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Roles\Role))}
-
-	- {factory: FastyBird\AuthNode\Models\Rules\RulesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Rules\Rule))}
-
-	- {factory: FastyBird\AuthNode\Models\Tokens\TokensManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Tokens\Token))}
 
 	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account))}
 
@@ -246,18 +225,6 @@ services:
 
 	- {factory: FastyBird\AuthNode\Controllers\RoleChildrenV1Controller, tags: [nette.inject]}
 
-	- {factory: FastyBird\AuthNode\Controllers\RoleRulesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\ResourcesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\ResourceChildrenV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\ResourcePrivilegesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\PrivilegesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\RulesV1Controller, tags: [nette.inject]}
-
 	# API schemas
 	#############
 
@@ -273,12 +240,6 @@ services:
 
 	- {factory: FastyBird\AuthNode\Schemas\Roles\RoleSchema}
 
-	- {factory: FastyBird\AuthNode\Schemas\Resources\ResourceSchema}
-
-	- {factory: FastyBird\AuthNode\Schemas\Privileges\PrivilegeSchema}
-
-	- {factory: FastyBird\AuthNode\Schemas\Rules\RuleSchema}
-
 	# API hydrators
 	###############
 
@@ -287,9 +248,3 @@ services:
 	- {factory: FastyBird\AuthNode\Hydrators\Emails\EmailHydrator}
 
 	- {factory: FastyBird\AuthNode\Hydrators\Roles\RoleHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Resources\ResourceHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Privileges\PrivilegeHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Rules\RuleHydrator}

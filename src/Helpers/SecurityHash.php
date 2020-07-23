@@ -4,7 +4,7 @@
  * SecurityHash.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -16,7 +16,7 @@
 namespace FastyBird\AuthNode\Helpers;
 
 use DateTimeImmutable;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
+use FastyBird\DateTimeFactory;
 use Nette;
 use Nette\Utils;
 
@@ -38,11 +38,11 @@ final class SecurityHash
 	/** @var  string */
 	private $interval;
 
-	/** @var NodeLibsHelpers\IDateFactory */
+	/** @var DateTimeFactory\DateTimeFactory */
 	private $dateTimeFactory;
 
 	public function __construct(
-		NodeLibsHelpers\IDateFactory $dateTimeFactory,
+		DateTimeFactory\DateTimeFactory $dateTimeFactory,
 		string $interval = '+ 1 hour'
 	) {
 		$this->interval = $interval;

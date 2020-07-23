@@ -4,7 +4,7 @@
  * IRole.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -36,13 +36,6 @@ interface IRole extends NS\IRole,
 	DoctrineTimestampable\Entities\IEntityUpdated,
 	DoctrineBlameable\Entities\IEntityEditor
 {
-
-	// The identifier of the anonymous role
-	public const ROLE_ANONYMOUS = 'guest';
-	// The identifier of the authenticated role
-	public const ROLE_AUTHENTICATED = 'authenticated';
-	// The identifier of the administrator role
-	public const ROLE_ADMINISTRATOR = 'administrator';
 
 	/**
 	 * @param string $name
@@ -98,29 +91,6 @@ interface IRole extends NS\IRole,
 	 * @return IRole[]
 	 */
 	public function getChildren(): array;
-
-	/**
-	 * @return Entities\Rules\IRule[]
-	 */
-	public function getRules(): array;
-
-	/**
-	 * @param Entities\Resources\IResource $resource
-	 * @param Entities\Privileges\IPrivilege $privilege
-	 *
-	 * @return bool
-	 */
-	public function hasAccess(
-		Entities\Resources\IResource $resource,
-		Entities\Privileges\IPrivilege $privilege
-	): bool;
-
-	/**
-	 * Check if role is one from system roles
-	 *
-	 * @return bool
-	 */
-	public function isLocked(): bool;
 
 	/**
 	 * Check if role is guest

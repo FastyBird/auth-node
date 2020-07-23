@@ -4,7 +4,7 @@
  * IIdentity.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -32,8 +32,8 @@ use Nette\Security as NS;
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
 interface IIdentity extends NS\IIdentity,
+	DoctrineCrud\Entities\IIdentifiedEntity,
 	NodeDatabaseEntities\IEntityParams,
-	DoctrineCrud\Entities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineBlameable\Entities\IEntityCreator,
 	DoctrineTimestampable\Entities\IEntityUpdated,

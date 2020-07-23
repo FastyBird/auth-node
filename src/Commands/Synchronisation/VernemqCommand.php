@@ -4,7 +4,7 @@
  * VernemqCommand.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Commands
@@ -107,7 +107,7 @@ class VernemqCommand extends Console\Command\Command
 	{
 		$io = new Style\SymfonyStyle($input, $output);
 
-		$io->title('FB auth node - Permissions synchronization');
+		$io->title('FB auth node - Verne MQ accounts synchronization');
 
 		$findAccount = new Queries\FindAccountsQuery();
 

@@ -4,7 +4,7 @@
  * Account.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -48,9 +48,10 @@ use Throwable;
  * })
  * @ORM\MappedSuperclass
  */
-abstract class Account extends NodeDatabaseEntities\Entity implements IAccount
+abstract class Account implements IAccount
 {
 
+	use NodeDatabaseEntities\TEntity;
 	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;

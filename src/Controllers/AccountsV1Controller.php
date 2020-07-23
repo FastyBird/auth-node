@@ -4,7 +4,7 @@
  * AccountsV1Controller.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -24,7 +24,7 @@ namespace FastyBird\AuthNode\Controllers;
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @Secured
- * @Secured\Permission(fastybird/auth-node:access)
+ * @Secured\Role(manager,administrator)
  */
 final class AccountsV1Controller extends BaseV1Controller
 {
