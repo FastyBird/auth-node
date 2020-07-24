@@ -17,7 +17,7 @@
 parameters:
 	security:
 		token:
-			issuer:		com.fastybird.auth-node
+			issuer: com.fastybird.auth-node
 
 #########################
 # Used Nette extensions #

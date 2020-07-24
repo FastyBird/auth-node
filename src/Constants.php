@@ -27,13 +27,6 @@ final class Constants
 {
 
 	/**
-	 * Node ACL
-	 */
-
-	// Permissions string delimiter
-	public const PERMISSIONS_DELIMITER = ':';
-
-	/**
 	 * Node routing
 	 */
 
@@ -62,21 +55,6 @@ final class Constants
 	public const ROUTE_NAME_ROLES = 'roles';
 	public const ROUTE_NAME_ROLE_RELATIONSHIP = 'role.relationship';
 	public const ROUTE_NAME_ROLE_CHILDREN = 'role.children';
-	public const ROUTE_NAME_ROLE_RULES = 'role.rules';
-
-	public const ROUTE_NAME_RESOURCE = 'resource';
-	public const ROUTE_NAME_RESOURCES = 'resources';
-	public const ROUTE_NAME_RESOURCE_RELATIONSHIP = 'resource.relationship';
-	public const ROUTE_NAME_RESOURCE_CHILDREN = 'resource.children';
-	public const ROUTE_NAME_RESOURCE_PRIVILEGES = 'resource.privileges';
-
-	public const ROUTE_NAME_PRIVILEGE = 'privilege';
-	public const ROUTE_NAME_PRIVILEGES = 'privileges';
-	public const ROUTE_NAME_PRIVILEGE_RELATIONSHIP = 'privilege.relationship';
-
-	public const ROUTE_NAME_RULE = 'rule';
-	public const ROUTE_NAME_RULES = 'rules';
-	public const ROUTE_NAME_RULE_RELATIONSHIP = 'rule.relationship';
 
 	/**
 	 * Account identities
