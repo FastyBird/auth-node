@@ -56,7 +56,6 @@ nodeAuth:
 	enable:
 		middleware: true
 		doctrine:
-			mapping: true
 			models: true
 
 # Node web server

@@ -249,7 +249,7 @@ class Role implements IRole
 	 */
 	public function __toString(): string
 	{
-		return $this->name;
+		return $this->getRoleId();
 	}
 
 }

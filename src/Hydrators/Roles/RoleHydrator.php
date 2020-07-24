@@ -19,7 +19,6 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 use IPub\JsonAPIDocument;
-use Nette\Utils;
 
 /**
  * Role entity hydrator
@@ -37,7 +36,6 @@ final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 
 	/** @var string[] */
 	protected $attributes = [
-		'name',
 		'description',
 	];
 
@@ -52,20 +50,6 @@ final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 	protected function getEntityName(): string
 	{
 		return Entities\Roles\Role::class;
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 *
-	 * @return string
-	 */
-	protected function hydrateNameAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): string
-	{
-		if ($attributes->get('name') === null || (string) $attributes->get('name') === '') {
-			return Utils\Strings::webalize((string) $attributes->get('name'));
-		}
-
-		return Utils\Strings::webalize((string) $attributes->get('name'));
 	}
 
 	/**
