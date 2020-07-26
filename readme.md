@@ -12,7 +12,7 @@
 
 Auth node is a microservice for managing application accounts & sessions.
 
-FastyBird auth node is an [Apache2](http://github.com/fastybird/auth-node/blob/master/license.md) licensed distributed accounts storage microservice, developed in PHP with [Nette framework](https://nette.org).
+FastyBird auth node is an [Apache2](http://github.com/fastybird/auth-node/blob/master/license.md) licensed distributed authentication microservice, developed in PHP with [Nette framework](https://nette.org).
 
 ## Requirements
 
@@ -32,7 +32,7 @@ $ cd path/to/install
 
 Everything required will be then installed in the provided folder `path/to/install`
 
-This microservice is composed from one console command.
+This microservice has several console command.
 
 ##### HTTP server
 
@@ -40,8 +40,7 @@ This microservice is composed from one console command.
 $ vendor/bin/fb-console fb:node:server:start
 ```
 
-This server is listening for incoming http api request messages from clients.
-And also is listening for new data from exchange bus from other microservices.
+This command is to start build in web server which is listening for incoming http api request messages from clients and is listening for new data from exchange bus from other microservices. 
 
 ## Install with docker
 
@@ -82,31 +81,31 @@ Configuration could be made via environment variables:
 | `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
 | `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 | | |
-| `FB_NODE_PARAMETER__SECURITY_SIGNATURE=` | Account access token signature string |
+| `FB_NODE_PARAMETER__SECURITY_SIGNATURE=` | Security token signature string |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
 
 ## Initialization
 
-This microservice is using database, so you have to initialise basic database schema. It could be done via shell command:
+This microservice is using database, so database have to be initialise with basic database schema. It could be done via shell command:
 
 ```sh
 $ php vendor/bin/doctrine orm:schema-tool:create
 ```
 
-After schema is created, you should create first user account:
+After database schema is being created, first user account should be created with command:
 
 ```sh
 $ vendor/bin/fb-console fb:auth-node:accounts:create
 ```
 
-Console command will ask you for all required information.
+Console command will ask for all required information.
 
 After this steps, microservice could be started with [server command](#http-server)
 
 ## Feedback
 
-Use the [issue tracker](https://github.com/FastyBird/auth-node/issues) for bugs or [mail](mailto:info@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
+Use the [issue tracker](https://github.com/FastyBird/auth-node/issues) for bugs or [mail](mailto:code@fastybird.com) or [Tweet](https://twitter.com/fastybird) us for any idea that can improve the project.
 
 Thank you for testing, reporting and contributing.
 

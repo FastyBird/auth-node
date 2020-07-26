@@ -35,43 +35,26 @@ final class SecurityHash
 
 	private const SEPARATOR = '##';
 
-	/** @var  string */
-	private $interval;
-
 	/** @var DateTimeFactory\DateTimeFactory */
 	private $dateTimeFactory;
 
 	public function __construct(
-		DateTimeFactory\DateTimeFactory $dateTimeFactory,
-		string $interval = '+ 1 hour'
+		DateTimeFactory\DateTimeFactory $dateTimeFactory
 	) {
-		$this->interval = $interval;
-
 		$this->dateTimeFactory = $dateTimeFactory;
 	}
 
 	/**
 	 * @param string $interval
 	 *
-	 * @return void
-	 */
-	public function setInterval(string $interval): void
-	{
-		$this->interval = $interval;
-	}
-
-	/**
-	 * @param string|null $interval
-	 *
 	 * @return string
 	 */
-	public function createKey(?string $interval = null): string
+	public function createKey(string $interval = '+ 1 hour'): string
 	{
 		/** @var DateTimeImmutable $now */
 		$now = $this->dateTimeFactory->getNow();
 
-		/** @var DateTimeImmutable $datetime */
-		$datetime = $now->modify($interval ?? $this->interval);
+		$datetime = $now->modify($interval);
 
 		return base64_encode(Utils\Random::generate(12) . self::SEPARATOR . $datetime->getTimestamp());
 	}
