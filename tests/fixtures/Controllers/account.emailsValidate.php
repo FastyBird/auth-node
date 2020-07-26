@@ -3,28 +3,28 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
-	'validate' => [
+	'validate'      => [
 		'/v1/validate-email',
 		null,
 		file_get_contents(__DIR__ . '/requests/account.emails.validate.json'),
 		StatusCodeInterface::STATUS_NO_CONTENT,
 		__DIR__ . '/responses/account.emails.validate.json',
 	],
-	'used' => [
+	'used'          => [
 		'/v1/validate-email',
 		null,
 		file_get_contents(__DIR__ . '/requests/account.emails.validate.used.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/account.emails.validate.used.json',
 	],
-	'invalidType' => [
+	'invalidType'   => [
 		'/v1/validate-email',
 		null,
 		file_get_contents(__DIR__ . '/requests/account.emails.validate.invalidType.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/account.emails.invalidType.json',
 	],
-	'invalidEmail' => [
+	'invalidEmail'  => [
 		'/v1/validate-email',
 		null,
 		file_get_contents(__DIR__ . '/requests/account.emails.validate.invalidEmail.json'),

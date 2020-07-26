@@ -3,7 +3,7 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
-	'create' => [
+	'create'          => [
 		'/v1/session',
 		file_get_contents(__DIR__ . '/requests/session.create.json'),
 		StatusCodeInterface::STATUS_CREATED,
@@ -15,31 +15,31 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/session.create.missingRequired.json',
 	],
-	'unknown' => [
+	'unknown'         => [
 		'/v1/session',
 		file_get_contents(__DIR__ . '/requests/session.create.unknown.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/session.create.unknown.json',
 	],
-	'invalid' => [
+	'invalid'         => [
 		'/v1/session',
 		file_get_contents(__DIR__ . '/requests/session.create.invalid.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/session.create.invalid.json',
 	],
-	'deleted' => [
+	'deleted'         => [
 		'/v1/session',
 		file_get_contents(__DIR__ . '/requests/session.create.deleted.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/session.create.deleted.json',
 	],
-	'blocked' => [
+	'blocked'         => [
 		'/v1/session',
 		file_get_contents(__DIR__ . '/requests/session.create.blocked.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/session.create.blocked.json',
 	],
-	'notActivated' => [
+	'notActivated'    => [
 		'/v1/session',
 		file_get_contents(__DIR__ . '/requests/session.create.notActivated.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,

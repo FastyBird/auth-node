@@ -3,7 +3,7 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
-	'update' => [
+	'update'          => [
 		'/v1/session',
 		file_get_contents(__DIR__ . '/requests/session.update.json'),
 		StatusCodeInterface::STATUS_CREATED,
@@ -15,7 +15,7 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/session.update.missingRequired.json',
 	],
-	'unknown' => [
+	'unknown'         => [
 		'/v1/session',
 		file_get_contents(__DIR__ . '/requests/session.update.unknown.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
