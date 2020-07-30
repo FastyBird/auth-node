@@ -119,10 +119,10 @@ interface IAccount extends NodeDatabaseEntities\IEntity,
 	public function removeRole(Entities\Roles\IRole $role): void;
 
 	/**
-	 * @param Entities\Roles\IRole $role
+	 * @param string $role
 	 *
 	 * @return bool
 	 */
-	public function hasRole(Entities\Roles\IRole $role): bool;
+	public function hasRole(string $role): bool;
 
 }

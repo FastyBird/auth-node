@@ -22,6 +22,7 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
+use FastyBird\NodeAuth;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
 use stdClass;
@@ -117,56 +118,22 @@ class VernemqCommand extends Console\Command\Command
 			if (
 				$account instanceof Entities\Accounts\IMachineAccount
 				|| $account instanceof Entities\Accounts\INodeAccount
+				|| $account instanceof Entities\Accounts\IUserAccount
 			) {
 				$identities = $account->getIdentities();
 
 				$identity = reset($identities);
 
-				if (
-					$identity instanceof Entities\Identities\IMachineAccountIdentity
-					|| $identity instanceof Entities\Identities\INodeAccountIdentity
-				) {
-					$findAccount = new Queries\FindVerneMqAccountsQuery();
-					$findAccount->forAccount($account);
+				$findAccount = new Queries\FindVerneMqAccountsQuery();
+				$findAccount->forAccount($account);
 
-					$verneMqAccount = $this->verneAccountRepository->findOneBy($findAccount);
+				$verneMqAccount = $this->verneAccountRepository->findOneBy($findAccount);
 
-					if ($verneMqAccount === null) {
-						$publishRule = new stdClass();
-						$publishRule->pattern = '/fb/' . $identity->getUid() . '/#';
-
-						$subscribeRule = new stdClass();
-						$subscribeRule->pattern = '/fb/' . $identity->getUid() . '/#';
-
-						$create = Utils\ArrayHash::from([
-							'username'     => $identity->getUid(),
-							'password'     => $identity->getPassword(),
-							'account'      => $account,
-							'publishAcl'   => [$publishRule],
-							'subscribeAcl' => [$subscribeRule],
-						]);
-
-						try {
-							// Start transaction connection to the database
-							$this->getOrmConnection()->beginTransaction();
-
-							$verneMqAccount = $this->verneAccountsManager->create($create);
-
-							// Commit all changes into database
-							$this->getOrmConnection()->commit();
-
-							$io->text(sprintf('<bg=green;options=bold> Created </> <info>%s</info>', $verneMqAccount->getUsername()));
-
-						} catch (Throwable $ex) {
-							// Revert all changes when error occur
-							$this->getOrmConnection()->rollBack();
-
-							$this->logger->error($ex->getMessage());
-
-							$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.sync.notFinished', ['error' => $ex->getMessage()])));
-						}
-
-					} else {
+				if ($verneMqAccount !== null) {
+					if (
+						$identity instanceof Entities\Identities\IMachineAccountIdentity
+						|| $identity instanceof Entities\Identities\INodeAccountIdentity
+					) {
 						$update = Utils\ArrayHash::from([
 							'username' => $identity->getUid(),
 							'password' => $identity->getPassword(),
@@ -190,6 +157,125 @@ class VernemqCommand extends Console\Command\Command
 							$this->logger->error($ex->getMessage());
 
 							$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.notFinished', ['error' => $ex->getMessage()])));
+						}
+					}
+
+				} else {
+					if (
+						$identity instanceof Entities\Identities\IMachineAccountIdentity
+						|| $identity instanceof Entities\Identities\INodeAccountIdentity
+					) {
+						$publishAcls = [];
+						$subscribeAcls = [];
+
+						if ($identity instanceof Entities\Identities\INodeAccountIdentity) {
+							$publishRule = new stdClass();
+							$publishRule->pattern = '/fb/#';
+
+							$publishAcls[] = $publishRule;
+
+							$subscribeRule = new stdClass();
+							$subscribeRule->pattern = '/fb/#';
+
+							$subscribeAcls[] = $subscribeRule;
+
+							$subscribeRule = new stdClass();
+							$subscribeRule->pattern = '$SYS/broker/log/#';
+
+							$subscribeAcls[] = $subscribeRule;
+
+						} else {
+							$publishRule = new stdClass();
+							$publishRule->pattern = '/fb/' . $identity->getUid() . '/#';
+
+							$publishAcls[] = $publishRule;
+
+							$subscribeRule = new stdClass();
+							$subscribeRule->pattern = '/fb/' . $identity->getUid() . '/#';
+
+							$subscribeAcls[] = $subscribeRule;
+						}
+
+						$create = Utils\ArrayHash::from([
+							'username'     => $identity->getUid(),
+							'password'     => $identity->getPassword(),
+							'account'      => $account,
+							'publishAcl'   => $publishAcls,
+							'subscribeAcl' => $subscribeAcls,
+						]);
+
+						try {
+							// Start transaction connection to the database
+							$this->getOrmConnection()->beginTransaction();
+
+							$verneMqAccount = $this->verneAccountsManager->create($create);
+
+							// Commit all changes into database
+							$this->getOrmConnection()->commit();
+
+							$io->text(sprintf('<bg=green;options=bold> Created </> <info>%s</info>', $verneMqAccount->getUsername()));
+
+						} catch (Throwable $ex) {
+							// Revert all changes when error occur
+							$this->getOrmConnection()->rollBack();
+
+							$this->logger->error($ex->getMessage());
+
+							$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.sync.notFinished', ['error' => $ex->getMessage()])));
+						}
+
+					} elseif ($identity instanceof Entities\Identities\IUserAccountIdentity) {
+						$publishAcls = [];
+						$subscribeAcls = [];
+
+						if (
+							$account->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)
+							|| $account->hasRole(NodeAuth\Constants::ROLE_MANAGER)
+						) {
+							$publishRule = new stdClass();
+							$publishRule->pattern = '/fb/#';
+
+							$publishAcls[] = $publishRule;
+						}
+
+						$subscribeRule = new stdClass();
+						$subscribeRule->pattern = '/fb/#';
+
+						$subscribeAcls[] = $subscribeRule;
+
+						if ($account->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)) {
+							$subscribeRule = new stdClass();
+							$subscribeRule->pattern = '$SYS/broker/log/#';
+
+							$subscribeAcls[] = $subscribeRule;
+						}
+
+						$create = Utils\ArrayHash::from([
+							'username'     => $identity->getUid(),
+							'password'     => $identity->getPassword(),
+							'account'      => $account,
+							'publishAcl'   => $publishAcls,
+							'subscribeAcl' => $subscribeAcls,
+						]);
+
+						try {
+							// Start transaction connection to the database
+							$this->getOrmConnection()->beginTransaction();
+
+							$verneMqAccount = $this->verneAccountsManager->create($create);
+
+							// Commit all changes into database
+							$this->getOrmConnection()->commit();
+
+							$io->text(sprintf('<bg=green;options=bold> Created </> <info>%s</info>', $verneMqAccount->getUsername()));
+
+						} catch (Throwable $ex) {
+							// Revert all changes when error occur
+							$this->getOrmConnection()->rollBack();
+
+							$this->logger->error($ex->getMessage());
+
+							$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.sync.notFinished', ['error' => $ex->getMessage()])));
 						}
 					}
 				}

@@ -263,12 +263,12 @@ abstract class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function hasRole(Entities\Roles\IRole $role): bool
+	public function hasRole(string $role): bool
 	{
 		if ($this->roles !== null) {
 			$role = $this->roles
 				->filter(function (Entities\Roles\IRole $row) use ($role): bool {
-					return $role->getId() === $row->getId();
+					return $role === $row->getRoleId();
 				})
 				->first();
 
