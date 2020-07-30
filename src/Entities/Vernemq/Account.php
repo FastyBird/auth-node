@@ -58,11 +58,11 @@ class Account implements IAccount
 	protected $id;
 
 	/**
-	 * @var Entities\Accounts\IAccount
+	 * @var Entities\Accounts\IAccount|null
 	 *
 	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\Account")
-	 * @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", onDelete="cascade")
+	 * @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", onDelete="cascade", nullable=true)
 	 */
 	private $account;
 
@@ -141,7 +141,7 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getAccount(): Entities\Accounts\IAccount
+	public function getAccount(): ?Entities\Accounts\IAccount
 	{
 		return $this->account;
 	}

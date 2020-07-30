@@ -65,6 +65,9 @@ class Router extends Routing\Router
 	/** @var Controllers\IdentitiesV1Controller */
 	private $identitiesV1Controller;
 
+	/** @var Controllers\AuthenticateV1Controller */
+	private $authenticateV1Controller;
+
 	/** @var NodeAuthMiddleware\Route\AccessMiddleware */
 	private $accessControlMiddleware;
 
@@ -78,6 +81,7 @@ class Router extends Routing\Router
 		Controllers\IdentitiesV1Controller $identitiesV1Controller,
 		Controllers\RolesV1Controller $rolesV1Controller,
 		Controllers\RoleChildrenV1Controller $roleChildrenV1Controller,
+		Controllers\AuthenticateV1Controller $authenticateV1Controller,
 		NodeAuthMiddleware\Route\AccessMiddleware $accessControlMiddleware,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
@@ -94,6 +98,7 @@ class Router extends Routing\Router
 		$this->identitiesV1Controller = $identitiesV1Controller;
 		$this->rolesV1Controller = $rolesV1Controller;
 		$this->roleChildrenV1Controller = $roleChildrenV1Controller;
+		$this->authenticateV1Controller = $authenticateV1Controller;
 
 		$this->accessControlMiddleware = $accessControlMiddleware;
 	}
@@ -241,6 +246,10 @@ class Router extends Routing\Router
 				 */
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/children', [$this->roleChildrenV1Controller, 'index']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ROLE_CHILDREN);
+			});
+
+			$group->group('/authenticate', function (Routing\RouteCollector $group): void {
+				$group->post('/vernemq', [$this->authenticateV1Controller, 'vernemq']);
 			});
 		})
 			->addMiddleware($this->accessControlMiddleware);

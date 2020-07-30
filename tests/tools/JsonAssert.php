@@ -72,7 +72,7 @@ class JsonAssert
 	 */
 	private static function makeJsonPretty(string $jsonString): string
 	{
-		return Utils\Json::encode(Utils\Json::decode($jsonString), Utils\Json::PRETTY);
+		return $jsonString === '' ? '' : Utils\Json::encode(Utils\Json::decode($jsonString), Utils\Json::PRETTY);
 	}
 
 	/**

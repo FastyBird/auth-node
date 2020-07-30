@@ -222,6 +222,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Controllers\RoleChildrenV1Controller, tags: [nette.inject]}
 
+	- {factory: FastyBird\AuthNode\Controllers\AuthenticateV1Controller, tags: [nette.inject]}
+
 	# API schemas
 	#############
 

@@ -60,6 +60,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Controllers\IdentitiesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RolesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RoleChildrenV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\AuthenticateV1Controller::class));
 
 		Assert::notNull($container->getByType(Schemas\Accounts\UserAccountSchema::class));
 		Assert::notNull($container->getByType(Schemas\Emails\EmailSchema::class));
