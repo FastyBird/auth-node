@@ -69,7 +69,7 @@ class CreateCommand extends Console\Command\Command
 		Models\Accounts\IAccountsManager $accountsManager,
 		Models\Emails\IEmailRepository $emailRepository,
 		Models\Emails\IEmailsManager $emailsManager,
-		Models\Identities\IIdentitiesManager  $identitiesManager,
+		Models\Identities\IIdentitiesManager $identitiesManager,
 		Translation\Translator $translator,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		LoggerInterface $logger,
