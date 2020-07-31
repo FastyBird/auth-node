@@ -222,7 +222,7 @@ class CreateCommand extends Console\Command\Command
 
 				// Create new email entity for user
 				$create = new Utils\ArrayHash();
-				$details->offsetSet('entity', Entities\Identities\UserAccountIdentity::class);
+				$create->offsetSet('entity', Entities\Identities\UserAccountIdentity::class);
 				$create->offsetSet('account', $account);
 				$create->offsetSet('uid', $account->getEmail());
 				$create->offsetSet('password', $password);

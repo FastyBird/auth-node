@@ -26,7 +26,7 @@ commands:
 				title	: "User last name?"
 			email:
 				title	: "User primary email address?"
-			identity:
+			password:
 				title	: "User default password?"
 
 		validation:
