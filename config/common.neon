@@ -164,6 +164,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Commands\Tests\GenerateTokenCommand}
 
+	- {factory: FastyBird\AuthNode\Commands\InitializeCommand}
+
 	# Events subscribers
 	####################
 

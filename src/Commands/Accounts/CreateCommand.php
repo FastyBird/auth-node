@@ -21,7 +21,9 @@ use Doctrine\DBAL\Connection;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Types;
+use FastyBird\NodeAuth;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
@@ -53,6 +55,9 @@ class CreateCommand extends Console\Command\Command
 	/** @var Models\Identities\IIdentitiesManager */
 	private $identitiesManager;
 
+	/** @var Models\Roles\IRoleRepository */
+	private $roleRepository;
+
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
@@ -70,6 +75,7 @@ class CreateCommand extends Console\Command\Command
 		Models\Emails\IEmailRepository $emailRepository,
 		Models\Emails\IEmailsManager $emailsManager,
 		Models\Identities\IIdentitiesManager $identitiesManager,
+		Models\Roles\IRoleRepository $roleRepository,
 		Translation\Translator $translator,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		LoggerInterface $logger,
@@ -79,6 +85,7 @@ class CreateCommand extends Console\Command\Command
 		$this->emailRepository = $emailRepository;
 		$this->emailsManager = $emailsManager;
 		$this->identitiesManager = $identitiesManager;
+		$this->roleRepository = $roleRepository;
 
 		$this->managerRegistry = $managerRegistry;
 
@@ -155,6 +162,44 @@ class CreateCommand extends Console\Command\Command
 
 		} while ($repeat);
 
+		$repeat = true;
+
+		do {
+			$roleName = $io->choice(
+				$this->translator->translate('inputs.role.title'),
+				[
+					'U' => $this->translator->translate('inputs.role.values.user'),
+					'M' => $this->translator->translate('inputs.role.values.manager'),
+					'A' => $this->translator->translate('inputs.role.values.administrator'),
+				],
+				'U'
+			);
+
+			switch ($roleName) {
+				case 'U':
+					$roleName = NodeAuth\Constants::ROLE_USER;
+					break;
+
+				case 'M':
+					$roleName = NodeAuth\Constants::ROLE_MANAGER;
+					break;
+
+				case 'A':
+					$roleName = NodeAuth\Constants::ROLE_ADMINISTRATOR;
+					break;
+			}
+
+			$findRole = new Queries\FindRolesQuery();
+			$findRole->byName($roleName);
+
+			$role = $this->roleRepository->findOneBy($findRole);
+
+			if ($role !== null) {
+				$repeat = false;
+			}
+
+		} while ($repeat);
+
 		try {
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
@@ -162,6 +207,7 @@ class CreateCommand extends Console\Command\Command
 			$create = new Utils\ArrayHash();
 			$create->offsetSet('entity', Entities\Accounts\UserAccount::class);
 			$create->offsetSet('status', Types\AccountStatusType::get(Types\AccountStatusType::STATE_ACTIVATED));
+			$create->offsetSet('roles', [$role]);
 
 			$details = new Utils\ArrayHash();
 			$details->offsetSet('entity', Entities\Details\Details::class);
@@ -201,13 +247,13 @@ class CreateCommand extends Console\Command\Command
 		$createIdentity = $io->choice(
 			$this->translator->translate('texts.createIdentity'),
 			[
-				'Yes',
-				'No',
+				'y' => 'Yes',
+				'n' => 'No',
 			],
-			'Yes'
+			'y'
 		);
 
-		if ($createIdentity === 'Yes') {
+		if ($createIdentity === 'y') {
 			$password = $io->ask($this->translator->translate('inputs.password.title'));
 
 			if ($account->getEmail() === null) {
@@ -224,7 +270,7 @@ class CreateCommand extends Console\Command\Command
 				$create = new Utils\ArrayHash();
 				$create->offsetSet('entity', Entities\Identities\UserAccountIdentity::class);
 				$create->offsetSet('account', $account);
-				$create->offsetSet('uid', $account->getEmail());
+				$create->offsetSet('uid', $account->getEmail()->getAddress());
 				$create->offsetSet('password', $password);
 				$create->offsetSet('status', Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_ACTIVE));
 

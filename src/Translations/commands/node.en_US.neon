@@ -28,6 +28,12 @@ commands:
 				title	: "User primary email address?"
 			password:
 				title	: "User default password?"
+			role:
+				title	: "User access role?"
+				values:
+					user			: "Regular user"
+					manager			: "System manager"
+					administrator	: "System administrator"
 
 		validation:
 			email:
@@ -64,3 +70,10 @@ commands:
 	sync:
 		validation:
 			notFinished	: "Synchronisation could not be finished: %s"
+
+	initialize:
+		validation:
+			role:
+				wasNotCreated	: "Roles could not be created"
+
+		success	: "Initialization was successfully finished."
