@@ -210,6 +210,12 @@ class CreateCommand extends Console\Command\Command
 		if ($createIdentity === 'Yes') {
 			$password = $io->ask($this->translator->translate('inputs.password.title'));
 
+			if ($account->getEmail() === null) {
+				$io->text(sprintf('<info>%s</info>', $this->translator->translate('validation.identity.noEmail')));
+
+				return 0;
+			}
+
 			try {
 				// Start transaction connection to the database
 				$this->getOrmConnection()->beginTransaction();
@@ -218,7 +224,7 @@ class CreateCommand extends Console\Command\Command
 				$create = new Utils\ArrayHash();
 				$details->offsetSet('entity', Entities\Identities\UserAccountIdentity::class);
 				$create->offsetSet('account', $account);
-				$create->offsetSet('uid', (string) $account->getEmail());
+				$create->offsetSet('uid', $account->getEmail());
 				$create->offsetSet('password', $password);
 				$create->offsetSet('status', Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_ACTIVE));
 

@@ -37,6 +37,7 @@ commands:
 				wasNotCreated	: "Account could not be created. Error was logged."
 			identity:
 				wasNotCreated	: "Account identity could not be created. Error was logged."
+				noEmail	: "Account identity could not be created because this account is withnout email address."
 
 		texts:
 			createIdentity: "Create identity for this account?"
