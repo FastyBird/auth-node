@@ -5,12 +5,12 @@ parameters:
 	database:
 		version: 5.7
 		host: 127.0.0.1
-		port: 3307
+		port: 3306
 		driver: pdo_mysql
 		memory: false
 		dbname: auth_node
-		username: io_server
-		password: superSecretAndHiddenPassword
+		username: root
+		password:
 
 	server:
 		address: 0.0.0.0
