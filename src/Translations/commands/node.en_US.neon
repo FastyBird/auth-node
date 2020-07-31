@@ -26,6 +26,8 @@ commands:
 				title	: "User last name?"
 			email:
 				title	: "User primary email address?"
+			identity:
+				title	: "User default password?"
 
 		validation:
 			email:
@@ -33,8 +35,15 @@ commands:
 				invalid	: "Address \"%email%\" is not a valid email. Please read it again, correct any typos you may have done and then try it again."
 			account:
 				wasNotCreated	: "Account could not be created. Error was logged."
+			identity:
+				wasNotCreated	: "Account identity could not be created. Error was logged."
 
-		success	: "Account \"%name%\" was successfully saved."
+		texts:
+			createIdentity: "Create identity for this account?"
+
+		success:
+			account: "Account \"%name%\" was successfully saved."
+			identity: "Identity for account \"%name%\" was successfully saved."
 
 	roleCreate:
 		key:

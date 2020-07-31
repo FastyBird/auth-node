@@ -21,6 +21,7 @@ use Doctrine\DBAL\Connection;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Types;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
@@ -49,6 +50,9 @@ class CreateCommand extends Console\Command\Command
 	/** @var Models\Emails\IEmailsManager */
 	private $emailsManager;
 
+	/** @var Models\Identities\IIdentitiesManager */
+	private $identitiesManager;
+
 	/** @var Common\Persistence\ManagerRegistry */
 	private $managerRegistry;
 
@@ -65,6 +69,7 @@ class CreateCommand extends Console\Command\Command
 		Models\Accounts\IAccountsManager $accountsManager,
 		Models\Emails\IEmailRepository $emailRepository,
 		Models\Emails\IEmailsManager $emailsManager,
+		Models\Identities\IIdentitiesManager  $identitiesManager,
 		Translation\Translator $translator,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		LoggerInterface $logger,
@@ -73,6 +78,7 @@ class CreateCommand extends Console\Command\Command
 		$this->accountsManager = $accountsManager;
 		$this->emailRepository = $emailRepository;
 		$this->emailsManager = $emailsManager;
+		$this->identitiesManager = $identitiesManager;
 
 		$this->managerRegistry = $managerRegistry;
 
@@ -155,6 +161,7 @@ class CreateCommand extends Console\Command\Command
 
 			$create = new Utils\ArrayHash();
 			$create->offsetSet('entity', Entities\Accounts\UserAccount::class);
+			$create->offsetSet('status', Types\AccountStatusType::get(Types\AccountStatusType::STATE_ACTIVATED));
 
 			$details = new Utils\ArrayHash();
 			$details->offsetSet('entity', Entities\Details\Details::class);
@@ -178,7 +185,7 @@ class CreateCommand extends Console\Command\Command
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-			$io->text(sprintf('<info>%s</info>', $this->translator->translate('success', ['name' => $account->getName()])));
+			$io->text(sprintf('<info>%s</info>', $this->translator->translate('success.account', ['name' => $account->getName()])));
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
@@ -187,6 +194,51 @@ class CreateCommand extends Console\Command\Command
 			$this->logger->error($ex->getMessage());
 
 			$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.account.wasNotCreated', ['error' => $ex->getMessage()])));
+
+			return $ex->getCode();
+		}
+
+		$createIdentity = $io->choice(
+			$this->translator->translate('texts.createIdentity'),
+			[
+				'Yes',
+				'No',
+			],
+			'Yes'
+		);
+
+		if ($createIdentity === 'Yes') {
+			$password = $io->ask($this->translator->translate('inputs.password.title'));
+
+			try {
+				// Start transaction connection to the database
+				$this->getOrmConnection()->beginTransaction();
+
+				// Create new email entity for user
+				$create = new Utils\ArrayHash();
+				$details->offsetSet('entity', Entities\Identities\UserAccountIdentity::class);
+				$create->offsetSet('account', $account);
+				$create->offsetSet('uid', $account->getEmail()->__toString());
+				$create->offsetSet('password', $password);
+				$create->offsetSet('status', Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_ACTIVE));
+
+				$this->identitiesManager->create($create);
+
+				// Commit all changes into database
+				$this->getOrmConnection()->commit();
+
+				$io->text(sprintf('<info>%s</info>', $this->translator->translate('success.identity', ['name' => $account->getName()])));
+
+			} catch (Throwable $ex) {
+				// Revert all changes when error occur
+				$this->getOrmConnection()->rollBack();
+
+				$this->logger->error($ex->getMessage());
+
+				$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.identity.wasNotCreated', ['error' => $ex->getMessage()])));
+
+				return $ex->getCode();
+			}
 		}
 
 		return 0;
