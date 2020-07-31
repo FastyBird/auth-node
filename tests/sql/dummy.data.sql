@@ -145,7 +145,7 @@ INSERT IGNORE INTO `fb_accounts_roles` (`role_id`, `account_id`)
 VALUES (_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34),
        (_binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD);
 
-INSERT IGNORE INTO `fb_vernemq_acl` (`id`, `account_id`, `mountpoint`, `client_id`, `username`, `password`,
+INSERT IGNORE INTO `vmq_auth_acl` (`id`, `account_id`, `mountpoint`, `client_id`, `username`, `password`,
                                      `publish_acl`, `subscribe_acl`)
 VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, '', '',
         'jane.doe@fastybird.com', 'passwd', '[]', '[]');
