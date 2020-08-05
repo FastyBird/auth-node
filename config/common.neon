@@ -17,6 +17,11 @@
 parameters:
 	origin: com.fastybird.auth-node
 
+	rabbitmq:
+		queueName: fb.auth.node.exchange
+		routing:
+			- fb.bus.node.entity.*.device		# Device entities
+
 #########################
 # Used Nette extensions #
 #########################
@@ -37,6 +42,7 @@ extensions:
 	fbDateTimeFactory					: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
 	nodeAuth							: FastyBird\NodeAuth\DI\NodeAuthExtension
 	nodeDatabase						: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
+	nodeExchange						: FastyBird\NodeExchange\DI\NodeExchangeExtension
 	nodeJsonApi							: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
 	nodeMetadata						: FastyBird\NodeMetadata\DI\NodeMetadataExtension
 	nodeWebServer						: FastyBird\NodeWebServer\DI\NodeWebServerExtension
@@ -55,6 +61,22 @@ nodeAuth:
 		middleware: true
 		doctrine:
 			models: true
+
+# Node data exchange
+####################
+nodeExchange:
+	origin: %origin%
+	rabbitMQ:
+		connection:
+			host: %exchange.host%
+			port: %exchange.port%
+			vhost: %exchange.vhost%
+			username: %exchange.username%
+			password: %exchange.password%
+		queue:
+			name: %rabbitmq.queueName%
+		routing:
+			keys: %rabbitmq.routing%
 
 # Node web server
 #################
@@ -165,6 +187,11 @@ services:
 	- {factory: FastyBird\AuthNode\Commands\Tests\GenerateTokenCommand}
 
 	- {factory: FastyBird\AuthNode\Commands\InitializeCommand}
+
+	# Message bus messages handlers
+	###############################
+
+	- {factory: FastyBird\AuthNode\Consumers\DeviceMessageHandler}
 
 	# Events subscribers
 	####################

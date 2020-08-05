@@ -64,4 +64,18 @@ final class Constants
 	public const IDENTITY_UID_MAXIMAL_LENGTH = 50;
 	public const IDENTITY_PASSWORD_MINIMAL_LENGTH = 8;
 
+	/**
+	 * Message bus routing key for devices & channels properties messages
+	 */
+
+	// Devices
+	public const RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY = 'fb.bus.node.entity.created.device';
+	public const RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY = 'fb.bus.node.entity.deleted.device';
+
+	/**
+	 * Microservices origins
+	 */
+
+	public const NODE_DEVICES_ORIGIN = 'com.fastybird.device-node';
+
 }
