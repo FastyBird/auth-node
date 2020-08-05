@@ -39,6 +39,7 @@ final class Constants
 	public const ROUTE_NAME_ME_IDENTITY = 'me.identity';
 	public const ROUTE_NAME_ME_IDENTITY_RELATIONSHIP = 'me.identity.relationship';
 
+	public const ROUTE_NAME_ACCOUNTS = 'accounts';
 	public const ROUTE_NAME_ACCOUNT = 'account';
 	public const ROUTE_NAME_ACCOUNT_RELATIONSHIP = 'account.relationship';
 	public const ROUTE_NAME_ACCOUNT_EMAILS = 'account.emails';

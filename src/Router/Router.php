@@ -113,8 +113,6 @@ class Router extends Routing\Router
 
 			$group->post('/password-reset', [$this->accountIdentitiesV1Controller, 'requestPassword']);
 
-			$group->post('/validate-email', [$this->accountEmailsV1Controller, 'validate']);
-
 			$group->group('/session', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->sessionV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_SESSION);
@@ -178,6 +176,9 @@ class Router extends Routing\Router
 			});
 
 			$group->group('/accounts', function (Routing\RouteCollector $group): void {
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->accountsV1Controller, 'index']);
+				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNTS);
+
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->accountsV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT);
 
