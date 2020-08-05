@@ -19,6 +19,8 @@ use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
+use FastyBird\NodeAuth;
 use FastyBird\NodeExchange\Consumers as NodeExchangeConsumers;
 use FastyBird\NodeExchange\Exceptions as NodeExchangeExceptions;
 use FastyBird\NodeMetadata;
@@ -26,6 +28,7 @@ use FastyBird\NodeMetadata\Loaders as NodeMetadataLoaders;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
+use Ramsey\Uuid;
 use Throwable;
 
 /**
@@ -41,6 +44,18 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 
 	use Nette\SmartObject;
 
+	/** @var Models\Accounts\IAccountRepository */
+	private $accountRepository;
+
+	/** @var Models\Accounts\IAccountsManager */
+	private $accountsManager;
+
+	/** @var Models\Identities\IIdentitiesManager */
+	private $identitiesManager;
+
+	/** @var Models\Roles\IRoleRepository */
+	private $roleRepository;
+
 	/** @var NodeMetadataLoaders\ISchemaLoader */
 	private $schemaLoader;
 
@@ -48,9 +63,18 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	private $logger;
 
 	public function __construct(
+		Models\Accounts\IAccountRepository $accountRepository,
+		Models\Accounts\IAccountsManager $accountsManager,
+		Models\Identities\IIdentitiesManager $identitiesManager,
+		Models\Roles\IRoleRepository $roleRepository,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
 		Log\LoggerInterface $logger
 	) {
+		$this->accountRepository = $accountRepository;
+		$this->accountsManager = $accountsManager;
+		$this->identitiesManager = $identitiesManager;
+		$this->roleRepository = $roleRepository;
+
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
 	}
@@ -64,14 +88,44 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 		string $routingKey,
 		Utils\ArrayHash $message
 	): bool {
-		$result = true;
-
 		try {
 			switch ($routingKey) {
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY:
+					$findRole = new Queries\FindRolesQuery();
+					$findRole->byName(NodeAuth\Constants::ROLE_USER);
+
+					$role = $this->roleRepository->findOneBy($findRole);
+
+					$create = Utils\ArrayHash::from([
+						'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
+						'entity' => Entities\Accounts\MachineAccount::class,
+						'status' => AuthNode\Types\AccountStatusType::get(AuthNode\Types\AccountStatusType::STATE_ACTIVATED),
+						'roles'  => [
+							$role,
+						],
+					]);
+
+					$account = $this->accountsManager->create($create);
+
+					$create = Utils\ArrayHash::from([
+						'account'  => $account,
+						'entity'   => Entities\Identities\MachineAccountIdentity::class,
+						'uid'      => $message->offsetGet('device'),
+						'password' => $message->offsetGet('device'),
+					]);
+
+					$this->identitiesManager->create($create);
 					break;
 
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY:
+					$findAccount = new Queries\FindAccountsQuery();
+					$findAccount->byId(Uuid\Uuid::fromString($message->offsetGet('id')));
+
+					$account = $this->accountRepository->findOneBy($findAccount);
+
+					if ($account !== null) {
+						$this->accountsManager->delete($account);
+					}
 					break;
 
 				default:
@@ -85,9 +139,7 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
-		if ($result) {
-			$this->logger->info('[CONSUMER] Successfully consumed entity message');
-		}
+		$this->logger->info('[CONSUMER] Successfully consumed entity message');
 
 		return true;
 	}
