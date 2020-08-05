@@ -109,8 +109,6 @@ class Router extends Routing\Router
 	public function registerRoutes(): void
 	{
 		$this->group('/v1', function (Routing\RouteCollector $group): void {
-			$group->post('/register', [$this->accountV1Controller, 'create']);
-
 			$group->post('/password-reset', [$this->accountIdentitiesV1Controller, 'requestPassword']);
 
 			$group->group('/session', function (Routing\RouteCollector $group): void {
@@ -130,6 +128,8 @@ class Router extends Routing\Router
 			$group->group('/me', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->accountV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ME);
+
+				$group->post('', [$this->accountV1Controller, 'create']);
 
 				$group->patch('', [$this->accountV1Controller, 'update']);
 
@@ -176,7 +176,7 @@ class Router extends Routing\Router
 			});
 
 			$group->group('/accounts', function (Routing\RouteCollector $group): void {
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->accountsV1Controller, 'index']);
+				$route = $group->get('', [$this->accountsV1Controller, 'index']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNTS);
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->accountsV1Controller, 'read']);
