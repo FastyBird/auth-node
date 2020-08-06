@@ -193,6 +193,11 @@ services:
 
 	- {factory: FastyBird\AuthNode\Consumers\DeviceMessageHandler}
 
+	# Node events
+	#############
+
+	- {factory: FastyBird\AuthNode\Events\ServerBeforeStartHandler}
+
 	# Events subscribers
 	####################
 

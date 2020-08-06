@@ -5,6 +5,7 @@ namespace Tests\Cases;
 use FastyBird\AuthNode\Commands;
 use FastyBird\AuthNode\Consumers;
 use FastyBird\AuthNode\Controllers;
+use FastyBird\AuthNode\Events;
 use FastyBird\AuthNode\Hydrators;
 use FastyBird\AuthNode\Middleware;
 use FastyBird\AuthNode\Models;
@@ -40,6 +41,8 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Commands\InitializeCommand::class));
 
 		Assert::notNull($container->getByType(Consumers\DeviceMessageHandler::class));
+
+		Assert::notNull($container->getByType(Events\ServerBeforeStartHandler::class));
 
 		Assert::notNull($container->getByType(Subscribers\EmailEntitySubscriber::class));
 		Assert::notNull($container->getByType(Subscribers\IdentityEntitySubscriber::class));
