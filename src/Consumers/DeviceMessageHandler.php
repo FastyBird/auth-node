@@ -15,6 +15,9 @@
 
 namespace FastyBird\AuthNode\Consumers;
 
+use Doctrine\Common;
+use Doctrine\DBAL;
+use Doctrine\DBAL\Connection;
 use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
@@ -62,13 +65,17 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	/** @var Log\LoggerInterface */
 	private $logger;
 
+	/** @var Common\Persistence\ManagerRegistry */
+	private $managerRegistry;
+
 	public function __construct(
 		Models\Accounts\IAccountRepository $accountRepository,
 		Models\Accounts\IAccountsManager $accountsManager,
 		Models\Identities\IIdentitiesManager $identitiesManager,
 		Models\Roles\IRoleRepository $roleRepository,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
-		Log\LoggerInterface $logger
+		Log\LoggerInterface $logger,
+		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->accountRepository = $accountRepository;
 		$this->accountsManager = $accountsManager;
@@ -77,12 +84,14 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
+		$this->managerRegistry = $managerRegistry;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 *
 	 * @throws NodeExchangeExceptions\TerminateException
+	 * @throws DBAL\ConnectionException
 	 */
 	public function process(
 		string $routingKey,
@@ -91,6 +100,9 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 		try {
 			switch ($routingKey) {
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY:
+					// Start transaction connection to the database
+					$this->getOrmConnection()->beginTransaction();
+
 					$findRole = new Queries\FindRolesQuery();
 					$findRole->byName(NodeAuth\Constants::ROLE_USER);
 
@@ -115,9 +127,15 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 					]);
 
 					$this->identitiesManager->create($create);
+
+					// Commit all changes into database
+					$this->getOrmConnection()->commit();
 					break;
 
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY:
+					// Start transaction connection to the database
+					$this->getOrmConnection()->beginTransaction();
+
 					$findAccount = new Queries\FindAccountsQuery();
 					$findAccount->byId(Uuid\Uuid::fromString($message->offsetGet('id')));
 
@@ -126,6 +144,9 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 					if ($account !== null) {
 						$this->accountsManager->delete($account);
 					}
+
+					// Commit all changes into database
+					$this->getOrmConnection()->commit();
 					break;
 
 				default:
@@ -136,6 +157,11 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			return false;
 
 		} catch (Throwable $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+
 			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
@@ -158,6 +184,20 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 		}
 
 		return null;
+	}
+
+	/**
+	 * @return Connection
+	 */
+	protected function getOrmConnection(): Connection
+	{
+		$connection = $this->managerRegistry->getConnection();
+
+		if ($connection instanceof Connection) {
+			return $connection;
+		}
+
+		throw new Exceptions\RuntimeException('Entity manager could not be loaded');
 	}
 
 }
