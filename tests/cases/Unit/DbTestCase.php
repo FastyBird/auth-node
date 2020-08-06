@@ -6,8 +6,8 @@ use DateTimeImmutable;
 use Doctrine\DBAL;
 use Doctrine\ORM;
 use FastyBird\AuthNode\Exceptions;
-use FastyBird\NodeLibs\Boot;
-use FastyBird\NodeLibs\Helpers;
+use FastyBird\DateTimeFactory;
+use FastyBird\NodeBootstrap\Boot;
 use Mockery;
 use Nette\DI;
 use Nettrine\DBAL as NettrineDBAL;
@@ -34,13 +34,13 @@ abstract class DbTestCase extends BaseMockeryTestCase
 
 		parent::setUp();
 
-		$dateTimeFactory = Mockery::mock(Helpers\DateFactory::class);
+		$dateTimeFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
 		$dateTimeFactory
 			->shouldReceive('getNow')
 			->andReturn(new DateTimeImmutable('2020-04-01T12:00:00+00:00'));
 
 		$this->mockContainerService(
-			Helpers\IDateFactory::class,
+			DateTimeFactory\DateTimeFactory::class,
 			$dateTimeFactory
 		);
 	}

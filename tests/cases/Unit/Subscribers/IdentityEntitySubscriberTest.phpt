@@ -12,6 +12,9 @@ use Tester\Assert;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
+/**
+ * @testCase
+ */
 final class IdentityEntitySubscriberTest extends DbTestCase
 {
 
@@ -49,7 +52,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$verneMQAccount = $verneMQRepository->findOneBy($findAccount);
 
 		Assert::notNull($verneMQAccount);
-		Assert::same($account->getId()->toString(), $verneMQAccount->getAccount()->getId()->toString());
+		Assert::same($identity->getId()->toString(), $verneMQAccount->getIdentity()->getId()->toString());
 		Assert::same(hash('sha256', $identity->getPassword(), false), $verneMQAccount->getPassword());
 		Assert::same('newUsername', $verneMQAccount->getUsername());
 	}
@@ -84,7 +87,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$verneMQAccount = $verneMQRepository->findOneBy($findAccount);
 
 		Assert::notNull($verneMQAccount);
-		Assert::same($identity->getAccount()->getId()->toString(), $verneMQAccount->getAccount()->getId()->toString());
+		Assert::same($identity->getId()->toString(), $verneMQAccount->getIdentity()->getId()->toString());
 		Assert::same(hash('sha256', $identity->getPassword(), false), $verneMQAccount->getPassword());
 		Assert::same('newUsername', $verneMQAccount->getUsername());
 	}
@@ -118,7 +121,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		$verneMQAccount = $verneMQRepository->findOneBy($findAccount);
 
 		Assert::notNull($verneMQAccount);
-		Assert::same($identity->getAccount()->getId()->toString(), $verneMQAccount->getAccount()->getId()->toString());
+		Assert::same($identity->getId()->toString(), $verneMQAccount->getIdentity()->getId()->toString());
 		Assert::same(hash('sha256', $identity->getPassword(), false), $verneMQAccount->getPassword());
 		Assert::same('deviceUsername', $verneMQAccount->getUsername());
 	}

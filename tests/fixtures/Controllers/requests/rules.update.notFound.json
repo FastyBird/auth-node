@@ -1,9 +1,0 @@
-{
-  "data" : {
-    "id" : "0046d3d6-c980-494a-8b40-f19e6095e610",
-    "type" : "auth-node/rule",
-    "attributes" : {
-      "access" : false
-    }
-  }
-}

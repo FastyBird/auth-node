@@ -4,19 +4,22 @@ namespace Tests\Cases;
 
 use DateTimeImmutable;
 use FastyBird\AuthNode\Helpers;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
+use FastyBird\DateTimeFactory;
 use Mockery;
 use Ninjify\Nunjuck\TestCase\BaseMockeryTestCase;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
 
+/**
+ * @testCase
+ */
 final class SecurityHashTest extends BaseMockeryTestCase
 {
 
 	public function testPassword(): void
 	{
-		$dateFactory = Mockery::mock(NodeLibsHelpers\IDateFactory::class);
+		$dateFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
 		$dateFactory
 			->shouldReceive('getNow')
 			->withNoArgs()
@@ -30,7 +33,7 @@ final class SecurityHashTest extends BaseMockeryTestCase
 
 		Assert::true($hashHelper->isValid($hash));
 
-		$dateFactory = Mockery::mock(NodeLibsHelpers\IDateFactory::class);
+		$dateFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
 		$dateFactory
 			->shouldReceive('getNow')
 			->withNoArgs()
@@ -40,7 +43,7 @@ final class SecurityHashTest extends BaseMockeryTestCase
 
 		Assert::false($hashHelper->isValid($hash));
 
-		$dateFactory = Mockery::mock(NodeLibsHelpers\IDateFactory::class);
+		$dateFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
 		$dateFactory
 			->shouldReceive('getNow')
 			->withNoArgs()
@@ -50,7 +53,7 @@ final class SecurityHashTest extends BaseMockeryTestCase
 
 		Assert::true($hashHelper->isValid($hash));
 
-		$dateFactory = Mockery::mock(NodeLibsHelpers\IDateFactory::class);
+		$dateFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);
 		$dateFactory
 			->shouldReceive('getNow')
 			->withNoArgs()

@@ -4,7 +4,7 @@
 # @language		en_US
 #
 # @license		More in license.md
-# @copyright	https://www.fastybird.com
+# @copyright	https://fastybird.com
 # @author		Adam Kadlec <adam.kadlec@fastybird.com>
 # @package		FastyBird:AuthNode!
 # @subpackage	Translations
@@ -26,6 +26,16 @@ commands:
 				title	: "User last name?"
 			email:
 				title	: "User primary email address?"
+			identity:
+				title	: "Create identity?"
+			password:
+				title	: "User default password?"
+			role:
+				title	: "User access role?"
+				values:
+					user			: "Regular user"
+					manager			: "System manager"
+					administrator	: "System administrator"
 
 		validation:
 			email:
@@ -33,8 +43,16 @@ commands:
 				invalid	: "Address \"%email%\" is not a valid email. Please read it again, correct any typos you may have done and then try it again."
 			account:
 				wasNotCreated	: "Account could not be created. Error was logged."
+			identity:
+				wasNotCreated	: "Account identity could not be created. Error was logged."
+				noEmail	: "Account identity could not be created because this account is withnout email address."
 
-		success	: "Account \"%name%\" was successfully saved."
+		texts:
+			createIdentity: "Create identity for this account?"
+
+		success:
+			account: "Account \"%name%\" was successfully saved."
+			identity: "Identity for account \"%name%\" was successfully saved."
 
 	roleCreate:
 		key:

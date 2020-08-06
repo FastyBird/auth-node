@@ -4,7 +4,7 @@
  * User.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Security
@@ -17,6 +17,7 @@ namespace FastyBird\AuthNode\Security;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
+use FastyBird\NodeAuth\Constants as NodeAuthConstants;
 use Nette\Security as NS;
 
 /**
@@ -36,10 +37,9 @@ class User extends NS\User
 	public function __construct(
 		UserStorage $storage,
 		Authenticator $authenticator,
-		Authorizator $authorizator,
 		Models\Roles\IRoleRepository $roleRepository
 	) {
-		parent::__construct($storage, $authenticator, $authorizator);
+		parent::__construct($storage, $authenticator);
 
 		$this->roleRepository = $roleRepository;
 	}
@@ -69,20 +69,22 @@ class User extends NS\User
 	}
 
 	/**
-	 * @return Entities\Roles\IRole[]
+	 * @return string[]
 	 */
 	public function getRoles(): array
 	{
 		if (!$this->isLoggedIn()) {
-			$role = $this->roleRepository->findOneByName(Entities\Roles\IRole::ROLE_ANONYMOUS);
+			$role = $this->roleRepository->findOneByName(NodeAuthConstants::ROLE_ANONYMOUS);
 
-			return $role !== null ? [$role] : [];
+			return $role !== null ? [$role->getRoleId()] : [];
 		}
 
 		$account = $this->getAccount();
 
 		if ($account !== null) {
-			return $account->getRoles();
+			return array_map(function (Entities\Roles\IRole $role): string {
+				return $role->getRoleId();
+			}, $account->getRoles());
 		}
 
 		return [];
@@ -106,7 +108,7 @@ class User extends NS\User
 		foreach ($this->getRoles() as $role) {
 			if (
 				$this->getAuthorizator() === null
-				|| $this->getAuthorizator()->isAllowed($role->getRoleId(), $resource, $privilege)
+				|| $this->getAuthorizator()->isAllowed($role, $resource, $privilege)
 			) {
 				return true;
 			}

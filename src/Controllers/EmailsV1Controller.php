@@ -4,7 +4,7 @@
  * EmailsV1Controller.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -38,9 +38,6 @@ use Throwable;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- *
- * @Secured
- * @Secured\Permission(fastybird/auth-node:access)
  */
 final class EmailsV1Controller extends BaseV1Controller
 {
@@ -92,7 +89,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-emails:read emails)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -116,7 +113,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-emails:read emails)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -139,7 +136,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-emails:create email)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function create(
 		Message\ServerRequestInterface $request,
@@ -259,7 +256,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-emails:edit email)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -342,7 +339,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-emails:delete email)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function delete(
 		Message\ServerRequestInterface $request,
@@ -402,7 +399,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-emails:read emails)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

@@ -4,7 +4,7 @@
  * SessionV1Controller.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -20,11 +20,13 @@ use DateTimeInterface;
 use Doctrine;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
-use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Router;
 use FastyBird\AuthNode\Schemas;
 use FastyBird\AuthNode\Security;
-use FastyBird\AuthNode\Types;
+use FastyBird\NodeAuth\Models as NodeAuthModels;
+use FastyBird\NodeAuth\Queries as NodeAuthQueries;
+use FastyBird\NodeAuth\Security as NodeAuthSecurity;
+use FastyBird\NodeAuth\Types as NodeAuthTypes;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
@@ -44,26 +46,26 @@ use Throwable;
 final class SessionV1Controller extends BaseV1Controller
 {
 
-	/** @var Models\Tokens\ITokenRepository */
+	/** @var NodeAuthModels\Tokens\ITokenRepository */
 	private $tokenRepository;
 
-	/** @var Models\Tokens\ITokensManager */
+	/** @var NodeAuthModels\Tokens\ITokensManager */
 	private $tokensManager;
 
-	/** @var Security\TokenReader */
+	/** @var NodeAuthSecurity\TokenReader */
 	private $tokenReader;
 
-	/** @var Security\TokenBuilder */
+	/** @var NodeAuthSecurity\TokenBuilder */
 	private $tokenBuilder;
 
 	/** @var string */
 	protected $translationDomain = 'node.session';
 
 	public function __construct(
-		Models\Tokens\ITokenRepository $tokenRepository,
-		Models\Tokens\ITokensManager $tokensManager,
-		Security\TokenReader $tokenReader,
-		Security\TokenBuilder $tokenBuilder
+		NodeAuthModels\Tokens\ITokenRepository $tokenRepository,
+		NodeAuthModels\Tokens\ITokensManager $tokensManager,
+		NodeAuthSecurity\TokenReader $tokenReader,
+		NodeAuthSecurity\TokenBuilder $tokenBuilder
 	) {
 		$this->tokenRepository = $tokenRepository;
 		$this->tokensManager = $tokensManager;
@@ -79,15 +81,18 @@ final class SessionV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$token = $this->getToken($request);
+		$accessToken = $this->getToken($request);
 
 		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($token));
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($accessToken));
 	}
 
 	/**
@@ -98,6 +103,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\User(guest)
 	 */
 	public function create(
 		Message\ServerRequestInterface $request,
@@ -201,9 +209,9 @@ final class SessionV1Controller extends BaseV1Controller
 			$values = Utils\ArrayHash::from([
 				'id'        => $accessTokenId,
 				'entity'    => Entities\Tokens\AccessToken::class,
-				'token'     => $this->createToken($accessTokenId, Security\TokenBuilder::TOKEN_TYPE_ACCESS, $validTill),
+				'token'     => $this->createToken($accessTokenId, $this->user->getRoles(), $validTill),
 				'validTill' => $validTill,
-				'status'    => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
+				'status'    => NodeAuthTypes\TokenStatusType::get(NodeAuthTypes\TokenStatusType::STATE_ACTIVE),
 				'identity'  => $this->user->getIdentity(),
 			]);
 
@@ -217,9 +225,9 @@ final class SessionV1Controller extends BaseV1Controller
 				'id'          => $refreshTokenId,
 				'entity'      => Entities\Tokens\RefreshToken::class,
 				'accessToken' => $accessToken,
-				'token'       => $this->createToken($refreshTokenId, Security\TokenBuilder::TOKEN_TYPE_REFRESH, $validTill),
+				'token'       => $this->createToken($refreshTokenId, [], $validTill),
 				'validTill'   => $validTill,
-				'status'      => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
+				'status'      => NodeAuthTypes\TokenStatusType::get(NodeAuthTypes\TokenStatusType::STATE_ACTIVE),
 			]);
 
 			$this->tokensManager->create($values);
@@ -265,6 +273,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\User(guest)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -326,9 +337,9 @@ final class SessionV1Controller extends BaseV1Controller
 			$values = Utils\ArrayHash::from([
 				'id'        => $accessTokenId,
 				'entity'    => Entities\Tokens\AccessToken::class,
-				'token'     => $this->createToken($accessTokenId, Security\TokenBuilder::TOKEN_TYPE_ACCESS, $validTill),
+				'token'     => $this->createToken($accessTokenId, $this->user->getRoles(), $validTill),
 				'validTill' => $validTill,
-				'status'    => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
+				'status'    => NodeAuthTypes\TokenStatusType::get(NodeAuthTypes\TokenStatusType::STATE_ACTIVE),
 				'identity'  => $this->user->getIdentity(),
 			]);
 
@@ -342,9 +353,9 @@ final class SessionV1Controller extends BaseV1Controller
 				'id'          => $refreshTokenId,
 				'entity'      => Entities\Tokens\RefreshToken::class,
 				'accessToken' => $newAccessToken,
-				'token'       => $this->createToken($refreshTokenId, Security\TokenBuilder::TOKEN_TYPE_REFRESH, $validTill),
+				'token'       => $this->createToken($refreshTokenId, [], $validTill),
 				'validTill'   => $validTill,
-				'status'      => Types\TokenStatusType::get(Types\TokenStatusType::STATE_ACTIVE),
+				'status'      => NodeAuthTypes\TokenStatusType::get(NodeAuthTypes\TokenStatusType::STATE_ACTIVE),
 			]);
 
 			$this->tokensManager->create($values);
@@ -399,6 +410,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function delete(
 		Message\ServerRequestInterface $request,
@@ -463,6 +477,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
@@ -518,11 +535,17 @@ final class SessionV1Controller extends BaseV1Controller
 			);
 		}
 
+		$findToken = new NodeAuthQueries\FindTokensQuery();
+		$findToken->byToken((string) $token);
+
+		$accessToken = $this->tokenRepository->findOneBy($findToken, Entities\Tokens\AccessToken::class);
+
 		if (
 			$this->user->getAccount() !== null
-			&& $token->getIdentity()->getAccount()->getId()->equals($this->user->getAccount()->getId())
+			&& $accessToken instanceof Entities\Tokens\IAccessToken
+			&& $accessToken->getIdentity()->getAccount()->getId()->equals($this->user->getAccount()->getId())
 		) {
-			return $token;
+			return $accessToken;
 		}
 
 		throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -534,17 +557,17 @@ final class SessionV1Controller extends BaseV1Controller
 
 	/**
 	 * @param Uuid\UuidInterface $id
-	 * @param string $type
+	 * @param string[] $roles
 	 * @param DateTimeInterface|null $validTill
 	 *
 	 * @return string
 	 */
 	private function createToken(
 		Uuid\UuidInterface $id,
-		string $type,
+		array $roles,
 		?DateTimeInterface $validTill
 	): string {
-		return (string) $this->tokenBuilder->build($id->toString(), $type, $validTill);
+		return (string) $this->tokenBuilder->build($id->toString(), $roles, $validTill);
 	}
 
 }

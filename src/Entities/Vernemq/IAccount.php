@@ -4,7 +4,7 @@
  * IAccount.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -36,9 +36,9 @@ interface IAccount extends NodeDatabaseEntities\IEntity,
 {
 
 	/**
-	 * @return Entities\Accounts\IAccount
+	 * @return Entities\Identities\IIdentity|null
 	 */
-	public function getAccount(): Entities\Accounts\IAccount;
+	public function getIdentity(): ?Entities\Identities\IIdentity;
 
 	/**
 	 * @param string $mountpoint

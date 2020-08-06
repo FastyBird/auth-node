@@ -4,7 +4,7 @@
  * FindAccountsQuery.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Queries
@@ -50,6 +50,22 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	{
 		$this->filter[] = function (ORM\QueryBuilder $qb) use ($id): void {
 			$qb->andWhere('a.id = :id')->setParameter('id', $id->getBytes());
+		};
+	}
+
+	/**
+	 * @param Entities\Roles\IRole $role
+	 *
+	 * @return void
+	 */
+	public function inRole(Entities\Roles\IRole $role): void
+	{
+		$this->select[] = function (ORM\QueryBuilder $qb): void {
+			$qb->join('a.roles', 'roles');
+		};
+
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($role): void {
+			$qb->andWhere('roles.id = :role')->setParameter('role', $role->getId(), Uuid\Doctrine\UuidBinaryType::NAME);
 		};
 	}
 

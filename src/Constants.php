@@ -4,7 +4,7 @@
  * Constants.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     common
@@ -27,13 +27,6 @@ final class Constants
 {
 
 	/**
-	 * Node ACL
-	 */
-
-	// Permissions string delimiter
-	public const PERMISSIONS_DELIMITER = ':';
-
-	/**
 	 * Node routing
 	 */
 
@@ -46,6 +39,7 @@ final class Constants
 	public const ROUTE_NAME_ME_IDENTITY = 'me.identity';
 	public const ROUTE_NAME_ME_IDENTITY_RELATIONSHIP = 'me.identity.relationship';
 
+	public const ROUTE_NAME_ACCOUNTS = 'accounts';
 	public const ROUTE_NAME_ACCOUNT = 'account';
 	public const ROUTE_NAME_ACCOUNT_RELATIONSHIP = 'account.relationship';
 	public const ROUTE_NAME_ACCOUNT_EMAILS = 'account.emails';
@@ -62,21 +56,6 @@ final class Constants
 	public const ROUTE_NAME_ROLES = 'roles';
 	public const ROUTE_NAME_ROLE_RELATIONSHIP = 'role.relationship';
 	public const ROUTE_NAME_ROLE_CHILDREN = 'role.children';
-	public const ROUTE_NAME_ROLE_RULES = 'role.rules';
-
-	public const ROUTE_NAME_RESOURCE = 'resource';
-	public const ROUTE_NAME_RESOURCES = 'resources';
-	public const ROUTE_NAME_RESOURCE_RELATIONSHIP = 'resource.relationship';
-	public const ROUTE_NAME_RESOURCE_CHILDREN = 'resource.children';
-	public const ROUTE_NAME_RESOURCE_PRIVILEGES = 'resource.privileges';
-
-	public const ROUTE_NAME_PRIVILEGE = 'privilege';
-	public const ROUTE_NAME_PRIVILEGES = 'privileges';
-	public const ROUTE_NAME_PRIVILEGE_RELATIONSHIP = 'privilege.relationship';
-
-	public const ROUTE_NAME_RULE = 'rule';
-	public const ROUTE_NAME_RULES = 'rules';
-	public const ROUTE_NAME_RULE_RELATIONSHIP = 'rule.relationship';
 
 	/**
 	 * Account identities
@@ -84,5 +63,19 @@ final class Constants
 
 	public const IDENTITY_UID_MAXIMAL_LENGTH = 50;
 	public const IDENTITY_PASSWORD_MINIMAL_LENGTH = 8;
+
+	/**
+	 * Message bus routing key for devices & channels properties messages
+	 */
+
+	// Devices
+	public const RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY = 'fb.bus.node.entity.created.device';
+	public const RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY = 'fb.bus.node.entity.deleted.device';
+
+	/**
+	 * Microservices origins
+	 */
+
+	public const NODE_DEVICES_ORIGIN = 'com.fastybird.device-node';
 
 }

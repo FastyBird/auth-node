@@ -15,6 +15,9 @@ use Tester\Assert;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
+/**
+ * @testCase
+ */
 final class SynchroniseVernemqTest extends DbTestCase
 {
 
@@ -70,7 +73,7 @@ final class SynchroniseVernemqTest extends DbTestCase
 
 		$accounts = $verneAccountRepository->findAllBy($findQuery);
 
-		Assert::same(2, count($accounts));
+		Assert::same(3, count($accounts));
 	}
 
 }

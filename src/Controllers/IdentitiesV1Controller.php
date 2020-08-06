@@ -4,7 +4,7 @@
  * IdentitiesV1Controller.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -36,9 +36,6 @@ use Throwable;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
- *
- * @Secured
- * @Secured\Permission(fastybird/auth-node:access)
  */
 final class IdentitiesV1Controller extends BaseV1Controller
 {
@@ -78,7 +75,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-identities:read identities)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -102,7 +99,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-identities:read identities)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -125,7 +122,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-identities:update identity)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -253,7 +250,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 *
 	 * @Secured
-	 * @Secured\Permission(fastybird/manage-identities:read identities)
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

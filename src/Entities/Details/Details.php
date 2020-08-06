@@ -4,7 +4,7 @@
  * Details.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -35,9 +35,10 @@ use Throwable;
  *     }
  * )
  */
-class Details extends NodeDatabaseEntities\Entity implements IDetails
+class Details implements IDetails
 {
 
+	use NodeDatabaseEntities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 	use DoctrineBlameable\Entities\TEntityCreator;

@@ -4,7 +4,7 @@
  * RefreshToken.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -18,6 +18,11 @@ namespace FastyBird\AuthNode\Entities\Tokens;
 use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Exceptions;
+use FastyBird\NodeAuth\Entities as NodeAuthEntities;
+use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
+use IPub\DoctrineBlameable;
+use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
+use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
 use Throwable;
 
@@ -32,8 +37,23 @@ use Throwable;
  *     }
  * )
  */
-class RefreshToken extends Token implements IRefreshToken
+class RefreshToken extends NodeAuthEntities\Tokens\Token implements IRefreshToken
 {
+
+	use NodeDatabaseEntities\TEntity;
+	use NodeDatabaseEntities\TEntityParams;
+	use DoctrineTimestampable\Entities\TEntityCreated;
+	use DoctrineTimestampable\Entities\TEntityUpdated;
+	use DoctrineBlameable\Entities\TEntityCreator;
+	use DoctrineBlameable\Entities\TEntityEditor;
+
+	/**
+	 * @var DateTimeInterface|null
+	 *
+	 * @IPubDoctrine\Crud(is={"writable"})
+	 * @ORM\Column(name="token_valid_till", type="datetime", nullable=true)
+	 */
+	private $validTill = null;
 
 	/**
 	 * @param IAccessToken $accessToken
@@ -49,7 +69,9 @@ class RefreshToken extends Token implements IRefreshToken
 		?DateTimeInterface $validTill,
 		?Uuid\UuidInterface $id = null
 	) {
-		parent::__construct($token, $validTill, $id);
+		parent::__construct($token, $id);
+
+		$this->validTill = $validTill;
 
 		$this->setParent($accessToken);
 	}
@@ -72,6 +94,26 @@ class RefreshToken extends Token implements IRefreshToken
 		}
 
 		return $token;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getValidTill(): ?DateTimeInterface
+	{
+		return $this->validTill;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function isValid(DateTimeInterface $dateTime): bool
+	{
+		if ($this->validTill === null) {
+			return true;
+		}
+
+		return $this->validTill >= $dateTime;
 	}
 
 }

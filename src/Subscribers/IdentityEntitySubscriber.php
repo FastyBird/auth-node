@@ -4,7 +4,7 @@
  * IdentityEntitySubscriber.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Subscribers
@@ -20,6 +20,7 @@ use Doctrine\ORM;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
+use FastyBird\NodeAuth;
 use Nette;
 use Throwable;
 
@@ -111,14 +112,14 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		$em = $eventArgs->getEntityManager();
 		$uow = $em->getUnitOfWork();
 
-		foreach ($uow->getScheduledEntityDeletions() as $object) {
-			if ($object instanceof Entities\Identities\IUserAccountIdentity) {
+		foreach (array_merge($uow->getScheduledEntityDeletions(), $uow->getScheduledCollectionDeletions()) as $object) {
+			if ($object instanceof Entities\Accounts\IAccount) {
 				$findAccount = new Queries\FindVerneMqAccountsQuery();
-				$findAccount->forAccount($object->getAccount());
+				$findAccount->forAccount($object);
 
-				$verneMqAccount = $this->accountRepository->findOneBy($findAccount);
+				$verneMqAccounts = $this->accountRepository->findAllBy($findAccount);
 
-				if ($verneMqAccount !== null) {
+				foreach ($verneMqAccounts as $verneMqAccount) {
 					$uow->scheduleForDelete($verneMqAccount);
 				}
 			}
@@ -143,62 +144,179 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 			$identity instanceof Entities\Identities\INodeAccountIdentity
 			|| $identity instanceof Entities\Identities\IMachineAccountIdentity
 		) {
-			$findAccount = new Queries\FindVerneMqAccountsQuery();
-			$findAccount->forAccount($identity->getAccount());
-
-			$verneMqAccount = $this->accountRepository->findOneBy($findAccount);
+			$verneMqAccount = $this->findAccount($identity);
 
 			if ($verneMqAccount === null) {
-				$verneMqAccount = new Entities\Vernemq\Account(
-					$identity->getUid(),
-					$identity->getPassword(),
-					$identity->getAccount()
-				);
-
-				$verneMqAccount->addPublishAcl('/fb/' . $identity->getUid() . '/#');
-				$verneMqAccount->addSubscribeAcl('/fb/' . $identity->getUid() . '/#');
+				$publishAcls = [];
+				$subscribeAcls = [];
 
 				if ($identity instanceof Entities\Identities\INodeAccountIdentity) {
-					$verneMqAccount->addSubscribeAcl('$SYS/broker/log/#');
+					$publishAcls[] = '/fb/#';
+					$subscribeAcls[] = '/fb/#';
+					$subscribeAcls[] = '$SYS/broker/log/#';
+
+				} else {
+					$publishAcls[] = '/fb/' . $identity->getUid() . '/#';
+					$subscribeAcls[] = '/fb/' . $identity->getUid() . '/#';
 				}
 
-				$uow->scheduleForInsert($verneMqAccount);
+				$this->createAccount($identity, $uow, $publishAcls, $subscribeAcls);
 
 			} else {
-				$classMetadata = $em->getClassMetadata(get_class($verneMqAccount));
-
-				$passwordProperty = $classMetadata->getReflectionProperty('password');
-				$usernameProperty = $classMetadata->getReflectionProperty('username');
-
-				$verneMqAccount->setPassword($identity->getPassword());
-				$verneMqAccount->setUsername($identity->getUid());
-
-				$uow->propertyChanged(
-					$verneMqAccount,
-					'password',
-					$passwordProperty->getValue($verneMqAccount),
-					$identity->getPassword()
-				);
-
-				$uow->propertyChanged(
-					$verneMqAccount,
-					'username',
-					$usernameProperty->getValue($verneMqAccount),
-					$identity->getUid()
-				);
-
-				$uow->scheduleExtraUpdate($verneMqAccount, [
-					'password' => [
-						$passwordProperty->getValue($verneMqAccount),
-						$identity->getPassword(),
-					],
-					'username' => [
-						$usernameProperty->getValue($verneMqAccount),
-						$identity->getUid(),
-					],
-				]);
+				$this->updateAccount($verneMqAccount, $identity, $em, $uow);
 			}
 		}
+
+		if (
+			$identity instanceof Entities\Identities\IUserAccountIdentity
+		) {
+			$account = $identity->getAccount();
+
+			$verneMqAccount = $this->findAccount($identity);
+
+			if ($verneMqAccount === null) {
+				$publishAcls = [];
+				$subscribeAcls = [];
+
+				if (
+					$account->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)
+					|| $account->hasRole(NodeAuth\Constants::ROLE_MANAGER)
+				) {
+					$publishAcls[] = '/fb/#';
+				}
+
+				$subscribeAcls[] = '/fb/#';
+
+				if ($account->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)) {
+					$subscribeAcls[] = '$SYS/broker/log/#';
+				}
+
+				$this->createAccount($identity, $uow, $publishAcls, $subscribeAcls);
+			}
+		}
+	}
+
+	/**
+	 * @param Entities\Identities\IIdentity $identity
+	 *
+	 * @return Entities\Vernemq\IAccount|null
+	 */
+	private function findAccount(
+		Entities\Identities\IIdentity $identity
+	): ?Entities\Vernemq\IAccount {
+		$account = $identity->getAccount();
+
+		$findAccount = new Queries\FindVerneMqAccountsQuery();
+		$findAccount->forAccount($account);
+
+		return $this->accountRepository->findOneBy($findAccount);
+	}
+
+	/**
+	 * @param Entities\Identities\IIdentity $identity
+	 * @param ORM\UnitOfWork $uow
+	 * @param string[] $publishAcls
+	 * @param string[] $subscribeAcls
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	private function createAccount(
+		Entities\Identities\IIdentity $identity,
+		ORM\UnitOfWork $uow,
+		array $publishAcls,
+		array $subscribeAcls
+	): void {
+		if (
+			!$identity instanceof Entities\Identities\IUserAccountIdentity
+			&& !$identity instanceof Entities\Identities\IMachineAccountIdentity
+			&& !$identity instanceof Entities\Identities\INodeAccountIdentity
+		) {
+			return;
+		}
+
+		if ($identity instanceof Entities\Identities\IUserAccountIdentity) {
+			$password = $identity->getPassword()->getPassword();
+
+			if ($password === null) {
+				return;
+			}
+
+		} else {
+			$password = $identity->getPassword();
+		}
+
+		$verneMqAccount = new Entities\Vernemq\Account(
+			$identity->getUid(),
+			$password,
+			$identity
+		);
+
+		foreach ($publishAcls as $publishAcl) {
+			$verneMqAccount->addPublishAcl($publishAcl);
+		}
+
+		foreach ($subscribeAcls as $subscribeAcl) {
+			$verneMqAccount->addSubscribeAcl($subscribeAcl);
+		}
+
+		$uow->scheduleForInsert($verneMqAccount);
+	}
+
+	/**
+	 * @param Entities\Vernemq\IAccount $verneMqAccount
+	 * @param Entities\Identities\IIdentity $identity
+	 * @param ORM\EntityManager $em
+	 * @param ORM\UnitOfWork $uow
+	 *
+	 * @return void
+	 */
+	private function updateAccount(
+		Entities\Vernemq\IAccount $verneMqAccount,
+		Entities\Identities\IIdentity $identity,
+		ORM\EntityManager $em,
+		ORM\UnitOfWork $uow
+	): void {
+		if (
+			!$identity instanceof Entities\Identities\IMachineAccountIdentity
+			&& !$identity instanceof Entities\Identities\INodeAccountIdentity
+		) {
+			return;
+		}
+
+		$classMetadata = $em->getClassMetadata(get_class($verneMqAccount));
+
+		$passwordProperty = $classMetadata->getReflectionProperty('password');
+		$usernameProperty = $classMetadata->getReflectionProperty('username');
+
+		$verneMqAccount->setPassword($identity->getPassword());
+		$verneMqAccount->setUsername($identity->getUid());
+
+		$uow->propertyChanged(
+			$verneMqAccount,
+			'password',
+			$passwordProperty->getValue($verneMqAccount),
+			$identity->getPassword()
+		);
+
+		$uow->propertyChanged(
+			$verneMqAccount,
+			'username',
+			$usernameProperty->getValue($verneMqAccount),
+			$identity->getUid()
+		);
+
+		$uow->scheduleExtraUpdate($verneMqAccount, [
+			'password' => [
+				$passwordProperty->getValue($verneMqAccount),
+				$identity->getPassword(),
+			],
+			'username' => [
+				$usernameProperty->getValue($verneMqAccount),
+				$identity->getUid(),
+			],
+		]);
 	}
 
 }

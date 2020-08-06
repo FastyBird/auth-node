@@ -4,7 +4,7 @@
  * BaseV1Controller.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -19,8 +19,8 @@ use Contributte\Translation;
 use Doctrine\DBAL\Connection;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Security;
+use FastyBird\DateTimeFactory;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
-use FastyBird\NodeLibs\Helpers as NodeLibsHelpers;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 use Nette;
@@ -45,7 +45,7 @@ abstract class BaseV1Controller
 	/** @var Security\User */
 	protected $user;
 
-	/** @var NodeLibsHelpers\IDateFactory */
+	/** @var DateTimeFactory\DateTimeFactory */
 	protected $dateFactory;
 
 	/** @var Translation\PrefixedTranslator */
@@ -71,11 +71,11 @@ abstract class BaseV1Controller
 	}
 
 	/**
-	 * @param NodeLibsHelpers\IDateFactory $dateFactory
+	 * @param DateTimeFactory\DateTimeFactory $dateFactory
 	 *
 	 * @return void
 	 */
-	public function injectDateFactory(NodeLibsHelpers\IDateFactory $dateFactory): void
+	public function injectDateFactory(DateTimeFactory\DateTimeFactory $dateFactory): void
 	{
 		$this->dateFactory = $dateFactory;
 	}

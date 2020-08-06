@@ -1,0 +1,11 @@
+{
+  "data" : {
+    "type" : "auth-node/email",
+    "id" : "d046c739-e1c2-444f-82a7-d02bf1cf2753",
+    "attributes" : {
+      "address" : "john@doe.com",
+      "is_default" : false,
+      "is_private" : true
+    }
+  }
+}

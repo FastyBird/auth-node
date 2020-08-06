@@ -13,28 +13,35 @@ use Tests\Tools;
 require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/../DbTestCase.php';
 
+/**
+ * @testCase
+ */
 final class SessionV1ControllerTest extends DbTestCase
 {
 
 	/**
 	 * @param string $url
-	 * @param string $token
+	 * @param string|null $token
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionRead.php
 	 */
-	public function testRead(string $url, string $token, int $statusCode, string $fixture): void
+	public function testRead(string $url, ?string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
+
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_GET,
 			$url,
-			[
-				'authorization' => $token,
-			]
+			$headers
 		);
 
 		$response = $router->handle($request);
@@ -48,21 +55,28 @@ final class SessionV1ControllerTest extends DbTestCase
 
 	/**
 	 * @param string $url
+	 * @param string|null $token
 	 * @param string $body
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionCreate.php
 	 */
-	public function testCreate(string $url, string $body, int $statusCode, string $fixture): void
+	public function testCreate(string $url, ?string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
+
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_POST,
 			$url,
-			[],
+			$headers,
 			$body
 		);
 
@@ -91,21 +105,28 @@ final class SessionV1ControllerTest extends DbTestCase
 
 	/**
 	 * @param string $url
+	 * @param string|null $token
 	 * @param string $body
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionUpdate.php
 	 */
-	public function testUpdate(string $url, string $body, int $statusCode, string $fixture): void
+	public function testUpdate(string $url, ?string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
+
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_PATCH,
 			$url,
-			[],
+			$headers,
 			$body
 		);
 
@@ -134,53 +155,27 @@ final class SessionV1ControllerTest extends DbTestCase
 
 	/**
 	 * @param string $url
-	 * @param string $token
+	 * @param string|null $token
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/sessionDelete.php
 	 */
-	public function testDelete(string $url, string $token, int $statusCode, string $fixture): void
+	public function testDelete(string $url, ?string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
+
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
 
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_DELETE,
 			$url,
-			[
-				'authorization' => $token,
-			]
-		);
-
-		$response = $router->handle($request);
-
-		$body = (string) $response->getBody();
-
-		Tools\JsonAssert::assertFixtureMatch($fixture, $body);
-		Assert::same($statusCode, $response->getStatusCode());
-		Assert::type(Http\Response::class, $response);
-	}
-
-	/**
-	 * @param string $url
-	 * @param string $token
-	 * @param int $statusCode
-	 * @param string $fixture
-	 *
-	 * @dataProvider ./../../../fixtures/Controllers/sessionRelationships.php
-	 */
-	public function testReadRelationship(string $url, string $token, int $statusCode, string $fixture): void
-	{
-		/** @var Router\Router $router */
-		$router = $this->getContainer()->getByType(Router\Router::class);
-
-		$request = new ServerRequest(
-			RequestMethodInterface::METHOD_GET,
-			$url,
-			[
-				'authorization' => $token,
-			]
+			$headers
 		);
 
 		$response = $router->handle($request);

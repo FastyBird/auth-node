@@ -4,7 +4,7 @@
  * RouterFactory.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Router
@@ -17,7 +17,7 @@ namespace FastyBird\AuthNode\Router;
 
 use FastyBird\AuthNode;
 use FastyBird\AuthNode\Controllers;
-use FastyBird\AuthNode\Middleware;
+use FastyBird\NodeAuth\Middleware as NodeAuthMiddleware;
 use IPub\SlimRouter\Routing;
 use Psr\Http\Message\ResponseFactoryInterface;
 
@@ -56,27 +56,6 @@ class Router extends Routing\Router
 	/** @var Controllers\RoleChildrenV1Controller */
 	private $roleChildrenV1Controller;
 
-	/** @var Controllers\RoleRulesV1Controller */
-	private $roleRulesV1Controller;
-
-	/** @var Controllers\ResourcesV1Controller */
-	private $resourcesV1Controller;
-
-	/** @var Controllers\ResourceChildrenV1Controller */
-	private $resourceChildrenV1Controller;
-
-	/** @var Controllers\ResourcePrivilegesV1Controller */
-	private $resourcePrivilegesV1Controller;
-
-	/** @var Controllers\PrivilegesV1Controller */
-	private $privilegesV1Controller;
-
-	/** @var Controllers\RulesV1Controller */
-	private $rulesV1Controller;
-
-	/** @var Middleware\AccessMiddleware */
-	private $accessControlMiddleware;
-
 	/** @var Controllers\AccountsV1Controller */
 	private $accountsV1Controller;
 
@@ -85,6 +64,12 @@ class Router extends Routing\Router
 
 	/** @var Controllers\IdentitiesV1Controller */
 	private $identitiesV1Controller;
+
+	/** @var Controllers\AuthenticateV1Controller */
+	private $authenticateV1Controller;
+
+	/** @var NodeAuthMiddleware\Route\AccessMiddleware */
+	private $accessControlMiddleware;
 
 	public function __construct(
 		Controllers\SessionV1Controller $sessionV1Controller,
@@ -96,13 +81,8 @@ class Router extends Routing\Router
 		Controllers\IdentitiesV1Controller $identitiesV1Controller,
 		Controllers\RolesV1Controller $rolesV1Controller,
 		Controllers\RoleChildrenV1Controller $roleChildrenV1Controller,
-		Controllers\RoleRulesV1Controller $roleRulesV1Controller,
-		Controllers\ResourcesV1Controller $resourcesV1Controller,
-		Controllers\ResourceChildrenV1Controller $resourceChildrenV1Controller,
-		Controllers\ResourcePrivilegesV1Controller $resourcePrivilegesV1Controller,
-		Controllers\PrivilegesV1Controller $privilegesV1Controller,
-		Controllers\RulesV1Controller $rulesV1Controller,
-		Middleware\AccessMiddleware $accessControlMiddleware,
+		Controllers\AuthenticateV1Controller $authenticateV1Controller,
+		NodeAuthMiddleware\Route\AccessMiddleware $accessControlMiddleware,
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
@@ -118,12 +98,7 @@ class Router extends Routing\Router
 		$this->identitiesV1Controller = $identitiesV1Controller;
 		$this->rolesV1Controller = $rolesV1Controller;
 		$this->roleChildrenV1Controller = $roleChildrenV1Controller;
-		$this->roleRulesV1Controller = $roleRulesV1Controller;
-		$this->resourcesV1Controller = $resourcesV1Controller;
-		$this->resourceChildrenV1Controller = $resourceChildrenV1Controller;
-		$this->resourcePrivilegesV1Controller = $resourcePrivilegesV1Controller;
-		$this->privilegesV1Controller = $privilegesV1Controller;
-		$this->rulesV1Controller = $rulesV1Controller;
+		$this->authenticateV1Controller = $authenticateV1Controller;
 
 		$this->accessControlMiddleware = $accessControlMiddleware;
 	}
@@ -134,11 +109,7 @@ class Router extends Routing\Router
 	public function registerRoutes(): void
 	{
 		$this->group('/v1', function (Routing\RouteCollector $group): void {
-			$group->post('/register', [$this->accountV1Controller, 'create']);
-
 			$group->post('/password-reset', [$this->accountIdentitiesV1Controller, 'requestPassword']);
-
-			$group->post('/validate-email', [$this->accountEmailsV1Controller, 'validate']);
 
 			$group->group('/session', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->sessionV1Controller, 'read']);
@@ -157,6 +128,8 @@ class Router extends Routing\Router
 			$group->group('/me', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->accountV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ME);
+
+				$group->post('', [$this->accountV1Controller, 'create']);
 
 				$group->patch('', [$this->accountV1Controller, 'update']);
 
@@ -203,6 +176,9 @@ class Router extends Routing\Router
 			});
 
 			$group->group('/accounts', function (Routing\RouteCollector $group): void {
+				$route = $group->get('', [$this->accountsV1Controller, 'index']);
+				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNTS);
+
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->accountsV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT);
 
@@ -261,11 +237,7 @@ class Router extends Routing\Router
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->rolesV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ROLE);
 
-				$group->post('', [$this->rolesV1Controller, 'create']);
-
 				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->rolesV1Controller, 'update']);
-
-				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->rolesV1Controller, 'delete']);
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rolesV1Controller, 'readRelationship']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ROLE_RELATIONSHIP);
@@ -275,67 +247,10 @@ class Router extends Routing\Router
 				 */
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/children', [$this->roleChildrenV1Controller, 'index']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ROLE_CHILDREN);
-
-				/**
-				 * RULES
-				 */
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/rules', [$this->roleRulesV1Controller, 'index']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_ROLE_RULES);
 			});
 
-			$group->group('/resources', function (Routing\RouteCollector $group): void {
-				$route = $group->get('', [$this->resourcesV1Controller, 'index']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_RESOURCES);
-
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->resourcesV1Controller, 'read']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_RESOURCE);
-
-				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->resourcesV1Controller, 'update']);
-
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->resourcesV1Controller, 'readRelationship']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_RESOURCE_RELATIONSHIP);
-
-				/**
-				 * CHILDREN
-				 */
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/children', [$this->resourceChildrenV1Controller, 'index']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_RESOURCE_CHILDREN);
-
-				/**
-				 * PRIVILEGES
-				 */
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/privileges', [$this->resourcePrivilegesV1Controller, 'index']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_RESOURCE_PRIVILEGES);
-			});
-
-			$group->group('/privileges', function (Routing\RouteCollector $group): void {
-				$route = $group->get('', [$this->privilegesV1Controller, 'index']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_PRIVILEGES);
-
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->privilegesV1Controller, 'read']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_PRIVILEGE);
-
-				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->privilegesV1Controller, 'update']);
-
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->privilegesV1Controller, 'readRelationship']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_PRIVILEGE_RELATIONSHIP);
-			});
-
-			$group->group('/rules', function (Routing\RouteCollector $group): void {
-				$route = $group->get('', [$this->rulesV1Controller, 'index']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_RULES);
-
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->rulesV1Controller, 'read']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_RULE);
-
-				$group->post('', [$this->rulesV1Controller, 'create']);
-
-				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->rulesV1Controller, 'update']);
-
-				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->rulesV1Controller, 'delete']);
-
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->rulesV1Controller, 'readRelationship']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_RULE_RELATIONSHIP);
+			$group->group('/authenticate', function (Routing\RouteCollector $group): void {
+				$group->post('/vernemq', [$this->authenticateV1Controller, 'vernemq']);
 			});
 		})
 			->addMiddleware($this->accessControlMiddleware);

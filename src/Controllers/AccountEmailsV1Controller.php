@@ -4,7 +4,7 @@
  * AccountEmailsV1Controller.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Controllers
@@ -29,7 +29,6 @@ use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
-use Nette\Utils;
 use Psr\Http\Message;
 use Throwable;
 
@@ -412,94 +411,6 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		}
 
 		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 */
-	public function validate(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		$document = $this->createDocument($request);
-
-		$attributes = $document->getResource()->getAttributes();
-
-		if ($document->getResource()->getType() !== Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidType.heading'),
-				$this->translator->translate('messages.invalidType.message'),
-				[
-					'pointer' => '/data/type',
-				]
-			);
-		}
-
-		if (!$attributes->has('address')) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
-				[
-					'pointer' => '/data/attributes/address',
-				]
-			);
-
-		} elseif (!Utils\Validators::isEmail((string) $attributes->get('address'))) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notValid.heading'),
-				$this->translator->translate('messages.notValid.message'),
-				[
-					'pointer' => '/data/attributes/address',
-				]
-			);
-		}
-
-		if ($this->user->isLoggedIn()) {
-			if ($this->user->getAccount() === null) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_FORBIDDEN,
-					$this->translator->translate('//node.base.messages.forbidden.heading'),
-					$this->translator->translate('//node.base.messages.forbidden.message')
-				);
-
-			} elseif (!$this->emailRepository->isEmailAvailable((string) $attributes->get('address'), $this->user->getAccount())) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.taken.heading'),
-					$this->translator->translate('messages.taken.message'),
-					[
-						'pointer' => '/data/attributes/address',
-					]
-				);
-			}
-
-		} else {
-			$email = $this->emailRepository->findOneByAddress((string) $attributes->get('address'));
-
-			if ($email !== null) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.taken.heading'),
-					$this->translator->translate('messages.taken.message'),
-					[
-						'pointer' => '/data/attributes/address',
-					]
-				);
-			}
-		}
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
 
 		return $response;
 	}

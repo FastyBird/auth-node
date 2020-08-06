@@ -4,7 +4,7 @@
  * Account.php
  *
  * @license        More in license.md
- * @copyright      https://www.fastybird.com
+ * @copyright      https://fastybird.com
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  * @package        FastyBird:AuthNode!
  * @subpackage     Entities
@@ -48,9 +48,10 @@ use Throwable;
  * })
  * @ORM\MappedSuperclass
  */
-abstract class Account extends NodeDatabaseEntities\Entity implements IAccount
+abstract class Account implements IAccount
 {
 
+	use NodeDatabaseEntities\TEntity;
 	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
@@ -262,12 +263,12 @@ abstract class Account extends NodeDatabaseEntities\Entity implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function hasRole(Entities\Roles\IRole $role): bool
+	public function hasRole(string $role): bool
 	{
 		if ($this->roles !== null) {
 			$role = $this->roles
 				->filter(function (Entities\Roles\IRole $row) use ($role): bool {
-					return $role->getId() === $row->getId();
+					return $role === $row->getRoleId();
 				})
 				->first();
 
