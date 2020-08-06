@@ -20,23 +20,27 @@ final class RolesV1Controller extends DbTestCase
 
 	/**
 	 * @param string $url
-	 * @param string $token
+	 * @param string|null $token
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/rolesRead.php
 	 */
-	public function testRead(string $url, string $token, int $statusCode, string $fixture): void
+	public function testRead(string $url, ?string $token, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
+
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_GET,
 			$url,
-			[
-				'authorization' => $token,
-			]
+			$headers
 		);
 
 		$response = $router->handle($request);
@@ -51,24 +55,28 @@ final class RolesV1Controller extends DbTestCase
 
 	/**
 	 * @param string $url
-	 * @param string $token
+	 * @param string|null $token
 	 * @param string $body
 	 * @param int $statusCode
 	 * @param string $fixture
 	 *
 	 * @dataProvider ./../../../fixtures/Controllers/rolesUpdate.php
 	 */
-	public function testUpdate(string $url, string $token, string $body, int $statusCode, string $fixture): void
+	public function testUpdate(string $url, ?string $token, string $body, int $statusCode, string $fixture): void
 	{
 		/** @var Router\Router $router */
 		$router = $this->getContainer()->getByType(Router\Router::class);
 
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
+
 		$request = new ServerRequest(
 			RequestMethodInterface::METHOD_PATCH,
 			$url,
-			[
-				'authorization' => $token,
-			],
+			$headers,
 			$body
 		);
 
