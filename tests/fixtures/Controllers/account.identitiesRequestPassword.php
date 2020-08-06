@@ -3,12 +3,17 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
+	// Valid responses
+	//////////////////
 	'request'         => [
 		'/v1/password-reset',
 		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.json'),
 		StatusCodeInterface::STATUS_NO_CONTENT,
 		__DIR__ . '/responses/account.identities.passwordRequest.json',
 	],
+
+	// Invalid responses
+	////////////////////
 	'missingRequired' => [
 		'/v1/password-reset',
 		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.missing.required.json'),

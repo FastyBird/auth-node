@@ -2,16 +2,61 @@
 
 use Fig\Http\Message\StatusCodeInterface;
 
+const VALID_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
+const EXPIRED_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3MjFlMTAyNS04Zjc4LTQzOGQtODIwZi0wZDQ2OWEzNzk1NWQiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU3Nzg4MDAwMCwiZXhwIjoxNTc3OTAxNjAwLCJ1c2VyIjoiNTI1ZDZhMDktN2MwNi00NmQyLWFmZmEtNzA5YmIxODM3MDdlIiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.F9veOiNfcqQVxpbMF7OY5j1AcPLpPQb8dEIZbrBmh24';
+const INVALID_TOKEN = 'eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
+
 return [
-	'read'    => [
+	// Valid responses
+	//////////////////
+	'read'                          => [
 		'/v1/session',
-		'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8',
+		'Bearer ' . VALID_TOKEN,
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/session.read.json',
 	],
-	'invalid' => [
+	'readRelationshipsAccount'      => [
+		'/v1/session/relationships/account',
+		'Bearer ' . VALID_TOKEN,
+		StatusCodeInterface::STATUS_OK,
+		__DIR__ . '/responses/session.readRelationship.account.json',
+	],
+
+	// Invalid responses
+	////////////////////
+	'readNoToken'                   => [
 		'/v1/session',
-		'Bearer ayJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8',
+		null,
+		StatusCodeInterface::STATUS_FORBIDDEN,
+		__DIR__ . '/responses/forbidden.json',
+	],
+	'readExpiredToken'              => [
+		'/v1/session',
+		'Bearer ' . EXPIRED_TOKEN,
+		StatusCodeInterface::STATUS_UNAUTHORIZED,
+		__DIR__ . '/responses/unauthorized.json',
+	],
+	'readInvalidToken'              => [
+		'/v1/session',
+		'Bearer ' . INVALID_TOKEN,
+		StatusCodeInterface::STATUS_UNAUTHORIZED,
+		__DIR__ . '/responses/unauthorized.json',
+	],
+	'readRelationshipsUnknown'      => [
+		'/v1/session/relationships/unknown',
+		'Bearer ' . VALID_TOKEN,
+		StatusCodeInterface::STATUS_NOT_FOUND,
+		__DIR__ . '/responses/session.readRelationship.unknown.json',
+	],
+	'readRelationshipsExpiredToken' => [
+		'/v1/session/relationships/account',
+		'Bearer ' . EXPIRED_TOKEN,
+		StatusCodeInterface::STATUS_UNAUTHORIZED,
+		__DIR__ . '/responses/unauthorized.json',
+	],
+	'readRelationshipsInvalidToken' => [
+		'/v1/session/relationships/account',
+		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],

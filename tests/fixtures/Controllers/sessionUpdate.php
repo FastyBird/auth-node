@@ -2,23 +2,56 @@
 
 use Fig\Http\Message\StatusCodeInterface;
 
+const VALID_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
+const EXPIRED_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3MjFlMTAyNS04Zjc4LTQzOGQtODIwZi0wZDQ2OWEzNzk1NWQiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU3Nzg4MDAwMCwiZXhwIjoxNTc3OTAxNjAwLCJ1c2VyIjoiNTI1ZDZhMDktN2MwNi00NmQyLWFmZmEtNzA5YmIxODM3MDdlIiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.F9veOiNfcqQVxpbMF7OY5j1AcPLpPQb8dEIZbrBmh24';
+const INVALID_TOKEN = 'eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
+
 return [
-	'update'          => [
+	// Valid responses
+	//////////////////
+	'update'                 => [
 		'/v1/session',
+		null,
 		file_get_contents(__DIR__ . '/requests/session.update.json'),
 		StatusCodeInterface::STATUS_CREATED,
 		__DIR__ . '/responses/session.update.json',
 	],
-	'missingRequired' => [
+
+	// Invalid responses
+	////////////////////
+	'missingRequired'        => [
 		'/v1/session',
+		null,
 		file_get_contents(__DIR__ . '/requests/session.update.missing.required.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/session.update.missingRequired.json',
 	],
-	'unknown'         => [
+	'unknownRefreshToken'    => [
 		'/v1/session',
+		null,
 		file_get_contents(__DIR__ . '/requests/session.update.unknown.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/session.update.unknown.json',
+	],
+	'updateWithToken'        => [
+		'/v1/session',
+		'Bearer ' . VALID_TOKEN,
+		file_get_contents(__DIR__ . '/requests/session.update.json'),
+		StatusCodeInterface::STATUS_FORBIDDEN,
+		__DIR__ . '/responses/forbidden.json',
+	],
+	'updateWithExpiredToken' => [
+		'/v1/session',
+		'Bearer ' . EXPIRED_TOKEN,
+		file_get_contents(__DIR__ . '/requests/session.update.json'),
+		StatusCodeInterface::STATUS_UNAUTHORIZED,
+		__DIR__ . '/responses/unauthorized.json',
+	],
+	'updateWithInvalidToken' => [
+		'/v1/session',
+		'Bearer ' . INVALID_TOKEN,
+		file_get_contents(__DIR__ . '/requests/session.update.json'),
+		StatusCodeInterface::STATUS_UNAUTHORIZED,
+		__DIR__ . '/responses/unauthorized.json',
 	],
 ];

@@ -81,6 +81,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -100,6 +103,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\User(guest)
 	 */
 	public function create(
 		Message\ServerRequestInterface $request,
@@ -267,6 +273,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\User(guest)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -401,6 +410,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function delete(
 		Message\ServerRequestInterface $request,
@@ -465,6 +477,9 @@ final class SessionV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 *
+	 * @Secured
+	 * @Secured\User(loggedIn)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
