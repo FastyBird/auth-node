@@ -61,7 +61,7 @@ class AccessToken extends NodeAuthEntities\Tokens\Token implements IAccessToken
 	 * @IPubDoctrine\Crud(is={"writable"})
 	 * @ORM\Column(name="token_valid_till", type="datetime", nullable=true)
 	 */
-	private $validTill = null;
+	private $validTill;
 
 	/**
 	 * @param Entities\Identities\IIdentity $identity

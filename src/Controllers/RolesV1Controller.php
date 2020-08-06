@@ -25,7 +25,6 @@ use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
-use Nette\Utils;
 use Psr\Http\Message;
 use Throwable;
 
@@ -159,42 +158,17 @@ final class RolesV1Controller extends BaseV1Controller
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			throw $ex;
 
-		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			if (
-				preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false
-				&& array_key_exists('key', $match)
-			) {
-				$columnParts = explode('.', $match['key']);
-				$columnKey = end($columnParts);
-
-				if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'role_')) {
-					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
-						$this->translator->translate('//node.base.messages.uniqueConstraint.message'),
-						[
-							'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 5),
-						]
-					);
-				}
-			}
-
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.uniqueConstraint.heading'),
-				$this->translator->translate('//node.base.messages.uniqueConstraint.message')
-			);
-
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [

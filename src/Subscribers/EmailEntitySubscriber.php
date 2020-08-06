@@ -49,8 +49,6 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 	 * @param ORM\Event\OnFlushEventArgs $eventArgs
 	 *
 	 * @return void
-	 *
-	 * @throws ORM\ORMException
 	 */
 	public function onFlush(ORM\Event\OnFlushEventArgs $eventArgs): void
 	{

@@ -170,7 +170,9 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 		} catch (Exceptions\EmailIsNotValidException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -183,7 +185,9 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 		} catch (Exceptions\EmailAlreadyTakenException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -196,7 +200,9 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -209,13 +215,17 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			throw $ex;
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -293,13 +303,17 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			throw $ex;
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -360,7 +374,9 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [

@@ -47,6 +47,8 @@ final class AuthenticateV1Controller extends BaseV1Controller
 	 * @param NodeWebServerHttp\Response $response
 	 *
 	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws Utils\JsonException
 	 */
 	public function vernemq(
 		Message\ServerRequestInterface $request,
@@ -100,7 +102,6 @@ final class AuthenticateV1Controller extends BaseV1Controller
 			return $response;
 		}
 
-		/** @var NodeWebServerHttp\Response $response */
 		$response
 			->getBody()
 			->write(Utils\Json::encode([

@@ -237,7 +237,9 @@ final class SessionV1Controller extends BaseV1Controller
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -366,15 +368,11 @@ final class SessionV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			throw $ex;
-
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -435,15 +433,11 @@ final class SessionV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
-
-			throw $ex;
-
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
@@ -561,6 +555,8 @@ final class SessionV1Controller extends BaseV1Controller
 	 * @param DateTimeInterface|null $validTill
 	 *
 	 * @return string
+	 *
+	 * @throws Throwable
 	 */
 	private function createToken(
 		Uuid\UuidInterface $id,

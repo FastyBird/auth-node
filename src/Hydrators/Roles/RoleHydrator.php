@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * RoletHydrator.php
+ * RoleHydrator.php
  *
  * @license        More in license.md
  * @copyright      https://fastybird.com

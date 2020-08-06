@@ -56,7 +56,6 @@ final class EntityAuthorSubscriber implements Common\EventSubscriber
 	 */
 	public function loadClassMetadata(ORM\Event\LoadClassMetadataEventArgs $eventArgs): void
 	{
-		/** @var ORM\Mapping\ClassMetadata $metadata */
 		$metadata = $eventArgs->getClassMetadata();
 
 		if (!in_array(DoctrineBlameable\Entities\IEntityCreator::class, class_implements($metadata->getName()), true)) {

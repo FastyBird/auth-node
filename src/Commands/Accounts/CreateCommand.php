@@ -266,7 +266,9 @@ class CreateCommand extends Console\Command\Command
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
-			$this->getOrmConnection()->rollBack();
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 
 			$this->logger->error($ex->getMessage());
 
@@ -323,7 +325,9 @@ class CreateCommand extends Console\Command\Command
 
 			} catch (Throwable $ex) {
 				// Revert all changes when error occur
-				$this->getOrmConnection()->rollBack();
+				if ($this->getOrmConnection()->isTransactionActive()) {
+					$this->getOrmConnection()->rollBack();
+				}
 
 				$this->logger->error($ex->getMessage());
 
