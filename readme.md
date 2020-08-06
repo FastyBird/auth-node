@@ -16,7 +16,7 @@ FastyBird auth node is an [Apache2](http://github.com/fastybird/auth-node/blob/m
 
 ## Requirements
 
-FastyBird auth node is tested against PHP 7.4 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server
+FastyBird auth node is tested against PHP 7.4 and [ReactPHP http](https://github.com/reactphp/http) 0.8 event-driven, streaming plaintext HTTP server and [RabbitMQ](https://www.rabbitmq.com/) 3.7 message broker
 
 ## Getting started
 
@@ -40,7 +40,7 @@ This microservice has several console command.
 $ vendor/bin/fb-console fb:node:server:start
 ```
 
-This command is to start build in web server which is listening for incoming http api request messages from clients and is listening for new data from exchange bus from other microservices. 
+This command is to start build-in web server which is listening for incoming http api request messages from clients and is listening for new data from exchange bus from other microservices. 
 
 ## Install with docker
 
@@ -65,12 +65,18 @@ $ docker run -d -it --name auth-node auth-node
 
 ## Configuration
 
-This microservices is preconfigured for default connections, but your infrastructure could be different.
+This microservice is preconfigured for default connections, but your infrastructure could be different.
 
 Configuration could be made via environment variables:
 
 | Environment Variable | Description |
 | ---------------------- | ---------------------------- |
+| `FB_NODE_PARAMETER__EXCHANGE_HOST=127.0.0.1` | RabbitMQ host address |
+| `FB_NODE_PARAMETER__EXCHANGE_PORT=5672` | RabbitMQ access port |
+| `FB_NODE_PARAMETER__EXCHANGE_VHOST=/` | RabbitMQ vhost |
+| `FB_NODE_PARAMETER__EXCHANGE_USERNAME=guest` | Username |
+| `FB_NODE_PARAMETER__EXCHANGE_PASSWORD=guest` | Password |
+| | |
 | `FB_NODE_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
 | `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
 | `FB_NODE_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
@@ -87,19 +93,13 @@ Configuration could be made via environment variables:
 
 ## Initialization
 
-This microservice is using database, so database have to be initialise with basic database schema. It could be done via shell command:
+This microservice is using database, and need some initial data to be inserted into it. This could be done via shell command:
 
 ```sh
-$ php vendor/bin/doctrine orm:schema-tool:create
+$ vendor/bin/fb-console fb:initialize
 ```
 
-After database schema is being created, first user account should be created with command:
-
-```sh
-$ vendor/bin/fb-console fb:auth-node:accounts:create
-```
-
-Console command will ask for all required information.
+This console command is interactive and will ask for all required information.
 
 After this steps, microservice could be started with [server command](#http-server)
 

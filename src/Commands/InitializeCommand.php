@@ -15,7 +15,6 @@
 
 namespace FastyBird\AuthNode\Commands;
 
-use Contributte\Translation;
 use Doctrine\Common;
 use Doctrine\DBAL\Connection;
 use FastyBird\AuthNode\Exceptions;
@@ -24,6 +23,7 @@ use FastyBird\AuthNode\Queries;
 use FastyBird\NodeAuth;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input;
 use Symfony\Component\Console\Output;
@@ -41,6 +41,9 @@ use Throwable;
 class InitializeCommand extends Console\Command\Command
 {
 
+	/** @var Models\Accounts\IAccountRepository */
+	private $accountRepository;
+
 	/** @var Models\Roles\IRoleRepository */
 	private $roleRepository;
 
@@ -53,28 +56,21 @@ class InitializeCommand extends Console\Command\Command
 	/** @var LoggerInterface */
 	private $logger;
 
-	/** @var Translation\PrefixedTranslator */
-	private $translator;
-
-	/** @var string */
-	private $translationDomain = 'node.commands.initialize';
-
 	public function __construct(
+		Models\Accounts\IAccountRepository $accountRepository,
 		Models\Roles\IRoleRepository $roleRepository,
 		Models\Roles\IRolesManager $rolesManager,
-		Translation\Translator $translator,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		LoggerInterface $logger,
 		?string $name = null
 	) {
+		$this->accountRepository = $accountRepository;
 		$this->roleRepository = $roleRepository;
 		$this->rolesManager = $rolesManager;
 
 		$this->managerRegistry = $managerRegistry;
 
 		$this->logger = $logger;
-
-		$this->translator = new Translation\PrefixedTranslator($translator, $this->translationDomain);
 
 		parent::__construct($name);
 	}
@@ -85,7 +81,7 @@ class InitializeCommand extends Console\Command\Command
 	protected function configure(): void
 	{
 		$this
-			->setName('fb:auth-node:initialize')
+			->setName('fb:initialize')
 			->addOption('noconfirm', null, Input\InputOption::VALUE_NONE, 'do not ask for any confirmation')
 			->setDescription('Initialize node.');
 	}
@@ -95,11 +91,48 @@ class InitializeCommand extends Console\Command\Command
 	 */
 	protected function execute(Input\InputInterface $input, Output\OutputInterface $output)
 	{
-		// $this->getApplication()->find('orm:schema-tool:create');
+		$symfonyApp = $this->getApplication();
+
+		if ($symfonyApp === null) {
+			return 1;
+		}
 
 		$io = new Style\SymfonyStyle($input, $output);
 
 		$io->title('FB auth node - initialization');
+
+		$io->note('This action will create|update node database structure, create initial data and initialize administrator account.');
+
+		/** @var bool $continue */
+		$continue = $io->ask('Would you like to continue?', 'n', function ($answer): bool {
+			if (!in_array($answer, ['y', 'Y', 'n', 'N'], true)) {
+				throw new RuntimeException('You must type Y or N');
+			}
+
+			return in_array($answer, ['y', 'Y'], true);
+		});
+
+		if (!$continue) {
+			return 0;
+		}
+
+		$io->section('Preparing node database');
+
+		$databaseCmd = $symfonyApp->find('orm:schema-tool:update');
+
+		$result = $databaseCmd->run(new Input\ArrayInput([
+			'--force' => true,
+		]), $output);
+
+		if ($result !== 0) {
+			$io->error('Something went wrong, initialization could not be finished.');
+
+			return 1;
+		}
+
+		$io->newLine();
+
+		$io->section('Preparing initial data');
 
 		$allRoles = [
 			NodeAuth\Constants::ROLE_ANONYMOUS,
@@ -141,12 +174,56 @@ class InitializeCommand extends Console\Command\Command
 
 			$this->logger->error($ex->getMessage());
 
-			$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.role.wasNotCreated')));
+			$io->error('Initial data could not be created.');
 
 			return $ex->getCode();
 		}
 
-		$io->text(sprintf('<info>%s</info>', $this->translator->translate('success')));
+		$io->success('All initial data has been successfully created.');
+
+		$io->newLine();
+
+		$io->section('Checking for administrator account');
+
+		$findRole = new Queries\FindRolesQuery();
+		$findRole->byName(NodeAuth\Constants::ROLE_ADMINISTRATOR);
+
+		$administratorRole = $this->roleRepository->findOneBy($findRole);
+
+		if ($administratorRole !== null) {
+			$findAccounts = new Queries\FindAccountsQuery();
+			$findAccounts->inRole($administratorRole);
+
+			$accounts = $this->accountRepository->findAllBy($findAccounts);
+
+			if (count($accounts) === 0) {
+				$accountCmd = $symfonyApp->find('fb:auth-node:accounts:create');
+
+				$result = $accountCmd->run(new Input\ArrayInput([
+					'role'       => NodeAuth\Constants::ROLE_ADMINISTRATOR,
+					'identity'   => 'y',
+					'--injected' => true,
+				]), $output);
+
+				if ($result !== 0) {
+					$io->error('Something went wrong, initialization could not be finished.');
+
+					return 1;
+				}
+
+			} else {
+				$io->success('There is existing administrator account.');
+			}
+
+		} else {
+			$io->error('Something went wrong, administrator role could not be found.');
+
+			return 1;
+		}
+
+		$io->newLine(3);
+
+		$io->success('This node has been successfully initialized and can be now started.');
 
 		return 0;
 	}

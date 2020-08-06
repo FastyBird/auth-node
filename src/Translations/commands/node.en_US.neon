@@ -26,6 +26,8 @@ commands:
 				title	: "User last name?"
 			email:
 				title	: "User primary email address?"
+			identity:
+				title	: "Create identity?"
 			password:
 				title	: "User default password?"
 			role:
@@ -70,10 +72,3 @@ commands:
 	sync:
 		validation:
 			notFinished	: "Synchronisation could not be finished: %s"
-
-	initialize:
-		validation:
-			role:
-				wasNotCreated	: "Roles could not be created"
-
-		success	: "Initialization was successfully finished."

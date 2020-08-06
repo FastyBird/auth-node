@@ -54,6 +54,22 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
+	 * @param Entities\Roles\IRole $role
+	 *
+	 * @return void
+	 */
+	public function inRole(Entities\Roles\IRole $role): void
+	{
+		$this->select[] = function (ORM\QueryBuilder $qb): void {
+			$qb->join('a.roles', 'roles');
+		};
+
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($role): void {
+			$qb->andWhere('roles.id = :role')->setParameter('role', $role->getId(), Uuid\Doctrine\UuidBinaryType::NAME);
+		};
+	}
+
+	/**
 	 * @param ORM\EntityRepository<Entities\Accounts\Account> $repository
 	 *
 	 * @return ORM\QueryBuilder

@@ -106,7 +106,10 @@ class CreateCommand extends Console\Command\Command
 			->addArgument('lastName', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.lastName.title'))
 			->addArgument('firstName', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.firstName.title'))
 			->addArgument('email', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.email.title'))
+			->addArgument('role', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.role.title'))
+			->addArgument('identity', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.identity.title'))
 			->addOption('noconfirm', null, Input\InputOption::VALUE_NONE, 'do not ask for any confirmation')
+			->addOption('injected', null, Input\InputOption::VALUE_NONE, 'do not show all outputs')
 			->setDescription('Create account.');
 	}
 
@@ -117,24 +120,38 @@ class CreateCommand extends Console\Command\Command
 	{
 		$io = new Style\SymfonyStyle($input, $output);
 
-		$io->title('FB auth node - create account');
+		if (!$input->hasOption('injected')) {
+			$io->title('FB auth node - create account');
+		}
 
-		if ($input->hasOption('lastName') && $input->getOption('lastName') !== '') {
-			$lastName = $input->getOption('lastName');
+		if (
+			$input->hasArgument('lastName')
+			&& is_string($input->getArgument('lastName'))
+			&& $input->getArgument('lastName') !== ''
+		) {
+			$lastName = $input->getArgument('lastName');
 
 		} else {
 			$lastName = $io->ask($this->translator->translate('inputs.lastName.title'));
 		}
 
-		if ($input->hasOption('firstName') && $input->getOption('firstName') !== '') {
-			$firstName = $input->getOption('firstName');
+		if (
+			$input->hasArgument('firstName')
+			&& is_string($input->getArgument('firstName'))
+			&& $input->getArgument('firstName') !== ''
+		) {
+			$firstName = $input->getArgument('firstName');
 
 		} else {
 			$firstName = $io->ask($this->translator->translate('inputs.firstName.title'));
 		}
 
-		if ($input->hasOption('email') && $input->getOption('email') !== '') {
-			$emailAddress = $input->getOption('email');
+		if (
+			$input->hasArgument('email')
+			&& is_string($input->getArgument('email'))
+			&& $input->getArgument('email') !== ''
+		) {
+			$emailAddress = $input->getArgument('email');
 
 		} else {
 			$emailAddress = $io->ask($this->translator->translate('inputs.email.title'));
@@ -142,7 +159,7 @@ class CreateCommand extends Console\Command\Command
 
 		do {
 			if (!Utils\Validators::isEmail($emailAddress)) {
-				$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.email.invalid', ['email' => $emailAddress])));
+				$io->error($this->translator->translate('validation.email.invalid', ['email' => $emailAddress]));
 
 				$repeat = true;
 
@@ -152,7 +169,7 @@ class CreateCommand extends Console\Command\Command
 				$repeat = $email !== null;
 
 				if ($repeat) {
-					$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.email.taken', ['email' => $emailAddress])));
+					$io->error($this->translator->translate('validation.email.taken', ['email' => $emailAddress]));
 				}
 			}
 
@@ -164,41 +181,55 @@ class CreateCommand extends Console\Command\Command
 
 		$repeat = true;
 
-		do {
-			$roleName = $io->choice(
-				$this->translator->translate('inputs.role.title'),
-				[
-					'U' => $this->translator->translate('inputs.role.values.user'),
-					'M' => $this->translator->translate('inputs.role.values.manager'),
-					'A' => $this->translator->translate('inputs.role.values.administrator'),
-				],
-				'U'
-			);
-
-			switch ($roleName) {
-				case 'U':
-					$roleName = NodeAuth\Constants::ROLE_USER;
-					break;
-
-				case 'M':
-					$roleName = NodeAuth\Constants::ROLE_MANAGER;
-					break;
-
-				case 'A':
-					$roleName = NodeAuth\Constants::ROLE_ADMINISTRATOR;
-					break;
-			}
-
+		if ($input->hasArgument('role') && in_array($input->getArgument('role'), [NodeAuth\Constants::ROLE_USER, NodeAuth\Constants::ROLE_MANAGER, NodeAuth\Constants::ROLE_ADMINISTRATOR], true)) {
 			$findRole = new Queries\FindRolesQuery();
-			$findRole->byName($roleName);
+			$findRole->byName($input->getArgument('role'));
 
 			$role = $this->roleRepository->findOneBy($findRole);
 
-			if ($role !== null) {
-				$repeat = false;
+			if ($role === null) {
+				$io->error('Entered unknown role name.');
+
+				return 1;
 			}
 
-		} while ($repeat);
+		} else {
+			do {
+				$roleName = $io->choice(
+					$this->translator->translate('inputs.role.title'),
+					[
+						'U' => $this->translator->translate('inputs.role.values.user'),
+						'M' => $this->translator->translate('inputs.role.values.manager'),
+						'A' => $this->translator->translate('inputs.role.values.administrator'),
+					],
+					'U'
+				);
+
+				switch ($roleName) {
+					case 'U':
+						$roleName = NodeAuth\Constants::ROLE_USER;
+						break;
+
+					case 'M':
+						$roleName = NodeAuth\Constants::ROLE_MANAGER;
+						break;
+
+					case 'A':
+						$roleName = NodeAuth\Constants::ROLE_ADMINISTRATOR;
+						break;
+				}
+
+				$findRole = new Queries\FindRolesQuery();
+				$findRole->byName($roleName);
+
+				$role = $this->roleRepository->findOneBy($findRole);
+
+				if ($role !== null) {
+					$repeat = false;
+				}
+
+			} while ($repeat);
+		}
 
 		try {
 			// Start transaction connection to the database
@@ -231,7 +262,7 @@ class CreateCommand extends Console\Command\Command
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-			$io->text(sprintf('<info>%s</info>', $this->translator->translate('success.account', ['name' => $account->getName()])));
+			$io->success($this->translator->translate('success.account', ['name' => $account->getName()]));
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
@@ -239,25 +270,34 @@ class CreateCommand extends Console\Command\Command
 
 			$this->logger->error($ex->getMessage());
 
-			$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.account.wasNotCreated', ['error' => $ex->getMessage()])));
+			$io->error($this->translator->translate('validation.account.wasNotCreated', ['error' => $ex->getMessage()]));
 
 			return $ex->getCode();
 		}
 
-		$createIdentity = $io->choice(
-			$this->translator->translate('texts.createIdentity'),
-			[
-				'y' => 'Yes',
-				'n' => 'No',
-			],
-			'y'
-		);
+		if (
+			$input->hasArgument('identity')
+			&& is_string($input->getArgument('identity'))
+			&& in_array(strtolower($input->getArgument('identity')), ['y', 'yes', 'n', 'no'], true)
+		) {
+			$createIdentity = in_array(strtolower($input->getArgument('identity')), ['y', 'yes'], true) ? 'y' : 'n';
+
+		} else {
+			$createIdentity = $io->choice(
+				$this->translator->translate('texts.createIdentity'),
+				[
+					'y' => 'Yes',
+					'n' => 'No',
+				],
+				'y'
+			);
+		}
 
 		if ($createIdentity === 'y') {
-			$password = $io->ask($this->translator->translate('inputs.password.title'));
+			$password = $io->askHidden($this->translator->translate('inputs.password.title'));
 
 			if ($account->getEmail() === null) {
-				$io->text(sprintf('<info>%s</info>', $this->translator->translate('validation.identity.noEmail')));
+				$io->warning($this->translator->translate('validation.identity.noEmail'));
 
 				return 0;
 			}
@@ -279,7 +319,7 @@ class CreateCommand extends Console\Command\Command
 				// Commit all changes into database
 				$this->getOrmConnection()->commit();
 
-				$io->text(sprintf('<info>%s</info>', $this->translator->translate('success.identity', ['name' => $account->getName()])));
+				$io->success($this->translator->translate('success.identity', ['name' => $account->getName()]));
 
 			} catch (Throwable $ex) {
 				// Revert all changes when error occur
@@ -287,7 +327,7 @@ class CreateCommand extends Console\Command\Command
 
 				$this->logger->error($ex->getMessage());
 
-				$io->text(sprintf('<error>%s</error>', $this->translator->translate('validation.identity.wasNotCreated', ['error' => $ex->getMessage()])));
+				$io->error($this->translator->translate('validation.identity.wasNotCreated', ['error' => $ex->getMessage()]));
 
 				return $ex->getCode();
 			}

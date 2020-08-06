@@ -80,8 +80,12 @@ class GenerateTokenCommand extends Console\Command\Command
 
 		$io->title('FB auth node - generate token');
 
-		if ($input->hasOption('type') && $input->getOption('type') !== '') {
-			$type = $input->getOption('type');
+		if (
+			$input->hasArgument('type')
+			&& is_string($input->getArgument('type'))
+			&& $input->getArgument('type') !== ''
+		) {
+			$type = $input->getArgument('type');
 
 		} else {
 			$type = $io->choice(
@@ -95,13 +99,17 @@ class GenerateTokenCommand extends Console\Command\Command
 		}
 
 		if (!in_array($type, [self::TYPE_ACCESS, self::TYPE_REFRESH], true)) {
-			$io->text(sprintf('<error>%s</error>', 'Provided token type is not valid.'));
+			$io->error('Provided token type is not valid.');
 
 			return 1;
 		}
 
-		if ($input->hasOption('uid') && $input->getOption('uid') !== '') {
-			$uid = $input->getOption('uid');
+		if (
+			$input->hasArgument('uid')
+			&& is_string($input->getArgument('uid'))
+			&& $input->getArgument('uid') !== ''
+		) {
+			$uid = $input->getArgument('uid');
 
 		} else {
 			$uid = $io->ask('Provide account identity identifier');
@@ -113,21 +121,25 @@ class GenerateTokenCommand extends Console\Command\Command
 		$identity = $this->identityRepository->findOneBy($findIdentity);
 
 		if ($identity === null) {
-			$io->text(sprintf('<error>%s</error>', 'Provided uid was not found.'));
+			$io->error('Provided uid was not found.');
 
 			return 1;
 		}
 
 		$account = $identity->getAccount();
 
-		if ($input->hasOption('validTill') && $input->getOption('validTill') !== '') {
-			$validTill = $input->getOption('validTill');
+		if (
+			$input->hasArgument('validTill')
+			&& is_string($input->getArgument('validTill'))
+			&& $input->getArgument('validTill') !== ''
+		) {
+			$validTill = $input->getArgument('validTill');
 
 		} else {
 			$validTill = $io->ask('When should token expire? (Y-m-d\TH:i:s)');
 
 			if ($validTill === false) {
-				$io->text(sprintf('<error>%s</error>', 'Provided date is not valid.'));
+				$io->error('Provided date is not valid.');
 
 				return 1;
 			}
@@ -152,7 +164,7 @@ class GenerateTokenCommand extends Console\Command\Command
 			$validTill
 		);
 
-		$io->text(sprintf('<info>%s</info>', 'Token was generated: ' . (string) $token));
+		$io->success('Token was generated: ' . (string) $token);
 
 		return 0;
 	}
