@@ -112,14 +112,14 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		$em = $eventArgs->getEntityManager();
 		$uow = $em->getUnitOfWork();
 
-		foreach ($uow->getScheduledEntityDeletions() as $object) {
-			if ($object instanceof Entities\Identities\IUserAccountIdentity) {
+		foreach (array_merge($uow->getScheduledEntityDeletions(), $uow->getScheduledCollectionDeletions()) as $object) {
+			if ($object instanceof Entities\Accounts\IAccount) {
 				$findAccount = new Queries\FindVerneMqAccountsQuery();
-				$findAccount->forAccount($object->getAccount());
+				$findAccount->forAccount($object);
 
-				$verneMqAccount = $this->accountRepository->findOneBy($findAccount);
+				$verneMqAccounts = $this->accountRepository->findAllBy($findAccount);
 
-				if ($verneMqAccount !== null) {
+				foreach ($verneMqAccounts as $verneMqAccount) {
 					$uow->scheduleForDelete($verneMqAccount);
 				}
 			}
@@ -250,7 +250,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		$verneMqAccount = new Entities\Vernemq\Account(
 			$identity->getUid(),
 			$password,
-			$identity->getAccount()
+			$identity
 		);
 
 		foreach ($publishAcls as $publishAcl) {

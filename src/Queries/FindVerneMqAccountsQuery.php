@@ -66,6 +66,22 @@ class FindVerneMqAccountsQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
+	 * @param Entities\Identities\IIdentity $identity
+	 *
+	 * @return void
+	 */
+	public function forIdentity(Entities\Identities\IIdentity $identity): void
+	{
+		$this->select[] = function (ORM\QueryBuilder $qb): void {
+			$qb->join('a.identity', 'identity');
+		};
+
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($identity): void {
+			$qb->andWhere('identity.id = :identity')->setParameter('identity', $identity->getId(), Uuid\Doctrine\UuidBinaryType::NAME);
+		};
+	}
+
+	/**
 	 * @param Entities\Accounts\IAccount $account
 	 *
 	 * @return void
@@ -73,7 +89,8 @@ class FindVerneMqAccountsQuery extends DoctrineOrmQuery\QueryObject
 	public function forAccount(Entities\Accounts\IAccount $account): void
 	{
 		$this->select[] = function (ORM\QueryBuilder $qb): void {
-			$qb->join('a.account', 'account');
+			$qb->join('a.identity', 'identity');
+			$qb->join('identity.account', 'account');
 		};
 
 		$this->filter[] = function (ORM\QueryBuilder $qb) use ($account): void {

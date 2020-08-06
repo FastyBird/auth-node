@@ -199,7 +199,7 @@ class VernemqCommand extends Console\Command\Command
 						$create = Utils\ArrayHash::from([
 							'username'     => $identity->getUid(),
 							'password'     => $identity->getPassword(),
-							'account'      => $account,
+							'identity'     => $identity,
 							'publishAcl'   => $publishAcls,
 							'subscribeAcl' => $subscribeAcls,
 						]);
@@ -253,7 +253,7 @@ class VernemqCommand extends Console\Command\Command
 						$create = Utils\ArrayHash::from([
 							'username'     => $identity->getUid(),
 							'password'     => $identity->getPassword(),
-							'account'      => $account,
+							'identity'     => $identity,
 							'publishAcl'   => $publishAcls,
 							'subscribeAcl' => $subscribeAcls,
 						]);

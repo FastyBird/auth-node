@@ -95,6 +95,8 @@ class InitializeCommand extends Console\Command\Command
 	 */
 	protected function execute(Input\InputInterface $input, Output\OutputInterface $output)
 	{
+		// $this->getApplication()->find('orm:schema-tool:create');
+
 		$io = new Style\SymfonyStyle($input, $output);
 
 		$io->title('FB auth node - initialization');

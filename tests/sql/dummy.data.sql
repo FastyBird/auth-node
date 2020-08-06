@@ -102,6 +102,8 @@ VALUES (_binary 0x77331268EFBFBD3449EFBFBDEFBFBD04, _binary 0x5E79EFBFBD0D5B7C46
         '11b9174dbbc8f3f5ce3b3d270a3c73eedbe33832489aaa70fe0f370566bcd2f12a1a15041b318b57fd6ce6bb82471d9e2d7bc753064491bf418f9f9c3de21fcf',
         '{"salt": "89bwo"}'),
        (_binary 0x540F6CFC39D1417587FBAAC729D78C0A, _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, 'deviceUsername',
+        'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'machine', 'unsecuredDevicePassword', '[]'),
+       (_binary 0x35BE56240160432383EE6F59000934B4, _binary 0x16E5DB2900064484AC385CDEA5A008F5, 'oldDeviceUsername',
         'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'machine', 'unsecuredDevicePassword', '[]');
 
 INSERT IGNORE INTO `fb_security_tokens` (`token_id`, `parent_id`, `token_token`, `token_status`, `token_type`)
@@ -145,7 +147,7 @@ INSERT IGNORE INTO `fb_accounts_roles` (`role_id`, `account_id`)
 VALUES (_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34),
        (_binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD);
 
-INSERT IGNORE INTO `vmq_auth_acl` (`id`, `account_id`, `mountpoint`, `client_id`, `username`, `password`,
+INSERT IGNORE INTO `vmq_auth_acl` (`id`, `identity_id`, `mountpoint`, `client_id`, `username`, `password`,
                                      `publish_acl`, `subscribe_acl`)
-VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, '', '',
+VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, _binary 0x540F6CFC39D1417587FBAAC729D78C0A, '', '',
         'jane.doe@fastybird.com', 'passwd', '[]', '[]');

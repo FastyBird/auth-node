@@ -35,7 +35,7 @@ use Throwable;
  *       "comment"="VerneMQ ACL"
  *     },
  *     uniqueConstraints={
- *       @ORM\UniqueConstraint(name="account_unique", columns={"mountpoint", "client_id", "username"}),
+ *       @ORM\UniqueConstraint(name="account_unique", columns={"mountpoint", "client_id", "username"})
  *     }
  * )
  */
@@ -58,13 +58,13 @@ class Account implements IAccount
 	protected $id;
 
 	/**
-	 * @var Entities\Accounts\IAccount|null
+	 * @var Entities\Identities\IIdentity|null
 	 *
 	 * @IPubDoctrine\Crud(is={"required", "writable"})
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\Account")
-	 * @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", onDelete="cascade", nullable=true)
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Identities\Identity")
+	 * @ORM\JoinColumn(name="identity_id", referencedColumnName="identity_id", onDelete="cascade", nullable=true)
 	 */
-	private $account;
+	private $identity;
 
 	/**
 	 * @var string
@@ -117,21 +117,21 @@ class Account implements IAccount
 	/**
 	 * @param string $username
 	 * @param string $password
-	 * @param Entities\Accounts\IAccount $account
+	 * @param Entities\Identities\IIdentity $identity
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		string $username,
 		string $password,
-		Entities\Accounts\IAccount $account
+		Entities\Identities\IIdentity $identity
 	) {
 		$this->id = Uuid\Uuid::uuid4();
 
 		$this->username = $username;
 		$this->setPassword($password);
 
-		$this->account = $account;
+		$this->identity = $identity;
 
 		// Fill defaults
 		$this->mountpoint = '';
@@ -141,9 +141,9 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getAccount(): ?Entities\Accounts\IAccount
+	public function getIdentity(): ?Entities\Identities\IIdentity
 	{
-		return $this->account;
+		return $this->identity;
 	}
 
 	/**

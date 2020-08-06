@@ -36,9 +36,9 @@ interface IAccount extends NodeDatabaseEntities\IEntity,
 {
 
 	/**
-	 * @return Entities\Accounts\IAccount|null
+	 * @return Entities\Identities\IIdentity|null
 	 */
-	public function getAccount(): ?Entities\Accounts\IAccount;
+	public function getIdentity(): ?Entities\Identities\IIdentity;
 
 	/**
 	 * @param string $mountpoint
