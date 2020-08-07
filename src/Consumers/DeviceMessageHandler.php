@@ -157,12 +157,13 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			return false;
 
 		} catch (Throwable $ex) {
+			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+
+		} finally {
 			// Revert all changes when error occur
 			if ($this->getOrmConnection()->isTransactionActive()) {
 				$this->getOrmConnection()->rollBack();
 			}
-
-			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 		}
 
 		$this->logger->info('[CONSUMER] Successfully consumed entity message');
