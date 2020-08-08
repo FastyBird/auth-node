@@ -130,6 +130,18 @@ class InitializeCommand extends Console\Command\Command
 			return 1;
 		}
 
+		$databaseProxiesCmd = $symfonyApp->find('orm:generate-proxies');
+
+		$result = $databaseProxiesCmd->run(new Input\ArrayInput([
+			'--quiet' => true,
+		]), $output);
+
+		if ($result !== 0) {
+			$io->error('Something went wrong, initialization could not be finished.');
+
+			return 1;
+		}
+
 		$io->newLine();
 
 		$io->section('Preparing initial data');
