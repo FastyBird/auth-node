@@ -53,9 +53,6 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	/** @var Models\Accounts\IAccountsManager */
 	private $accountsManager;
 
-	/** @var Models\Identities\IIdentitiesManager */
-	private $identitiesManager;
-
 	/** @var Models\Roles\IRoleRepository */
 	private $roleRepository;
 
@@ -71,7 +68,6 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	public function __construct(
 		Models\Accounts\IAccountRepository $accountRepository,
 		Models\Accounts\IAccountsManager $accountsManager,
-		Models\Identities\IIdentitiesManager $identitiesManager,
 		Models\Roles\IRoleRepository $roleRepository,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
 		Log\LoggerInterface $logger,
@@ -79,7 +75,6 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	) {
 		$this->accountRepository = $accountRepository;
 		$this->accountsManager = $accountsManager;
-		$this->identitiesManager = $identitiesManager;
 		$this->roleRepository = $roleRepository;
 
 		$this->schemaLoader = $schemaLoader;
@@ -100,53 +95,51 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 		try {
 			switch ($routingKey) {
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY:
-					// Start transaction connection to the database
-					$this->getOrmConnection()->beginTransaction();
+					$findAccount = new Queries\FindAccountsQuery();
+					$findAccount->byId(Uuid\Uuid::fromString($message->offsetGet('id')));
 
-					$findRole = new Queries\FindRolesQuery();
-					$findRole->byName(NodeAuth\Constants::ROLE_USER);
+					$account = $this->accountRepository->findOneBy($findAccount);
 
-					$role = $this->roleRepository->findOneBy($findRole);
+					if ($account === null) {
+						// Start transaction connection to the database
+						$this->getOrmConnection()->beginTransaction();
 
-					$create = Utils\ArrayHash::from([
-						'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
-						'entity' => Entities\Accounts\MachineAccount::class,
-						'status' => AuthNode\Types\AccountStatusType::get(AuthNode\Types\AccountStatusType::STATE_ACTIVATED),
-						'roles'  => [
-							$role,
-						],
-					]);
+						$findRole = new Queries\FindRolesQuery();
+						$findRole->byName(NodeAuth\Constants::ROLE_USER);
 
-					$account = $this->accountsManager->create($create);
+						$role = $this->roleRepository->findOneBy($findRole);
 
-					$create = Utils\ArrayHash::from([
-						'account'  => $account,
-						'entity'   => Entities\Identities\MachineAccountIdentity::class,
-						'uid'      => $message->offsetGet('device'),
-						'password' => $message->offsetGet('device'),
-					]);
+						$create = Utils\ArrayHash::from([
+							'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
+							'entity' => Entities\Accounts\MachineAccount::class,
+							'status' => AuthNode\Types\AccountStatusType::get(AuthNode\Types\AccountStatusType::STATE_ACTIVATED),
+							'roles'  => [
+								$role,
+							],
+						]);
 
-					$this->identitiesManager->create($create);
+						$this->accountsManager->create($create);
 
-					// Commit all changes into database
-					$this->getOrmConnection()->commit();
+						// Commit all changes into database
+						$this->getOrmConnection()->commit();
+					}
 					break;
 
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY:
-					// Start transaction connection to the database
-					$this->getOrmConnection()->beginTransaction();
-
 					$findAccount = new Queries\FindAccountsQuery();
 					$findAccount->byId(Uuid\Uuid::fromString($message->offsetGet('id')));
 
 					$account = $this->accountRepository->findOneBy($findAccount);
 
 					if ($account !== null) {
-						$this->accountsManager->delete($account);
-					}
+						// Start transaction connection to the database
+						$this->getOrmConnection()->beginTransaction();
 
-					// Commit all changes into database
-					$this->getOrmConnection()->commit();
+						$this->accountsManager->delete($account);
+
+						// Commit all changes into database
+						$this->getOrmConnection()->commit();
+					}
 					break;
 
 				default:

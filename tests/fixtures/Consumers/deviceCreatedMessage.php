@@ -19,6 +19,6 @@ return [
 			'device'     => 'first-device',
 			'parent'     => null,
 		]),
-		'first-device',
+		'69786d15-fd0c-4d9f-9378-33287c2009fa',
 	],
 ];

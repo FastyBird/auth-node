@@ -9,6 +9,7 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use Nette\Utils;
+use Ramsey\Uuid;
 use Tester\Assert;
 
 require_once __DIR__ . '/../../../bootstrap.php';
@@ -34,22 +35,22 @@ final class DeviceMessageHandlerTest extends DbTestCase
 	 *
 	 * @dataProvider ./../../../fixtures/Consumers/deviceCreatedMessage.php
 	 */
-	public function testProcessMessageDeviceCreated(string $routingKey, Utils\ArrayHash $message, ?string $verneUsername): void
+	public function testProcessMessageDeviceCreated(string $routingKey, Utils\ArrayHash $message, ?string $id): void
 	{
 		/** @var Consumers\DeviceMessageHandler $handler */
 		$handler = $this->getContainer()->getByType(Consumers\DeviceMessageHandler::class);
 
 		$handler->process($routingKey, $message);
 
-		/** @var Models\Vernemq\IAccountRepository $accountRepository */
-		$accountRepository = $this->getContainer()->getByType(Models\Vernemq\IAccountRepository::class);
+		/** @var Models\Accounts\IAccountRepository $accountRepository */
+		$accountRepository = $this->getContainer()->getByType(Models\Accounts\IAccountRepository::class);
 
-		$findAccount = new Queries\FindVerneMqAccountsQuery();
-		$findAccount->byUsername($verneUsername);
+		$findAccount = new Queries\FindAccountsQuery();
+		$findAccount->byId(Uuid\Uuid::fromString($id));
 
 		$account = $accountRepository->findOneBy($findAccount);
 
-		Assert::type(Entities\Vernemq\Account::class, $account);
+		Assert::type(Entities\Accounts\MachineAccount::class, $account);
 	}
 
 	/**
@@ -82,9 +83,6 @@ final class DeviceMessageHandlerTest extends DbTestCase
 
 		$updatedAccounts = $accountRepository->findAllBy($findAccounts);
 
-		foreach ($updatedAccounts as $account) {
-			var_dump($account->getUsername());
-		}
 		Assert::same(count($accounts) - 1, count($updatedAccounts));
 	}
 
