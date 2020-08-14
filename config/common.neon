@@ -154,7 +154,7 @@ nettrineOrmAnnotations:
 decorator:
 	FastyBird\NodeWebServer\Commands\HttpServerCommand:
 		setup:
-			- '$onBeforeServerStart[]' = @FastyBird\DevicesNode\Events\ServerBeforeStartHandler
+			- '$onBeforeServerStart[]' = @FastyBird\AuthNode\Events\ServerBeforeStartHandler
 
 services:
 	# Security
