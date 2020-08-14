@@ -151,6 +151,11 @@ nettrineOrmAnnotations:
 # Node services definitions #
 #############################
 
+decorator:
+	FastyBird\NodeWebServer\Commands\HttpServerCommand:
+		setup:
+			- '$onBeforeServerStart[]' = @FastyBird\DevicesNode\Events\ServerBeforeStartHandler
+
 services:
 	# Security
 	##########
