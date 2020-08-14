@@ -156,6 +156,10 @@ decorator:
 		setup:
 			- '$onBeforeServerStart[]' = @FastyBird\AuthNode\Events\ServerBeforeStartHandler
 
+	FastyBird\NodeExchange\Exchange:
+		setup:
+			- '$onAfterConsumeMessage[]' = @FastyBird\NodeDatabase\Events\AfterConsumeHandler
+
 services:
 	# Security
 	##########
