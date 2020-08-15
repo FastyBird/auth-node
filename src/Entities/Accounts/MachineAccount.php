@@ -139,4 +139,14 @@ class MachineAccount extends Account implements IMachineAccount
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return array_merge(parent::toArray(), [
+			'parent' => $this->getParent() !== null ? $this->getParent()->getPlainId() : null,
+		]);
+	}
+
 }

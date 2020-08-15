@@ -194,6 +194,19 @@ abstract class Identity implements IIdentity
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return [
+			'id'      => $this->getPlainId(),
+			'account' => $this->getAccount()->getPlainId(),
+			'uid'     => $this->getUid(),
+			'status'  => $this->getStatus()->getValue(),
+		];
+	}
+
+	/**
 	 * @return void
 	 *
 	 * @throws Throwable

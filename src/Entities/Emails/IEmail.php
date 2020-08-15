@@ -136,4 +136,9 @@ interface IEmail extends NodeDatabaseEntities\IEntity,
 	 */
 	public function isPrivate(): bool;
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

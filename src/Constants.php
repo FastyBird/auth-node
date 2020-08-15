@@ -15,6 +15,8 @@
 
 namespace FastyBird\AuthNode;
 
+use FastyBird\AuthNode\Entities as AuthNodeEntities;
+
 /**
  * Service constants
  *
@@ -65,6 +67,17 @@ final class Constants
 	public const IDENTITY_PASSWORD_MINIMAL_LENGTH = 8;
 
 	/**
+	 * Message bus routing keys mapping
+	 */
+	public const RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING = [
+		AuthNodeEntities\Accounts\Account::class    => 'fb.bus.node.entity.[ACTION].account',
+		AuthNodeEntities\Emails\Email::class        => 'fb.bus.node.entity.[ACTION].email',
+		AuthNodeEntities\Identities\Identity::class => 'fb.bus.node.entity.[ACTION].identity',
+	];
+
+	public const RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING = '[ACTION]';
+
+	/**
 	 * Message bus routing key for devices & channels properties messages
 	 */
 
@@ -76,6 +89,6 @@ final class Constants
 	 * Microservices origins
 	 */
 
-	public const NODE_DEVICES_ORIGIN = 'com.fastybird.device-node';
+	public const NODE_DEVICES_ORIGIN = 'com.fastybird.devices-node';
 
 }

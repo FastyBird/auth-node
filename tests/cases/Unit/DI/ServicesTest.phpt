@@ -45,6 +45,9 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Events\ServerBeforeStartHandler::class));
 
 		Assert::notNull($container->getByType(Subscribers\EmailEntitySubscriber::class));
+		Assert::notNull($container->getByType(Subscribers\EntitiesSubscriber::class));
+		Assert::notNull($container->getByType(Subscribers\EntityAuthorSubscriber::class));
+		Assert::notNull($container->getByType(Subscribers\EntityEditorSubscriber::class));
 		Assert::notNull($container->getByType(Subscribers\IdentityEntitySubscriber::class));
 
 		Assert::notNull($container->getByType(Models\Accounts\AccountRepository::class));
@@ -70,6 +73,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Controllers\AuthenticateV1Controller::class));
 
 		Assert::notNull($container->getByType(Schemas\Accounts\UserAccountSchema::class));
+		Assert::notNull($container->getByType(Schemas\Accounts\MachineAccountSchema::class));
 		Assert::notNull($container->getByType(Schemas\Emails\EmailSchema::class));
 		Assert::notNull($container->getByType(Schemas\Sessions\SessionSchema::class));
 		Assert::notNull($container->getByType(Schemas\Identities\UserAccountIdentitySchema::class));

@@ -5,6 +5,8 @@ namespace Tests\Cases;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use Mockery;
 use Nette\Utils;
 use Ramsey\Uuid;
 use Tester\Assert;
@@ -19,6 +21,20 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 {
 
 	private const ACCOUNT_TEST_ID = '16e5db29-0006-4484-ac38-5cdea5a008f5';
+
+	public function setUp(): void
+	{
+		parent::setUp();
+
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher
+			->shouldReceive('publish');
+
+		$this->mockContainerService(
+			NodeExchangePublishers\IRabbitMqPublisher::class,
+			$rabbitPublisher
+		);
+	}
 
 	public function testCreateEntity(): void
 	{

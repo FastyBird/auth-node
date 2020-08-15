@@ -45,7 +45,10 @@ base:
 		forbidden:
 			heading	: "Not allowed"
 			message	: "You are not allowed to perform this action"
-		uniqueConstraint:
+		uniqueIdConstraint:
+			heading	: "Identifier not unique"
+			message	: "Provided identifier is not unique"
+		uniqueAttributeConstraint:
 			heading	: "Attribute not unique"
 			message	: "Provided attribute is not unique"
 		roleNotFound:

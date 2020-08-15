@@ -3,8 +3,10 @@
 namespace Tests\Cases;
 
 use FastyBird\AuthNode\Router;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;
+use Mockery;
 use React\Http\Io\ServerRequest;
 use Tester\Assert;
 use Tests\Tools;
@@ -45,6 +47,21 @@ final class AccountIdentitiesV1ControllerTest extends DbTestCase
 			$body
 		);
 
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher
+			->shouldReceive('publish')
+			->withArgs(function (string $routingKey, array $data): bool {
+				Assert::same('fb.bus.node.entity.updated.identity', $routingKey);
+				Assert::false($data === []);
+
+				return true;
+			});
+
+		$this->mockContainerService(
+			NodeExchangePublishers\IRabbitMqPublisher::class,
+			$rabbitPublisher
+		);
+
 		$response = $router->handle($request);
 
 		Tools\JsonAssert::assertFixtureMatch(
@@ -73,6 +90,21 @@ final class AccountIdentitiesV1ControllerTest extends DbTestCase
 			$url,
 			[],
 			$body
+		);
+
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher
+			->shouldReceive('publish')
+			->withArgs(function (string $routingKey, array $data): bool {
+				Assert::same('fb.bus.node.entity.updated.account', $routingKey);
+				Assert::false($data === []);
+
+				return true;
+			});
+
+		$this->mockContainerService(
+			NodeExchangePublishers\IRabbitMqPublisher::class,
+			$rabbitPublisher
 		);
 
 		$response = $router->handle($request);

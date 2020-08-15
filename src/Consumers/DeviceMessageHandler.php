@@ -173,7 +173,7 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			switch ($routingKey) {
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY:
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY:
-					return $this->schemaLoader->load(NodeMetadata\Constants::RESOURCES_FOLDER . '/schemas/devices-node/data.device.json');
+					return $this->schemaLoader->load(NodeMetadata\Constants::RESOURCES_FOLDER . '/schemas/devices-node/entity.device.json');
 			}
 		}
 

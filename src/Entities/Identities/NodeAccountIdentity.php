@@ -84,4 +84,14 @@ class NodeAccountIdentity extends Identity implements INodeAccountIdentity
 		return $this->password === $password;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return array_merge(parent::toArray(), [
+			'password' => $this->getPassword(),
+		]);
+	}
+
 }

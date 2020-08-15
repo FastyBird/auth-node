@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Router;
 use FastyBird\DateTimeFactory;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use FastyBird\NodeWebServer\Http;
 use Fig\Http\Message\RequestMethodInterface;
 use Mockery;
@@ -95,6 +96,21 @@ final class AccountV1ControllerTest extends DbTestCase
 			$url,
 			$headers,
 			$body
+		);
+
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher
+			->shouldReceive('publish')
+			->withArgs(function (string $routingKey, array $data): bool {
+				Assert::same('fb.bus.node.entity.updated.account', $routingKey);
+				Assert::false($data === []);
+
+				return true;
+			});
+
+		$this->mockContainerService(
+			NodeExchangePublishers\IRabbitMqPublisher::class,
+			$rabbitPublisher
 		);
 
 		$dateTimeFactory = Mockery::mock(DateTimeFactory\DateTimeFactory::class);

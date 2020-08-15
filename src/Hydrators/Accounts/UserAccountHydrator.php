@@ -23,7 +23,7 @@ use IPub\JsonAPIDocument;
 use Nette\Utils;
 
 /**
- * Account entity hydrator
+ * User account entity hydrator
  *
  * @package        FastyBird:AuthNode!
  * @subpackage     Hydrators

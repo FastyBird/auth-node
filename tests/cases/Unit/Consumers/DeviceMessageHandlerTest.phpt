@@ -8,6 +8,8 @@ use FastyBird\AuthNode\Consumers;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use Mockery;
 use Nette\Utils;
 use Ramsey\Uuid;
 use Tester\Assert;
@@ -26,6 +28,15 @@ final class DeviceMessageHandlerTest extends DbTestCase
 		$this->registerDatabaseSchemaFile(__DIR__ . '/../../../sql/deviceExchangecConsumer.sql');
 
 		parent::setUp();
+
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher
+			->shouldReceive('publish');
+
+		$this->mockContainerService(
+			NodeExchangePublishers\IRabbitMqPublisher::class,
+			$rabbitPublisher
+		);
 	}
 
 	/**

@@ -5,6 +5,8 @@ namespace Tests\Cases;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
+use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use Mockery;
 use Nette\Utils;
 use Tester\Assert;
 
@@ -16,6 +18,20 @@ require_once __DIR__ . '/../DbTestCase.php';
  */
 final class EmailEntitySubscriberTest extends DbTestCase
 {
+
+	public function setUp(): void
+	{
+		parent::setUp();
+
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher
+			->shouldReceive('publish');
+
+		$this->mockContainerService(
+			NodeExchangePublishers\IRabbitMqPublisher::class,
+			$rabbitPublisher
+		);
+	}
 
 	public function testChangeDefault(): void
 	{

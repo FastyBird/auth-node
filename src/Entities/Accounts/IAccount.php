@@ -125,4 +125,9 @@ interface IAccount extends NodeDatabaseEntities\IEntity,
 	 */
 	public function hasRole(string $role): bool;
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

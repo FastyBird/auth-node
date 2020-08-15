@@ -87,4 +87,9 @@ interface IIdentity extends NS\IIdentity,
 	 */
 	public function invalidate(): void;
 
+	/**
+	 * @return mixed[]
+	 */
+	public function toArray(): array;
+
 }

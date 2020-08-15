@@ -291,6 +291,22 @@ class Email implements IEmail
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return [
+			'id'          => $this->getPlainId(),
+			'account'     => $this->getAccount()->getPlainId(),
+			'address'     => $this->getAddress(),
+			'is_default'  => $this->isDefault(),
+			'is_verified' => $this->isVerified(),
+			'is_private'  => $this->isPrivate(),
+			'is_public'   => $this->isPublic(),
+		];
+	}
+
+	/**
 	 * @return string
 	 */
 	public function __toString(): string

@@ -28,6 +28,7 @@ use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
+use Nette\Utils;
 use Psr\Http\Message;
 use Throwable;
 
@@ -226,6 +227,44 @@ final class EmailsV1Controller extends BaseV1Controller
 			}
 
 			throw $ex;
+
+		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+
+			if (preg_match("%'PRIMARY'%", $ex->getMessage(), $match) !== false) {
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('//node.base.messages.uniqueIdConstraint.heading'),
+					$this->translator->translate('//node.base.messages.uniqueIdConstraint.message'),
+					[
+						'pointer' => '/data/id',
+					]
+				);
+
+			} elseif (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
+				$columnParts = explode('.', $match['key']);
+				$columnKey = end($columnParts);
+
+				if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'email_')) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
+						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message'),
+						[
+							'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 6),
+						]
+					);
+				}
+			}
+
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
+				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message')
+			);
 
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur

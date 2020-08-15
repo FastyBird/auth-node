@@ -278,4 +278,20 @@ abstract class Account implements IAccount
 		return false;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return [
+			'id'         => $this->getPlainId(),
+			'status'     => $this->getStatus()->getValue(),
+			'registered' => $this->getCreatedAt() !== null ? $this->getCreatedAt()->format(DATE_ATOM) : null,
+			'last_visit' => $this->getLastVisit() !== null ? $this->getLastVisit()->format(DATE_ATOM) : null,
+			'roles'      => array_map(function (Entities\Roles\IRole $role): string {
+				return $role->getRoleId();
+			}, $this->getRoles()),
+		];
+	}
+
 }

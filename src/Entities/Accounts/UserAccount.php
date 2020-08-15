@@ -276,4 +276,19 @@ class UserAccount extends Account implements IUserAccount
 		return 'en';
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public function toArray(): array
+	{
+		return array_merge(parent::toArray(), [
+			'first_name'  => $this->getDetails()->getFirstName(),
+			'last_name'   => $this->getDetails()->getLastName(),
+			'middle_name' => $this->getDetails()->getMiddleName(),
+			'email'       => $this->getEmail() !== null ? $this->getEmail()->getAddress() : null,
+			'language'    => $this->getLanguage(),
+			'parent'      => $this->getParent() !== null ? $this->getParent()->getPlainId() : null,
+		]);
+	}
+
 }

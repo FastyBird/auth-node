@@ -218,8 +218,9 @@ services:
 
 	- {factory: FastyBird\AuthNode\Subscribers\EntityEditorSubscriber}
 
+	- {factory: FastyBird\AuthNode\Subscribers\EntitiesSubscriber}
+
 	# Database repositories
-	#######################
 
 	- {factory: FastyBird\AuthNode\Models\Accounts\AccountRepository}
 
@@ -272,6 +273,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Schemas\Accounts\UserAccountSchema}
 
+	- {factory: FastyBird\AuthNode\Schemas\Accounts\MachineAccountSchema}
+
 	- {factory: FastyBird\AuthNode\Schemas\Emails\EmailSchema}
 
 	- {factory: FastyBird\AuthNode\Schemas\Sessions\SessionSchema}
@@ -286,6 +289,8 @@ services:
 	###############
 
 	- {factory: FastyBird\AuthNode\Hydrators\Accounts\UserAccountHydrator}
+
+	- {factory: FastyBird\AuthNode\Hydrators\Accounts\MachineAccountHydrator}
 
 	- {factory: FastyBird\AuthNode\Hydrators\Emails\EmailHydrator}
 
