@@ -41,7 +41,7 @@ use Throwable;
  *     },
  *     indexes={
  *       @ORM\Index(name="identity_uid_idx", columns={"identity_uid"}),
- *       @ORM\Index(name="identity_status_idx", columns={"identity_status"})
+ *       @ORM\Index(name="identity_state_idx", columns={"identity_state"})
  *     }
  * )
  * @ORM\InheritanceType("SINGLE_TABLE")
@@ -90,13 +90,13 @@ abstract class Identity implements IIdentity
 	protected $uid;
 
 	/**
-	 * @var Types\IdentityStatusType
+	 * @var Types\IdentityStateType
 	 *
-	 * @Enum(class=Types\IdentityStatusType::class)
+	 * @Enum(class=Types\IdentityStateType::class)
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string_enum", name="identity_status", nullable=false, options={"default": "active"})
+	 * @ORM\Column(type="string_enum", name="identity_state", nullable=false, options={"default": "active"})
 	 */
-	protected $status;
+	protected $state;
 
 	/**
 	 * @param Entities\Accounts\IAccount $account
@@ -113,7 +113,7 @@ abstract class Identity implements IIdentity
 		$this->account = $account;
 		$this->uid = $uid;
 
-		$this->status = Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_ACTIVE);
+		$this->state = Types\IdentityStateType::get(Types\IdentityStateType::STATE_ACTIVE);
 	}
 
 	/**
@@ -135,17 +135,17 @@ abstract class Identity implements IIdentity
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setStatus(Types\IdentityStatusType $status): void
+	public function setState(Types\IdentityStateType $state): void
 	{
-		$this->status = $status;
+		$this->state = $state;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getStatus(): Types\IdentityStatusType
+	public function getState(): Types\IdentityStateType
 	{
-		return $this->status;
+		return $this->state;
 	}
 
 	/**
@@ -153,7 +153,7 @@ abstract class Identity implements IIdentity
 	 */
 	public function isActive(): bool
 	{
-		return $this->status === Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_ACTIVE);
+		return $this->state === Types\IdentityStateType::get(Types\IdentityStateType::STATE_ACTIVE);
 	}
 
 	/**
@@ -161,7 +161,7 @@ abstract class Identity implements IIdentity
 	 */
 	public function isBlocked(): bool
 	{
-		return $this->status === Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_BLOCKED);
+		return $this->state === Types\IdentityStateType::get(Types\IdentityStateType::STATE_BLOCKED);
 	}
 
 	/**
@@ -169,7 +169,7 @@ abstract class Identity implements IIdentity
 	 */
 	public function isDeleted(): bool
 	{
-		return $this->status === Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_DELETED);
+		return $this->state === Types\IdentityStateType::get(Types\IdentityStateType::STATE_DELETED);
 	}
 
 	/**
@@ -177,7 +177,7 @@ abstract class Identity implements IIdentity
 	 */
 	public function isInvalid(): bool
 	{
-		return $this->status === Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_INVALID);
+		return $this->state === Types\IdentityStateType::get(Types\IdentityStateType::STATE_INVALID);
 	}
 
 	/**
@@ -193,7 +193,7 @@ abstract class Identity implements IIdentity
 	 */
 	public function invalidate(): void
 	{
-		$this->status = Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_INVALID);
+		$this->state = Types\IdentityStateType::get(Types\IdentityStateType::STATE_INVALID);
 	}
 
 	/**
@@ -205,7 +205,7 @@ abstract class Identity implements IIdentity
 			'id'      => $this->getPlainId(),
 			'account' => $this->getAccount()->getPlainId(),
 			'uid'     => $this->getUid(),
-			'status'  => $this->getStatus()->getValue(),
+			'state'   => $this->getState()->getValue(),
 		];
 	}
 
@@ -220,7 +220,7 @@ abstract class Identity implements IIdentity
 	{
 		$this->id = Uuid\Uuid::uuid4();
 		$this->createdAt = new Utils\DateTime();
-		$this->status = Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_ACTIVE);
+		$this->state = Types\IdentityStateType::get(Types\IdentityStateType::STATE_ACTIVE);
 	}
 
 }

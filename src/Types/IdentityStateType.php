@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * AccountStatusType.php
+ * IdentityStateType.php
  *
  * @license        More in license.md
  * @copyright      https://fastybird.com
@@ -18,24 +18,23 @@ namespace FastyBird\AuthNode\Types;
 use Consistence;
 
 /**
- * Doctrine2 DB type for account status column
+ * Doctrine2 DB type for identity state column
  *
  * @package        FastyBird:AuthNode!
  * @subpackage     Types
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class AccountStatusType extends Consistence\Enum\Enum
+class IdentityStateType extends Consistence\Enum\Enum
 {
 
 	/**
 	 * Define states
 	 */
-	public const STATE_ACTIVATED = 'activated';
+	public const STATE_ACTIVE = 'active';
 	public const STATE_BLOCKED = 'blocked';
 	public const STATE_DELETED = 'deleted';
-	public const STATE_NOT_ACTIVATED = 'notActivated';
-	public const STATE_APPROVAL_WAITING = 'approvalWaiting';
+	public const STATE_INVALID = 'invalid';
 
 	/**
 	 * @return string
@@ -44,16 +43,5 @@ class AccountStatusType extends Consistence\Enum\Enum
 	{
 		return (string) self::getValue();
 	}
-
-	/**
-	 * List of allowed statuses
-	 *
-	 * @var string[]
-	 */
-	public static $allowedStates = [
-		self::STATE_ACTIVATED,
-		self::STATE_BLOCKED,
-		self::STATE_DELETED,
-	];
 
 }

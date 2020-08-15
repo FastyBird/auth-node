@@ -84,20 +84,20 @@ class FindIdentitiesQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
-	 * @param string $status
+	 * @param string $state
 	 *
 	 * @return void
 	 *
 	 * @throw Exceptions\InvalidArgumentException
 	 */
-	public function inStatus(string $status): void
+	public function inState(string $state): void
 	{
-		if (!Types\IdentityStatusType::isValidValue($status)) {
-			throw new Exceptions\InvalidArgumentException('Invalid identity status given');
+		if (!Types\IdentityStateType::isValidValue($state)) {
+			throw new Exceptions\InvalidArgumentException('Invalid identity state given');
 		}
 
-		$this->filter[] = function (ORM\QueryBuilder $qb) use ($status): void {
-			$qb->andWhere('i.status = :status')->setParameter('status', $status);
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($state): void {
+			$qb->andWhere('i.state = :state')->setParameter('state', $state);
 		};
 	}
 

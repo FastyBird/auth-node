@@ -77,14 +77,14 @@ final class Authenticator implements NS\IAuthenticator
 
 		$account = $identity->getAccount();
 
-		if ($account->getStatus()->equalsValue(Types\AccountStatusType::STATE_ACTIVATED)) {
+		if ($account->getState()->equalsValue(Types\AccountStateType::STATE_ACTIVATED)) {
 			return $identity;
 		}
 
-		if ($account->getStatus()->equalsValue(Types\AccountStatusType::STATE_BLOCKED)) {
+		if ($account->getState()->equalsValue(Types\AccountStateType::STATE_BLOCKED)) {
 			throw new Exceptions\AuthenticationFailedException('Account profile is blocked', self::ACCOUNT_PROFILE_BLOCKED);
 
-		} elseif ($account->getStatus()->equalsValue(Types\AccountStatusType::STATE_DELETED)) {
+		} elseif ($account->getState()->equalsValue(Types\AccountStateType::STATE_DELETED)) {
 			throw new Exceptions\AuthenticationFailedException('Account profile is deleted', self::ACCOUNT_PROFILE_DELETED);
 		}
 

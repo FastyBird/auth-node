@@ -56,20 +56,20 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
-	 * @param string $status
+	 * @param string $state
 	 *
 	 * @return void
 	 *
 	 * @throw Exceptions\InvalidArgumentException
 	 */
-	public function inStatus(string $status): void
+	public function inState(string $state): void
 	{
-		if (!Types\AccountStatusType::isValidValue($status)) {
-			throw new Exceptions\InvalidArgumentException('Invalid account status given');
+		if (!Types\AccountStateType::isValidValue($state)) {
+			throw new Exceptions\InvalidArgumentException('Invalid account state given');
 		}
 
-		$this->filter[] = function (ORM\QueryBuilder $qb) use ($status): void {
-			$qb->andWhere('a.status = :status')->setParameter('status', $status);
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($state): void {
+			$qb->andWhere('a.state = :state')->setParameter('state', $state);
 		};
 	}
 

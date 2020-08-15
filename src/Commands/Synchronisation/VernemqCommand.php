@@ -112,7 +112,7 @@ class VernemqCommand extends Console\Command\Command
 		$io->title('FB auth node - Verne MQ accounts synchronization');
 
 		$findAccount = new Queries\FindAccountsQuery();
-		$findAccount->inStatus(Types\AccountStatusType::STATE_ACTIVATED);
+		$findAccount->inState(Types\AccountStateType::STATE_ACTIVATED);
 
 		$accounts = $this->accountRepository->findAllBy($findAccount);
 

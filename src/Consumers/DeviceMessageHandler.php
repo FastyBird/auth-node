@@ -113,7 +113,7 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 							'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
 							'device' => $message->offsetGet('device'),
 							'entity' => Entities\Accounts\MachineAccount::class,
-							'status' => AuthNode\Types\AccountStatusType::get(AuthNode\Types\AccountStatusType::STATE_ACTIVATED),
+							'state'  => AuthNode\Types\AccountStateType::get(AuthNode\Types\AccountStateType::STATE_ACTIVATED),
 							'roles'  => [
 								$role,
 							],

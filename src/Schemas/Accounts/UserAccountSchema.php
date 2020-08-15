@@ -92,7 +92,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 				'middle_name' => $account->getDetails()->getMiddleName(),
 			],
 
-			'status' => $account->getStatus()->getValue(),
+			'state' => $account->getState()->getValue(),
 
 			'last_visit' => $account->getLastVisit() !== null ? $account->getLastVisit()->format(DATE_ATOM) : null,
 			'registered' => $account->getCreatedAt() !== null ? $account->getCreatedAt()->format(DATE_ATOM) : null,

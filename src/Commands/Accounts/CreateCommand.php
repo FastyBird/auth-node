@@ -237,7 +237,7 @@ class CreateCommand extends Console\Command\Command
 
 			$create = new Utils\ArrayHash();
 			$create->offsetSet('entity', Entities\Accounts\UserAccount::class);
-			$create->offsetSet('status', Types\AccountStatusType::get(Types\AccountStatusType::STATE_ACTIVATED));
+			$create->offsetSet('state', Types\AccountStateType::get(Types\AccountStateType::STATE_ACTIVATED));
 			$create->offsetSet('roles', [$role]);
 
 			$details = new Utils\ArrayHash();
@@ -314,7 +314,7 @@ class CreateCommand extends Console\Command\Command
 				$create->offsetSet('account', $account);
 				$create->offsetSet('uid', $account->getEmail()->getAddress());
 				$create->offsetSet('password', $password);
-				$create->offsetSet('status', Types\IdentityStatusType::get(Types\IdentityStatusType::STATE_ACTIVE));
+				$create->offsetSet('state', Types\IdentityStateType::get(Types\IdentityStateType::STATE_ACTIVE));
 
 				$this->identitiesManager->create($create);
 

@@ -68,13 +68,13 @@ abstract class Account implements IAccount
 	protected $id;
 
 	/**
-	 * @var Types\AccountStatusType
+	 * @var Types\AccountStateType
 	 *
-	 * @Enum(class=Types\AccountStatusType::class)
+	 * @Enum(class=Types\AccountStateType::class)
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\Column(type="string_enum", name="account_status", nullable=false, options={"default": "notActivated"})
+	 * @ORM\Column(type="string_enum", name="account_state", nullable=false, options={"default": "notActivated"})
 	 */
-	protected $status;
+	protected $state;
 
 	/**
 	 * @var DateTimeInterface
@@ -117,7 +117,7 @@ abstract class Account implements IAccount
 	) {
 		$this->id = $id ?? Uuid\Uuid::uuid4();
 
-		$this->status = Types\AccountStatusType::get(Types\AccountStatusType::STATE_NOT_ACTIVATED);
+		$this->state = Types\AccountStateType::get(Types\AccountStateType::STATE_NOT_ACTIVATED);
 
 		$this->identities = new Common\Collections\ArrayCollection();
 		$this->roles = new Common\Collections\ArrayCollection();
@@ -126,17 +126,17 @@ abstract class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setStatus(Types\AccountStatusType $status): void
+	public function setState(Types\AccountStateType $state): void
 	{
-		$this->status = $status;
+		$this->state = $state;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getStatus(): Types\AccountStatusType
+	public function getState(): Types\AccountStateType
 	{
-		return $this->status;
+		return $this->state;
 	}
 
 	/**
@@ -144,7 +144,7 @@ abstract class Account implements IAccount
 	 */
 	public function isActivated(): bool
 	{
-		return $this->status->equalsValue(Types\AccountStatusType::STATE_ACTIVATED);
+		return $this->state->equalsValue(Types\AccountStateType::STATE_ACTIVATED);
 	}
 
 	/**
@@ -152,7 +152,7 @@ abstract class Account implements IAccount
 	 */
 	public function isBlocked(): bool
 	{
-		return $this->status->equalsValue(Types\AccountStatusType::STATE_BLOCKED);
+		return $this->state->equalsValue(Types\AccountStateType::STATE_BLOCKED);
 	}
 
 	/**
@@ -160,7 +160,7 @@ abstract class Account implements IAccount
 	 */
 	public function isDeleted(): bool
 	{
-		return $this->status->equalsValue(Types\AccountStatusType::STATE_DELETED);
+		return $this->state->equalsValue(Types\AccountStateType::STATE_DELETED);
 	}
 
 	/**
@@ -168,7 +168,7 @@ abstract class Account implements IAccount
 	 */
 	public function isNotActivated(): bool
 	{
-		return $this->status->equalsValue(Types\AccountStatusType::STATE_NOT_ACTIVATED);
+		return $this->state->equalsValue(Types\AccountStateType::STATE_NOT_ACTIVATED);
 	}
 
 	/**
@@ -176,7 +176,7 @@ abstract class Account implements IAccount
 	 */
 	public function isApprovalRequired(): bool
 	{
-		return $this->status->equalsValue(Types\AccountStatusType::STATE_APPROVAL_WAITING);
+		return $this->state->equalsValue(Types\AccountStateType::STATE_APPROVAL_WAITING);
 	}
 
 	/**
@@ -285,7 +285,7 @@ abstract class Account implements IAccount
 	{
 		return [
 			'id'         => $this->getPlainId(),
-			'status'     => $this->getStatus()->getValue(),
+			'state'      => $this->getState()->getValue(),
 			'registered' => $this->getCreatedAt() !== null ? $this->getCreatedAt()->format(DATE_ATOM) : null,
 			'last_visit' => $this->getLastVisit() !== null ? $this->getLastVisit()->format(DATE_ATOM) : null,
 			'roles'      => array_map(function (Entities\Roles\IRole $role): string {

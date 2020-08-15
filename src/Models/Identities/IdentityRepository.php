@@ -58,7 +58,7 @@ final class IdentityRepository implements IIdentityRepository
 	): ?Entities\Identities\IIdentity {
 		$findQuery = new Queries\FindIdentitiesQuery();
 		$findQuery->forAccount($account);
-		$findQuery->inStatus(Types\IdentityStatusType::STATE_ACTIVE);
+		$findQuery->inState(Types\IdentityStateType::STATE_ACTIVE);
 
 		return $this->findOneBy($findQuery, $type);
 	}
@@ -72,7 +72,7 @@ final class IdentityRepository implements IIdentityRepository
 	): ?Entities\Identities\IIdentity {
 		$findQuery = new Queries\FindIdentitiesQuery();
 		$findQuery->byUid($uid);
-		$findQuery->inStatus(Types\IdentityStatusType::STATE_ACTIVE);
+		$findQuery->inState(Types\IdentityStateType::STATE_ACTIVE);
 
 		return $this->findOneBy($findQuery, $type);
 	}

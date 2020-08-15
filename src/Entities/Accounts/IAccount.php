@@ -39,16 +39,16 @@ interface IAccount extends NodeDatabaseEntities\IEntity,
 {
 
 	/**
-	 * @param Types\AccountStatusType $status
+	 * @param Types\AccountStateType $state
 	 *
 	 * @return void
 	 */
-	public function setStatus(Types\AccountStatusType $status): void;
+	public function setState(Types\AccountStateType $state): void;
 
 	/**
-	 * @return Types\AccountStatusType
+	 * @return Types\AccountStateType
 	 */
-	public function getStatus(): Types\AccountStatusType;
+	public function getState(): Types\AccountStateType;
 
 	/**
 	 * @return bool

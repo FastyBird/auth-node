@@ -51,16 +51,16 @@ interface IIdentity extends NS\IIdentity,
 	public function getUid(): string;
 
 	/**
-	 * @param Types\IdentityStatusType $status
+	 * @param Types\IdentityStateType $state
 	 *
 	 * @return void
 	 */
-	public function setStatus(Types\IdentityStatusType $status): void;
+	public function setState(Types\IdentityStateType $state): void;
 
 	/**
-	 * @return Types\IdentityStatusType
+	 * @return Types\IdentityStateType
 	 */
-	public function getStatus(): Types\IdentityStatusType;
+	public function getState(): Types\IdentityStateType;
 
 	/**
 	 * @return bool

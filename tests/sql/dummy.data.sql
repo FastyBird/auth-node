@@ -1,4 +1,4 @@
-INSERT IGNORE INTO `fb_accounts` (`account_id`, `account_type`, `account_status`, `account_last_visit`, `params`,
+INSERT IGNORE INTO `fb_accounts` (`account_id`, `account_type`, `account_state`, `account_last_visit`, `params`,
                                   `created_at`, `updated_at`)
 VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'user', 'activated', '2019-11-07 22:30:56',
         '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}',
@@ -75,7 +75,7 @@ VALUES (_binary 0x0B46D3D6C980494A8B40F19E6095E610, _binary 0x5E79EFBFBD0D5B7C46
         'clark.kent@fastybird.com', 1, 1, NULL, NULL, '2019-09-22 21:09:56', 'public', '2019-09-22 21:09:56',
         '2019-09-22 21:09:56');
 
-INSERT IGNORE INTO `fb_identities` (`identity_id`, `account_id`, `identity_uid`, `identity_status`, `created_at`,
+INSERT IGNORE INTO `fb_identities` (`identity_id`, `account_id`, `identity_uid`, `identity_state`, `created_at`,
                                     `updated_at`, `identity_type`, `identity_token`, `params`)
 VALUES (_binary 0x77331268EFBFBD3449EFBFBDEFBFBD04, _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34,
         'john.doe@fastybird.com', 'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'user',

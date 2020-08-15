@@ -63,8 +63,8 @@ abstract class IdentitySchema extends NodeJsonApiSchemas\JsonApiSchema
 	public function getAttributes($identity, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		return [
-			'uid'    => $identity->getUid(),
-			'status' => $identity->getStatus()->getValue(),
+			'uid'   => $identity->getUid(),
+			'state' => $identity->getState()->getValue(),
 		];
 	}
 
