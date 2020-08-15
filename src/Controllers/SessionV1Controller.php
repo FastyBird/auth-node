@@ -211,7 +211,7 @@ final class SessionV1Controller extends BaseV1Controller
 				'entity'    => Entities\Tokens\AccessToken::class,
 				'token'     => $this->createToken($accessTokenId, $this->user->getRoles(), $validTill),
 				'validTill' => $validTill,
-				'status'    => NodeAuthTypes\TokenStatusType::get(NodeAuthTypes\TokenStatusType::STATE_ACTIVE),
+				'state'     => NodeAuthTypes\TokenStateType::get(NodeAuthTypes\TokenStateType::STATE_ACTIVE),
 				'identity'  => $this->user->getIdentity(),
 			]);
 
@@ -227,7 +227,7 @@ final class SessionV1Controller extends BaseV1Controller
 				'accessToken' => $accessToken,
 				'token'       => $this->createToken($refreshTokenId, [], $validTill),
 				'validTill'   => $validTill,
-				'status'      => NodeAuthTypes\TokenStatusType::get(NodeAuthTypes\TokenStatusType::STATE_ACTIVE),
+				'state'       => NodeAuthTypes\TokenStateType::get(NodeAuthTypes\TokenStateType::STATE_ACTIVE),
 			]);
 
 			$this->tokensManager->create($values);
@@ -341,7 +341,7 @@ final class SessionV1Controller extends BaseV1Controller
 				'entity'    => Entities\Tokens\AccessToken::class,
 				'token'     => $this->createToken($accessTokenId, $this->user->getRoles(), $validTill),
 				'validTill' => $validTill,
-				'state'     => NodeAuthTypes\TokenStatusType::get(NodeAuthTypes\TokenStatusType::STATE_ACTIVE),
+				'state'     => NodeAuthTypes\TokenStateType::get(NodeAuthTypes\TokenStateType::STATE_ACTIVE),
 				'identity'  => $this->user->getIdentity(),
 			]);
 
@@ -357,7 +357,7 @@ final class SessionV1Controller extends BaseV1Controller
 				'accessToken' => $newAccessToken,
 				'token'       => $this->createToken($refreshTokenId, [], $validTill),
 				'validTill'   => $validTill,
-				'status'      => NodeAuthTypes\TokenStatusType::get(NodeAuthTypes\TokenStatusType::STATE_ACTIVE),
+				'state'       => NodeAuthTypes\TokenStateType::get(NodeAuthTypes\TokenStateType::STATE_ACTIVE),
 			]);
 
 			$this->tokensManager->create($values);
