@@ -3,8 +3,8 @@ INSERT IGNORE INTO `fb_accounts` (`account_id`, `account_type`, `account_status`
 VALUES (_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, 'machine', 'activated', '2019-11-07 22:30:56', '[]',
         '2017-01-03 11:30:00', '2017-01-03 11:30:00');
 
-INSERT IGNORE INTO `fb_accounts_machines` (`account_id`, `parent_id`)
-VALUES (_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, NULL);
+INSERT IGNORE INTO `fb_accounts_machines` (`account_device`, `account_id`, `parent_id`)
+VALUES ('machine-second-device-name', _binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, NULL);
 
 INSERT IGNORE INTO `fb_identities` (`identity_id`, `account_id`, `identity_uid`, `identity_status`, `created_at`,
                                     `updated_at`, `identity_type`, `identity_token`, `params`)

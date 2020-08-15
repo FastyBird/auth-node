@@ -223,6 +223,8 @@ class Router extends Routing\Router
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->identitiesV1Controller, 'read']);
 					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY);
 
+					$group->post('', [$this->identitiesV1Controller, 'create']);
+
 					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->identitiesV1Controller, 'update']);
 
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->identitiesV1Controller, 'readRelationship']);

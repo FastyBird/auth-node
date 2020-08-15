@@ -36,6 +36,9 @@ use Throwable;
  *       "charset"="utf8mb4",
  *       "comment"="Accounts identities"
  *     },
+ *     uniqueConstraints={
+ *       @ORM\UniqueConstraint(name="identity_uid_unique", columns={"identity_uid"})
+ *     },
  *     indexes={
  *       @ORM\Index(name="identity_uid_idx", columns={"identity_uid"}),
  *       @ORM\Index(name="identity_status_idx", columns={"identity_status"})

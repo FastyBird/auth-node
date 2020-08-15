@@ -29,6 +29,11 @@ interface IMachineAccount extends IAccount
 {
 
 	/**
+	 * @return string
+	 */
+	public function getDevice(): string;
+
+	/**
 	 * @param Entities\Accounts\IMachineAccount $account
 	 *
 	 * @return void

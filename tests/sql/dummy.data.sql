@@ -31,9 +31,9 @@ VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, NULL, 'NGZqMmVxdnhubjJpIyMxN
        (_binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, NULL, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1'),
        (_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, NULL, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1');
 
-INSERT IGNORE INTO `fb_accounts_machines` (`account_id`, `parent_id`)
-VALUES (_binary 0x16E5DB2900064484AC385CDEA5A008F5, NULL),
-       (_binary 0xFF32AC4EF0104C859CB3D310F6708A4E, NULL);
+INSERT IGNORE INTO `fb_accounts_machines` (`account_device`, `account_id`, `parent_id`)
+VALUES ('machine-first-device-name', _binary 0x16E5DB2900064484AC385CDEA5A008F5, NULL),
+       ('machine-old-device-name', _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, NULL);
 
 INSERT IGNORE INTO `fb_accounts_details` (`detail_id`, `account_id`, `detail_first_name`, `detail_last_name`,
                                           `detail_middle_name`, `created_at`, `updated_at`)

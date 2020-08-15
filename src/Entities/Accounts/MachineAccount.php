@@ -30,11 +30,22 @@ use Throwable;
  *       "collate"="utf8mb4_general_ci",
  *       "charset"="utf8mb4",
  *       "comment"="Machine accounts"
+ *     },
+ *     uniqueConstraints={
+ *       @ORM\UniqueConstraint(name="account_device_unique", columns={"account_device"})
  *     }
  * )
  */
 class MachineAccount extends Account implements IMachineAccount
 {
+
+	/**
+	 * @var string
+	 *
+	 * @IPubDoctrine\Crud(is="writable")
+	 * @ORM\Column(type="string", name="account_device", length=150, nullable=false)
+	 */
+	private $device;
 
 	/**
 	 * @var Entities\Accounts\IMachineAccount|null
@@ -54,16 +65,27 @@ class MachineAccount extends Account implements IMachineAccount
 	private $children;
 
 	/**
+	 * @param string $device
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
+		string $device,
 		?Uuid\UuidInterface $id = null
 	) {
 		parent::__construct($id);
 
+		$this->device = $device;
 		$this->children = new Common\Collections\ArrayCollection();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getDevice(): string
+	{
+		return $this->device;
 	}
 
 	/**
@@ -145,6 +167,7 @@ class MachineAccount extends Account implements IMachineAccount
 	public function toArray(): array
 	{
 		return array_merge(parent::toArray(), [
+			'device' => $this->getDevice(),
 			'parent' => $this->getParent() !== null ? $this->getParent()->getPlainId() : null,
 		]);
 	}

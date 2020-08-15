@@ -18,6 +18,7 @@ namespace FastyBird\AuthNode\Controllers;
 use Doctrine;
 use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Hydrators;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Router;
@@ -25,6 +26,7 @@ use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
+use IPub\DoctrineCrud\Exceptions as DoctrineCrudExceptions;
 use Nette\Utils;
 use Psr\Http\Message;
 use Throwable;
@@ -43,6 +45,12 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	use Controllers\Finders\TAccountFinder;
 	use Controllers\Finders\TIdentityFinder;
 
+	/** @var Hydrators\Accounts\UserAccountHydrator */
+	private $userAccountIdentityHydrator;
+
+	/** @var Hydrators\Accounts\MachineAccountHydrator */
+	private $machineAccountIdentityHydrator;
+
 	/** @var Models\Identities\IIdentitiesManager */
 	private $identitiesManager;
 
@@ -56,10 +64,14 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	protected $translationDomain = 'node.identities';
 
 	public function __construct(
+		Hydrators\Accounts\UserAccountHydrator $userAccountIdentityHydrator,
+		Hydrators\Accounts\MachineAccountHydrator $machineAccountIdentityHydrator,
 		Models\Identities\IIdentityRepository $identityRepository,
 		Models\Identities\IIdentitiesManager $identitiesManager,
 		Models\Accounts\IAccountRepository $accountRepository
 	) {
+		$this->userAccountIdentityHydrator = $userAccountIdentityHydrator;
+		$this->machineAccountIdentityHydrator = $machineAccountIdentityHydrator;
 		$this->identityRepository = $identityRepository;
 		$this->identitiesManager = $identitiesManager;
 
@@ -110,6 +122,149 @@ final class IdentitiesV1Controller extends BaseV1Controller
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($identity));
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Role(manager,administrator)
+	 */
+	public function create(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		// Get user profile account or url defined account
+		$account = $this->findAccount($request);
+
+		$document = $this->createDocument($request);
+
+		try {
+			// Start transaction connection to the database
+			$this->getOrmConnection()->beginTransaction();
+
+			if ($document->getResource()->getType() === Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE) {
+				$createData = $this->userAccountIdentityHydrator->hydrate($document);
+				$createData->offsetSet('account', $account);
+
+				// Store item into database
+				$identity = $this->identitiesManager->create($createData);
+
+			} elseif ($document->getResource()->getType() === Schemas\Identities\MachineAccountIdentitySchema::SCHEMA_TYPE) {
+				$createData = $this->machineAccountIdentityHydrator->hydrate($document);
+				$createData->offsetSet('account', $account);
+
+				// Store item into database
+				$identity = $this->identitiesManager->create($createData);
+
+			} else {
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('messages.invalidType.heading'),
+					$this->translator->translate('messages.invalidType.message'),
+					[
+						'pointer' => '/data/type',
+					]
+				);
+			}
+
+			// Commit all changes into database
+			$this->getOrmConnection()->commit();
+
+		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRequired.heading'),
+				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				[
+					'pointer' => 'data/attributes/' . $ex->getField(),
+				]
+			);
+
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+
+			throw $ex;
+
+		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+
+			if (preg_match("%'PRIMARY'%", $ex->getMessage(), $match) !== false) {
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('//node.base.messages.uniqueIdConstraint.heading'),
+					$this->translator->translate('//node.base.messages.uniqueIdConstraint.message'),
+					[
+						'pointer' => '/data/id',
+					]
+				);
+
+			} elseif (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
+				$columnParts = explode('.', $match['key']);
+				$columnKey = end($columnParts);
+
+				if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'identity_')) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
+						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message'),
+						[
+							'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 9),
+						]
+					);
+				}
+			}
+
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
+				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message')
+			);
+
+		} catch (Throwable $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+
+			// Log catched exception
+			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
+				'exception' => [
+					'message' => $ex->getMessage(),
+					'code'    => $ex->getCode(),
+				],
+			]);
+
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.notCreated.heading'),
+				$this->translator->translate('messages.notCreated.message')
+			);
+		}
+
+		/** @var NodeWebServerHttp\Response $response */
+		$response = $response
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($identity))
+			->withStatus(StatusCodeInterface::STATUS_CREATED);
+
+		return $response;
 	}
 
 	/**

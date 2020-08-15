@@ -292,6 +292,10 @@ services:
 
 	- {factory: FastyBird\AuthNode\Hydrators\Accounts\MachineAccountHydrator}
 
+	- {factory: FastyBird\AuthNode\Hydrators\Identities\UserAccountIdentityHydrator}
+
+	- {factory: FastyBird\AuthNode\Hydrators\Identities\MachineAccountIdentityHydrator}
+
 	- {factory: FastyBird\AuthNode\Hydrators\Emails\EmailHydrator}
 
 	- {factory: FastyBird\AuthNode\Hydrators\Roles\RoleHydrator}

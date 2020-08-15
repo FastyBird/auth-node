@@ -18,6 +18,8 @@ namespace FastyBird\AuthNode\Queries;
 use Closure;
 use Doctrine\ORM;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Types;
 use IPub\DoctrineOrmQuery;
 use Ramsey\Uuid;
 
@@ -50,6 +52,24 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	{
 		$this->filter[] = function (ORM\QueryBuilder $qb) use ($id): void {
 			$qb->andWhere('a.id = :id')->setParameter('id', $id->getBytes());
+		};
+	}
+
+	/**
+	 * @param string $status
+	 *
+	 * @return void
+	 *
+	 * @throw Exceptions\InvalidArgumentException
+	 */
+	public function inStatus(string $status): void
+	{
+		if (!Types\AccountStatusType::isValidValue($status)) {
+			throw new Exceptions\InvalidArgumentException('Invalid account status given');
+		}
+
+		$this->filter[] = function (ORM\QueryBuilder $qb) use ($status): void {
+			$qb->andWhere('a.status = :status')->setParameter('status', $status);
 		};
 	}
 
