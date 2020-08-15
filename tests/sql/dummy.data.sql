@@ -148,6 +148,6 @@ VALUES (_binary 0x337A0518664B40EFBFBDEFBFBD7914EF, _binary 0x5E79EFBFBD0D5B7C46
        (_binary 0xEFBFBDEFBFBDEFBFBD0FEFBFBD5C4F61, _binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD);
 
 INSERT IGNORE INTO `vmq_auth_acl` (`id`, `identity_id`, `mountpoint`, `client_id`, `username`, `password`,
-                                     `publish_acl`, `subscribe_acl`)
+                                   `publish_acl`, `subscribe_acl`)
 VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, _binary 0x540F6CFC39D1417587FBAAC729D78C0A, '', '',
         'jane.doe@fastybird.com', 'passwd', '[]', '[]');

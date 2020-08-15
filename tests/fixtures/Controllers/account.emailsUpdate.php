@@ -26,7 +26,7 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/account.emails.invalidType.json',
 	],
-	'idMismatch'  => [
+	'idMismatch'   => [
 		'/v1/me/emails/0b46d3d6-c980-494a-8b40-f19e6095e610',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account.emails.update.idMismatch.json'),
@@ -40,14 +40,14 @@ return [
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],
-	'noToken'         => [
+	'noToken'      => [
 		'/v1/me/emails/0b46d3d6-c980-494a-8b40-f19e6095e610',
 		null,
 		file_get_contents(__DIR__ . '/requests/account.emails.update.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/forbidden.json',
 	],
-	'expiredToken'    => [
+	'expiredToken' => [
 		'/v1/me/emails/0b46d3d6-c980-494a-8b40-f19e6095e610',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account.emails.update.json'),

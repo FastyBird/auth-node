@@ -9,7 +9,7 @@ const INVALID_TOKEN = 'eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZ
 return [
 	// Valid responses
 	//////////////////
-	'delete'  => [
+	'delete'       => [
 		'/v1/session',
 		'Bearer ' . VALID_TOKEN,
 		StatusCodeInterface::STATUS_NO_CONTENT,
