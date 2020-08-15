@@ -90,6 +90,7 @@ class NodeAccountIdentity extends Identity implements INodeAccountIdentity
 	public function toArray(): array
 	{
 		return array_merge(parent::toArray(), [
+			'type'     => 'node',
 			'password' => $this->getPassword(),
 		]);
 	}

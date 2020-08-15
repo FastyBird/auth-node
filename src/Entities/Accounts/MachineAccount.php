@@ -167,6 +167,7 @@ class MachineAccount extends Account implements IMachineAccount
 	public function toArray(): array
 	{
 		return array_merge(parent::toArray(), [
+			'type'   => 'machine',
 			'device' => $this->getDevice(),
 			'parent' => $this->getParent() !== null ? $this->getParent()->getPlainId() : null,
 		]);

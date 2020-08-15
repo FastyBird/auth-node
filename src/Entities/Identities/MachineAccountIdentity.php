@@ -90,6 +90,7 @@ class MachineAccountIdentity extends Identity implements IMachineAccountIdentity
 	public function toArray(): array
 	{
 		return array_merge(parent::toArray(), [
+			'type'     => 'machine',
 			'password' => $this->getPassword(),
 		]);
 	}

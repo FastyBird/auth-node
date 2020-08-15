@@ -282,6 +282,7 @@ class UserAccount extends Account implements IUserAccount
 	public function toArray(): array
 	{
 		return array_merge(parent::toArray(), [
+			'type'        => 'user',
 			'first_name'  => $this->getDetails()->getFirstName(),
 			'last_name'   => $this->getDetails()->getLastName(),
 			'middle_name' => $this->getDetails()->getMiddleName(),
