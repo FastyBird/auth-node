@@ -44,6 +44,9 @@ class Router extends Routing\Router
 	/** @var Controllers\AccountV1Controller */
 	private $accountV1Controller;
 
+	/** @var Controllers\AccountChildrenV1Controller */
+	private $accountChildrenV1Controller;
+
 	/** @var Controllers\AccountEmailsV1Controller */
 	private $accountEmailsV1Controller;
 
@@ -77,6 +80,7 @@ class Router extends Routing\Router
 		Controllers\AccountEmailsV1Controller $accountEmailsV1Controller,
 		Controllers\AccountIdentitiesV1Controller $accountIdentitiesV1Controller,
 		Controllers\AccountsV1Controller $accountsV1Controller,
+		Controllers\AccountChildrenV1Controller $accountChildrenV1Controller,
 		Controllers\EmailsV1Controller $emailsV1Controller,
 		Controllers\IdentitiesV1Controller $identitiesV1Controller,
 		Controllers\RolesV1Controller $rolesV1Controller,
@@ -90,6 +94,7 @@ class Router extends Routing\Router
 		$this->sessionV1Controller = $sessionV1Controller;
 
 		$this->accountV1Controller = $accountV1Controller;
+		$this->accountChildrenV1Controller = $accountChildrenV1Controller;
 		$this->accountEmailsV1Controller = $accountEmailsV1Controller;
 		$this->accountIdentitiesV1Controller = $accountIdentitiesV1Controller;
 
@@ -230,6 +235,12 @@ class Router extends Routing\Router
 					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->identitiesV1Controller, 'readRelationship']);
 					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY_RELATIONSHIP);
 				});
+
+				/**
+				 * CHILDREN
+				 */
+				$route = $group->get('/children', [$this->accountChildrenV1Controller, 'index']);
+				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_CHILDREN);
 			});
 
 			$group->group('/roles', function (Routing\RouteCollector $group): void {

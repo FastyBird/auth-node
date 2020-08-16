@@ -50,6 +50,7 @@ final class Constants
 	public const ROUTE_NAME_ACCOUNT_IDENTITIES = 'account.identities';
 	public const ROUTE_NAME_ACCOUNT_IDENTITY = 'account.identity';
 	public const ROUTE_NAME_ACCOUNT_IDENTITY_RELATIONSHIP = 'account.identity.relationship';
+	public const ROUTE_NAME_ACCOUNT_CHILDREN = 'account.children';
 
 	public const ROUTE_NAME_SESSION = 'session';
 	public const ROUTE_NAME_SESSION_RELATIONSHIP = 'session.relationship';

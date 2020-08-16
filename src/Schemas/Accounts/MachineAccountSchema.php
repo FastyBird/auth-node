@@ -168,7 +168,7 @@ final class MachineAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ROLE_CHILDREN,
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT_CHILDREN,
 					[
 						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
 					]
