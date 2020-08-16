@@ -77,7 +77,7 @@ final class Authenticator implements NS\IAuthenticator
 
 		$account = $identity->getAccount();
 
-		if ($account->getState()->equalsValue(Types\AccountStateType::STATE_ACTIVATED)) {
+		if ($account->getState()->equalsValue(Types\AccountStateType::STATE_ACTIVE)) {
 			return $identity;
 		}
 

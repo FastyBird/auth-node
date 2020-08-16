@@ -237,7 +237,7 @@ class CreateCommand extends Console\Command\Command
 
 			$create = new Utils\ArrayHash();
 			$create->offsetSet('entity', Entities\Accounts\UserAccount::class);
-			$create->offsetSet('state', Types\AccountStateType::get(Types\AccountStateType::STATE_ACTIVATED));
+			$create->offsetSet('state', Types\AccountStateType::get(Types\AccountStateType::STATE_ACTIVE));
 			$create->offsetSet('roles', [$role]);
 
 			$details = new Utils\ArrayHash();

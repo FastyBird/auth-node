@@ -1,9 +1,9 @@
 INSERT IGNORE INTO `fb_accounts` (`account_id`, `account_type`, `account_state`, `account_last_visit`, `params`,
                                   `created_at`, `updated_at`)
-VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'user', 'activated', '2019-11-07 22:30:56',
+VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'user', 'active', '2019-11-07 22:30:56',
         '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}',
         '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
-       (_binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, 'user', 'activated', '2019-05-29 07:38:24',
+       (_binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, 'user', 'active', '2019-05-29 07:38:24',
         '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}',
         '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
        (_binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'user', 'approvalWaiting', '2019-05-29 07:38:24',
@@ -18,9 +18,9 @@ VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'user', 'activated', '2019-1
        (_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, 'user', 'blocked', '2019-05-29 07:38:24',
         '{"datetime": {"zone": "Europe/Prague", "format": {"date": "DD.MM.YYYY", "time": "HH:mm"}, "week_start": 1}}',
         '2017-01-04 12:30:00', '2017-01-04 12:30:00'),
-       (_binary 0x16E5DB2900064484AC385CDEA5A008F5, 'machine', 'activated', '2019-11-07 22:30:56', '[]',
+       (_binary 0x16E5DB2900064484AC385CDEA5A008F5, 'machine', 'active', '2019-11-07 22:30:56', '[]',
         '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
-       (_binary 0xFF32AC4EF0104C859CB3D310F6708A4E, 'machine', 'activated', '2019-11-07 22:30:56', '[]',
+       (_binary 0xFF32AC4EF0104C859CB3D310F6708A4E, 'machine', 'active', '2019-11-07 22:30:56', '[]',
         '2017-01-03 11:30:00', '2017-01-03 11:30:00');
 
 INSERT IGNORE INTO `fb_accounts_users` (`account_id`, `parent_id`, `account_request_hash`)

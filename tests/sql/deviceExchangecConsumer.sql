@@ -1,6 +1,6 @@
 INSERT IGNORE INTO `fb_accounts` (`account_id`, `account_type`, `account_state`, `account_last_visit`, `params`,
                                   `created_at`, `updated_at`)
-VALUES (_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, 'machine', 'activated', '2019-11-07 22:30:56', '[]',
+VALUES (_binary 0xBF4CD8702AAC45F0A85EE1CEFD2D6D9A, 'machine', 'active', '2019-11-07 22:30:56', '[]',
         '2017-01-03 11:30:00', '2017-01-03 11:30:00');
 
 INSERT IGNORE INTO `fb_accounts_machines` (`account_device`, `account_id`, `parent_id`)

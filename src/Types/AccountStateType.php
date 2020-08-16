@@ -31,7 +31,7 @@ class AccountStateType extends Consistence\Enum\Enum
 	/**
 	 * Define states
 	 */
-	public const STATE_ACTIVATED = 'activated';
+	public const STATE_ACTIVE = 'active';
 	public const STATE_BLOCKED = 'blocked';
 	public const STATE_DELETED = 'deleted';
 	public const STATE_NOT_ACTIVATED = 'notActivated';
@@ -51,7 +51,7 @@ class AccountStateType extends Consistence\Enum\Enum
 	 * @var string[]
 	 */
 	public static $allowedStates = [
-		self::STATE_ACTIVATED,
+		self::STATE_ACTIVE,
 		self::STATE_BLOCKED,
 		self::STATE_DELETED,
 	];

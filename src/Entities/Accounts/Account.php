@@ -144,7 +144,7 @@ abstract class Account implements IAccount
 	 */
 	public function isActivated(): bool
 	{
-		return $this->state->equalsValue(Types\AccountStateType::STATE_ACTIVATED);
+		return $this->state->equalsValue(Types\AccountStateType::STATE_ACTIVE);
 	}
 
 	/**
