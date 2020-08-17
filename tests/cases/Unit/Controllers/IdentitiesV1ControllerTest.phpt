@@ -138,7 +138,7 @@ final class IdentitiesV1ControllerTest extends DbTestCase
 		$rabbitPublisher
 			->shouldReceive('publish')
 			->withArgs(function (string $routingKey, array $data): bool {
-				Assert::same('fb.bus.node.entity.updated.email', $routingKey);
+				Assert::same('fb.bus.node.entity.updated.identity', $routingKey);
 				Assert::false($data === []);
 
 				return true;

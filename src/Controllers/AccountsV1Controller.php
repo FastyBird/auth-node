@@ -274,6 +274,98 @@ final class AccountsV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Role(manager,administrator)
+	 */
+	public function update(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		$document = $this->createDocument($request);
+
+		$account = $this->findAccount($request);
+
+		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_BAD_REQUEST,
+				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
+				$this->translator->translate('//node.base.messages.identifierInvalid.message')
+			);
+		}
+
+		try {
+			// Start transaction connection to the database
+			$this->getOrmConnection()->beginTransaction();
+
+			if ($document->getResource()->getType() === Schemas\Accounts\UserAccountSchema::SCHEMA_TYPE) {
+				$updateAccountData = $this->userAccountHydrator->hydrate($document, $account);
+
+				$account = $this->accountsManager->update($account, $updateAccountData);
+
+			} elseif ($document->getResource()->getType() === Schemas\Accounts\MachineAccountSchema::SCHEMA_TYPE) {
+				$updateAccountData = $this->machineAccountHydrator->hydrate($document, $account);
+
+				$account = $this->accountsManager->update($account, $updateAccountData);
+
+			} else {
+				throw new NodeJsonApiExceptions\JsonApiErrorException(
+					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+					$this->translator->translate('messages.invalidType.heading'),
+					$this->translator->translate('messages.invalidType.message'),
+					[
+						'pointer' => '/data/type',
+					]
+				);
+			}
+
+			// Commit all changes into database
+			$this->getOrmConnection()->commit();
+
+		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+
+			throw $ex;
+
+		} catch (Throwable $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+
+			// Log catched exception
+			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
+				'exception' => [
+					'message' => $ex->getMessage(),
+					'code'    => $ex->getCode(),
+				],
+			]);
+
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.notUpdated.heading'),
+				$this->translator->translate('messages.notUpdated.message')
+			);
+		}
+
+		/** @var NodeWebServerHttp\Response $response */
+		$response = $response
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($account));
+
+		return $response;
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,

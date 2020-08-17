@@ -307,6 +307,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		$document = $this->createDocument($request);
 
+		$email = $this->findEmail($request, $this->findAccount());
+
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
@@ -314,8 +316,6 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 				$this->translator->translate('//node.base.messages.identifierInvalid.message')
 			);
 		}
-
-		$email = $this->findEmail($request, $this->findAccount());
 
 		try {
 			// Start transaction connection to the database

@@ -13,6 +13,7 @@
     "type" : "auth-node/machine-account",
     "id" : "3de0c345-ea83-4585-a7ca-7759a2e1e66e",
     "attributes" : {
+      "device" : "some-new-device",
       "state" : "notActivated",
       "last_visit" : null,
       "registered" : "__TIME_PLACEHOLDER__",
