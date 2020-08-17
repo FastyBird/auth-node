@@ -45,10 +45,10 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	use Controllers\Finders\TAccountFinder;
 	use Controllers\Finders\TIdentityFinder;
 
-	/** @var Hydrators\Accounts\UserAccountHydrator */
+	/** @var Hydrators\Identities\UserAccountIdentityHydrator */
 	private $userAccountIdentityHydrator;
 
-	/** @var Hydrators\Accounts\MachineAccountHydrator */
+	/** @var Hydrators\Identities\MachineAccountIdentityHydrator */
 	private $machineAccountIdentityHydrator;
 
 	/** @var Models\Identities\IIdentitiesManager */
@@ -64,8 +64,8 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	protected $translationDomain = 'node.identities';
 
 	public function __construct(
-		Hydrators\Accounts\UserAccountHydrator $userAccountIdentityHydrator,
-		Hydrators\Accounts\MachineAccountHydrator $machineAccountIdentityHydrator,
+		Hydrators\Identities\UserAccountIdentityHydrator $userAccountIdentityHydrator,
+		Hydrators\Identities\MachineAccountIdentityHydrator $machineAccountIdentityHydrator,
 		Models\Identities\IIdentityRepository $identityRepository,
 		Models\Identities\IIdentitiesManager $identitiesManager,
 		Models\Accounts\IAccountRepository $accountRepository
