@@ -234,7 +234,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				$this->getOrmConnection()->rollBack();
 			}
 
-			if (preg_match("%'PRIMARY'%", $ex->getMessage(), $match) !== false) {
+			if (preg_match("%PRIMARY'%", $ex->getMessage(), $match) === 1) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('//node.base.messages.uniqueIdConstraint.heading'),
@@ -244,7 +244,7 @@ final class EmailsV1Controller extends BaseV1Controller
 					]
 				);
 
-			} elseif (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
+			} elseif (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) === 1) {
 				$columnParts = explode('.', $match['key']);
 				$columnKey = end($columnParts);
 

@@ -18,6 +18,7 @@ namespace FastyBird\AuthNode\Entities\Identities;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Entities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
+use Ramsey\Uuid;
 use Throwable;
 
 /**
@@ -47,15 +48,17 @@ class NodeAccountIdentity extends Identity implements INodeAccountIdentity
 	 * @param Entities\Accounts\INodeAccount $account
 	 * @param string $uid
 	 * @param string $password
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Accounts\INodeAccount $account,
 		string $uid,
-		string $password
+		string $password,
+		?Uuid\UuidInterface $id = null
 	) {
-		parent::__construct($account, $uid);
+		parent::__construct($account, $uid, $id);
 
 		$this->setPassword($password);
 	}

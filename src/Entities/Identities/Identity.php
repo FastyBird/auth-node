@@ -101,14 +101,16 @@ abstract class Identity implements IIdentity
 	/**
 	 * @param Entities\Accounts\IAccount $account
 	 * @param string $uid
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Accounts\IAccount $account,
-		string $uid
+		string $uid,
+		?Uuid\UuidInterface $id = null
 	) {
-		$this->id = Uuid\Uuid::uuid4();
+		$this->id = $id ?? Uuid\Uuid::uuid4();
 
 		$this->account = $account;
 		$this->uid = $uid;

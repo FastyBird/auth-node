@@ -39,7 +39,7 @@ final class MachineAccountIdentityHydrator extends IdentityHydrator
 	 */
 	protected function getEntityName(): string
 	{
-		return Entities\Identities\UserAccountIdentity::class;
+		return Entities\Identities\MachineAccountIdentity::class;
 	}
 
 }

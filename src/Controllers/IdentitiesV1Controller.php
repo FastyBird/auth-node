@@ -206,7 +206,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 				$this->getOrmConnection()->rollBack();
 			}
 
-			if (preg_match("%'PRIMARY'%", $ex->getMessage(), $match) !== false) {
+			if (preg_match("%PRIMARY'%", $ex->getMessage(), $match) === 1) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 					$this->translator->translate('//node.base.messages.uniqueIdConstraint.heading'),
@@ -216,7 +216,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 					]
 				);
 
-			} elseif (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) !== false) {
+			} elseif (preg_match("%key '(?P<key>.+)_unique'%", $ex->getMessage(), $match) === 1) {
 				$columnParts = explode('.', $match['key']);
 				$columnKey = end($columnParts);
 
@@ -348,7 +348,16 @@ final class IdentitiesV1Controller extends BaseV1Controller
 				$update->offsetSet('password', (string) $attributes->get('password')->get('new'));
 
 				// Update item in database
-				$this->identitiesManager->update($identity, $update);
+				$identity = $this->identitiesManager->update($identity, $update);
+
+			} elseif (
+				$document->getResource()->getType() === Schemas\Identities\MachineAccountIdentitySchema::SCHEMA_TYPE
+				&& $identity instanceof Entities\Identities\IMachineAccountIdentity
+			) {
+				$updateIdentityData = $this->machineAccountIdentityHydrator->hydrate($document, $identity);
+
+				// Update item in database
+				$identity = $this->identitiesManager->update($identity, $updateIdentityData);
 
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -395,7 +404,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 
 		/** @var NodeWebServerHttp\Response $response */
 		$response = $response
-			->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($identity));
 
 		return $response;
 	}

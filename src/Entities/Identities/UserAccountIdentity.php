@@ -19,6 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Helpers;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
+use Ramsey\Uuid;
 use Throwable;
 
 /**
@@ -51,15 +52,17 @@ class UserAccountIdentity extends Identity implements IUserAccountIdentity
 	 * @param Entities\Accounts\IUserAccount $account
 	 * @param string $uid
 	 * @param string $password
+	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		Entities\Accounts\IUserAccount $account,
 		string $uid,
-		string $password
+		string $password,
+		?Uuid\UuidInterface $id = null
 	) {
-		parent::__construct($account, $uid);
+		parent::__construct($account, $uid, $id);
 
 		$this->setPassword($password);
 	}

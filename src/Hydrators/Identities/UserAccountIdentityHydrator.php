@@ -16,6 +16,8 @@
 namespace FastyBird\AuthNode\Hydrators\Identities;
 
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Helpers;
+use IPub\JsonAPIDocument;
 
 /**
  * User account identity entity hydrator
@@ -40,6 +42,17 @@ final class UserAccountIdentityHydrator extends IdentityHydrator
 	protected function getEntityName(): string
 	{
 		return Entities\Identities\UserAccountIdentity::class;
+	}
+
+	/**
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
+	 *
+	 * @return Helpers\Password
+	 */
+	protected function hydratePasswordAttribute(
+		JsonAPIDocument\Objects\IStandardObject $attributes
+	): Helpers\Password {
+		return Helpers\Password::createFromString((string) $attributes->get('password'));
 	}
 
 }

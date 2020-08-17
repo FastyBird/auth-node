@@ -1,28 +1,7 @@
 {
-  "data" : {
-    "attributes" : {
-      "address" : "john@doe.com",
-      "is_default" : false,
-      "is_private" : true,
-      "is_verified" : false
-    },
-    "id" : "66295a83-0f85-4e8f-9c3d-9d9f5a947737",
-    "links" : {
-      "self" : "/v1/me/emails/66295a83-0f85-4e8f-9c3d-9d9f5a947737"
-    },
-    "relationships" : {
-      "account" : {
-        "data" : {
-          "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
-          "type" : "auth-node/user-account"
-        },
-        "links" : {
-          "related" : "/v1/me",
-          "self" : "/v1/me/emails/66295a83-0f85-4e8f-9c3d-9d9f5a947737/relationships/account"
-        }
-      }
-    },
-    "type" : "auth-node/email"
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
   },
   "jsonapi" : {
     "version" : "1.1"
@@ -30,8 +9,29 @@
   "links" : {
     "self" : "/v1/me/emails"
   },
-  "meta" : {
-    "author" : "FastyBird dev team",
-    "copyright" : "FastyBird s.r.o"
+  "data" : {
+    "type" : "auth-node/email",
+    "id" : "66295a83-0f85-4e8f-9c3d-9d9f5a947737",
+    "attributes" : {
+      "address" : "john@doe.com",
+      "is_default" : false,
+      "is_verified" : false,
+      "is_private" : false
+    },
+    "relationships" : {
+      "account" : {
+        "links" : {
+          "self" : "/v1/me/emails/66295a83-0f85-4e8f-9c3d-9d9f5a947737/relationships/account",
+          "related" : "/v1/me"
+        },
+        "data" : {
+          "type" : "auth-node/user-account",
+          "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
+        }
+      }
+    },
+    "links" : {
+      "self" : "/v1/me/emails/66295a83-0f85-4e8f-9c3d-9d9f5a947737"
+    }
   }
 }

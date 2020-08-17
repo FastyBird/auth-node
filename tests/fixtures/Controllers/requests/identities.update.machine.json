@@ -1,0 +1,10 @@
+{
+  "data" : {
+    "type" : "auth-node/machine-account-identity",
+    "id" : "35be5624-0160-4323-83ee-6f59000934b4",
+    "attributes" : {
+      "uid" : "oldDeviceUsername",
+      "password" : "newSecretPassword"
+    }
+  }
+}

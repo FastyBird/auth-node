@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Schemas\Identities;
 
 use FastyBird\AuthNode\Entities;
+use Neomerx\JsonApi;
 
 /**
  * Machine account identity entity schema
@@ -49,6 +50,21 @@ final class MachineAccountIdentitySchema extends IdentitySchema
 	public function getType(): string
 	{
 		return self::SCHEMA_TYPE;
+	}
+
+	/**
+	 * @param Entities\Identities\IUserAccountIdentity $identity
+	 * @param JsonApi\Contracts\Schema\ContextInterface $context
+	 *
+	 * @return iterable<string, mixed>
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 */
+	public function getAttributes($identity, JsonApi\Contracts\Schema\ContextInterface $context): iterable
+	{
+		return array_merge((array) parent::getAttributes($identity, $context), [
+			'password' => $identity->getPassword(),
+		]);
 	}
 
 }
