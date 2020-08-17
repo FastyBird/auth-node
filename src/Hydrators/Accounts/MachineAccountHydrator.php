@@ -36,9 +36,8 @@ final class MachineAccountHydrator extends NodeJsonApiHydrators\Hydrator
 
 	/** @var string[] */
 	protected $attributes = [
-		0 => 'params',
-
-		"device",
+		'device',
+		'params',
 	];
 
 	/**
