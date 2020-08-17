@@ -66,6 +66,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Controllers\SessionV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\AccountIdentitiesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\AccountsV1Controller::class));
+		Assert::notNull($container->getByType(Controllers\AccountChildrenV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\EmailsV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\IdentitiesV1Controller::class));
 		Assert::notNull($container->getByType(Controllers\RolesV1Controller::class));
@@ -80,6 +81,7 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Schemas\Roles\RoleSchema::class));
 
 		Assert::notNull($container->getByType(Hydrators\Accounts\UserAccountHydrator::class));
+		Assert::notNull($container->getByType(Hydrators\Accounts\MachineAccountHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Identities\UserAccountIdentityHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Identities\MachineAccountIdentityHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Emails\EmailHydrator::class));

@@ -112,22 +112,19 @@ final class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 
 	/**
 	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 * @param Entities\Accounts\IUserAccount $entity
 	 *
 	 * @return Utils\ArrayHash|null
 	 *
 	 * @throws NodeJsonApiExceptions\JsonApiErrorException
 	 */
 	protected function hydrateDetailsAttribute(
-		JsonAPIDocument\Objects\IStandardObject $attributes,
-		Entities\Accounts\IUserAccount $entity
+		JsonAPIDocument\Objects\IStandardObject $attributes
 	): ?Utils\ArrayHash {
 		if ($attributes->has('details')) {
 			$details = $attributes->get('details');
 
 			$update = new Utils\ArrayHash();
 			$update['entity'] = Entities\Details\Details::class;
-			$update['id'] = $entity->getDetails()->getId();
 
 			if ($details->has('first_name')) {
 				$update->offsetSet('firstName', $details->get('first_name'));

@@ -21,6 +21,8 @@ VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'user', 'active', '2019-11-0
        (_binary 0x16E5DB2900064484AC385CDEA5A008F5, 'machine', 'active', '2019-11-07 22:30:56', '[]',
         '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
        (_binary 0xFF32AC4EF0104C859CB3D310F6708A4E, 'machine', 'active', '2019-11-07 22:30:56', '[]',
+        '2017-01-03 11:30:00', '2017-01-03 11:30:00'),
+       (_binary 0xF3CCE15AF9564C7EA4B3AC31A0017AC9, 'machine', 'active', '2019-11-07 22:30:56', '[]',
         '2017-01-03 11:30:00', '2017-01-03 11:30:00');
 
 INSERT IGNORE INTO `fb_accounts_users` (`account_id`, `parent_id`, `account_request_hash`)
@@ -33,7 +35,8 @@ VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, NULL, 'NGZqMmVxdnhubjJpIyMxN
 
 INSERT IGNORE INTO `fb_accounts_machines` (`account_device`, `account_id`, `parent_id`)
 VALUES ('machine-first-device-name', _binary 0x16E5DB2900064484AC385CDEA5A008F5, NULL),
-       ('machine-old-device-name', _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, NULL);
+       ('machine-old-device-name', _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, NULL),
+       ('child-device-name', _binary 0xF3CCE15AF9564C7EA4B3AC31A0017AC9, _binary 0x16E5DB2900064484AC385CDEA5A008F5);
 
 INSERT IGNORE INTO `fb_accounts_details` (`detail_id`, `account_id`, `detail_first_name`, `detail_last_name`,
                                           `detail_middle_name`, `created_at`, `updated_at`)
@@ -104,6 +107,8 @@ VALUES (_binary 0x77331268EFBFBD3449EFBFBDEFBFBD04, _binary 0x5E79EFBFBD0D5B7C46
        (_binary 0x540F6CFC39D1417587FBAAC729D78C0A, _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, 'deviceUsername',
         'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'machine', 'unsecuredDevicePassword', '[]'),
        (_binary 0x35BE56240160432383EE6F59000934B4, _binary 0x16E5DB2900064484AC385CDEA5A008F5, 'oldDeviceUsername',
+        'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'machine', 'unsecuredDevicePassword', '[]'),
+       (_binary 0xED987404F14C40B4915015B6590DEB8C, _binary 0xF3CCE15AF9564C7EA4B3AC31A0017AC9, 'oldDeviceUsername',
         'active', '2017-05-03 11:27:34', '2019-05-29 07:14:00', 'machine', 'unsecuredDevicePassword', '[]');
 
 INSERT IGNORE INTO `fb_security_tokens` (`token_id`, `parent_id`, `token_token`, `token_state`, `token_type`)

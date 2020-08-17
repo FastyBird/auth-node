@@ -22,6 +22,7 @@ use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Router;
 use FastyBird\AuthNode\Schemas;
+use FastyBird\NodeAuth;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
@@ -57,6 +58,9 @@ final class AccountsV1Controller extends BaseV1Controller
 	/** @var Models\Accounts\IAccountsManager */
 	private $accountsManager;
 
+	/** @var Models\Roles\IRoleRepository */
+	private $roleRepository;
+
 	/** @var string */
 	protected $translationDomain = 'node.accounts';
 
@@ -64,13 +68,16 @@ final class AccountsV1Controller extends BaseV1Controller
 		Hydrators\Accounts\UserAccountHydrator $userAccountHydrator,
 		Hydrators\Accounts\MachineAccountHydrator $machineAccountHydrator,
 		Models\Accounts\IAccountRepository $accountRepository,
-		Models\Accounts\IAccountsManager $accountsManager
+		Models\Accounts\IAccountsManager $accountsManager,
+		Models\Roles\IRoleRepository $roleRepository
 	) {
 		$this->userAccountHydrator = $userAccountHydrator;
 		$this->machineAccountHydrator = $machineAccountHydrator;
 
 		$this->accountRepository = $accountRepository;
 		$this->accountsManager = $accountsManager;
+
+		$this->roleRepository = $roleRepository;
 	}
 
 	/**
@@ -137,6 +144,21 @@ final class AccountsV1Controller extends BaseV1Controller
 
 			} elseif ($document->getResource()->getType() === Schemas\Accounts\MachineAccountSchema::SCHEMA_TYPE) {
 				$createData = $this->machineAccountHydrator->hydrate($document);
+
+				$findRole = new Queries\FindRolesQuery();
+				$findRole->byName(NodeAuth\Constants::ROLE_USER);
+
+				$role = $this->roleRepository->findOneBy($findRole);
+
+				if ($role === null) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('messages.notCreated.heading'),
+						$this->translator->translate('messages.notCreated.message')
+					);
+				}
+
+				$createData['roles'] = [$role];
 
 				// Store item into database
 				$account = $this->accountsManager->create($createData);
