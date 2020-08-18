@@ -30,15 +30,11 @@
         "last_visit" : "2019-11-07T22:30:56+00:00",
         "registered" : "2017-01-03T11:30:00+00:00",
         "language" : "en",
-        "params" : {
-          "datetime" : {
-            "zone" : "Europe/Prague",
-            "format" : {
-              "date" : "DD.MM.YYYY",
-              "time" : "HH:mm"
-            },
-            "week_start" : 1
-          }
+        "week_start" : 1,
+        "datetime" : {
+          "timezone" : "Europe/Prague",
+          "date_format" : "DD.MM.YYYY",
+          "time_format" : "HH:mm"
         }
       },
       "relationships" : {

@@ -17,8 +17,7 @@
         "device" : "child-device-name",
         "state" : "active",
         "last_visit" : "2019-11-07T22:30:56+00:00",
-        "registered" : "2017-01-03T11:30:00+00:00",
-        "params" : {}
+        "registered" : "2017-01-03T11:30:00+00:00"
       },
       "relationships" : {
         "parent" : {

@@ -7,15 +7,11 @@
         "last_name" : "Smith",
         "middle_name" : null
       },
-      "params" : {
-        "datetime" : {
-          "format" : {
-            "date" : "YYYY/DD/MM",
-            "time" : "HH:mm"
-          },
-          "week_start" : 1,
-          "zone" : "Europe/Prague"
-        }
+      "week_start" : 1,
+      "datetime" : {
+        "timezone" : "Europe/Prague",
+        "date_format" : "YYYY/DD/MM",
+        "time_format" : "HH:mm"
       }
     }
   }

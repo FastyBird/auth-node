@@ -99,7 +99,12 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 
 			'language' => $account->getLanguage(),
 
-			'params' => $account->getParams(),
+			'week_start' => $account->getParam('datetime.week_start', 1),
+			'datetime'   => [
+				'timezone'    => $account->getParam('datetime.zone', 'Europe/London'),
+				'date_format' => $account->getParam('datetime.format.date', 'DD.MM.YYYY'),
+				'time_format' => $account->getParam('datetime.format.time', 'HH:mm'),
+			],
 		];
 	}
 

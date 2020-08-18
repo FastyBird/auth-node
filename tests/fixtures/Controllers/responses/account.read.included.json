@@ -10,15 +10,11 @@
       "language" : "en",
       "last_visit" : "2019-11-07T22:30:56+00:00",
       "name" : "Doe John",
-      "params" : {
-        "datetime" : {
-          "format" : {
-            "date" : "DD.MM.YYYY",
-            "time" : "HH:mm"
-          },
-          "week_start" : 1,
-          "zone" : "Europe/Prague"
-        }
+      "week_start" : 1,
+      "datetime" : {
+        "timezone" : "Europe/Prague",
+        "date_format" : "DD.MM.YYYY",
+        "time_format" : "HH:mm"
       },
       "registered" : "2017-01-03T11:30:00+00:00",
       "state" : "active"

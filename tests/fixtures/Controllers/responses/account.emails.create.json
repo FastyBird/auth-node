@@ -16,7 +16,7 @@
       "address" : "john@doe.com",
       "is_default" : false,
       "is_verified" : false,
-      "is_private" : false
+      "is_private" : true
     },
     "relationships" : {
       "account" : {

@@ -2055,12 +2055,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-json-api.git",
-                "reference": "152b3729abf7a53349b6e83405e0874b627212e6"
+                "reference": "87a85a2996d78dd751170b56c50526c1d6bd2a97"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/152b3729abf7a53349b6e83405e0874b627212e6",
-                "reference": "152b3729abf7a53349b6e83405e0874b627212e6",
+                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/87a85a2996d78dd751170b56c50526c1d6bd2a97",
+                "reference": "87a85a2996d78dd751170b56c50526c1d6bd2a97",
                 "shasum": ""
             },
             "require": {
@@ -2122,7 +2122,7 @@
                 "library",
                 "libs"
             ],
-            "time": "2020-08-17T20:26:59+00:00"
+            "time": "2020-08-18T09:47:20+00:00"
         },
         {
             "name": "fastybird/node-metadata",

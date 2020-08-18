@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Hydrators\Accounts;
 
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Types;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 use Fig\Http\Message\StatusCodeInterface;
@@ -39,11 +40,16 @@ final class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	/** @var string[] */
 	protected $attributes = [
 		0 => 'details',
-		1 => 'params',
+		1 => 'state',
 
 		'first_name'  => 'firstName',
 		'last_name'   => 'lastName',
 		'middle_name' => 'middleName',
+	];
+
+	/** @var string[] */
+	protected $compositedAttributes = [
+		'params',
 	];
 
 	/**
@@ -170,21 +176,64 @@ final class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	/**
 	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
 	 *
+	 * @return Types\AccountStateType
+	 */
+	protected function hydrateStateAttribute(
+		JsonAPIDocument\Objects\IStandardObject $attributes
+	): Types\AccountStateType {
+		if (!Types\AccountStateType::isValidValue((string) $attributes->get('state'))) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.attributeInvalid.heading'),
+				$this->translator->translate('//node.base.messages.attributeInvalid.message'),
+				[
+					'pointer' => '/data/attributes/state',
+				]
+			);
+		}
+
+		return Types\AccountStateType::get((string) $attributes->get('state'));
+	}
+
+	/**
+	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
+	 *
 	 * @return Utils\ArrayHash|null
 	 */
 	protected function hydrateParamsAttribute(
 		JsonAPIDocument\Objects\IStandardObject $attributes
 	): ?Utils\ArrayHash {
-		if ($attributes->has('params')) {
-			if ($attributes->get('params') instanceof JsonAPIDocument\Objects\IStandardObject) {
-				return Utils\ArrayHash::from($attributes->get('params')->toArray());
+		var_dump('TEST');
+		$params = Utils\ArrayHash::from([
+			'datetime' => [
+				'format' => [],
+			],
+		]);
 
-			} elseif ($attributes->get('params') !== null) {
-				return Utils\ArrayHash::from((array) $attributes->get('params'));
+		if ($attributes->has('week_start')) {
+			$params['datetime']->offsetSet('week_start', (int) $attributes->get('week_start'));
+		}
+
+		if (
+			$attributes->has('datetime')
+			&& $attributes->get('datetime') instanceof JsonAPIDocument\Objects\IStandardObject
+		) {
+			$datetime = $attributes->get('datetime');
+
+			if ($datetime->has('timezone')) {
+				$params['datetime']->offsetSet('zone', (string) $datetime->get('timezone'));
+			}
+
+			if ($datetime->has('date_format')) {
+				$params['datetime']['format']->offsetSet('date', (string) $datetime->get('date_format'));
+			}
+
+			if ($datetime->has('time_format')) {
+				$params['datetime']['format']->offsetSet('time', (string) $datetime->get('time_format'));
 			}
 		}
 
-		return null;
+		return $params;
 	}
 
 }

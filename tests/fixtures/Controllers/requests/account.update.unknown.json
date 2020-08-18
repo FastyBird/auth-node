@@ -11,15 +11,11 @@
       "email" : "john.doe@fastybird.com",
       "language" : "en",
       "name" : "Doe John",
-      "params" : {
-        "datetime" : {
-          "format" : {
-            "date" : "DD.MM.YYYY",
-            "time" : "HH:mm"
-          },
-          "week_start" : 1,
-          "zone" : "Europe/Prague"
-        }
+      "week_start" : 1,
+      "datetime" : {
+        "timezone" : "Europe/Prague",
+        "date_format" : "YYYY/DD/MM",
+        "time_format" : "HH:mm"
       }
     }
   }

@@ -88,8 +88,6 @@ final class MachineAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 
 			'last_visit' => $account->getLastVisit() !== null ? $account->getLastVisit()->format(DATE_ATOM) : null,
 			'registered' => $account->getCreatedAt() !== null ? $account->getCreatedAt()->format(DATE_ATOM) : null,
-
-			'params' => $account->getParams(),
 		];
 	}
 

@@ -16,7 +16,10 @@
 namespace FastyBird\AuthNode\Hydrators\Accounts;
 
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Types;
+use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
+use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 use Nette\Utils;
 
@@ -37,7 +40,7 @@ final class MachineAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	/** @var string[] */
 	protected $attributes = [
 		'device',
-		'params',
+		'state',
 	];
 
 	/**
@@ -51,21 +54,24 @@ final class MachineAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	/**
 	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
 	 *
-	 * @return Utils\ArrayHash|null
+	 * @return Types\AccountStateType
 	 */
-	protected function hydrateParamsAttribute(
+	protected function hydrateStateAttribute(
 		JsonAPIDocument\Objects\IStandardObject $attributes
-	): ?Utils\ArrayHash {
-		if ($attributes->has('params')) {
-			if ($attributes->get('params') instanceof JsonAPIDocument\Objects\IStandardObject) {
-				return Utils\ArrayHash::from($attributes->get('params')->toArray());
-
-			} elseif ($attributes->get('params') !== null) {
-				return Utils\ArrayHash::from((array) $attributes->get('params'));
-			}
+	): Types\AccountStateType {
+		var_dump('TEST');
+		if (!Types\AccountStateType::isValidValue((string) $attributes->get('state'))) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.attributeInvalid.heading'),
+				$this->translator->translate('//node.base.messages.attributeInvalid.message'),
+				[
+					'pointer' => '/data/attributes/state',
+				]
+			);
 		}
 
-		return null;
+		return Types\AccountStateType::get((string) $attributes->get('state'));
 	}
 
 }

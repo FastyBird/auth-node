@@ -24,7 +24,12 @@
       "last_visit" : null,
       "registered" : "__TIME_PLACEHOLDER__",
       "language" : "en",
-      "params" : {}
+      "week_start" : 1,
+      "datetime" : {
+        "timezone" : "Europe/London",
+        "date_format" : "DD.MM.YYYY",
+        "time_format" : "HH:mm"
+      }
     },
     "relationships" : {
       "emails" : {

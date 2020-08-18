@@ -16,7 +16,7 @@
       "address" : "john.doe@fastybird.com",
       "is_default" : false,
       "is_verified" : true,
-      "is_private" : false
+      "is_private" : true
     },
     "relationships" : {
       "account" : {

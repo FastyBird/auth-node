@@ -17,6 +17,13 @@ return [
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/accounts.update.user.json',
 	],
+	'updateMachine'    => [
+		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5',
+		'Bearer ' . VALID_TOKEN,
+		file_get_contents(__DIR__ . '/requests/accounts.update.machine.json'),
+		StatusCodeInterface::STATUS_OK,
+		__DIR__ . '/responses/accounts.update.machine.json',
+	],
 
 	// Invalid responses
 	////////////////////
