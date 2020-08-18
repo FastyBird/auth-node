@@ -203,7 +203,6 @@ final class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	protected function hydrateParamsAttribute(
 		JsonAPIDocument\Objects\IStandardObject $attributes
 	): ?Utils\ArrayHash {
-		var_dump('TEST');
 		$params = Utils\ArrayHash::from([
 			'datetime' => [
 				'format' => [],

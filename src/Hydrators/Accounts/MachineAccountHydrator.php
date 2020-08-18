@@ -21,7 +21,6 @@ use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
-use Nette\Utils;
 
 /**
  * Machine account entity hydrator
@@ -59,7 +58,6 @@ final class MachineAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	protected function hydrateStateAttribute(
 		JsonAPIDocument\Objects\IStandardObject $attributes
 	): Types\AccountStateType {
-		var_dump('TEST');
 		if (!Types\AccountStateType::isValidValue((string) $attributes->get('state'))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
