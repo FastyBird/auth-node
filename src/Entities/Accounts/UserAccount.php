@@ -18,6 +18,7 @@ namespace FastyBird\AuthNode\Entities\Accounts;
 use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use Ramsey\Uuid;
 use Throwable;
@@ -81,14 +82,18 @@ class UserAccount extends Account implements IUserAccount
 	private $emails;
 
 	/**
+	 * @param Entities\Accounts\IUserAccount|null $parent
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
+		?Entities\Accounts\IUserAccount $parent = null,
 		?Uuid\UuidInterface $id = null
 	) {
 		parent::__construct($id);
+
+		$this->parent = $parent;
 
 		$this->emails = new Common\Collections\ArrayCollection();
 		$this->children = new Common\Collections\ArrayCollection();
@@ -97,8 +102,12 @@ class UserAccount extends Account implements IUserAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setParent(Entities\Accounts\IUserAccount $account): void
+	public function setParent(?Entities\Accounts\IUserAccount $account): void
 	{
+		if ($account !== null && $account->hasParent()) {
+			throw new Exceptions\ParentWithParentException('Parent account have to be without parent');
+		}
+
 		$this->parent = $account;
 	}
 
@@ -108,6 +117,14 @@ class UserAccount extends Account implements IUserAccount
 	public function getParent(): ?Entities\Accounts\IUserAccount
 	{
 		return $this->parent;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function hasParent(): bool
+	{
+		return $this->parent !== null;
 	}
 
 	/**

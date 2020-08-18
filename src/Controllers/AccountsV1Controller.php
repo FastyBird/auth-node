@@ -17,12 +17,12 @@ namespace FastyBird\AuthNode\Controllers;
 
 use Doctrine;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Hydrators;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Router;
 use FastyBird\AuthNode\Schemas;
-use FastyBird\NodeAuth;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
@@ -58,9 +58,6 @@ final class AccountsV1Controller extends BaseV1Controller
 	/** @var Models\Accounts\IAccountsManager */
 	private $accountsManager;
 
-	/** @var Models\Roles\IRoleRepository */
-	private $roleRepository;
-
 	/** @var string */
 	protected $translationDomain = 'node.accounts';
 
@@ -68,16 +65,13 @@ final class AccountsV1Controller extends BaseV1Controller
 		Hydrators\Accounts\UserAccountHydrator $userAccountHydrator,
 		Hydrators\Accounts\MachineAccountHydrator $machineAccountHydrator,
 		Models\Accounts\IAccountRepository $accountRepository,
-		Models\Accounts\IAccountsManager $accountsManager,
-		Models\Roles\IRoleRepository $roleRepository
+		Models\Accounts\IAccountsManager $accountsManager
 	) {
 		$this->userAccountHydrator = $userAccountHydrator;
 		$this->machineAccountHydrator = $machineAccountHydrator;
 
 		$this->accountRepository = $accountRepository;
 		$this->accountsManager = $accountsManager;
-
-		$this->roleRepository = $roleRepository;
 	}
 
 	/**
@@ -145,21 +139,6 @@ final class AccountsV1Controller extends BaseV1Controller
 			} elseif ($document->getResource()->getType() === Schemas\Accounts\MachineAccountSchema::SCHEMA_TYPE) {
 				$createData = $this->machineAccountHydrator->hydrate($document);
 
-				$findRole = new Queries\FindRolesQuery();
-				$findRole->byName(NodeAuth\Constants::ROLE_USER);
-
-				$role = $this->roleRepository->findOneBy($findRole);
-
-				if ($role === null) {
-					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('messages.notCreated.heading'),
-						$this->translator->translate('messages.notCreated.message')
-					);
-				}
-
-				$createData['roles'] = [$role];
-
 				// Store item into database
 				$account = $this->accountsManager->create($createData);
 
@@ -177,12 +156,37 @@ final class AccountsV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
+		} catch (Exceptions\ParentRequiredException $ex) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.missingRelation.heading'),
+				$this->translator->translate('//node.base.messages.missingRelation.message'),
+				[
+					'pointer' => '/data/relationships/parent/data/id',
+				]
+			);
 
+		} catch (Exceptions\ParentInvalidException | Exceptions\ParentWithParentException $ex) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.invalidAdministrator.heading'),
+				$this->translator->translate('messages.invalidAdministrator.message'),
+				[
+					'pointer' => '/data/relationships/parent/data/id',
+				]
+			);
+
+		} catch (Exceptions\AccountRoleInvalidException $ex) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.invalidRelation.heading'),
+				$this->translator->translate('//node.base.messages.invalidRelation.message'),
+				[
+					'pointer' => '/data/relationships/roles/data/id',
+				]
+			);
+
+		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRequired.heading'),
@@ -193,19 +197,9 @@ final class AccountsV1Controller extends BaseV1Controller
 			);
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw $ex;
 
 		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			if (preg_match("%PRIMARY'%", $ex->getMessage(), $match) === 1) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -239,11 +233,6 @@ final class AccountsV1Controller extends BaseV1Controller
 			);
 
 		} catch (Throwable $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -257,6 +246,12 @@ final class AccountsV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.notCreated.heading'),
 				$this->translator->translate('messages.notCreated.message')
 			);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
 		/** @var NodeWebServerHttp\Response $response */
@@ -324,19 +319,29 @@ final class AccountsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->commit();
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw $ex;
 
-		} catch (Throwable $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
+		} catch (Exceptions\ParentInvalidException | Exceptions\ParentWithParentException $ex) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.invalidAdministrator.heading'),
+				$this->translator->translate('messages.invalidAdministrator.message'),
+				[
+					'pointer' => '/data/relationships/parent/data/id',
+				]
+			);
 
+		} catch (Exceptions\AccountRoleInvalidException $ex) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.invalidRelation.heading'),
+				$this->translator->translate('//node.base.messages.invalidRelation.message'),
+				[
+					'pointer' => '/data/relationships/roles/data/id',
+				]
+			);
+
+		} catch (Throwable $ex) {
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -350,6 +355,12 @@ final class AccountsV1Controller extends BaseV1Controller
 				$this->translator->translate('messages.notUpdated.heading'),
 				$this->translator->translate('messages.notUpdated.message')
 			);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
 		/** @var NodeWebServerHttp\Response $response */

@@ -80,6 +80,30 @@
             "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef"
           }
         ]
+      },
+      "parent" : {
+        "links" : {
+          "self" : "/v1/me/relationships/parent",
+          "related" : "/auth-node/user-account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/parent"
+        },
+        "data" : null
+      },
+      "children" : {
+        "links" : {
+          "self" : "/v1/me/relationships/children",
+          "related" : {
+            "href" : "/v1/me/children",
+            "meta" : {
+              "count" : 1
+            }
+          }
+        },
+        "data" : [
+          {
+            "type" : "auth-node/user-account",
+            "id" : "efbfbdef-bfbd-68ef-bfbd-770b40efbfbd"
+          }
+        ]
       }
     },
     "links" : {

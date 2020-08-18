@@ -24,6 +24,7 @@ use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Types;
 use FastyBird\NodeAuth;
+use Monolog;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console;
@@ -94,6 +95,15 @@ class CreateCommand extends Console\Command\Command
 		$this->translator = new Translation\PrefixedTranslator($translator, $this->translationDomain);
 
 		parent::__construct($name);
+
+		// Override loggers to not log debug events into console
+		if ($logger instanceof Monolog\Logger) {
+			foreach ($logger->getHandlers() as $handler) {
+				if ($handler instanceof Monolog\Handler\StreamHandler) {
+					$handler->setLevel(Monolog\Logger::WARNING);
+				}
+			}
+		}
 	}
 
 	/**
@@ -231,6 +241,12 @@ class CreateCommand extends Console\Command\Command
 			} while ($repeat);
 		}
 
+		if ($role === null) {
+			$io->error('Role could\'t be loaded.');
+
+			return 1;
+		}
+
 		try {
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
@@ -239,6 +255,10 @@ class CreateCommand extends Console\Command\Command
 			$create->offsetSet('entity', Entities\Accounts\UserAccount::class);
 			$create->offsetSet('state', Types\AccountStateType::get(Types\AccountStateType::STATE_ACTIVE));
 			$create->offsetSet('roles', [$role]);
+
+			if ($role->getRoleId() === NodeAuth\Constants::ROLE_ADMINISTRATOR) {
+				$create->offsetSet('parent', null);
+			}
 
 			$details = new Utils\ArrayHash();
 			$details->offsetSet('entity', Entities\Details\Details::class);

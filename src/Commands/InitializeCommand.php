@@ -21,6 +21,7 @@ use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\NodeAuth;
+use Monolog;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -73,6 +74,15 @@ class InitializeCommand extends Console\Command\Command
 		$this->logger = $logger;
 
 		parent::__construct($name);
+
+		// Override loggers to not log debug events into console
+		if ($logger instanceof Monolog\Logger) {
+			foreach ($logger->getHandlers() as $handler) {
+				if ($handler instanceof Monolog\Handler\StreamHandler) {
+					$handler->setLevel(Monolog\Logger::WARNING);
+				}
+			}
+		}
 	}
 
 	/**

@@ -24,6 +24,7 @@ use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Types;
 use FastyBird\NodeAuth;
+use Monolog;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
 use stdClass;
@@ -86,6 +87,15 @@ class VernemqCommand extends Console\Command\Command
 		$this->translator = new Translation\PrefixedTranslator($translator, $this->translationDomain);
 
 		parent::__construct($name);
+
+		// Override loggers to not log debug events into console
+		if ($logger instanceof Monolog\Logger) {
+			foreach ($logger->getHandlers() as $handler) {
+				if ($handler instanceof Monolog\Handler\StreamHandler) {
+					$handler->setLevel(Monolog\Logger::WARNING);
+				}
+			}
+		}
 	}
 
 	/**

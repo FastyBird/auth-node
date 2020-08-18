@@ -237,6 +237,30 @@
               "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef"
             }
           ]
+        },
+        "parent" : {
+          "links" : {
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent",
+            "related" : "/auth-node/user-account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/parent"
+          },
+          "data" : null
+        },
+        "children" : {
+          "links" : {
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/children",
+              "meta" : {
+                "count" : 1
+              }
+            }
+          },
+          "data" : [
+            {
+              "type" : "auth-node/user-account",
+              "id" : "efbfbdef-bfbd-68ef-bfbd-770b40efbfbd"
+            }
+          ]
         }
       },
       "links" : {
@@ -310,6 +334,28 @@
               "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61"
             }
           ]
+        },
+        "parent" : {
+          "links" : {
+            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/parent",
+            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
+          },
+          "data" : {
+            "type" : "auth-node/user-account",
+            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
+          }
+        },
+        "children" : {
+          "links" : {
+            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
+          },
+          "data" : []
         }
       },
       "links" : {
@@ -376,6 +422,25 @@
         "roles" : {
           "links" : {
             "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/roles"
+          },
+          "data" : []
+        },
+        "parent" : {
+          "links" : {
+            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/parent",
+            "related" : "/auth-node/user-account/fae8d781-7e2c-4318-9c85-43ba637d14c5/parent"
+          },
+          "data" : null
+        },
+        "children" : {
+          "links" : {
+            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
           },
           "data" : []
         }
@@ -446,6 +511,25 @@
             "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/roles"
           },
           "data" : []
+        },
+        "parent" : {
+          "links" : {
+            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/parent",
+            "related" : "/auth-node/user-account/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/parent"
+          },
+          "data" : null
+        },
+        "children" : {
+          "links" : {
+            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
+          },
+          "data" : []
         }
       },
       "links" : {
@@ -514,6 +598,25 @@
             "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/roles"
           },
           "data" : []
+        },
+        "parent" : {
+          "links" : {
+            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/parent",
+            "related" : "/auth-node/user-account/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/parent"
+          },
+          "data" : null
+        },
+        "children" : {
+          "links" : {
+            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
+          },
+          "data" : []
         }
       },
       "links" : {
@@ -580,6 +683,25 @@
         "roles" : {
           "links" : {
             "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/roles"
+          },
+          "data" : []
+        },
+        "parent" : {
+          "links" : {
+            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/parent",
+            "related" : "/auth-node/user-account/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/parent"
+          },
+          "data" : null
+        },
+        "children" : {
+          "links" : {
+            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
           },
           "data" : []
         }

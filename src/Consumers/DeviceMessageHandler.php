@@ -23,7 +23,6 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use FastyBird\NodeAuth;
 use FastyBird\NodeExchange\Consumers as NodeExchangeConsumers;
 use FastyBird\NodeExchange\Exceptions as NodeExchangeExceptions;
 use FastyBird\NodeMetadata;
@@ -53,9 +52,6 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	/** @var Models\Accounts\IAccountsManager */
 	private $accountsManager;
 
-	/** @var Models\Roles\IRoleRepository */
-	private $roleRepository;
-
 	/** @var NodeMetadataLoaders\ISchemaLoader */
 	private $schemaLoader;
 
@@ -68,14 +64,12 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	public function __construct(
 		Models\Accounts\IAccountRepository $accountRepository,
 		Models\Accounts\IAccountsManager $accountsManager,
-		Models\Roles\IRoleRepository $roleRepository,
 		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
 		Log\LoggerInterface $logger,
 		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
 		$this->accountRepository = $accountRepository;
 		$this->accountsManager = $accountsManager;
-		$this->roleRepository = $roleRepository;
 
 		$this->schemaLoader = $schemaLoader;
 		$this->logger = $logger;
@@ -104,19 +98,11 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 						// Start transaction connection to the database
 						$this->getOrmConnection()->beginTransaction();
 
-						$findRole = new Queries\FindRolesQuery();
-						$findRole->byName(NodeAuth\Constants::ROLE_USER);
-
-						$role = $this->roleRepository->findOneBy($findRole);
-
 						$create = Utils\ArrayHash::from([
 							'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
 							'device' => $message->offsetGet('device'),
 							'entity' => Entities\Accounts\MachineAccount::class,
 							'state'  => AuthNode\Types\AccountStateType::get(AuthNode\Types\AccountStateType::STATE_ACTIVE),
-							'roles'  => [
-								$role,
-							],
 						]);
 
 						$this->accountsManager->create($create);

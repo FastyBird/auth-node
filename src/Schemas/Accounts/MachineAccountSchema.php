@@ -46,6 +46,7 @@ final class MachineAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 	public const RELATIONSHIPS_PARENT = 'parent';
 	public const RELATIONSHIPS_CHILDREN = 'children';
 	public const RELATIONSHIPS_IDENTITIES = 'identities';
+	public const RELATIONSHIPS_ROLES = 'roles';
 
 	/** @var Routing\IRouter */
 	private $router;

@@ -29,16 +29,21 @@ interface IUserAccount extends IAccount
 {
 
 	/**
-	 * @param Entities\Accounts\IUserAccount $account
+	 * @param Entities\Accounts\IUserAccount|null $account
 	 *
 	 * @return void
 	 */
-	public function setParent(Entities\Accounts\IUserAccount $account): void;
+	public function setParent(?Entities\Accounts\IUserAccount $account): void;
 
 	/**
 	 * @return Entities\Accounts\IUserAccount|null
 	 */
 	public function getParent(): ?Entities\Accounts\IUserAccount;
+
+	/**
+	 * @return bool
+	 */
+	public function hasParent(): bool;
 
 	/**
 	 * @return void

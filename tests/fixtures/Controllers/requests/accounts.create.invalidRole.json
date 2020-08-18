@@ -9,6 +9,14 @@
       }
     },
     "relationships" : {
+      "roles" : {
+        "data" : [
+          {
+            "type" : "auth-node/role",
+            "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef"
+          }
+        ]
+      },
       "parent" : {
         "data" : {
           "type" : "auth-node/user-account",

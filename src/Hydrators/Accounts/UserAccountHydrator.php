@@ -15,13 +15,20 @@
 
 namespace FastyBird\AuthNode\Hydrators\Accounts;
 
+use Contributte\Translation;
+use Doctrine\Common;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Models;
+use FastyBird\AuthNode\Queries;
+use FastyBird\AuthNode\Schemas;
 use FastyBird\AuthNode\Types;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 use Nette\Utils;
+use Ramsey\Uuid;
+use stdClass;
 
 /**
  * User account entity hydrator
@@ -51,6 +58,33 @@ final class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	protected $compositedAttributes = [
 		'params',
 	];
+
+	/** @var string[] */
+	protected $relationships = [
+		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_PARENT,
+		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_ROLES,
+	];
+
+	/** @var string */
+	protected $translationDomain = 'node.accounts';
+
+	/** @var Models\Accounts\IAccountRepository */
+	private $accountRepository;
+
+	/** @var Models\Roles\IRoleRepository */
+	private $roleRepository;
+
+	public function __construct(
+		Models\Accounts\IAccountRepository $accountRepository,
+		Models\Roles\IRoleRepository $roleRepository,
+		Common\Persistence\ManagerRegistry $managerRegistry,
+		Translation\Translator $translator
+	) {
+		parent::__construct($managerRegistry, $translator);
+
+		$this->accountRepository = $accountRepository;
+		$this->roleRepository = $roleRepository;
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -233,6 +267,98 @@ final class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 		}
 
 		return $params;
+	}
+
+	/**
+	 * @param JsonAPIDocument\Objects\IRelationship<mixed> $relationship
+	 *
+	 * @return Entities\Accounts\IUserAccount
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 */
+	protected function hydrateParentRelationship(
+		JsonAPIDocument\Objects\IRelationship $relationship
+	): Entities\Accounts\IUserAccount {
+		if (
+			!$relationship->isHasOne()
+			|| $relationship->getIdentifier() === null
+			|| !Uuid\Uuid::isValid($relationship->getIdentifier()->getId())
+			|| !$relationship->getData() instanceof JsonAPIDocument\Objects\IResourceIdentifier
+			|| $relationship->getData()->get('type') !== Schemas\Accounts\UserAccountSchema::SCHEMA_TYPE
+		) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.relationNotFound.heading'),
+				$this->translator->translate('//node.base.messages.relationNotFound.message'),
+				[
+					'pointer' => '/data/relationships/parent/data/id',
+				]
+			);
+		}
+
+		$findQuery = new Queries\FindAccountsQuery();
+		$findQuery->byId(Uuid\Uuid::fromString($relationship->getIdentifier()->getId()));
+
+		/** @var Entities\Accounts\IUserAccount|null $account */
+		$account = $this->accountRepository->findOneBy($findQuery);
+
+		if ($account === null) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.relationNotFound.heading'),
+				$this->translator->translate('//node.base.messages.relationNotFound.message'),
+				[
+					'pointer' => '/data/relationships/parent/data/id',
+				]
+			);
+		}
+
+		return $account;
+	}
+
+	/**
+	 * @param JsonAPIDocument\Objects\IRelationship<mixed> $relationship
+	 *
+	 * @return Entities\Roles\IRole[]
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 */
+	protected function hydrateRolesRelationship(
+		JsonAPIDocument\Objects\IRelationship $relationship
+	): ?array {
+		if (!$relationship->isHasMany()) {
+			return null;
+		}
+
+		$roles = [];
+
+		foreach ($relationship as $rolesRelation) {
+			/** @var stdClass $roleRelation */
+			foreach ($rolesRelation as $roleRelation) {
+				try {
+					$findQuery = new Queries\FindRolesQuery();
+					$findQuery->byId(Uuid\Uuid::fromString($roleRelation->id));
+
+					$role = $this->roleRepository->findOneBy($findQuery);
+
+					if ($role !== null) {
+						$roles[] = $role;
+					}
+
+				} catch (Uuid\Exception\InvalidUuidStringException $ex) {
+					throw new NodeJsonApiExceptions\JsonApiErrorException(
+						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+						$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
+						$this->translator->translate('//node.base.messages.identifierInvalid.message'),
+						[
+							'pointer' => '/data/relationships/roles/data/id',
+						]
+					);
+				}
+			}
+		}
+
+		return $roles;
 	}
 
 }

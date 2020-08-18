@@ -10,14 +10,21 @@ const VALID_TOKEN_USER = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3YzVkN
 return [
 	// Valid responses
 	//////////////////
-	'createUser'      => [
+	'createUser'          => [
 		'/v1/accounts',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.create.user.json'),
 		StatusCodeInterface::STATUS_CREATED,
 		__DIR__ . '/responses/accounts.create.user.json',
 	],
-	'createMachine'   => [
+	'createUserWithRoles' => [
+		'/v1/accounts',
+		'Bearer ' . VALID_TOKEN,
+		file_get_contents(__DIR__ . '/requests/accounts.create.userWithRoles.json'),
+		StatusCodeInterface::STATUS_CREATED,
+		__DIR__ . '/responses/accounts.create.userWithRoles.json',
+	],
+	'createMachine'       => [
 		'/v1/accounts',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.create.machine.json'),
@@ -27,42 +34,73 @@ return [
 
 	// Invalid responses
 	////////////////////
-	'missingRequired' => [
+	'missingRequired'     => [
 		'/v1/accounts',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.create.missing.required.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/accounts.create.missingRequired.json',
 	],
-	'invalidType'     => [
+	'invalidType'         => [
 		'/v1/accounts',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.create.invalidType.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/accounts.invalidType.json',
 	],
-	'invalidToken'    => [
+	'missingParent'       => [
+		'/v1/accounts',
+		'Bearer ' . VALID_TOKEN,
+		file_get_contents(__DIR__ . '/requests/accounts.create.missingParent.json'),
+		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+		__DIR__ . '/responses/accounts.create.missingParent.json',
+	],
+	// As parent is set account with other parent
+	'invalidParent'       => [
+		'/v1/accounts',
+		'Bearer ' . VALID_TOKEN,
+		file_get_contents(__DIR__ . '/requests/accounts.create.invalidParent.json'),
+		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+		__DIR__ . '/responses/accounts.invalidParent.json',
+	],
+	// Administrator role is only for parent account
+	'invalidRole' => [
+		'/v1/accounts',
+		'Bearer ' . VALID_TOKEN,
+		file_get_contents(__DIR__ . '/requests/accounts.create.invalidRole.json'),
+		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+		__DIR__ . '/responses/accounts.invalidRole.json',
+	],
+	// User role could not be combined with other roles
+	'invalidRoles' => [
+		'/v1/accounts',
+		'Bearer ' . VALID_TOKEN,
+		file_get_contents(__DIR__ . '/requests/accounts.create.invalidRoles.json'),
+		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+		__DIR__ . '/responses/accounts.invalidRole.json',
+	],
+	'invalidToken'        => [
 		'/v1/accounts',
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.create.user.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],
-	'noToken'         => [
+	'noToken'             => [
 		'/v1/accounts',
 		null,
 		file_get_contents(__DIR__ . '/requests/accounts.create.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/forbidden.json',
 	],
-	'expiredToken'    => [
+	'expiredToken'        => [
 		'/v1/accounts',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.create.user.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],
-	'userToken'       => [
+	'userToken'           => [
 		'/v1/accounts',
 		'Bearer ' . VALID_TOKEN_USER,
 		file_get_contents(__DIR__ . '/requests/accounts.create.user.json'),

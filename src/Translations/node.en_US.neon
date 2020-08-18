@@ -42,6 +42,12 @@ base:
 		missingRequired:
 			heading	: "Missing required attribute"
 			message	: "Provided request is missing required attribute or relation"
+		missingRelation:
+			heading	: "Missing required relation"
+			message	: "Provided request is missing required relation"
+		invalidRelation:
+			heading	: "Invalid relation"
+			message	: "Provided relation is not valid"
 		notAuthorized:
 			heading	: "Not authorized"
 			message	: "You are not authorized to perform this action"
@@ -108,6 +114,9 @@ accounts:
 		invalid:
 			heading	: "Bad request"
 			message	: "Request resource identifier is invalid"
+		invalidAdministrator:
+			heading	: "Invalid administrator"
+			message	: "Provided parent account is not valid"
 
 account:
 	messages:

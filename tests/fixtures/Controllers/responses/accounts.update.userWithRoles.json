@@ -7,17 +7,17 @@
     "version" : "1.1"
   },
   "links" : {
-    "self" : "/v1/me"
+    "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
   },
   "data" : {
     "type" : "auth-node/user-account",
     "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
     "attributes" : {
-      "name" : "Smith John",
+      "name" : "Doe Jane",
       "email" : "john.doe@fastybird.com",
       "details" : {
-        "first_name" : "John",
-        "last_name" : "Smith",
+        "first_name" : "Jane",
+        "last_name" : "Doe",
         "middle_name" : null
       },
       "state" : "active",
@@ -34,9 +34,9 @@
     "relationships" : {
       "emails" : {
         "links" : {
-          "self" : "/v1/me/relationships/emails",
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/emails",
           "related" : {
-            "href" : "/v1/me/emails",
+            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/emails",
             "meta" : {
               "count" : 2
             }
@@ -55,9 +55,9 @@
       },
       "identities" : {
         "links" : {
-          "self" : "/v1/me/relationships/identities",
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/identities",
           "related" : {
-            "href" : "/v1/me/identities",
+            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities",
             "meta" : {
               "count" : 1
             }
@@ -72,27 +72,27 @@
       },
       "roles" : {
         "links" : {
-          "self" : "/v1/me/relationships/roles"
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/roles"
         },
         "data" : [
           {
             "type" : "auth-node/role",
-            "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef"
+            "id" : "89f4a14f-7f78-4216-99b8-584ab9229f1c"
           }
         ]
       },
       "parent" : {
         "links" : {
-          "self" : "/v1/me/relationships/parent",
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent",
           "related" : "/auth-node/user-account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/parent"
         },
         "data" : null
       },
       "children" : {
         "links" : {
-          "self" : "/v1/me/relationships/children",
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children",
           "related" : {
-            "href" : "/v1/me/children",
+            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/children",
             "meta" : {
               "count" : 1
             }
@@ -107,7 +107,7 @@
       }
     },
     "links" : {
-      "self" : "/v1/me"
+      "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
     }
   }
 }

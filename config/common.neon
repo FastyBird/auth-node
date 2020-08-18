@@ -220,6 +220,11 @@ services:
 
 	- {factory: FastyBird\AuthNode\Subscribers\EntitiesSubscriber}
 
+	-
+		factory: FastyBird\AuthNode\Subscribers\AccountEntitySubscriber
+		arguments:
+			singleAdministrator: %security.singleAdministrator%
+
 	# Database repositories
 
 	- {factory: FastyBird\AuthNode\Models\Accounts\AccountRepository}
@@ -235,15 +240,30 @@ services:
 	# Database managers
 	###################
 
-	- {factory: FastyBird\AuthNode\Models\Accounts\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Accounts\Account))}
+	-
+		factory: FastyBird\AuthNode\Models\Accounts\AccountsManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Accounts\Account)
 
-	- {factory: FastyBird\AuthNode\Models\Emails\EmailsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Emails\Email))}
+	-
+		factory: FastyBird\AuthNode\Models\Emails\EmailsManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Emails\Email)
 
-	- {factory: FastyBird\AuthNode\Models\Identities\IdentitiesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Identities\Identity))}
+	-
+		factory: FastyBird\AuthNode\Models\Identities\IdentitiesManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Identities\Identity)
 
-	- {factory: FastyBird\AuthNode\Models\Roles\RolesManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Roles\Role))}
+	-
+		factory: FastyBird\AuthNode\Models\Roles\RolesManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Roles\Role)
 
-	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account))}
+	-
+		factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager
+		arguments:
+			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account)
 
 	# API controllers
 	#################
