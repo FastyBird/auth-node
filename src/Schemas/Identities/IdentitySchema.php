@@ -54,7 +54,7 @@ abstract class IdentitySchema extends NodeJsonApiSchemas\JsonApiSchema
 	 * @param Entities\Identities\IIdentity $identity
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, mixed>
+	 * @return iterable<string, string>
 	 *
 	 * @phpstan-param T $identity
 	 *

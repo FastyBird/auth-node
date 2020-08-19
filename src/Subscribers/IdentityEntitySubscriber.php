@@ -140,25 +140,17 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		ORM\EntityManager $em,
 		ORM\UnitOfWork $uow
 	): void {
-		if (
-			$identity instanceof Entities\Identities\INodeAccountIdentity
-			|| $identity instanceof Entities\Identities\IMachineAccountIdentity
-		) {
+		if ($identity instanceof Entities\Identities\IMachineAccountIdentity) {
 			$verneMqAccount = $this->findAccount($identity);
 
 			if ($verneMqAccount === null) {
-				$publishAcls = [];
-				$subscribeAcls = [];
+				$publishAcls = [
+					'/fb/' . $identity->getUid() . '/#',
+				];
 
-				if ($identity instanceof Entities\Identities\INodeAccountIdentity) {
-					$publishAcls[] = '/fb/#';
-					$subscribeAcls[] = '/fb/#';
-					$subscribeAcls[] = '$SYS/broker/log/#';
-
-				} else {
-					$publishAcls[] = '/fb/' . $identity->getUid() . '/#';
-					$subscribeAcls[] = '/fb/' . $identity->getUid() . '/#';
-				}
+				$subscribeAcls = [
+					'/fb/' . $identity->getUid() . '/#',
+				];
 
 				$this->createAccount($identity, $uow, $publishAcls, $subscribeAcls);
 
@@ -167,16 +159,36 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 			}
 		}
 
-		if (
-			$identity instanceof Entities\Identities\IUserAccountIdentity
-		) {
+		if ($identity instanceof Entities\Identities\INodeAccountIdentity) {
+			$verneMqAccount = $this->findAccount($identity);
+
+			if ($verneMqAccount === null) {
+				$publishAcls = [
+					'/fb/#',
+				];
+
+				$subscribeAcls = [
+					'/fb/#',
+					'$SYS/broker/log/#',
+				];
+
+				$this->createAccount($identity, $uow, $publishAcls, $subscribeAcls);
+
+			} else {
+				$this->updateAccount($verneMqAccount, $identity, $em, $uow);
+			}
+		}
+
+		if ($identity instanceof Entities\Identities\IUserAccountIdentity) {
 			$account = $identity->getAccount();
 
 			$verneMqAccount = $this->findAccount($identity);
 
 			if ($verneMqAccount === null) {
 				$publishAcls = [];
-				$subscribeAcls = [];
+				$subscribeAcls = [
+					'/fb/#',
+				];
 
 				if (
 					$account->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)
@@ -184,8 +196,6 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 				) {
 					$publishAcls[] = '/fb/#';
 				}
-
-				$subscribeAcls[] = '/fb/#';
 
 				if ($account->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)) {
 					$subscribeAcls[] = '$SYS/broker/log/#';

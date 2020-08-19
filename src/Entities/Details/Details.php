@@ -66,7 +66,7 @@ class Details implements IDetails
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="detail_first_name", length=100, nullable=false)
 	 */
 	private $firstName;
@@ -74,7 +74,7 @@ class Details implements IDetails
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="detail_last_name", length=100, nullable=false)
 	 */
 	private $lastName;

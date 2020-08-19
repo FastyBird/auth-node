@@ -60,7 +60,6 @@ class Role implements IRole
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="role_name", length=100, nullable=false)
 	 */
 	private $name;
@@ -85,6 +84,7 @@ class Role implements IRole
 	/**
 	 * @var Common\Collections\Collection<int, IRole>
 	 *
+	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Roles\Role", mappedBy="parent")
 	 */
 	private $children;

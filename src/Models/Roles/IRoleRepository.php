@@ -49,11 +49,6 @@ interface IRoleRepository
 	public function findOneBy(Queries\FindRolesQuery $queryObject): ?Entities\Roles\IRole;
 
 	/**
-	 * @return Entities\Roles\IRole[]
-	 */
-	public function findAll(): array;
-
-	/**
 	 * @param Queries\FindRolesQuery $queryObject
 	 *
 	 * @return Entities\Roles\IRole[]

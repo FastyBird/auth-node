@@ -39,7 +39,7 @@ return [
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.create.invalidType.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/identities.invalidType.json',
+		__DIR__ . '/responses/generic/invalidType.json',
 	],
 	'invalidId'       => [
 		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
@@ -53,7 +53,7 @@ return [
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.create.user.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'usedUid'         => [
 		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
@@ -67,20 +67,20 @@ return [
 		null,
 		file_get_contents(__DIR__ . '/requests/identities.create.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'expiredToken'    => [
 		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.create.user.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'userToken'       => [
 		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
 		'Bearer ' . VALID_TOKEN_USER,
 		file_get_contents(__DIR__ . '/requests/accounts.create.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 ];

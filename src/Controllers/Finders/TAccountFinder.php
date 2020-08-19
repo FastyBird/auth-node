@@ -47,8 +47,8 @@ trait TAccountFinder
 		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ACCOUNT_ID, null))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.accounts.messages.notFound.heading'),
-				$this->translator->translate('//node.accounts.messages.notFound.message')
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 
@@ -60,8 +60,8 @@ trait TAccountFinder
 		if ($account === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.accounts.messages.notFound.heading'),
-				$this->translator->translate('//node.accounts.messages.notFound.message')
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 

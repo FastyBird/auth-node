@@ -19,7 +19,6 @@ use Contributte\Translation;
 use Doctrine\Common;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Schemas;
-use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 
 /**
  * User account entity hydrator
@@ -29,13 +28,10 @@ use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
+class UserAccountHydrator extends AccountHydrator
 {
 
 	use TUserAccountHydrator;
-
-	/** @var string */
-	protected $entityIdentifier = self::IDENTIFIER_KEY;
 
 	/** @var string[] */
 	protected $attributes = [
@@ -57,9 +53,6 @@ class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_PARENT,
 		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_ROLES,
 	];
-
-	/** @var string */
-	protected $translationDomain = 'node.accounts';
 
 	/** @var Models\Accounts\IAccountRepository */
 	protected $accountRepository;

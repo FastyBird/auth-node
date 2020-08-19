@@ -42,7 +42,7 @@ class MachineAccount extends Account implements IMachineAccount
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="string", name="account_device", length=150, nullable=false)
 	 */
 	private $device;

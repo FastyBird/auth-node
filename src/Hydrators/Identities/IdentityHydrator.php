@@ -36,4 +36,7 @@ abstract class IdentityHydrator extends NodeJsonApiHydrators\Hydrator
 		'uid',
 	];
 
+	/** @var string */
+	protected $translationDomain = 'node.identities';
+
 }

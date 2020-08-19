@@ -87,6 +87,7 @@ abstract class Account implements IAccount
 	/**
 	 * @var Common\Collections\Collection<int, Entities\Identities\IIdentity>
 	 *
+	 * @IPubDoctrine\Crud(is="writable")
 	 * @ORM\OneToMany(targetEntity="FastyBird\AuthNode\Entities\Identities\Identity", mappedBy="account")
 	 */
 	protected $identities;

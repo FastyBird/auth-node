@@ -20,7 +20,6 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Schemas;
-use FastyBird\AuthNode\Types;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
@@ -64,8 +63,8 @@ trait TUserAccountHydrator
 		if (!$attributes->has('first_name')) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				$this->translator->translate('//node.base.messages.missingAttribute.heading'),
+				$this->translator->translate('//node.base.messages.missingAttribute.message'),
 				[
 					'pointer' => '/data/attributes/details/first_name',
 				]
@@ -88,8 +87,8 @@ trait TUserAccountHydrator
 		if (!$attributes->has('last_name')) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				$this->translator->translate('//node.base.messages.missingAttribute.heading'),
+				$this->translator->translate('//node.base.messages.missingAttribute.message'),
 				[
 					'pointer' => '/data/attributes/details/last_name',
 				]
@@ -132,8 +131,8 @@ trait TUserAccountHydrator
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.missingRequired.heading'),
-					$this->translator->translate('//node.base.messages.missingRequired.message'),
+					$this->translator->translate('//node.base.messages.missingAttribute.heading'),
+					$this->translator->translate('//node.base.messages.missingAttribute.message'),
 					[
 						'pointer' => '/data/attributes/details/first_name',
 					]
@@ -146,8 +145,8 @@ trait TUserAccountHydrator
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.missingRequired.heading'),
-					$this->translator->translate('//node.base.messages.missingRequired.message'),
+					$this->translator->translate('//node.base.messages.missingAttribute.heading'),
+					$this->translator->translate('//node.base.messages.missingAttribute.message'),
 					[
 						'pointer' => '/data/attributes/details/last_name',
 					]
@@ -165,28 +164,6 @@ trait TUserAccountHydrator
 		}
 
 		return null;
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 *
-	 * @return Types\AccountStateType
-	 */
-	protected function hydrateStateAttribute(
-		JsonAPIDocument\Objects\IStandardObject $attributes
-	): Types\AccountStateType {
-		if (!Types\AccountStateType::isValidValue((string) $attributes->get('state'))) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.attributeInvalid.heading'),
-				$this->translator->translate('//node.base.messages.attributeInvalid.message'),
-				[
-					'pointer' => '/data/attributes/state',
-				]
-			);
-		}
-
-		return Types\AccountStateType::get((string) $attributes->get('state'));
 	}
 
 	/**
@@ -249,8 +226,8 @@ trait TUserAccountHydrator
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.base.messages.relationNotFound.heading'),
-				$this->translator->translate('//node.base.messages.relationNotFound.message'),
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message'),
 				[
 					'pointer' => '/data/relationships/parent/data/id',
 				]
@@ -266,8 +243,8 @@ trait TUserAccountHydrator
 		if ($account === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.base.messages.relationNotFound.heading'),
-				$this->translator->translate('//node.base.messages.relationNotFound.message'),
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message'),
 				[
 					'pointer' => '/data/relationships/parent/data/id',
 				]
@@ -310,8 +287,8 @@ trait TUserAccountHydrator
 				} catch (Uuid\Exception\InvalidUuidStringException $ex) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
-						$this->translator->translate('//node.base.messages.identifierInvalid.message'),
+						$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
+						$this->translator->translate('//node.base.messages.invalidIdentifier.message'),
 						[
 							'pointer' => '/data/relationships/roles/data/id',
 						]

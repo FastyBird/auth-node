@@ -18,6 +18,8 @@ namespace FastyBird\AuthNode\Subscribers;
 use Doctrine\Common;
 use Doctrine\ORM;
 use FastyBird\AuthNode\Entities;
+use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Models;
 use Nette;
 
 /**
@@ -33,6 +35,9 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 
 	use Nette\SmartObject;
 
+	/** @var Models\Emails\IEmailRepository */
+	private $emailRepository;
+
 	/**
 	 * Register events
 	 *
@@ -41,8 +46,37 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 	public function getSubscribedEvents(): array
 	{
 		return [
+			ORM\Events::prePersist,
 			ORM\Events::onFlush,
 		];
+	}
+
+	public function __construct(
+		Models\Emails\IEmailRepository $emailRepository
+	) {
+		$this->emailRepository = $emailRepository;
+	}
+
+	/**
+	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
+	 */
+	public function prePersist(ORM\Event\LifecycleEventArgs $eventArgs): void
+	{
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
+
+		// Check all scheduled updates
+		foreach ($uow->getScheduledEntityInsertions() as $object) {
+			if ($object instanceof Entities\Emails\IEmail) {
+				$foundEmail = $this->emailRepository->findOneByAddress($object->getAddress());
+
+				if ($foundEmail !== null && !$foundEmail->getId()->equals($object->getId())) {
+					throw new Exceptions\EmailAlreadyTakenException('Given email is already taken');
+				}
+			}
+		}
 	}
 
 	/**

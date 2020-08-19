@@ -20,7 +20,6 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Router;
 use FastyBird\AuthNode\Security;
 use FastyBird\NodeAuth;
-use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
 use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
 
@@ -32,9 +31,9 @@ use Neomerx\JsonApi;
  *
  * @author          Adam Kadlec <adam.kadlec@fastybird.com>
  *
- * @phpstan-extends NodeJsonApiSchemas\JsonApiSchema<Entities\Accounts\IUserAccount>
+ * @phpstan-extends AccountSchema<Entities\Accounts\IUserAccount>
  */
-final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
+final class UserAccountSchema extends AccountSchema
 {
 
 	/**
@@ -48,11 +47,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 	public const RELATIONSHIPS_PARENT = 'parent';
 	public const RELATIONSHIPS_CHILDREN = 'children';
 	public const RELATIONSHIPS_EMAILS = 'emails';
-	public const RELATIONSHIPS_IDENTITIES = 'identities';
-	public const RELATIONSHIPS_ROLES = 'roles';
-
-	/** @var Routing\IRouter */
-	private $router;
 
 	/** @var Security\User */
 	private $user;
@@ -61,7 +55,8 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 		Routing\IRouter $router,
 		Security\User $user
 	) {
-		$this->router = $router;
+		parent::__construct($router);
+
 		$this->user = $user;
 	}
 
@@ -91,7 +86,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 */
 	public function getAttributes($account, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
-		return [
+		return array_merge((array) parent::getAttributes($account, $context), [
 			'name'  => $account->getName(),
 			'email' => $account->getEmail() !== null ? $account->getEmail()->getAddress() : null,
 
@@ -101,11 +96,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 				'middle_name' => $account->getDetails()->getMiddleName(),
 			],
 
-			'state' => $account->getState()->getValue(),
-
-			'last_visit' => $account->getLastVisit() !== null ? $account->getLastVisit()->format(DATE_ATOM) : null,
-			'registered' => $account->getCreatedAt() !== null ? $account->getCreatedAt()->format(DATE_ATOM) : null,
-
 			'language' => $account->getLanguage(),
 
 			'week_start' => $account->getParam('datetime.week_start', 1),
@@ -114,28 +104,7 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 				'date_format' => $account->getParam('datetime.format.date', 'DD.MM.YYYY'),
 				'time_format' => $account->getParam('datetime.format.time', 'HH:mm'),
 			],
-		];
-	}
-
-	/**
-	 * @param Entities\Accounts\IUserAccount $account
-	 *
-	 * @return JsonApi\Contracts\Schema\LinkInterface
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 */
-	public function getSelfLink($account): JsonApi\Contracts\Schema\LinkInterface
-	{
-		return new JsonApi\Schema\Link(
-			false,
-			$this->router->urlFor(
-				AuthNode\Constants::ROUTE_NAME_ACCOUNT,
-				[
-					Router\Router::URL_ITEM_ID => $account->getPlainId(),
-				]
-			),
-			false
-		);
+		]);
 	}
 
 	/**
@@ -148,23 +117,13 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 */
 	public function getRelationships($account, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
-		$basicRelations = [
-			self::RELATIONSHIPS_EMAILS     => [
+		$basicRelations = array_merge((array) parent::getRelationships($account, $context), [
+			self::RELATIONSHIPS_EMAILS => [
 				self::RELATIONSHIP_DATA          => $account->getEmails(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
-			self::RELATIONSHIPS_IDENTITIES => [
-				self::RELATIONSHIP_DATA          => $account->getIdentities(),
-				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
-			],
-			self::RELATIONSHIPS_ROLES      => [
-				self::RELATIONSHIP_DATA          => $account->getRoles(),
-				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => false,
-			],
-		];
+		]);
 
 		if ($this->user->isInRole(NodeAuth\Constants::ROLE_USER)) {
 			return $basicRelations;
@@ -236,21 +195,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 					'count' => count($account->getEmails()),
 				]
 			);
-
-		} elseif ($name === self::RELATIONSHIPS_IDENTITIES) {
-			return new JsonApi\Schema\Link(
-				false,
-				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITIES,
-					[
-						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
-					]
-				),
-				true,
-				[
-					'count' => count($account->getIdentities()),
-				]
-			);
 		}
 
 		return parent::getRelationshipRelatedLink($account, $name);
@@ -270,8 +214,6 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			$name === self::RELATIONSHIPS_PARENT
 			|| $name === self::RELATIONSHIPS_CHILDREN
 			|| $name === self::RELATIONSHIPS_EMAILS
-			|| $name === self::RELATIONSHIPS_IDENTITIES
-			|| $name === self::RELATIONSHIPS_ROLES
 		) {
 			return new JsonApi\Schema\Link(
 				false,

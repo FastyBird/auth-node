@@ -28,18 +28,18 @@ return [
 		'/v1/me/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c',
 		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'noToken'      => [
 		'/v1/me/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c',
 		null,
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'expiredToken' => [
 		'/v1/me/emails/32ebe3c3-0238-482e-ab79-6b1d9ee2147c',
 		'Bearer ' . EXPIRED_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 ];

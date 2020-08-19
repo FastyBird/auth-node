@@ -31,14 +31,14 @@ return [
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account.emails.create.invalidType.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/account.emails.invalidType.json',
+		__DIR__ . '/responses/generic/invalidType.json',
 	],
 	'invalidToken'    => [
 		'/v1/me/emails',
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account.emails.create.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'invalidEmail'    => [
 		'/v1/me/emails',
@@ -59,13 +59,13 @@ return [
 		null,
 		file_get_contents(__DIR__ . '/requests/account.emails.create.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'expiredToken'    => [
 		'/v1/me/emails',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account.emails.create.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 ];

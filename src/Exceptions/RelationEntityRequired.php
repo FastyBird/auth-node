@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * ParentRequiredException.php
+ * RelationEntityRequired.php
  *
  * @license        More in license.md
  * @copyright      https://fastybird.com
@@ -15,7 +15,7 @@
 
 namespace FastyBird\AuthNode\Exceptions;
 
-class ParentRequiredException extends InvalidArgumentException implements IException
+class RelationEntityRequired extends InvalidArgumentException implements IException
 {
 
 }

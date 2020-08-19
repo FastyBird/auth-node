@@ -3,8 +3,8 @@
     {
       "status" : "422",
       "code" : "422",
-      "title" : "Invalid administrator",
-      "detail" : "Provided parent account is not valid",
+      "title" : "Invalid relation",
+      "detail" : "Provided relation is not valid",
       "source" : {
         "pointer" : "/data/relationships/parent/data/id"
       }

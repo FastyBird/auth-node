@@ -1,10 +1,13 @@
 {
   "errors" : [
     {
-      "code" : "404",
-      "status" : "404",
+      "status" : "422",
+      "code" : "422",
       "title" : "Not found",
-      "detail" : "Provided refresh token is invalid"
+      "detail" : "Provided refresh token is invalid",
+      "source" : {
+        "pointer" : "/data/attributes/refresh"
+      }
     }
   ],
   "jsonapi" : {

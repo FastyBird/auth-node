@@ -4,7 +4,7 @@
       "status" : "404",
       "code" : "404",
       "title" : "Not found",
-      "detail" : "Requested account was not found"
+      "detail" : "Requested entity was not found"
     }
   ],
   "jsonapi" : {

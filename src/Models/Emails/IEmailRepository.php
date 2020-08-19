@@ -61,12 +61,4 @@ interface IEmailRepository
 		Queries\FindEmailsQuery $queryObject
 	): DoctrineOrmQuery\ResultSet;
 
-	/**
-	 * @param string $address
-	 * @param Entities\Accounts\IAccount $account
-	 *
-	 * @return bool
-	 */
-	public function isEmailAvailable(string $address, Entities\Accounts\IAccount $account): bool;
-
 }

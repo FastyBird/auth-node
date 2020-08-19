@@ -156,7 +156,7 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	 */
 	public function getSchema(string $routingKey, string $origin): ?string
 	{
-		if ($origin === AuthNode\Constants::NODE_DEVICES_ORIGIN) {
+		if ($origin === AuthNode\Constants::RABBIT_MQ_DEVICES_ORIGIN) {
 			switch ($routingKey) {
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY:
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY:

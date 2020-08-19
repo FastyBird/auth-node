@@ -19,7 +19,7 @@ use FastyBird\AuthNode\Entities as AuthNodeEntities;
 use FastyBird\NodeAuth;
 
 /**
- * Service constants
+ * Node constants
  *
  * @package        FastyBird:AuthNode!
  * @subpackage     common
@@ -62,6 +62,22 @@ final class Constants
 	public const ROUTE_NAME_ROLE_CHILDREN = 'role.children';
 
 	/**
+	 * Accounts default roles
+	 */
+
+	public const USER_ACCOUNT_DEFAULT_ROLES = [
+		NodeAuth\Constants::ROLE_USER,
+	];
+
+	public const MACHINE_ACCOUNT_DEFAULT_ROLES = [
+		NodeAuth\Constants::ROLE_USER,
+	];
+
+	public const NODE_ACCOUNT_DEFAULT_ROLES = [
+		NodeAuth\Constants::ROLE_USER,
+	];
+
+	/**
 	 * Account identities
 	 */
 
@@ -88,25 +104,9 @@ final class Constants
 	public const RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY = 'fb.bus.node.entity.deleted.device';
 
 	/**
-	 * Microservices origins
+	 * Message bus origins
 	 */
 
-	public const NODE_DEVICES_ORIGIN = 'com.fastybird.devices-node';
-
-	/**
-	 * Accounts default roles
-	 */
-
-	public const USER_ACCOUNT_DEFAULT_ROLES = [
-		NodeAuth\Constants::ROLE_USER,
-	];
-
-	public const MACHINE_ACCOUNT_DEFAULT_ROLES = [
-		NodeAuth\Constants::ROLE_USER,
-	];
-
-	public const NODE_ACCOUNT_DEFAULT_ROLES = [
-		NodeAuth\Constants::ROLE_USER,
-	];
+	public const RABBIT_MQ_DEVICES_ORIGIN = 'com.fastybird.devices-node';
 
 }

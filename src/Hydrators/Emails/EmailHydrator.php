@@ -42,6 +42,9 @@ final class EmailHydrator extends NodeJsonApiHydrators\Hydrator
 		'is_private' => 'visibility',
 	];
 
+	/** @var string */
+	protected $translationDomain = 'node.emails';
+
 	/**
 	 * {@inheritDoc}
 	 */

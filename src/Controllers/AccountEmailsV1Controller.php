@@ -158,8 +158,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.invalidType.heading'),
-					$this->translator->translate('messages.invalidType.message'),
+					$this->translator->translate('//node.base.messages.invalidType.heading'),
+					$this->translator->translate('//node.base.messages.invalidType.message'),
 					[
 						'pointer' => '/data/type',
 					]
@@ -170,26 +170,16 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->commit();
 
 		} catch (Exceptions\EmailIsNotValidException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notValid.heading'),
-				$this->translator->translate('messages.notValid.message'),
+				$this->translator->translate('//node.base.messages.invalidAttribute.heading'),
+				$this->translator->translate('//node.base.messages.invalidAttribute.message'),
 				[
 					'pointer' => '/data/attributes/address',
 				]
 			);
 
 		} catch (Exceptions\EmailAlreadyTakenException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('messages.taken.heading'),
@@ -200,39 +190,24 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			);
 
 		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				$this->translator->translate('//node.base.messages.missingAttribute.heading'),
+				$this->translator->translate('//node.base.messages.missingAttribute.message'),
 				[
 					'pointer' => 'data/attributes/' . $ex->getField(),
 				]
 			);
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw $ex;
 
 		} catch (Doctrine\DBAL\Exception\UniqueConstraintViolationException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			if (preg_match("%PRIMARY'%", $ex->getMessage(), $match) === 1) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.uniqueIdConstraint.heading'),
-					$this->translator->translate('//node.base.messages.uniqueIdConstraint.message'),
+					$this->translator->translate('//node.base.messages.uniqueIdentifier.heading'),
+					$this->translator->translate('//node.base.messages.uniqueIdentifier.message'),
 					[
 						'pointer' => '/data/id',
 					]
@@ -245,8 +220,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 				if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'email_')) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
-						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message'),
+						$this->translator->translate('//node.base.messages.uniqueAttribute.heading'),
+						$this->translator->translate('//node.base.messages.uniqueAttribute.message'),
 						[
 							'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 6),
 						]
@@ -256,16 +231,11 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
-				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message')
+				$this->translator->translate('//node.base.messages.uniqueAttribute.heading'),
+				$this->translator->translate('//node.base.messages.uniqueAttribute.message')
 			);
 
 		} catch (Throwable $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -276,9 +246,15 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notCreated.heading'),
-				$this->translator->translate('messages.notCreated.message')
+				$this->translator->translate('//node.base.messages.notCreated.heading'),
+				$this->translator->translate('//node.base.messages.notCreated.message')
 			);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
 		/** @var NodeWebServerHttp\Response $response */
@@ -312,8 +288,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
-				$this->translator->translate('//node.base.messages.identifierInvalid.message')
+				$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
+				$this->translator->translate('//node.base.messages.invalidIdentifier.message')
 			);
 		}
 
@@ -329,8 +305,8 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.invalidType.heading'),
-					$this->translator->translate('messages.invalidType.message'),
+					$this->translator->translate('//node.base.messages.invalidType.heading'),
+					$this->translator->translate('//node.base.messages.invalidType.message'),
 					[
 						'pointer' => '/data/type',
 					]
@@ -341,19 +317,9 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->commit();
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			throw $ex;
 
 		} catch (Throwable $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -364,9 +330,15 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notUpdated.heading'),
-				$this->translator->translate('messages.notUpdated.message')
+				$this->translator->translate('//node.base.messages.notUpdated.heading'),
+				$this->translator->translate('//node.base.messages.notUpdated.message')
 			);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
 		/** @var NodeWebServerHttp\Response $response */
@@ -412,11 +384,6 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->commit();
 
 		} catch (Throwable $ex) {
-			// Revert all changes when error occur
-			if ($this->getOrmConnection()->isTransactionActive()) {
-				$this->getOrmConnection()->rollBack();
-			}
-
 			// Log catched exception
 			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
 				'exception' => [
@@ -427,9 +394,15 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notDeleted.heading'),
-				$this->translator->translate('messages.notDeleted.message')
+				$this->translator->translate('//node.base.messages.notDeleted.heading'),
+				$this->translator->translate('//node.base.messages.notDeleted.message')
 			);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
 		}
 
 		/** @var NodeWebServerHttp\Response $response */

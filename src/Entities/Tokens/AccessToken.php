@@ -50,6 +50,7 @@ class AccessToken extends NodeAuthEntities\Tokens\Token implements IAccessToken
 	/**
 	 * @var Entities\Identities\IIdentity
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Identities\Identity")
 	 * @ORM\JoinColumn(name="identity_id", referencedColumnName="identity_id", onDelete="cascade", nullable=false)
 	 */

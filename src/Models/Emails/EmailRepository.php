@@ -89,17 +89,6 @@ final class EmailRepository implements IEmailRepository
 	}
 
 	/**
-	 * {@inheritDoc}
-	 */
-	public function isEmailAvailable(string $address, Entities\Accounts\IAccount $account): bool
-	{
-		/** @var Entities\Emails\IEmail|null $email */
-		$email = $this->findOneByAddress($address);
-
-		return $email === null || $email->getAccount()->getId()->equals($account->getId());
-	}
-
-	/**
 	 * @return Persistence\ObjectRepository<Entities\Emails\Email>
 	 */
 	private function getRepository(): Persistence\ObjectRepository

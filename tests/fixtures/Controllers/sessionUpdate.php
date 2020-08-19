@@ -30,7 +30,7 @@ return [
 		'/v1/session',
 		null,
 		file_get_contents(__DIR__ . '/requests/session.update.unknown.json'),
-		StatusCodeInterface::STATUS_NOT_FOUND,
+		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/session.update.unknown.json',
 	],
 	'updateWithToken'        => [
@@ -38,20 +38,20 @@ return [
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/session.update.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'updateWithExpiredToken' => [
 		'/v1/session',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/session.update.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'updateWithInvalidToken' => [
 		'/v1/session',
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/session.update.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 ];

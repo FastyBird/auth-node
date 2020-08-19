@@ -15,19 +15,14 @@
 
 namespace FastyBird\AuthNode\Subscribers;
 
-use Consistence;
 use Doctrine\Common;
 use Doctrine\ORM;
 use Doctrine\Persistence;
 use FastyBird\AuthNode;
-use FastyBird\AuthNode\Exceptions;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
 use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
 use IPub\DoctrineCrud;
 use Nette;
-use Ramsey\Uuid;
-use ReflectionClass;
-use ReflectionException;
 
 /**
  * Doctrine entities events
@@ -200,11 +195,12 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 	{
 		foreach (AuthNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING as $class => $routingKey) {
 			if (
-			$this->validateEntity($entity, $class)
+				$this->validateEntity($entity, $class)
+				&& method_exists($entity, 'toArray')
 			) {
 				$routingKey = str_replace(AuthNode\Constants::RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING, $action, $routingKey);
 
-				$this->publisher->publish($routingKey, $this->toArray($entity));
+				$this->publisher->publish($routingKey, $entity->toArray());
 
 				return;
 			}
@@ -230,100 +226,6 @@ final class EntitiesSubscriber implements Common\EventSubscriber
 		}
 
 		return $result;
-	}
-
-	/**
-	 * @param NodeDatabaseEntities\IEntity $entity
-	 *
-	 * @return mixed[]
-	 */
-	private function toArray(NodeDatabaseEntities\IEntity $entity): array
-	{
-		if (method_exists($entity, 'toArray')) {
-			return $entity->toArray();
-		}
-
-		$metadata = $this->entityManager->getClassMetadata(get_class($entity));
-
-		$fields = [];
-
-		foreach ($metadata->fieldMappings as $field) {
-			if (isset($field['fieldName'])) {
-				$fields[] = $field['fieldName'];
-			}
-		}
-
-		try {
-			$rc = new ReflectionClass(get_class($entity));
-
-			foreach ($rc->getProperties() as $property) {
-				$fields[] = $property->getName();
-			}
-
-		} catch (ReflectionException $ex) {
-			// Nothing to do, reflection could not be loaded
-		}
-
-		$fields = array_unique($fields);
-
-		$values = [];
-
-		foreach ($fields as $field) {
-			try {
-				$value = $this->getPropertyValue($entity, $field);
-
-				if ($value instanceof Consistence\Enum\Enum) {
-					$value = $value->getValue();
-
-				} elseif ($value instanceof Uuid\UuidInterface) {
-					$value = $value->toString();
-				}
-
-				if (is_object($value)) {
-					continue;
-				}
-
-				$values[strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $field))] = $value;
-
-			} catch (Exceptions\PropertyNotExistsException $ex) {
-				// No need to do anything
-			}
-		}
-
-		return $values;
-	}
-
-	/**
-	 * @param NodeDatabaseEntities\IEntity $entity
-	 * @param string $property
-	 *
-	 * @return mixed
-	 *
-	 * @throws Exceptions\PropertyNotExistsException
-	 */
-	private function getPropertyValue(NodeDatabaseEntities\IEntity $entity, string $property)
-	{
-		$ucFirst = ucfirst($property);
-
-		$methods = [
-			'get' . $ucFirst,
-			'is' . $ucFirst,
-			'has' . $ucFirst,
-		];
-
-		foreach ($methods as $method) {
-			$callable = [$entity, $method];
-
-			if (is_callable($callable)) {
-				return call_user_func($callable);
-			}
-		}
-
-		if (!property_exists($entity, $property)) {
-			throw new Exceptions\PropertyNotExistsException(sprintf('Property "%s" does not exists on entity', $property));
-		}
-
-		return $entity->{$property};
 	}
 
 }

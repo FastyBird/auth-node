@@ -76,6 +76,7 @@ abstract class Identity implements IIdentity
 	/**
 	 * @var Entities\Accounts\IAccount
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\Account", inversedBy="identities", cascade={"persist", "remove"})
 	 * @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", onDelete="cascade", nullable=false)
 	 */
@@ -84,7 +85,7 @@ abstract class Identity implements IIdentity
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\Column(type="string", name="identity_uid", length=50, nullable=false)
 	 */
 	protected $uid;

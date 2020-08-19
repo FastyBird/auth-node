@@ -67,6 +67,7 @@ class Email implements IEmail
 	/**
 	 * @var Entities\Accounts\IUserAccount
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\UserAccount", inversedBy="emails")
 	 * @ORM\JoinColumn(name="account_id", referencedColumnName="account_id", onDelete="cascade", nullable=false)
 	 */
@@ -75,6 +76,7 @@ class Email implements IEmail
 	/**
 	 * @var string
 	 *
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\Column(type="string", name="email_address", unique=true, length=150, nullable=false)
 	 */
 	private $address;

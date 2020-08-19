@@ -60,7 +60,7 @@ class Account implements IAccount
 	/**
 	 * @var Entities\Identities\IIdentity|null
 	 *
-	 * @IPubDoctrine\Crud(is={"required", "writable"})
+	 * @IPubDoctrine\Crud(is="required")
 	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Identities\Identity")
 	 * @ORM\JoinColumn(name="identity_id", referencedColumnName="identity_id", onDelete="cascade", nullable=true)
 	 */

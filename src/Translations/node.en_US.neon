@@ -24,63 +24,60 @@ base:
 		failed:
 			heading	: "Request failed"
 			message	: "Provided request failed and can't be finished"
-		invalid:
-			heading	: "Request failed"
-			message	: "Provided request is invalid and can't be finished"
-		identifierInvalid:
-			heading	: "Entity identifier invalid"
+		forbidden:
+			heading	: "Not allowed"
+			message	: "You are not allowed to perform this action"
+		unauthorized:
+			heading	: "Not authorized"
+			message	: "You are not authorized to perform this action"
+		notFound:
+			heading	: "Not found"
+			message	: "Requested entity was not found"
+		notCreated:
+			heading	: "System error"
+			message	: "Something went wrong, entity could not be created"
+		notUpdated:
+			heading	: "System error"
+			message	: "Something went wrong, entity could not be updated"
+		notDeleted:
+			heading	: "System error"
+			message	: "Something went wrong, entity could not be deleted"
+		invalidIdentifier:
+			heading	: "Invalid identifier"
 			message	: "Provided entity identifier is not valid"
-		attributeInvalid:
+		invalidType:
+			heading	: "Invalid type"
+			message	: "Provided entity type is not valid"
+		invalidAttribute:
 			heading	: "Invalid attribute"
 			message	: "Provided entity attribute is not valid"
+		invalidRelation:
+			heading	: "Invalid relation"
+			message	: "Provided relation is not valid"
 		unknownRelation:
 			heading	: "Relation not found"
 			message	: "Requested unknown relation"
 		relationNotFound:
 			heading	: "Relation not found"
 			message	: "Requested relation %relation% was not found"
-		missingRequired:
-			heading	: "Missing required attribute"
-			message	: "Provided request is missing required attribute or relation"
+		missingAttribute:
+			heading	: "Missing attribute"
+			message	: "Provided request is missing required attribute"
 		missingRelation:
 			heading	: "Missing required relation"
 			message	: "Provided request is missing required relation"
-		invalidRelation:
-			heading	: "Invalid relation"
-			message	: "Provided relation is not valid"
-		notAuthorized:
-			heading	: "Not authorized"
-			message	: "You are not authorized to perform this action"
-		forbidden:
-			heading	: "Not allowed"
-			message	: "You are not allowed to perform this action"
-		uniqueIdConstraint:
+		uniqueIdentifier:
 			heading	: "Identifier not unique"
 			message	: "Provided identifier is not unique"
-		uniqueAttributeConstraint:
+		uniqueAttribute:
 			heading	: "Attribute not unique"
 			message	: "Provided attribute is not unique"
-		roleNotFound:
-			heading	: "Role not found"
-			message	: "Requested role was not found"
-		resourceNotFound:
-			heading	: "Resource not found"
-			message	: "Requested resource was not found"
 
 session:
 	messages:
 		unknownAccount:
 			heading	: "Invalid attribute"
 			message	: "Provided account credentials could not be found in our system"
-		accountBlocked:
-			heading	: "Forbidden"
-			message	: "Access to our system is for this account disabled"
-		accountDeleted:
-			heading	: "Forbidden"
-			message	: "This account has been deleted"
-		notCreated:
-			heading	: "System error"
-			message	: "Something went wrong, session creation could not be finished"
 		invalidRefreshToken:
 			heading	: "Not found"
 			message	: "Provided refresh token is invalid"
@@ -94,80 +91,17 @@ session:
 			heading	: "System error"
 			message	: "Something went wrong, session could not be destroyed"
 
-accounts:
-	messages:
-		invalidType:
-			heading	: "Invalid type"
-			message	: "Provided account entity type is not valid"
-		notFound:
-			heading	: "Not found"
-			message	: "Requested account was not found"
-		notCreated:
-			heading	: "System error"
-			message	: "Something went wrong, account could not be created"
-		notUpdated:
-			heading	: "System error"
-			message	: "Something went wrong, account could not be updated"
-		notDeleted:
-			heading	: "System error"
-			message	: "Something went wrong, account could not be deleted"
-		invalid:
-			heading	: "Bad request"
-			message	: "Request resource identifier is invalid"
-		invalidAdministrator:
-			heading	: "Invalid administrator"
-			message	: "Provided parent account is not valid"
-
-account:
-	messages:
-		notUpdated:
-			heading	: "System error"
-			message	: "Something went wrong, account could not be updated"
-
 emails:
 	messages:
-		invalidType:
-			heading	: "Invalid type"
-			message	: "Provided email entity type is not valid"
-		notFound:
-			heading	: "Not found"
-			message	: "Requested email address was not found"
-		notValid:
-			heading	: "Not processed"
-			message	: "Provided email address is not valid"
 		taken:
 			heading	: "Not processed"
 			message	: "Provided email address is already in use"
-		notCreated:
-			heading	: "System error"
-			message	: "Something went wrong, email address could not be created"
-		notUpdated:
-			heading	: "System error"
-			message	: "Something went wrong, email address could not be updated"
-		notDeleted:
-			heading	: "System error"
-			message	: "Something went wrong, email address could not be deleted"
-		invalid:
-			heading	: "Bad request"
-			message	: "Request resource identifier is invalid"
 		defaultNotDeletable:
 			heading	: "Email is default"
 			message	: "Default email address could not be deleted"
 
 identities:
 	messages:
-		invalidType:
-			heading	: "Invalid type"
-			message	: "Provided identity entity type is not valid"
-		notFound:
-			heading	: "Not found"
-			message	: "Requested identity was not found"
-		invalidPassword:
-			heading	: "Not processed"
-			message	: "Provided current password is invalid"
-		notUpdated:
-			heading	: "System error"
-			message	: "Something went wrong, password could not be updated"
 		notActivated:
 			heading	: "Not processed"
 			message	: "Account is not activated yet. Activation email was resend"
@@ -177,21 +111,3 @@ identities:
 		requestNotSent:
 			heading	: "System error"
 			message	: "Something went wrong, password reset request could not be processed"
-
-roles:
-	messages:
-		invalidType:
-			heading	: "Invalid type"
-			message	: "Provided role entity type is not valid"
-		notCreated:
-			heading	: "System error"
-			message	: "Something went wrong, role could not be created"
-		notUpdated:
-			heading	: "System error"
-			message	: "Something went wrong, role could not be updated"
-		notDeleted:
-			heading	: "System error"
-			message	: "Something went wrong, role could not be deleted"
-		systemNotDeletable:
-			heading	: "Role is system"
-			message	: "System role could not be deleted"

@@ -105,7 +105,7 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 		Assert::notNull($verneMQAccount);
 		Assert::same($identity->getId()->toString(), $verneMQAccount->getIdentity()->getId()->toString());
 		Assert::same(hash('sha256', $identity->getPassword(), false), $verneMQAccount->getPassword());
-		Assert::same('newUsername', $verneMQAccount->getUsername());
+		Assert::same('deviceUsername', $verneMQAccount->getUsername());
 	}
 
 	public function testUpdateEntityPassword(): void

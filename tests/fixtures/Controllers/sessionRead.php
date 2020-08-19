@@ -28,19 +28,19 @@ return [
 		'/v1/session',
 		null,
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'readExpiredToken'              => [
 		'/v1/session',
 		'Bearer ' . EXPIRED_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'readInvalidToken'              => [
 		'/v1/session',
 		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'readRelationshipsUnknown'      => [
 		'/v1/session/relationships/unknown',
@@ -52,12 +52,12 @@ return [
 		'/v1/session/relationships/account',
 		'Bearer ' . EXPIRED_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'readRelationshipsInvalidToken' => [
 		'/v1/session/relationships/account',
 		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 ];

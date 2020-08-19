@@ -16,8 +16,6 @@
 namespace FastyBird\AuthNode\Models\Emails;
 
 use FastyBird\AuthNode\Entities;
-use FastyBird\AuthNode\Exceptions;
-use FastyBird\AuthNode\Models;
 use IPub\DoctrineCrud\Crud;
 use Nette;
 use Nette\Utils;
@@ -35,18 +33,12 @@ final class EmailsManager implements IEmailsManager
 
 	use Nette\SmartObject;
 
-	/** @var Models\Emails\IEmailRepository */
-	private $emailRepository;
-
 	/** @var Crud\IEntityCrud */
 	private $entityCrud;
 
 	public function __construct(
-		Crud\IEntityCrud $entityCrud,
-		Models\Emails\IEmailRepository $emailRepository
+		Crud\IEntityCrud $entityCrud
 	) {
-		$this->emailRepository = $emailRepository;
-
 		// Entity CRUD for handling entities
 		$this->entityCrud = $entityCrud;
 	}
@@ -59,11 +51,6 @@ final class EmailsManager implements IEmailsManager
 	): Entities\Emails\IEmail {
 		// Get entity creator
 		$creator = $this->entityCrud->getEntityCreator();
-
-		// Service events
-		$creator->beforeAction[] = function (Entities\Emails\IEmail $entity): void {
-			$this->validateEmail($entity);
-		};
 
 		/** @var Entities\Emails\IEmail $entity */
 		$entity = $creator->create($values);
@@ -81,11 +68,6 @@ final class EmailsManager implements IEmailsManager
 		// Get entity updater
 		$updater = $this->entityCrud->getEntityUpdater();
 
-		// Service events
-		$updater->beforeAction[] = function (Entities\Emails\IEmail $entity): void {
-			$this->validateEmail($entity);
-		};
-
 		/** @var Entities\Emails\IEmail $entity */
 		$entity = $updater->update($values, $entity);
 
@@ -100,27 +82,6 @@ final class EmailsManager implements IEmailsManager
 	): bool {
 		// Delete entity from database
 		return $this->entityCrud->getEntityDeleter()->delete($entity);
-	}
-
-	/**
-	 * @param Entities\Emails\IEmail $email
-	 *
-	 * @return void
-	 *
-	 * @throws Exceptions\EmailIsNotValidException
-	 * @throws Exceptions\EmailAlreadyTakenException
-	 */
-	private function validateEmail(Entities\Emails\IEmail $email): void
-	{
-		if (!Utils\Validators::isEmail($email->getAddress())) {
-			throw new Exceptions\EmailIsNotValidException('Given email is not valid');
-		}
-
-		$foundEmail = $this->emailRepository->findOneByAddress($email->getAddress());
-
-		if ($foundEmail !== null && $foundEmail !== $email) {
-			throw new Exceptions\EmailAlreadyTakenException('Given email is already taken');
-		}
 	}
 
 }

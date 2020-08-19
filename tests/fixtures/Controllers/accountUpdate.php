@@ -39,20 +39,20 @@ return [
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account.update.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'expiredToken'                => [
 		'/v1/me',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account.update.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/unauthorized.json',
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'noToken'                     => [
 		'/v1/me',
 		null,
 		file_get_contents(__DIR__ . '/requests/account.update.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/forbidden.json',
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
 ];

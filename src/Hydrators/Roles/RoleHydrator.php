@@ -44,6 +44,9 @@ final class RoleHydrator extends NodeJsonApiHydrators\Hydrator
 		Schemas\Roles\RoleSchema::RELATIONSHIPS_PARENT,
 	];
 
+	/** @var string */
+	protected $translationDomain = 'node.roles';
+
 	/**
 	 * {@inheritDoc}
 	 */

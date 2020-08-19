@@ -39,7 +39,7 @@ class MachineAccountIdentity extends Identity implements IMachineAccountIdentity
 	/**
 	 * @var string
 	 *
-	 * @IPubDoctrine\Crud(is="writable")
+	 * @IPubDoctrine\Crud(is={"required", "writable"})
 	 * @ORM\Column(type="text", name="identity_token", nullable=false)
 	 */
 	private $password;

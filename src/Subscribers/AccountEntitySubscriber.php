@@ -17,6 +17,7 @@ namespace FastyBird\AuthNode\Subscribers;
 
 use Doctrine\Common;
 use Doctrine\ORM;
+use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
@@ -67,6 +68,7 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 	public function getSubscribedEvents(): array
 	{
 		return [
+			ORM\Events::prePersist,
 			ORM\Events::preFlush,
 			ORM\Events::onFlush,
 		];
@@ -81,6 +83,46 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 
 		$this->accountRepository = $accountRepository;
 		$this->roleRepository = $roleRepository;
+	}
+
+	/**
+	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	public function prePersist(ORM\Event\LifecycleEventArgs $eventArgs): void
+	{
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
+
+		// Check all scheduled updates
+		foreach ($uow->getScheduledEntityInsertions() as $object) {
+			if ($object instanceof Entities\Accounts\IUserAccount) {
+				/**
+				 * If new account is without any role
+				 * we have to assign default roles
+				 */
+				if (count($object->getRoles()) === 0) {
+					$object->setRoles($this->getDefaultRoles(AuthNode\Constants::USER_ACCOUNT_DEFAULT_ROLES));
+				}
+			}
+
+			if ($object instanceof Entities\Accounts\IMachineAccount) {
+				/**
+				 * Machine account has always only defined roles
+				 */
+				$object->setRoles($this->getDefaultRoles(AuthNode\Constants::MACHINE_ACCOUNT_DEFAULT_ROLES));
+			}
+
+			if (
+				$this->getAdministrator() === null
+				&& !$object->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)
+			) {
+				throw new Exceptions\InvalidStateException('First account have to be an administrator account');
+			}
+		}
 	}
 
 	/**
@@ -106,10 +148,10 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 				 */
 				if (
 					$this->singleAdministrator
-					&& !$object->hasParent()
 					&& $this->getAdministrator() !== null
+					&& !$object->hasParent()
 				) {
-					throw new Exceptions\ParentRequiredException('Account parent entity have to be defined');
+					throw new Exceptions\RelationEntityRequired('Account parent entity have to be defined');
 				}
 			}
 		}
@@ -137,9 +179,9 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 				 * This check is skipped when node is without administrator account
 				 */
 				if (
-					$object->getParent() !== null
-					&& $this->singleAdministrator
+					$this->singleAdministrator
 					&& $this->getAdministrator() !== null
+					&& $object->getParent() !== null
 					&& !$object->getParent()->getId()->equals($this->getAdministrator()->getId())
 				) {
 					throw new Exceptions\ParentInvalidException('Provided parent entity is not node administrator');
@@ -197,7 +239,7 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 		$role = $this->roleRepository->findOneBy($findRole);
 
 		if ($role === null) {
-			throw new Exceptions\InvalidStateException('Administrator is not registered');
+			throw new Exceptions\InvalidStateException(sprintf('Role %s is not created', NodeAuth\Constants::ROLE_ADMINISTRATOR));
 		}
 
 		$findAccount = new Queries\FindAccountsQuery();
@@ -207,6 +249,31 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 		$account = $this->accountRepository->findOneBy($findAccount, Entities\Accounts\UserAccount::class);
 
 		return $account;
+	}
+
+	/**
+	 * @param string[] $roleNames
+	 *
+	 * @return Entities\Roles\IRole[]
+	 */
+	private function getDefaultRoles(array $roleNames): array
+	{
+		$roles = [];
+
+		foreach ($roleNames as $roleName) {
+			$findRole = new Queries\FindRolesQuery();
+			$findRole->byName($roleName);
+
+			$role = $this->roleRepository->findOneBy($findRole);
+
+			if ($role === null) {
+				throw new Exceptions\InvalidStateException(sprintf('Role %s is not created', $roleName));
+			}
+
+			$roles[] = $role;
+		}
+
+		return $roles;
 	}
 
 }

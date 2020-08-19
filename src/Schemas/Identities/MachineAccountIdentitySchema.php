@@ -53,10 +53,10 @@ final class MachineAccountIdentitySchema extends IdentitySchema
 	}
 
 	/**
-	 * @param Entities\Identities\IUserAccountIdentity $identity
+	 * @param Entities\Identities\IMachineAccountIdentity $identity
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, mixed>
+	 * @return iterable<string, string>
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */

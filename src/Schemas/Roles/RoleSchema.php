@@ -84,7 +84,7 @@ final class RoleSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 * @param Entities\Roles\IRole $role
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, mixed>
+	 * @return iterable<string, string|bool>
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */

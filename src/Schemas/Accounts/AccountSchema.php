@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * MachineAccountSchema.php
+ * AccountSchema.php
  *
  * @license        More in license.md
  * @copyright      https://fastybird.com
@@ -10,7 +10,7 @@
  * @subpackage     Schemas
  * @since          0.1.0
  *
- * @date           15.08.20
+ * @date           19.08.20
  */
 
 namespace FastyBird\AuthNode\Schemas\Accounts;
@@ -18,6 +18,8 @@ namespace FastyBird\AuthNode\Schemas\Accounts;
 use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Router;
+use FastyBird\NodeJsonApi\Schemas as NodeJsonApiSchemas;
+use IPub\SlimRouter\Routing;
 use Neomerx\JsonApi;
 
 /**
@@ -28,59 +30,68 @@ use Neomerx\JsonApi;
  *
  * @author          Adam Kadlec <adam.kadlec@fastybird.com>
  *
- * @phpstan-extends AccountSchema<Entities\Accounts\IMachineAccount>
+ * @phpstan-template T of Entities\Accounts\IAccount
+ * @phpstan-extends  NodeJsonApiSchemas\JsonApiSchema<T>
  */
-final class MachineAccountSchema extends AccountSchema
+abstract class AccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 {
-
-	/**
-	 * Define entity schema type string
-	 */
-	public const SCHEMA_TYPE = 'auth-node/machine-account';
 
 	/**
 	 * Define relationships names
 	 */
-	public const RELATIONSHIPS_PARENT = 'parent';
-	public const RELATIONSHIPS_CHILDREN = 'children';
+	public const RELATIONSHIPS_IDENTITIES = 'identities';
+	public const RELATIONSHIPS_ROLES = 'roles';
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getEntityClass(): string
-	{
-		return Entities\Accounts\MachineAccount::class;
+	/** @var Routing\IRouter */
+	protected $router;
+
+	public function __construct(
+		Routing\IRouter $router
+	) {
+		$this->router = $router;
 	}
 
 	/**
-	 * @return string
-	 */
-	public function getType(): string
-	{
-		return self::SCHEMA_TYPE;
-	}
-
-	/**
-	 * @param Entities\Accounts\IMachineAccount $account
+	 * @param Entities\Accounts\IAccount $account
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, mixed>
+	 * @return iterable<string, string|null>
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
 	public function getAttributes($account, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
-		return array_merge((array) parent::getAttributes($account, $context), [
-			'device' => $account->getDevice(),
-			'state'  => $account->getState()->getValue(),
+		return [
+			'state' => $account->getState()->getValue(),
 
 			'last_visit' => $account->getLastVisit() !== null ? $account->getLastVisit()->format(DATE_ATOM) : null,
 			'registered' => $account->getCreatedAt() !== null ? $account->getCreatedAt()->format(DATE_ATOM) : null,
-		]);
+		];
 	}
 
 	/**
-	 * @param Entities\Accounts\IMachineAccount $account
+	 * @param Entities\Accounts\IAccount $account
+	 *
+	 * @return JsonApi\Contracts\Schema\LinkInterface
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 */
+	public function getSelfLink($account): JsonApi\Contracts\Schema\LinkInterface
+	{
+		return new JsonApi\Schema\Link(
+			false,
+			$this->router->urlFor(
+				AuthNode\Constants::ROUTE_NAME_ACCOUNT,
+				[
+					Router\Router::URL_ITEM_ID => $account->getPlainId(),
+				]
+			),
+			false
+		);
+	}
+
+	/**
+	 * @param Entities\Accounts\IAccount $account
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
 	 * @return iterable<string, mixed>
@@ -89,22 +100,22 @@ final class MachineAccountSchema extends AccountSchema
 	 */
 	public function getRelationships($account, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
-		return array_merge((array) parent::getRelationships($account, $context), [
-			self::RELATIONSHIPS_PARENT   => [
-				self::RELATIONSHIP_DATA          => $account->getParent(),
+		return [
+			self::RELATIONSHIPS_IDENTITIES => [
+				self::RELATIONSHIP_DATA          => $account->getIdentities(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
 				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
-			self::RELATIONSHIPS_CHILDREN => [
-				self::RELATIONSHIP_DATA          => $account->getChildren(),
+			self::RELATIONSHIPS_ROLES      => [
+				self::RELATIONSHIP_DATA          => $account->getRoles(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
+				self::RELATIONSHIP_LINKS_RELATED => false,
 			],
-		]);
+		];
 	}
 
 	/**
-	 * @param Entities\Accounts\IMachineAccount $account
+	 * @param Entities\Accounts\IAccount $account
 	 * @param string $name
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
@@ -113,30 +124,18 @@ final class MachineAccountSchema extends AccountSchema
 	 */
 	public function getRelationshipRelatedLink($account, string $name): JsonApi\Contracts\Schema\LinkInterface
 	{
-		if ($name === self::RELATIONSHIPS_PARENT && $account->getParent() !== null) {
+		if ($name === self::RELATIONSHIPS_IDENTITIES) {
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ACCOUNT,
-					[
-						Router\Router::URL_ITEM_ID => $account->getParent()->getPlainId(),
-					]
-				),
-				false
-			);
-
-		} elseif ($name === self::RELATIONSHIPS_CHILDREN) {
-			return new JsonApi\Schema\Link(
-				false,
-				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ACCOUNT_CHILDREN,
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITIES,
 					[
 						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
 					]
 				),
 				true,
 				[
-					'count' => count($account->getChildren()),
+					'count' => count($account->getIdentities()),
 				]
 			);
 		}
@@ -145,7 +144,7 @@ final class MachineAccountSchema extends AccountSchema
 	}
 
 	/**
-	 * @param Entities\Accounts\IMachineAccount $account
+	 * @param Entities\Accounts\IAccount $account
 	 * @param string $name
 	 *
 	 * @return JsonApi\Contracts\Schema\LinkInterface
@@ -155,8 +154,8 @@ final class MachineAccountSchema extends AccountSchema
 	public function getRelationshipSelfLink($account, string $name): JsonApi\Contracts\Schema\LinkInterface
 	{
 		if (
-			$name === self::RELATIONSHIPS_PARENT
-			|| $name === self::RELATIONSHIPS_CHILDREN
+			$name === self::RELATIONSHIPS_IDENTITIES
+			|| $name === self::RELATIONSHIPS_ROLES
 		) {
 			return new JsonApi\Schema\Link(
 				false,

@@ -74,7 +74,7 @@ final class EmailSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 * @param Entities\Emails\IEmail $email
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, mixed>
+	 * @return iterable<string, string|bool>
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */

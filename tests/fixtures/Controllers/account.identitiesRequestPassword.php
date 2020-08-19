@@ -24,19 +24,19 @@ return [
 		'/v1/password-reset',
 		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.invalidType.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/account.identities.invalidType.json',
+		__DIR__ . '/responses/generic/invalidType.json',
 	],
 	'invalid'         => [
 		'/v1/password-reset',
 		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.invalid.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
-		__DIR__ . '/responses/account.identities.passwordRequest.invalid.json',
+		__DIR__ . '/responses/generic/notFound.json',
 	],
 	'deleted'         => [
 		'/v1/password-reset',
 		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.deleted.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
-		__DIR__ . '/responses/account.identities.passwordRequest.deleted.json',
+		__DIR__ . '/responses/generic/notFound.json',
 	],
 	'blocked'         => [
 		'/v1/password-reset',

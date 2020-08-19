@@ -72,20 +72,6 @@ final class RoleRepository implements IRoleRepository
 	}
 
 	/**
-	 * @return Entities\Roles\IRole[]
-	 *
-	 * @throws Throwable
-	 */
-	public function findAll(): array
-	{
-		$queryObject = new Queries\FindRolesQuery();
-
-		$result = $queryObject->fetch($this->getRepository());
-
-		return is_array($result) ? $result : $result->toArray();
-	}
-
-	/**
 	 * {@inheritDoc}
 	 *
 	 * @throws Throwable

@@ -145,8 +145,8 @@ final class AccountsV1Controller extends BaseV1Controller
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.invalidType.heading'),
-					$this->translator->translate('messages.invalidType.message'),
+					$this->translator->translate('//node.base.messages.invalidType.heading'),
+					$this->translator->translate('//node.base.messages.invalidType.message'),
 					[
 						'pointer' => '/data/type',
 					]
@@ -156,7 +156,7 @@ final class AccountsV1Controller extends BaseV1Controller
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-		} catch (Exceptions\ParentRequiredException $ex) {
+		} catch (Exceptions\RelationEntityRequired $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.missingRelation.heading'),
@@ -169,8 +169,8 @@ final class AccountsV1Controller extends BaseV1Controller
 		} catch (Exceptions\ParentInvalidException | Exceptions\ParentWithParentException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidAdministrator.heading'),
-				$this->translator->translate('messages.invalidAdministrator.message'),
+				$this->translator->translate('//node.base.messages.invalidRelation.heading'),
+				$this->translator->translate('//node.base.messages.invalidRelation.message'),
 				[
 					'pointer' => '/data/relationships/parent/data/id',
 				]
@@ -189,8 +189,8 @@ final class AccountsV1Controller extends BaseV1Controller
 		} catch (DoctrineCrudExceptions\EntityCreationException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRequired.heading'),
-				$this->translator->translate('//node.base.messages.missingRequired.message'),
+				$this->translator->translate('//node.base.messages.missingAttribute.heading'),
+				$this->translator->translate('//node.base.messages.missingAttribute.message'),
 				[
 					'pointer' => 'data/attributes/' . $ex->getField(),
 				]
@@ -203,8 +203,8 @@ final class AccountsV1Controller extends BaseV1Controller
 			if (preg_match("%PRIMARY'%", $ex->getMessage(), $match) === 1) {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('//node.base.messages.uniqueIdConstraint.heading'),
-					$this->translator->translate('//node.base.messages.uniqueIdConstraint.message'),
+					$this->translator->translate('//node.base.messages.uniqueIdentifier.heading'),
+					$this->translator->translate('//node.base.messages.uniqueIdentifier.message'),
 					[
 						'pointer' => '/data/id',
 					]
@@ -217,8 +217,8 @@ final class AccountsV1Controller extends BaseV1Controller
 				if (is_string($columnKey) && Utils\Strings::startsWith($columnKey, 'account_')) {
 					throw new NodeJsonApiExceptions\JsonApiErrorException(
 						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
-						$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message'),
+						$this->translator->translate('//node.base.messages.uniqueAttribute.heading'),
+						$this->translator->translate('//node.base.messages.uniqueAttribute.message'),
 						[
 							'pointer' => '/data/attributes/' . Utils\Strings::substring($columnKey, 8),
 						]
@@ -228,8 +228,8 @@ final class AccountsV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.heading'),
-				$this->translator->translate('//node.base.messages.uniqueAttributeConstraint.message')
+				$this->translator->translate('//node.base.messages.uniqueAttribute.heading'),
+				$this->translator->translate('//node.base.messages.uniqueAttribute.message')
 			);
 
 		} catch (Throwable $ex) {
@@ -243,8 +243,8 @@ final class AccountsV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notCreated.heading'),
-				$this->translator->translate('messages.notCreated.message')
+				$this->translator->translate('//node.base.messages.notCreated.heading'),
+				$this->translator->translate('//node.base.messages.notCreated.message')
 			);
 
 		} finally {
@@ -285,8 +285,8 @@ final class AccountsV1Controller extends BaseV1Controller
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.identifierInvalid.heading'),
-				$this->translator->translate('//node.base.messages.identifierInvalid.message')
+				$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
+				$this->translator->translate('//node.base.messages.invalidIdentifier.message')
 			);
 		}
 
@@ -307,8 +307,8 @@ final class AccountsV1Controller extends BaseV1Controller
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(
 					StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-					$this->translator->translate('messages.invalidType.heading'),
-					$this->translator->translate('messages.invalidType.message'),
+					$this->translator->translate('//node.base.messages.invalidType.heading'),
+					$this->translator->translate('//node.base.messages.invalidType.message'),
 					[
 						'pointer' => '/data/type',
 					]
@@ -324,8 +324,8 @@ final class AccountsV1Controller extends BaseV1Controller
 		} catch (Exceptions\ParentInvalidException | Exceptions\ParentWithParentException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.invalidAdministrator.heading'),
-				$this->translator->translate('messages.invalidAdministrator.message'),
+				$this->translator->translate('//node.base.messages.invalidRelation.heading'),
+				$this->translator->translate('//node.base.messages.invalidRelation.message'),
 				[
 					'pointer' => '/data/relationships/parent/data/id',
 				]
@@ -352,8 +352,8 @@ final class AccountsV1Controller extends BaseV1Controller
 
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notUpdated.heading'),
-				$this->translator->translate('messages.notUpdated.message')
+				$this->translator->translate('//node.base.messages.notUpdated.heading'),
+				$this->translator->translate('//node.base.messages.notUpdated.message')
 			);
 
 		} finally {
@@ -435,8 +435,8 @@ final class AccountsV1Controller extends BaseV1Controller
 		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 
@@ -448,8 +448,8 @@ final class AccountsV1Controller extends BaseV1Controller
 		if ($account === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('messages.notFound.heading'),
-				$this->translator->translate('messages.notFound.message')
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
 			);
 		}
 

@@ -14,12 +14,30 @@
       "type" : "auth-node/machine-account",
       "id" : "f3cce15a-f956-4c7e-a4b3-ac31a0017ac9",
       "attributes" : {
-        "device" : "child-device-name",
         "state" : "active",
         "last_visit" : "2019-11-07T22:30:56+00:00",
-        "registered" : "2017-01-03T11:30:00+00:00"
+        "registered" : "2017-01-03T11:30:00+00:00",
+        "device" : "child-device-name"
       },
       "relationships" : {
+        "identities" : {
+          "links" : {
+            "self" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/identities",
+              "meta" : {
+                "count" : 0
+              }
+            }
+          },
+          "data" : []
+        },
+        "roles" : {
+          "links" : {
+            "self" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/relationships/roles"
+          },
+          "data" : []
+        },
         "parent" : {
           "links" : {
             "self" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/relationships/parent",
@@ -35,18 +53,6 @@
             "self" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/relationships/children",
             "related" : {
               "href" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/children",
-              "meta" : {
-                "count" : 0
-              }
-            }
-          },
-          "data" : []
-        },
-        "identities" : {
-          "links" : {
-            "self" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/relationships/identities",
-            "related" : {
-              "href" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/identities",
               "meta" : {
                 "count" : 0
               }

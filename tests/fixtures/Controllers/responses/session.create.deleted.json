@@ -1,10 +1,10 @@
 {
   "errors" : [
     {
-      "code" : "403",
       "status" : "403",
-      "title" : "Forbidden",
-      "detail" : "This account has been deleted"
+      "code" : "403",
+      "title" : "Not allowed",
+      "detail" : "You are not allowed to perform this action"
     }
   ],
   "jsonapi" : {

@@ -111,7 +111,7 @@ class InitializeCommand extends Console\Command\Command
 
 		$io->title('FB auth node - initialization');
 
-		$io->note('This action will create|update node database structure, create initial data and initialize administrator account.');
+		$io->note('This action will create or update node database structure, create initial data and initialize administrator account.');
 
 		/** @var bool $continue */
 		$continue = $io->ask('Would you like to continue?', 'n', function ($answer): bool {

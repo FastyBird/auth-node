@@ -13,12 +13,30 @@
     "type" : "auth-node/machine-account",
     "id" : "3de0c345-ea83-4585-a7ca-7759a2e1e66e",
     "attributes" : {
-      "device" : "some-new-device",
       "state" : "notActivated",
       "last_visit" : null,
-      "registered" : "__TIME_PLACEHOLDER__"
+      "registered" : "__TIME_PLACEHOLDER__",
+      "device" : "some-new-device"
     },
     "relationships" : {
+      "identities" : {
+        "links" : {
+          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/identities",
+          "related" : {
+            "href" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/identities",
+            "meta" : {
+              "count" : 0
+            }
+          }
+        },
+        "data" : []
+      },
+      "roles" : {
+        "links" : {
+          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/roles"
+        },
+        "data" : []
+      },
       "parent" : {
         "links" : {
           "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/parent",
@@ -31,18 +49,6 @@
           "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/children",
           "related" : {
             "href" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/children",
-            "meta" : {
-              "count" : 0
-            }
-          }
-        },
-        "data" : []
-      },
-      "identities" : {
-        "links" : {
-          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/identities",
-          "related" : {
-            "href" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/identities",
             "meta" : {
               "count" : 0
             }

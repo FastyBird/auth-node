@@ -1,10 +1,10 @@
 {
   "errors" : [
     {
-      "code" : "403",
       "status" : "403",
-      "title" : "Forbidden",
-      "detail" : "Access to our system is for this account disabled"
+      "code" : "403",
+      "title" : "Not allowed",
+      "detail" : "You are not allowed to perform this action"
     }
   ],
   "jsonapi" : {

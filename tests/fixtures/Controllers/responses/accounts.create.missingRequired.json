@@ -3,8 +3,8 @@
     {
       "status" : "422",
       "code" : "422",
-      "title" : "Missing required attribute",
-      "detail" : "Provided request is missing required attribute or relation",
+      "title" : "Missing attribute",
+      "detail" : "Provided request is missing required attribute",
       "source" : {
         "pointer" : "/data/attributes/details/last_name"
       }

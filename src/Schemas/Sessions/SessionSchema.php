@@ -75,7 +75,7 @@ final class SessionSchema extends NodeJsonApiSchemas\JsonApiSchema
 	 * @param Entities\Tokens\IAccessToken $accessToken
 	 * @param JsonApi\Contracts\Schema\ContextInterface $context
 	 *
-	 * @return iterable<string, mixed>
+	 * @return iterable<string, string|null>
 	 *
 	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
 	 */
