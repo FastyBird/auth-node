@@ -64,7 +64,7 @@ return [
 		__DIR__ . '/responses/accounts.invalidParent.json',
 	],
 	// Administrator role is only for parent account
-	'invalidRole' => [
+	'invalidRole'         => [
 		'/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.update.invalidRole.json'),

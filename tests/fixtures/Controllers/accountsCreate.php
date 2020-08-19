@@ -64,7 +64,7 @@ return [
 		__DIR__ . '/responses/accounts.invalidParent.json',
 	],
 	// Administrator role is only for parent account
-	'invalidRole' => [
+	'invalidRole'         => [
 		'/v1/accounts',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.create.invalidRole.json'),
@@ -72,7 +72,7 @@ return [
 		__DIR__ . '/responses/accounts.invalidRole.json',
 	],
 	// User role could not be combined with other roles
-	'invalidRoles' => [
+	'invalidRoles'        => [
 		'/v1/accounts',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts.create.invalidRoles.json'),

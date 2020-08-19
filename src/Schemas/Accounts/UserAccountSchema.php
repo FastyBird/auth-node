@@ -171,12 +171,12 @@ final class UserAccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 
 		} else {
 			return array_merge($basicRelations, [
-				self::RELATIONSHIPS_PARENT     => [
+				self::RELATIONSHIPS_PARENT   => [
 					self::RELATIONSHIP_DATA          => $account->getParent(),
 					self::RELATIONSHIP_LINKS_SELF    => true,
 					self::RELATIONSHIP_LINKS_RELATED => true,
 				],
-				self::RELATIONSHIPS_CHILDREN   => [
+				self::RELATIONSHIPS_CHILDREN => [
 					self::RELATIONSHIP_DATA          => $account->getChildren(),
 					self::RELATIONSHIP_LINKS_SELF    => true,
 					self::RELATIONSHIP_LINKS_RELATED => true,

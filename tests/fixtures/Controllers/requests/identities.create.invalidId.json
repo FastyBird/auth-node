@@ -1,7 +1,7 @@
 {
   "data" : {
     "type" : "auth-node/user-account-identity",
-    "id": "77331268-efbf-bd34-49ef-bfbdefbfbd04",
+    "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
     "attributes" : {
       "uid" : "petr@novak.cz",
       "password" : "123456789"

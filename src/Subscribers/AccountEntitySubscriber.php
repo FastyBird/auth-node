@@ -117,7 +117,7 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 					&& $this->singleAdministrator
 					&& $this->getAdministrator() !== null
 					&& (
-						!$object->getParent()->getId()->equals($this->getAdministrator()->getId())
+					!$object->getParent()->getId()->equals($this->getAdministrator()->getId())
 					)
 				) {
 					throw new Exceptions\ParentInvalidException('Provided parent entity is not node administrator');

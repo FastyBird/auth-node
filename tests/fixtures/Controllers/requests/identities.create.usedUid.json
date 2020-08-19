@@ -1,7 +1,7 @@
 {
   "data" : {
     "type" : "auth-node/user-account-identity",
-    "id": "e09fba77-f9c3-4b6f-bdc2-91d6fa2a5eaf",
+    "id" : "e09fba77-f9c3-4b6f-bdc2-91d6fa2a5eaf",
     "attributes" : {
       "uid" : "john.doe@fastybird.com",
       "password" : "123456789"

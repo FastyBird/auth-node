@@ -1,7 +1,7 @@
 <?php declare(strict_types = 1);
 
 /**
- * UserAccountHydrator.php
+ * ProfileAccountHydrator.php
  *
  * @license        More in license.md
  * @copyright      https://fastybird.com
@@ -10,7 +10,7 @@
  * @subpackage     Hydrators
  * @since          0.1.0
  *
- * @date           31.03.20
+ * @date           19.08.20
  */
 
 namespace FastyBird\AuthNode\Hydrators\Accounts;
@@ -18,7 +18,6 @@ namespace FastyBird\AuthNode\Hydrators\Accounts;
 use Contributte\Translation;
 use Doctrine\Common;
 use FastyBird\AuthNode\Models;
-use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 
 /**
@@ -29,7 +28,7 @@ use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
+final class ProfileAccountHydrator extends NodeJsonApiHydrators\Hydrator
 {
 
 	use TUserAccountHydrator;
@@ -40,7 +39,6 @@ class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	/** @var string[] */
 	protected $attributes = [
 		0 => 'details',
-		1 => 'state',
 
 		'first_name'  => 'firstName',
 		'last_name'   => 'lastName',
@@ -50,12 +48,6 @@ class UserAccountHydrator extends NodeJsonApiHydrators\Hydrator
 	/** @var string[] */
 	protected $compositedAttributes = [
 		'params',
-	];
-
-	/** @var string[] */
-	protected $relationships = [
-		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_PARENT,
-		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_ROLES,
 	];
 
 	/** @var string */

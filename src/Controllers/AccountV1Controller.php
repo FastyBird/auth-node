@@ -38,7 +38,7 @@ use Throwable;
 final class AccountV1Controller extends BaseV1Controller
 {
 
-	/** @var Hydrators\Accounts\UserAccountHydrator */
+	/** @var Hydrators\Accounts\ProfileAccountHydrator */
 	private $accountHydrator;
 
 	/** @var Models\Accounts\IAccountsManager */
@@ -48,7 +48,7 @@ final class AccountV1Controller extends BaseV1Controller
 	protected $translationDomain = 'node.account';
 
 	public function __construct(
-		Hydrators\Accounts\UserAccountHydrator $accountHydrator,
+		Hydrators\Accounts\ProfileAccountHydrator $accountHydrator,
 		Models\Accounts\IAccountsManager $accountsManager
 	) {
 		$this->accountHydrator = $accountHydrator;

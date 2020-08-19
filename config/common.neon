@@ -312,6 +312,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Hydrators\Accounts\UserAccountHydrator}
 
+	- {factory: FastyBird\AuthNode\Hydrators\Accounts\ProfileAccountHydrator}
+
 	- {factory: FastyBird\AuthNode\Hydrators\Accounts\MachineAccountHydrator}
 
 	- {factory: FastyBird\AuthNode\Hydrators\Identities\UserAccountIdentityHydrator}

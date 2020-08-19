@@ -10,7 +10,7 @@ const VALID_TOKEN_USER = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3YzVkN
 return [
 	// Valid responses
 	//////////////////
-	'update'       => [
+	'update'        => [
 		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities/35be5624-0160-4323-83ee-6f59000934b4',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.update.machine.json'),
@@ -20,49 +20,49 @@ return [
 
 	// Invalid responses
 	////////////////////
-	'unknownEntity'  => [
+	'unknownEntity' => [
 		'/v1/accounts/17c59dfa-2edd-438e-8c49-faa4e38e5ae5/identities/35be5624-0160-4323-83ee-6f59000934b4',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/accounts.notFound.json',
 	],
-	'invalidType'  => [
+	'invalidType'   => [
 		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities/35be5624-0160-4323-83ee-6f59000934b4',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.update.invalidType.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/identities.invalidType.json',
 	],
-	'idMismatch'   => [
+	'idMismatch'    => [
 		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities/35be5624-0160-4323-83ee-6f59000934b4',
 		'Bearer ' . VALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.update.idMismatch.json'),
 		StatusCodeInterface::STATUS_BAD_REQUEST,
 		__DIR__ . '/responses/invalid.identifier.json',
 	],
-	'invalidToken' => [
+	'invalidToken'  => [
 		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities/35be5624-0160-4323-83ee-6f59000934b4',
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],
-	'noToken'      => [
+	'noToken'       => [
 		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities/35be5624-0160-4323-83ee-6f59000934b4',
 		null,
 		file_get_contents(__DIR__ . '/requests/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/forbidden.json',
 	],
-	'expiredToken' => [
+	'expiredToken'  => [
 		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities/35be5624-0160-4323-83ee-6f59000934b4',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/unauthorized.json',
 	],
-	'userToken'    => [
+	'userToken'     => [
 		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities/35be5624-0160-4323-83ee-6f59000934b4',
 		'Bearer ' . VALID_TOKEN_USER,
 		file_get_contents(__DIR__ . '/requests/identities.update.machine.json'),
