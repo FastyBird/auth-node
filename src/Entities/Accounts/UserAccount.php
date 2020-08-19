@@ -130,14 +130,6 @@ class UserAccount extends Account implements IUserAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function removeParent(): void
-	{
-		$this->parent = null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function setChildren(array $children): void
 	{
 		$this->children = new Common\Collections\ArrayCollection();

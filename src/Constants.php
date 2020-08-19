@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode;
 
 use FastyBird\AuthNode\Entities as AuthNodeEntities;
+use FastyBird\NodeAuth;
 
 /**
  * Service constants
@@ -91,5 +92,21 @@ final class Constants
 	 */
 
 	public const NODE_DEVICES_ORIGIN = 'com.fastybird.devices-node';
+
+	/**
+	 * Accounts default roles
+	 */
+
+	public const USER_ACCOUNT_DEFAULT_ROLES = [
+		NodeAuth\Constants::ROLE_USER,
+	];
+
+	public const MACHINE_ACCOUNT_DEFAULT_ROLES = [
+		NodeAuth\Constants::ROLE_USER,
+	];
+
+	public const NODE_ACCOUNT_DEFAULT_ROLES = [
+		NodeAuth\Constants::ROLE_USER,
+	];
 
 }

@@ -15,11 +15,11 @@
 
 namespace FastyBird\AuthNode\Models\Accounts;
 
+use FastyBird\AuthNode;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use FastyBird\NodeAuth;
 use IPub\DoctrineCrud\Crud;
 use Nette;
 use Nette\Utils;
@@ -62,29 +62,11 @@ final class AccountsManager implements IAccountsManager
 		if ($values->offsetExists('entity')) {
 			if ($values->offsetGet('entity') === Entities\Accounts\UserAccount::class) {
 				if (!$values->offsetExists('roles')) {
-					$findRole = new Queries\FindRolesQuery();
-					$findRole->byName(NodeAuth\Constants::ROLE_USER);
-
-					$role = $this->roleRepository->findOneBy($findRole);
-
-					if ($role === null) {
-						throw new Exceptions\InvalidStateException('Default role is not created');
-					}
-
-					$values->offsetSet('roles', [$role]);
+					$values->offsetSet('roles', $this->getDefaultRoles(AuthNode\Constants::USER_ACCOUNT_DEFAULT_ROLES));
 				}
 
 			} elseif ($values->offsetGet('entity') === Entities\Accounts\MachineAccount::class) {
-				$findRole = new Queries\FindRolesQuery();
-				$findRole->byName(NodeAuth\Constants::ROLE_USER);
-
-				$role = $this->roleRepository->findOneBy($findRole);
-
-				if ($role === null) {
-					throw new Exceptions\InvalidStateException('Default role is not created');
-				}
-
-				$values->offsetSet('roles', [$role]);
+				$values->offsetSet('roles', $this->getDefaultRoles(AuthNode\Constants::MACHINE_ACCOUNT_DEFAULT_ROLES));
 			}
 		}
 
@@ -115,6 +97,31 @@ final class AccountsManager implements IAccountsManager
 	): bool {
 		// Delete entity from database
 		return $this->entityCrud->getEntityDeleter()->delete($entity);
+	}
+
+	/**
+	 * @param string[] $roleNames
+	 *
+	 * @return Entities\Roles\IRole[]
+	 */
+	private function getDefaultRoles(array $roleNames): array
+	{
+		$roles = [];
+
+		foreach ($roleNames as $roleName) {
+			$findRole = new Queries\FindRolesQuery();
+			$findRole->byName($roleName);
+
+			$role = $this->roleRepository->findOneBy($findRole);
+
+			if ($role === null) {
+				throw new Exceptions\InvalidStateException('Default role is not created');
+			}
+
+			$roles[] = $role;
+		}
+
+		return $roles;
 	}
 
 }

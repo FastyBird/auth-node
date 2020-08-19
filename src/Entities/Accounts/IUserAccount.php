@@ -46,11 +46,6 @@ interface IUserAccount extends IAccount
 	public function hasParent(): bool;
 
 	/**
-	 * @return void
-	 */
-	public function removeParent(): void;
-
-	/**
 	 * @param Entities\Accounts\IUserAccount[] $children
 	 *
 	 * @return void

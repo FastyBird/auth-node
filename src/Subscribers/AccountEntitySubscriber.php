@@ -38,6 +38,18 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 
 	use Nette\SmartObject;
 
+	/** @var string[] */
+	private $singleRoles = [
+		NodeAuth\Constants::ROLE_ADMINISTRATOR,
+		NodeAuth\Constants::ROLE_USER,
+	];
+
+	/** @var string[] */
+	private $notAssignableRoles = [
+		NodeAuth\Constants::ROLE_VISITOR,
+		NodeAuth\Constants::ROLE_ANONYMOUS,
+	];
+
 	/** @var bool */
 	private $singleAdministrator;
 
@@ -86,6 +98,12 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 		// Check all scheduled updates
 		foreach ($uow->getScheduledEntityInsertions() as $object) {
 			if ($object instanceof Entities\Accounts\IUserAccount) {
+				/**
+				 * When in node is single administrator mode
+				 * every user have to have as a parent administrator account
+				 *
+				 * This check is skipped when node is without administrator account
+				 */
 				if (
 					$this->singleAdministrator
 					&& !$object->hasParent()
@@ -112,6 +130,12 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 		// Check all scheduled updates
 		foreach (array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledEntityUpdates()) as $object) {
 			if ($object instanceof Entities\Accounts\IUserAccount) {
+				/**
+				 * When in node is single administrator mode
+				 * every user have to have as a parent administrator account
+				 *
+				 * This check is skipped when node is without administrator account
+				 */
 				if (
 					$object->getParent() !== null
 					&& $this->singleAdministrator
@@ -122,6 +146,10 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 				}
 
 				foreach ($object->getRoles() as $role) {
+					/**
+					 * If account has administrator role
+					 * it have to be a account without parent
+					 */
 					if (
 						$role->getRoleId() === NodeAuth\Constants::ROLE_ADMINISTRATOR
 						&& $object->hasParent()
@@ -129,25 +157,23 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 						throw new Exceptions\AccountRoleInvalidException('Account with administrator role have to be without parent');
 					}
 
+					/**
+					 * Special roles like administrator or user
+					 * can not be assigned to account with other roles
+					 */
 					if (
-						$role->getRoleId() === NodeAuth\Constants::ROLE_ADMINISTRATOR
+						in_array($role->getRoleId(), $this->singleRoles, true)
 						&& count($object->getRoles()) > 1
 					) {
-						throw new Exceptions\AccountRoleInvalidException('Administrator role could not be combined with other roles');
+						throw new Exceptions\AccountRoleInvalidException(sprintf('Role %s could not be combined with other roles', $role->getRoleId()));
 					}
 
-					if (
-						$role->getRoleId() === NodeAuth\Constants::ROLE_USER
-						&& count($object->getRoles()) > 1
-					) {
-						throw new Exceptions\AccountRoleInvalidException('User role could not be combined with other roles');
-					}
-
-					if (
-						$role->getRoleId() === NodeAuth\Constants::ROLE_ANONYMOUS
-						|| $role->getRoleId() === NodeAuth\Constants::ROLE_VISITOR
-					) {
-						throw new Exceptions\AccountRoleInvalidException('Guest or visitor role could not be assigned to account');
+					/**
+					 * Special roles like visitor or guest
+					 * can not be assigned to account
+					 */
+					if (in_array($role->getRoleId(), $this->notAssignableRoles, true)) {
+						throw new Exceptions\AccountRoleInvalidException(sprintf('Role %s could not be assigned to account', $role->getRoleId()));
 					}
 				}
 			}
