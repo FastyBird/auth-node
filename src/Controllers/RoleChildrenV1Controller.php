@@ -18,7 +18,6 @@ namespace FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Controllers;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Psr\Http\Message;
@@ -64,7 +63,7 @@ final class RoleChildrenV1Controller extends BaseV1Controller
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// At first, try to load role
-		$role = $this->findRole($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$role = $this->findRole($request);
 
 		$findQuery = new Queries\FindRolesQuery();
 		$findQuery->forParent($role);

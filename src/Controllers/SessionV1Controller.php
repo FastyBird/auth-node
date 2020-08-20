@@ -233,10 +233,7 @@ final class SessionV1Controller extends BaseV1Controller
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 				$this->translator->translate('//node.base.messages.notCreated.heading'),
-				$this->translator->translate('//node.base.messages.notCreated.message'),
-				[
-					'pointer' => '/data/attributes/uid',
-				]
+				$this->translator->translate('//node.base.messages.notCreated.message')
 			);
 
 		} finally {
@@ -301,7 +298,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 		if (
 			$refreshToken->getValidTill() !== null
-			&& $refreshToken->getValidTill() < $this->dateFactory->getNow()
+			&& $refreshToken->getValidTill() < $this->getNow()
 		) {
 			// Remove expired tokens
 			$this->tokensManager->delete($refreshToken->getAccessToken());
@@ -475,9 +472,7 @@ final class SessionV1Controller extends BaseV1Controller
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()));
 		}
 
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
+		return parent::readRelationship($request, $response);
 	}
 
 	/**

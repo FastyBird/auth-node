@@ -71,16 +71,10 @@ final class AccountV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+		$account = $this->findAccount();
 
 		return $response
-			->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()));
+			->withEntity(NodeWebServerHttp\ScalarEntity::from($account));
 	}
 
 	/**
@@ -121,17 +115,11 @@ final class AccountV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+		$account = $this->findAccount();
 
 		$document = $this->createDocument($request);
 
-		if ($document->getResource()->getIdentifier()->getId() !== $this->user->getAccount()->getPlainId()) {
+		if ($document->getResource()->getIdentifier()->getId() !== $account->getPlainId()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
@@ -145,8 +133,8 @@ final class AccountV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\Accounts\UserAccountSchema::SCHEMA_TYPE) {
 				$account = $this->accountsManager->update(
-					$this->user->getAccount(),
-					$this->accountHydrator->hydrate($document, $this->user->getAccount())
+					$account,
+					$this->accountHydrator->hydrate($document, $account)
 				);
 
 			} else {
@@ -210,13 +198,7 @@ final class AccountV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		if ($this->user->getAccount() === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_FORBIDDEN,
-				$this->translator->translate('//node.base.messages.forbidden.heading'),
-				$this->translator->translate('//node.base.messages.forbidden.message')
-			);
-		}
+		$account = $this->findAccount();
 
 		// TODO: Closing account not implemented yet
 
@@ -242,6 +224,36 @@ final class AccountV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
+		$account = $this->findAccount();
+
+		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
+
+		if (
+			$relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_EMAILS
+			&& $account instanceof Entities\Accounts\IUserAccount
+		) {
+			return $response
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getEmails()));
+
+		} elseif ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_IDENTITIES) {
+			return $response
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getIdentities()));
+
+		} elseif ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_ROLES) {
+			return $response
+				->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getRoles()));
+		}
+
+		return parent::readRelationship($request, $response);
+	}
+
+	/**
+	 * @return Entities\Accounts\IAccount
+	 *
+	 * @throws NodeJsonApiExceptions\JsonApiErrorException
+	 */
+	private function findAccount(): Entities\Accounts\IAccount
+	{
 		if ($this->user->getAccount() === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
@@ -250,27 +262,7 @@ final class AccountV1Controller extends BaseV1Controller
 			);
 		}
 
-		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
-
-		if (
-			$relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_EMAILS
-			&& $this->user->getAccount() instanceof Entities\Accounts\IUserAccount
-		) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getEmails()));
-
-		} elseif ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_IDENTITIES) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getIdentities()));
-
-		} elseif ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_ROLES) {
-			return $response
-				->withEntity(NodeWebServerHttp\ScalarEntity::from($this->user->getAccount()->getRoles()));
-		}
-
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
+		return $this->user->getAccount();
 	}
 
 }

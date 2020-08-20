@@ -438,9 +438,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($email->getAccount()));
 		}
 
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
+		return parent::readRelationship($request, $response);
 	}
 
 	/**
@@ -450,9 +448,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	 */
 	private function findAccount(): Entities\Accounts\IAccount
 	{
-		if (
-			$this->user->getAccount() === null
-		) {
+		if ($this->user->getAccount() === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_FORBIDDEN,
 				$this->translator->translate('//node.base.messages.forbidden.heading'),

@@ -294,12 +294,18 @@ final class AccountsV1Controller extends BaseV1Controller
 			// Start transaction connection to the database
 			$this->getOrmConnection()->beginTransaction();
 
-			if ($document->getResource()->getType() === Schemas\Accounts\UserAccountSchema::SCHEMA_TYPE) {
+			if (
+				$document->getResource()->getType() === Schemas\Accounts\UserAccountSchema::SCHEMA_TYPE
+				&& $account instanceof Entities\Accounts\IUserAccount
+			) {
 				$updateAccountData = $this->userAccountHydrator->hydrate($document, $account);
 
 				$account = $this->accountsManager->update($account, $updateAccountData);
 
-			} elseif ($document->getResource()->getType() === Schemas\Accounts\MachineAccountSchema::SCHEMA_TYPE) {
+			} elseif (
+				$document->getResource()->getType() === Schemas\Accounts\MachineAccountSchema::SCHEMA_TYPE
+				&& $account instanceof Entities\Accounts\IMachineAccount
+			) {
 				$updateAccountData = $this->machineAccountHydrator->hydrate($document, $account);
 
 				$account = $this->accountsManager->update($account, $updateAccountData);
@@ -417,9 +423,7 @@ final class AccountsV1Controller extends BaseV1Controller
 			}
 		}
 
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
+		return parent::readRelationship($request, $response);
 	}
 
 	/**

@@ -18,15 +18,17 @@ namespace FastyBird\AuthNode\Controllers;
 use Contributte\Translation;
 use Doctrine\DBAL\Connection;
 use FastyBird\AuthNode\Exceptions;
+use FastyBird\AuthNode\Router;
 use FastyBird\AuthNode\Security;
 use FastyBird\DateTimeFactory;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
+use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 use Nette;
 use Nette\Utils;
 use Nettrine\ORM;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -111,13 +113,41 @@ abstract class BaseV1Controller
 	}
 
 	/**
-	 * @param ServerRequestInterface $request
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 */
+	public function readRelationship(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		// & relation entity name
+		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
+
+		if ($relationEntity !== '') {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.relationNotFound.heading'),
+				$this->translator->translate('//node.base.messages.relationNotFound.message', ['relation' => $relationEntity])
+			);
+		}
+
+		throw new NodeJsonApiExceptions\JsonApiErrorException(
+			StatusCodeInterface::STATUS_NOT_FOUND,
+			$this->translator->translate('//node.base.messages.unknownRelation.heading'),
+			$this->translator->translate('//node.base.messages.unknownRelation.message')
+		);
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
 	 *
 	 * @return JsonAPIDocument\IDocument<JsonAPIDocument\Objects\StandardObject>
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
-	protected function createDocument(ServerRequestInterface $request): JsonAPIDocument\IDocument
+	protected function createDocument(Message\ServerRequestInterface $request): JsonAPIDocument\IDocument
 	{
 		try {
 			$document = new JsonAPIDocument\Document(Utils\Json::decode($request->getBody()->getContents()));
@@ -138,28 +168,6 @@ abstract class BaseV1Controller
 		}
 
 		return $document;
-	}
-
-	/**
-	 * @param string|null $relationEntity
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 */
-	protected function throwUnknownRelation(?string $relationEntity): void
-	{
-		if ($relationEntity !== null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.base.messages.relationNotFound.heading'),
-				$this->translator->translate('//node.base.messages.relationNotFound.message', ['relation' => $relationEntity])
-			);
-		}
-
-		throw new NodeJsonApiExceptions\JsonApiErrorException(
-			StatusCodeInterface::STATUS_NOT_FOUND,
-			$this->translator->translate('//node.base.messages.unknownRelation.heading'),
-			$this->translator->translate('//node.base.messages.unknownRelation.message')
-		);
 	}
 
 	/**

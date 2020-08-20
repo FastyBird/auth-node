@@ -289,52 +289,10 @@ final class IdentitiesV1Controller extends BaseV1Controller
 				$document->getResource()->getType() === Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE
 				&& $identity instanceof Entities\Identities\IUserAccountIdentity
 			) {
-				$attributes = $document->getResource()->getAttributes();
-
-				if (
-					!$attributes->has('password')
-					|| !$attributes->get('password')->has('current')
-				) {
-					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.missingAttribute.heading'),
-						$this->translator->translate('//node.base.messages.missingAttribute.message'),
-						[
-							'pointer' => '/data/attributes/password/current',
-						]
-					);
-				}
-
-				if (
-					!$attributes->has('password')
-					|| !$attributes->get('password')->has('new')
-				) {
-					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.missingAttribute.heading'),
-						$this->translator->translate('//node.base.messages.missingAttribute.message'),
-						[
-							'pointer' => '/data/attributes/password/new',
-						]
-					);
-				}
-
-				if (!$identity->verifyPassword((string) $attributes->get('password')->get('current'))) {
-					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.invalidAttribute.heading'),
-						$this->translator->translate('//node.base.messages.invalidAttribute.message'),
-						[
-							'pointer' => '/data/attributes/password/current',
-						]
-					);
-				}
-
-				$update = new Utils\ArrayHash();
-				$update->offsetSet('password', (string) $attributes->get('password')->get('new'));
+				$updateIdentityData = $this->userAccountIdentityHydrator->hydrate($document, $identity);
 
 				// Update item in database
-				$identity = $this->identitiesManager->update($identity, $update);
+				$identity = $this->identitiesManager->update($identity, $updateIdentityData);
 
 			} elseif (
 				$document->getResource()->getType() === Schemas\Identities\MachineAccountIdentitySchema::SCHEMA_TYPE
@@ -416,9 +374,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($identity->getAccount()));
 		}
 
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
+		return parent::readRelationship($request, $response);
 	}
 
 }

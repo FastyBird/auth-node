@@ -18,9 +18,11 @@ namespace FastyBird\AuthNode\Controllers\Finders;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
+use FastyBird\AuthNode\Router;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use Nette\Localization;
+use Psr\Http\Message;
 use Ramsey\Uuid;
 
 /**
@@ -31,29 +33,29 @@ trait TRoleFinder
 {
 
 	/**
-	 * @param string $id
+	 * @param Message\ServerRequestInterface $request
 	 *
 	 * @return Entities\Roles\IRole
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
-	protected function findRole(string $id): Entities\Roles\IRole
-	{
-		try {
-			$findQuery = new Queries\FindRolesQuery();
-			$findQuery->byId(Uuid\Uuid::fromString($id));
+	protected function findRole(
+		Message\ServerRequestInterface $request
+	): Entities\Roles\IRole {
+		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_NOT_FOUND,
+				$this->translator->translate('//node.base.messages.notFound.heading'),
+				$this->translator->translate('//node.base.messages.notFound.message')
+			);
+		}
 
-			$role = $this->roleRepository->findOneBy($findQuery);
+		$findQuery = new Queries\FindRolesQuery();
+		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID, null)));
 
-			if ($role === null) {
-				throw new NodeJsonApiExceptions\JsonApiErrorException(
-					StatusCodeInterface::STATUS_NOT_FOUND,
-					$this->translator->translate('//node.base.messages.notFound.heading'),
-					$this->translator->translate('//node.base.messages.notFound.message')
-				);
-			}
+		$role = $this->roleRepository->findOneBy($findQuery);
 
-		} catch (Uuid\Exception\InvalidUuidStringException $ex) {
+		if ($role === null) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('//node.base.messages.notFound.heading'),

@@ -99,7 +99,7 @@ final class RolesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$role = $this->findRole($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$role = $this->findRole($request);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($role));
@@ -123,7 +123,7 @@ final class RolesV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		$document = $this->createDocument($request);
 
-		$role = $this->findRole($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$role = $this->findRole($request);
 
 		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -200,7 +200,7 @@ final class RolesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$role = $this->findRole($request->getAttribute(Router\Router::URL_ITEM_ID));
+		$role = $this->findRole($request);
 
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));
 
@@ -213,9 +213,7 @@ final class RolesV1Controller extends BaseV1Controller
 				->withEntity(NodeWebServerHttp\ScalarEntity::from($role->getChildren()));
 		}
 
-		$this->throwUnknownRelation($relationEntity);
-
-		return $response;
+		return parent::readRelationship($request, $response);
 	}
 
 }
