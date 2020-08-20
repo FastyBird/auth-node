@@ -12,7 +12,7 @@
 
 Auth node is a microservice for managing application accounts & sessions.
 
-FastyBird auth node is an [Apache2](http://github.com/fastybird/auth-node/blob/master/license.md) licensed distributed authentication microservice, developed in PHP with [Nette framework](https://nette.org).
+FastyBird auth node is an [Apache2](https://github.com/fastybird/auth-node/blob/master/license.md) licensed distributed authentication microservice, developed in PHP with [Nette framework](https://nette.org).
 
 ## Requirements
 
@@ -22,7 +22,7 @@ FastyBird auth node is tested against PHP 7.4 and [ReactPHP http](https://github
 
 > **NOTE:** If you don't want to install it manually, try [docker image](#install-with-docker)
 
-The best way to install **fastybird/auth-node** is using [Composer](http://getcomposer.org/). If you don't have Composer yet, [download it](https://getcomposer.org/download/) following the instructions.
+The best way to install **fastybird/auth-node** is using [Composer](https://getcomposer.org/). If you don't have Composer yet, [download it](https://getcomposer.org/download/) following the instructions.
 Then use command:
 
 ```sh
@@ -130,4 +130,4 @@ For release info check [release page](https://github.com/FastyBird/auth-node/rel
 </table>
 
 ***
-Homepage [http://fastybird.com](http://fastybird.com) and repository [http://github.com/fastybird/auth-node](http://github.com/fastybird/auth-node).
+Homepage [https://fastybird.com](https://fastybird.com) and repository [https://github.com/fastybird/auth-node](https://github.com/fastybird/auth-node).
