@@ -137,13 +137,7 @@ final class AccountIdentitiesV1Controller extends BaseV1Controller
 
 		$identity = $this->findIdentity($request, $this->findAccount());
 
-		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
-				$this->translator->translate('//node.base.messages.invalidIdentifier.message')
-			);
-		}
+		$this->validateIdentifier($request, $document);
 
 		try {
 			// Start transaction connection to the database

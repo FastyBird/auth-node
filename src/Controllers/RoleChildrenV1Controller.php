@@ -29,6 +29,9 @@ use Psr\Http\Message;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\Role(manager,administrator)
  */
 final class RoleChildrenV1Controller extends BaseV1Controller
 {
@@ -54,9 +57,6 @@ final class RoleChildrenV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 *
-	 * @Secured
-	 * @Secured\Role(manager,administrator)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,

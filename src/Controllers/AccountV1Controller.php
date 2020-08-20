@@ -119,13 +119,7 @@ final class AccountV1Controller extends BaseV1Controller
 
 		$document = $this->createDocument($request);
 
-		if ($document->getResource()->getIdentifier()->getId() !== $account->getPlainId()) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
-				$this->translator->translate('//node.base.messages.invalidIdentifier.message')
-			);
-		}
+		$this->validateIdentifier($request, $document);
 
 		try {
 			// Start transaction connection to the database

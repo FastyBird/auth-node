@@ -23,6 +23,7 @@ use FastyBird\AuthNode\Security;
 use FastyBird\DateTimeFactory;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
+use Fig\Http\Message\RequestMethodInterface;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 use Nette;
@@ -168,6 +169,32 @@ abstract class BaseV1Controller
 		}
 
 		return $document;
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param JsonAPIDocument\IDocument<JsonAPIDocument\Objects\StandardObject> $document
+	 *
+	 * @return bool
+	 *
+	 * @throws NodeJsonApiExceptions\JsonApiErrorException
+	 */
+	protected function validateIdentifier(
+		Message\ServerRequestInterface $request,
+		JsonAPIDocument\IDocument $document
+	): bool {
+		if (
+			in_array(strtoupper($request->getMethod()), [RequestMethodInterface::METHOD_POST, RequestMethodInterface::METHOD_PATCH], true)
+			&& $request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()
+		) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_BAD_REQUEST,
+				$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
+				$this->translator->translate('//node.base.messages.invalidIdentifier.message')
+			);
+		}
+
+		return true;
 	}
 
 	/**

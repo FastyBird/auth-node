@@ -35,6 +35,9 @@ use Throwable;
  * @subpackage     Controllers
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
+ *
+ * @Secured
+ * @Secured\Role(manager,administrator)
  */
 final class RolesV1Controller extends BaseV1Controller
 {
@@ -68,9 +71,6 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @param NodeWebServerHttp\Response $response
 	 *
 	 * @return NodeWebServerHttp\Response
-	 *
-	 * @Secured
-	 * @Secured\Role(manager,administrator)
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
@@ -91,9 +91,6 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 *
-	 * @Secured
-	 * @Secured\Role(manager,administrator)
 	 */
 	public function read(
 		Message\ServerRequestInterface $request,
@@ -113,9 +110,6 @@ final class RolesV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
-	 *
-	 * @Secured
-	 * @Secured\Role(manager,administrator)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,
@@ -125,13 +119,7 @@ final class RolesV1Controller extends BaseV1Controller
 
 		$role = $this->findRole($request);
 
-		if ($request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_BAD_REQUEST,
-				$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
-				$this->translator->translate('//node.base.messages.invalidIdentifier.message')
-			);
-		}
+		$this->validateIdentifier($request, $document);
 
 		try {
 			// Start transaction connection to the database
@@ -192,9 +180,6 @@ final class RolesV1Controller extends BaseV1Controller
 	 * @return NodeWebServerHttp\Response
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 *
-	 * @Secured
-	 * @Secured\Role(manager,administrator)
 	 */
 	public function readRelationship(
 		Message\ServerRequestInterface $request,
