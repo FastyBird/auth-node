@@ -7,47 +7,47 @@ return [
 	//////////////////
 	'request'         => [
 		'/v1/password-reset',
-		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.json'),
+		file_get_contents(__DIR__ . '/requests/account/identities/account.identities.passwordRequest.json'),
 		StatusCodeInterface::STATUS_NO_CONTENT,
-		__DIR__ . '/responses/account.identities.passwordRequest.json',
+		__DIR__ . '/responses/account/identities/account.identities.passwordRequest.json',
 	],
 
 	// Invalid responses
 	////////////////////
 	'missingRequired' => [
 		'/v1/password-reset',
-		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.missing.required.json'),
+		file_get_contents(__DIR__ . '/requests/account/identities/account.identities.passwordRequest.missing.required.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/account.identities.passwordRequest.missingRequired.json',
+		__DIR__ . '/responses/account/identities/account.identities.passwordRequest.missing.required.json',
 	],
 	'invalidType'     => [
 		'/v1/password-reset',
-		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.invalidType.json'),
+		file_get_contents(__DIR__ . '/requests/account/identities/account.identities.passwordRequest.invalidType.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/generic/invalidType.json',
+		__DIR__ . '/responses/generic/invalid.type.json',
 	],
-	'invalid'         => [
+	'unknown'         => [
 		'/v1/password-reset',
-		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.invalid.json'),
+		file_get_contents(__DIR__ . '/requests/account/identities/account.identities.passwordRequest.invalid.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',
 	],
 	'deleted'         => [
 		'/v1/password-reset',
-		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.deleted.json'),
+		file_get_contents(__DIR__ . '/requests/account/identities/account.identities.passwordRequest.deleted.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',
 	],
 	'blocked'         => [
 		'/v1/password-reset',
-		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.blocked.json'),
+		file_get_contents(__DIR__ . '/requests/account/identities/account.identities.passwordRequest.blocked.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/account.identities.passwordRequest.blocked.json',
+		__DIR__ . '/responses/account/identities/account.identities.passwordRequest.blocked.json',
 	],
 	'notActivated'    => [
 		'/v1/password-reset',
-		file_get_contents(__DIR__ . '/requests/account.identities.passwordRequest.notActivated.json'),
+		file_get_contents(__DIR__ . '/requests/account/identities/account.identities.passwordRequest.notActivated.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/account.identities.passwordRequest.notActivated.json',
+		__DIR__ . '/responses/account/identities/account.identities.passwordRequest.notActivated.json',
 	],
 ];

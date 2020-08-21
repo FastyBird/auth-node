@@ -138,10 +138,10 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 		$uow = $em->getUnitOfWork();
 
 		// Check all scheduled updates
-		foreach ($uow->getScheduledEntityInsertions() as $object) {
+		foreach (array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledEntityUpdates()) as $object) {
 			if ($object instanceof Entities\Accounts\IUserAccount) {
 				/**
-				 * When in node is single administrator mode
+				 * When node is single administrator mode
 				 * every user have to have as a parent administrator account
 				 *
 				 * This check is skipped when node is without administrator account
@@ -150,6 +150,7 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 					$this->singleAdministrator
 					&& $this->getAdministrator() !== null
 					&& !$object->hasParent()
+					&& !$object->getId()->equals($this->getAdministrator()->getId())
 				) {
 					throw new Exceptions\RelationEntityRequired('Account parent entity have to be defined');
 				}
@@ -187,6 +188,21 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 					throw new Exceptions\ParentInvalidException('Provided parent entity is not node administrator');
 				}
 
+				/**
+				 * When node is single administrator mode
+				 * every user have to have as a parent administrator account
+				 *
+				 * This check is skipped when node is without administrator account
+				 */
+				if (
+					$this->singleAdministrator
+					&& $this->getAdministrator() !== null
+					&& !$object->hasParent()
+					&& !$object->getId()->equals($this->getAdministrator()->getId())
+				) {
+					throw new Exceptions\RelationEntityRequired('Account parent entity have to be defined');
+				}
+
 				foreach ($object->getRoles() as $role) {
 					/**
 					 * If account has administrator role
@@ -217,6 +233,13 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 					if (in_array($role->getRoleId(), $this->notAssignableRoles, true)) {
 						throw new Exceptions\AccountRoleInvalidException(sprintf('Role %s could not be assigned to account', $role->getRoleId()));
 					}
+				}
+
+				if (
+					!$object->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)
+					&& count($object->getChildren())
+				) {
+					throw new Exceptions\AccountRoleInvalidException('Only account with administrator role could have children');
 				}
 			}
 		}

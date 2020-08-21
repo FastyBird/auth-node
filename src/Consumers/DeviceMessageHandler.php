@@ -95,17 +95,28 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 					$account = $this->accountRepository->findOneBy($findAccount);
 
 					if ($account === null) {
+						if ($message->offsetGet('parent') === null) {
+							// Start transaction connection to the database
+							$this->getOrmConnection()->beginTransaction();
+
+							$create = Utils\ArrayHash::from([
+								'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
+								'device' => $message->offsetGet('device'),
+								'entity' => Entities\Accounts\MachineAccount::class,
+								'state'  => AuthNode\Types\AccountStateType::get(AuthNode\Types\AccountStateType::STATE_ACTIVE),
+							]);
+
+							$this->accountsManager->create($create);
+
+							// Commit all changes into database
+							$this->getOrmConnection()->commit();
+						}
+
+					} elseif ($message->offsetGet('parent') !== null) {
 						// Start transaction connection to the database
 						$this->getOrmConnection()->beginTransaction();
 
-						$create = Utils\ArrayHash::from([
-							'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
-							'device' => $message->offsetGet('device'),
-							'entity' => Entities\Accounts\MachineAccount::class,
-							'state'  => AuthNode\Types\AccountStateType::get(AuthNode\Types\AccountStateType::STATE_ACTIVE),
-						]);
-
-						$this->accountsManager->create($create);
+						$this->accountsManager->delete($account);
 
 						// Commit all changes into database
 						$this->getOrmConnection()->commit();

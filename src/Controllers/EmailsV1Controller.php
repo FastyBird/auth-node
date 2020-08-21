@@ -89,15 +89,12 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @param NodeWebServerHttp\Response $response
 	 *
 	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		$findQuery = new Queries\FindEmailsQuery();
-		$findQuery->forAccount($this->findAccount($request));
 
 		$emails = $this->emailRepository->getResultSet($findQuery);
 
@@ -118,7 +115,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// Find email
-		$email = $this->findEmail($request, $this->findAccount($request));
+		$email = $this->findEmail($request);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($email));
@@ -137,9 +134,6 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		// Get user profile account or url defined account
-		$account = $this->findAccount($request);
-
 		$document = $this->createDocument($request);
 
 		try {
@@ -148,7 +142,6 @@ final class EmailsV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
 				$createData = $this->emailHydrator->hydrate($document);
-				$createData->offsetSet('account', $account);
 				$createData->offsetSet('verificationHash', $this->securityHash->createKey());
 				$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
 
@@ -172,8 +165,8 @@ final class EmailsV1Controller extends BaseV1Controller
 		} catch (Exceptions\EmailIsNotValidException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('messages.notValid.heading'),
-				$this->translator->translate('messages.notValid.message'),
+				$this->translator->translate('//node.base.messages.invalidAttribute.heading'),
+				$this->translator->translate('//node.base.messages.invalidAttribute.message'),
 				[
 					'pointer' => '/data/attributes/address',
 				]
@@ -280,7 +273,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		$document = $this->createDocument($request);
 
-		$email = $this->findEmail($request, $this->findAccount($request));
+		$email = $this->findEmail($request);
 
 		$this->validateIdentifier($request, $document);
 
@@ -309,6 +302,16 @@ final class EmailsV1Controller extends BaseV1Controller
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			throw $ex;
+
+		} catch (Exceptions\EmailHaveToBeDefaultException $ex) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.invalidAttribute.heading'),
+				$this->translator->translate('//node.base.messages.invalidAttribute.message'),
+				[
+					'pointer' => 'data/attributes/is_default',
+				]
+			);
 
 		} catch (Throwable $ex) {
 			// Log catched exception
@@ -352,7 +355,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$email = $this->findEmail($request, $this->findAccount($request));
+		$email = $this->findEmail($request);
 
 		if ($email->isDefault()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -413,7 +416,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// At first, try to load email
-		$email = $this->findEmail($request, $this->findAccount($request));
+		$email = $this->findEmail($request);
 
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));

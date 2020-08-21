@@ -104,7 +104,7 @@ abstract class AccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			self::RELATIONSHIPS_IDENTITIES => [
 				self::RELATIONSHIP_DATA          => $account->getIdentities(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
+				self::RELATIONSHIP_LINKS_RELATED => false,
 			],
 			self::RELATIONSHIPS_ROLES      => [
 				self::RELATIONSHIP_DATA          => $account->getRoles(),
@@ -128,10 +128,7 @@ abstract class AccountSchema extends NodeJsonApiSchemas\JsonApiSchema
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITIES,
-					[
-						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
-					]
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITIES
 				),
 				true,
 				[

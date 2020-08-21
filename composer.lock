@@ -2055,12 +2055,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-json-api.git",
-                "reference": "71b3490c9b18843da2be9bf4bdd630e7dcac7271"
+                "reference": "9fb671d0da39a822219e41d5abe47de49ef577b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/71b3490c9b18843da2be9bf4bdd630e7dcac7271",
-                "reference": "71b3490c9b18843da2be9bf4bdd630e7dcac7271",
+                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/9fb671d0da39a822219e41d5abe47de49ef577b1",
+                "reference": "9fb671d0da39a822219e41d5abe47de49ef577b1",
                 "shasum": ""
             },
             "require": {
@@ -2122,7 +2122,7 @@
                 "library",
                 "libs"
             ],
-            "time": "2020-08-19T20:30:58+00:00"
+            "time": "2020-08-21T20:24:44+00:00"
         },
         {
             "name": "fastybird/node-metadata",
@@ -2130,12 +2130,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-metadata.git",
-                "reference": "c7ca6f9bfed25f8840dcc1634e0423cb1d9676ef"
+                "reference": "88f002660b7de2d5f3f3dc92dbf87d4a1b66c033"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/c7ca6f9bfed25f8840dcc1634e0423cb1d9676ef",
-                "reference": "c7ca6f9bfed25f8840dcc1634e0423cb1d9676ef",
+                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/88f002660b7de2d5f3f3dc92dbf87d4a1b66c033",
+                "reference": "88f002660b7de2d5f3f3dc92dbf87d4a1b66c033",
                 "shasum": ""
             },
             "require": {
@@ -2188,7 +2188,7 @@
                 "metadata",
                 "node"
             ],
-            "time": "2020-08-16T10:44:16+00:00"
+            "time": "2020-08-20T22:32:43+00:00"
         },
         {
             "name": "fastybird/node-web-server",
@@ -3206,16 +3206,16 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "3.3.2",
+            "version": "3.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "56f10808089e38623345e28af2f2d5e4eb579455"
+                "reference": "c1123697f6a2ec29162b82f170dd4a491f524773"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/56f10808089e38623345e28af2f2d5e4eb579455",
-                "reference": "56f10808089e38623345e28af2f2d5e4eb579455",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/c1123697f6a2ec29162b82f170dd4a491f524773",
+                "reference": "c1123697f6a2ec29162b82f170dd4a491f524773",
                 "shasum": ""
             },
             "require": {
@@ -3267,7 +3267,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-05-22T08:21:12+00:00"
+            "time": "2020-08-20T13:22:28+00:00"
         },
         {
             "name": "mangoweb/clock",

@@ -91,8 +91,18 @@ final class EmailEntitySubscriber implements Common\EventSubscriber
 
 		// Check all scheduled updates
 		foreach (array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledEntityUpdates()) as $object) {
+			$changeSet = $uow->getEntityChangeSet($object);
+
+			if (
+				array_key_exists('default', $changeSet)
+				&& count($changeSet['default']) === 2
+				&& $changeSet['default'][0] === true
+				&& $changeSet['default'][1] === false
+			) {
+				throw new Exceptions\EmailHaveToBeDefaultException('Default email address can not be made not default');
+			}
+
 			if ($object instanceof Entities\Emails\IEmail && $object->isDefault()) {
-				$changeSet = $uow->getEntityChangeSet($object);
 				$classMetadata = $em->getClassMetadata(get_class($object));
 
 				// Check if entity was set as default

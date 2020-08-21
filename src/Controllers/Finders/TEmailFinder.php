@@ -34,7 +34,7 @@ trait TEmailFinder
 
 	/**
 	 * @param Message\ServerRequestInterface $request
-	 * @param Entities\Accounts\IAccount $account
+	 * @param Entities\Accounts\IAccount|null $account
 	 *
 	 * @return Entities\Emails\IEmail
 	 *
@@ -42,7 +42,7 @@ trait TEmailFinder
 	 */
 	private function findEmail(
 		Message\ServerRequestInterface $request,
-		Entities\Accounts\IAccount $account
+		?Entities\Accounts\IAccount $account = null
 	): Entities\Emails\IEmail {
 		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -54,7 +54,10 @@ trait TEmailFinder
 
 		$findQuery = new Queries\FindEmailsQuery();
 		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID, null)));
-		$findQuery->forAccount($account);
+
+		if ($account !== null) {
+			$findQuery->forAccount($account);
+		}
 
 		$email = $this->emailRepository->findOneBy($findQuery);
 

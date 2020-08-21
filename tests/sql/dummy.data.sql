@@ -29,15 +29,19 @@ INSERT IGNORE INTO `fb_accounts_users` (`account_id`, `account_request_hash`, `p
 VALUES (_binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34, 'NGZqMmVxdnhubjJpIyMxNTc0NDUwNDAz', NULL),
        (_binary 0xEFBFBDEFBFBD68EFBFBD770B40EFBFBD, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1',
         _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34),
-       (_binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', NULL),
-       (_binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', NULL),
-       (_binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', NULL),
-       (_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1', NULL);
+       (_binary 0xFAE8D7817E2C43189C8543BA637D14C5, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1',
+        _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34),
+       (_binary 0xFD23CCB48D874EB394DA638AB4E10AE3, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1',
+        _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34),
+       (_binary 0xFDBE2CE23B1841F1AAABC3C56D286EB4, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1',
+        _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34),
+       (_binary 0xFE1152868CFD41BFACEB6CA95BAF6FE9, 'YjRqZXFoZGw1Z3ZzIyMxNTc0MjA3NDQ1',
+        _binary 0x5E79EFBFBD0D5B7C46EFBFBDEFBFBD34);
 
-INSERT IGNORE INTO `fb_accounts_machines` (`account_device`, `account_id`, `parent_id`)
-VALUES ('machine-first-device-name', _binary 0x16E5DB2900064484AC385CDEA5A008F5, NULL),
-       ('machine-old-device-name', _binary 0xFF32AC4EF0104C859CB3D310F6708A4E, NULL),
-       ('child-device-name', _binary 0xF3CCE15AF9564C7EA4B3AC31A0017AC9, _binary 0x16E5DB2900064484AC385CDEA5A008F5);
+INSERT IGNORE INTO `fb_accounts_machines` (`account_device`, `account_id`)
+VALUES ('machine-first-device-name', _binary 0x16E5DB2900064484AC385CDEA5A008F5),
+       ('machine-old-device-name', _binary 0xFF32AC4EF0104C859CB3D310F6708A4E),
+       ('other-device-name', _binary 0xF3CCE15AF9564C7EA4B3AC31A0017AC9);
 
 INSERT IGNORE INTO `fb_accounts_details` (`detail_id`, `account_id`, `detail_first_name`, `detail_last_name`,
                                           `detail_middle_name`, `created_at`, `updated_at`)
@@ -76,7 +80,7 @@ VALUES (_binary 0x0B46D3D6C980494A8B40F19E6095E610, _binary 0x5E79EFBFBD0D5B7C46
         'bruce.wane@fastybird.com', 1, 1, NULL, NULL, '2017-09-06 22:56:44', 'public', '2017-09-06 22:56:44',
         '2019-04-21 19:49:32'),
        (_binary 0xED987404F14C40B4915015B6590DEB8C, _binary 0xFAE8D7817E2C43189C8543BA637D14C5,
-        'clark.kent@fastybird.com', 1, 1, NULL, NULL, '2019-09-22 21:09:56', 'public', '2019-09-22 21:09:56',
+        'clark.kent@fastybird.com', 1, 0, NULL, '2019-09-22 21:09:56', NULL, 'public', '2019-09-22 21:09:56',
         '2019-09-22 21:09:56');
 
 INSERT IGNORE INTO `fb_identities` (`identity_id`, `account_id`, `identity_uid`, `identity_state`, `created_at`,

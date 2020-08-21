@@ -86,15 +86,12 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	 * @param NodeWebServerHttp\Response $response
 	 *
 	 * @return NodeWebServerHttp\Response
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		$findQuery = new Queries\FindIdentitiesQuery();
-		$findQuery->forAccount($this->findAccount($request));
 
 		$identities = $this->identityRepository->getResultSet($findQuery);
 
@@ -115,7 +112,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// Find identity
-		$identity = $this->findIdentity($request, $this->findAccount($request));
+		$identity = $this->findIdentity($request);
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($identity));
@@ -137,9 +134,6 @@ final class IdentitiesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		// Get user profile account or url defined account
-		$account = $this->findAccount($request);
-
 		$document = $this->createDocument($request);
 
 		try {
@@ -148,14 +142,12 @@ final class IdentitiesV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE) {
 				$createData = $this->userAccountIdentityHydrator->hydrate($document);
-				$createData->offsetSet('account', $account);
 
 				// Store item into database
 				$identity = $this->identitiesManager->create($createData);
 
 			} elseif ($document->getResource()->getType() === Schemas\Identities\MachineAccountIdentitySchema::SCHEMA_TYPE) {
 				$createData = $this->machineAccountIdentityHydrator->hydrate($document);
-				$createData->offsetSet('account', $account);
 
 				// Store item into database
 				$identity = $this->identitiesManager->create($createData);
@@ -265,7 +257,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		$document = $this->createDocument($request);
 
-		$identity = $this->findIdentity($request, $this->findAccount($request));
+		$identity = $this->findIdentity($request);
 
 		$this->validateIdentifier($request, $document);
 
@@ -349,7 +341,7 @@ final class IdentitiesV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$identity = $this->findIdentity($request, $this->findAccount($request));
+		$identity = $this->findIdentity($request);
 
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));

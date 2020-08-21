@@ -31,7 +31,7 @@ use Psr\Http\Message;
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @Secured
- * @Secured\Role(manager,administrator)
+ * @Secured\User(loggedIn)
  */
 final class RoleChildrenV1Controller extends BaseV1Controller
 {

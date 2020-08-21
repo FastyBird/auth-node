@@ -37,7 +37,7 @@ use Throwable;
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  *
  * @Secured
- * @Secured\Role(manager,administrator)
+ * @Secured\User(loggedIn)
  */
 final class RolesV1Controller extends BaseV1Controller
 {
@@ -110,6 +110,9 @@ final class RolesV1Controller extends BaseV1Controller
 	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
+	 *
+	 * @Secured
+	 * @Secured\Role(manager,administrator)
 	 */
 	public function update(
 		Message\ServerRequestInterface $request,

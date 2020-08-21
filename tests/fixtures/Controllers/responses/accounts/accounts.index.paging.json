@@ -1,0 +1,117 @@
+{
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o",
+    "totalCount" : 9
+  },
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "self" : "/v1/accounts?page%5Boffset%5D=1&page%5Blimit%5D=1",
+    "first" : "/v1/accounts?page%5Boffset%5D=0&page%5Blimit%5D=1",
+    "prev" : "/v1/accounts?page%5Boffset%5D=0&page%5Blimit%5D=1",
+    "next" : "/v1/accounts?page%5Boffset%5D=2&page%5Blimit%5D=1",
+    "last" : "/v1/accounts?page%5Boffset%5D=8&page%5Blimit%5D=1"
+  },
+  "data" : [
+    {
+      "type" : "auth-node/user-account",
+      "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34",
+      "attributes" : {
+        "state" : "active",
+        "last_visit" : "2019-11-07T22:30:56+00:00",
+        "registered" : "2017-01-03T11:30:00+00:00",
+        "name" : "Doe John",
+        "email" : "john.doe@fastybird.com",
+        "details" : {
+          "first_name" : "John",
+          "last_name" : "Doe",
+          "middle_name" : null
+        },
+        "language" : "en",
+        "week_start" : 1,
+        "datetime" : {
+          "timezone" : "Europe/Prague",
+          "date_format" : "DD.MM.YYYY",
+          "time_format" : "HH:mm"
+        }
+      },
+      "relationships" : {
+        "identities" : {
+          "links" : {
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/identities"
+          },
+          "data" : [
+            {
+              "type" : "auth-node/user-account-identity",
+              "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04"
+            }
+          ]
+        },
+        "roles" : {
+          "links" : {
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/roles"
+          },
+          "data" : [
+            {
+              "type" : "auth-node/role",
+              "id" : "337a0518-664b-40ef-bfbd-efbfbd7914ef"
+            }
+          ]
+        },
+        "emails" : {
+          "links" : {
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/emails"
+          },
+          "data" : [
+            {
+              "type" : "auth-node/email",
+              "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610"
+            },
+            {
+              "type" : "auth-node/email",
+              "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c"
+            }
+          ]
+        },
+        "parent" : {
+          "links" : {
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent"
+          },
+          "data" : null
+        },
+        "children" : {
+          "links" : {
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children"
+          },
+          "data" : [
+            {
+              "type" : "auth-node/user-account",
+              "id" : "efbfbdef-bfbd-68ef-bfbd-770b40efbfbd"
+            },
+            {
+              "type" : "auth-node/user-account",
+              "id" : "fae8d781-7e2c-4318-9c85-43ba637d14c5"
+            },
+            {
+              "type" : "auth-node/user-account",
+              "id" : "fd23ccb4-8d87-4eb3-94da-638ab4e10ae3"
+            },
+            {
+              "type" : "auth-node/user-account",
+              "id" : "fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4"
+            },
+            {
+              "type" : "auth-node/user-account",
+              "id" : "fe115286-8cfd-41bf-aceb-6ca95baf6fe9"
+            }
+          ]
+        }
+      },
+      "links" : {
+        "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
+      }
+    }
+  ]
+}

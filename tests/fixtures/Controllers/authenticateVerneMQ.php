@@ -3,12 +3,17 @@
 use Fig\Http\Message\StatusCodeInterface;
 
 return [
+	// Valid responses
+	//////////////////
 	'authenticate'    => [
 		'/v1/authenticate/vernemq',
 		file_get_contents(__DIR__ . '/requests/authenticate.vernemq.json'),
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/authenticate.vernemq.json',
 	],
+
+	// Invalid responses
+	////////////////////
 	'missingRequired' => [
 		'/v1/authenticate/vernemq',
 		file_get_contents(__DIR__ . '/requests/authenticate.vernemq.missing.required.json'),

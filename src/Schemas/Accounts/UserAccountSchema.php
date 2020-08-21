@@ -121,7 +121,7 @@ final class UserAccountSchema extends AccountSchema
 			self::RELATIONSHIPS_EMAILS => [
 				self::RELATIONSHIP_DATA          => $account->getEmails(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => true,
+				self::RELATIONSHIP_LINKS_RELATED => false,
 			],
 		]);
 
@@ -133,12 +133,12 @@ final class UserAccountSchema extends AccountSchema
 				self::RELATIONSHIPS_PARENT   => [
 					self::RELATIONSHIP_DATA          => $account->getParent(),
 					self::RELATIONSHIP_LINKS_SELF    => true,
-					self::RELATIONSHIP_LINKS_RELATED => true,
+					self::RELATIONSHIP_LINKS_RELATED => false,
 				],
 				self::RELATIONSHIPS_CHILDREN => [
 					self::RELATIONSHIP_DATA          => $account->getChildren(),
 					self::RELATIONSHIP_LINKS_SELF    => true,
-					self::RELATIONSHIP_LINKS_RELATED => true,
+					self::RELATIONSHIP_LINKS_RELATED => false,
 				],
 			]);
 		}
@@ -154,41 +154,11 @@ final class UserAccountSchema extends AccountSchema
 	 */
 	public function getRelationshipRelatedLink($account, string $name): JsonApi\Contracts\Schema\LinkInterface
 	{
-		if ($name === self::RELATIONSHIPS_PARENT && $account->getParent() !== null) {
+		if ($name === self::RELATIONSHIPS_EMAILS) {
 			return new JsonApi\Schema\Link(
 				false,
 				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ACCOUNT,
-					[
-						Router\Router::URL_ITEM_ID => $account->getParent()->getPlainId(),
-					]
-				),
-				false
-			);
-
-		} elseif ($name === self::RELATIONSHIPS_CHILDREN) {
-			return new JsonApi\Schema\Link(
-				false,
-				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ACCOUNT_CHILDREN,
-					[
-						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
-					]
-				),
-				true,
-				[
-					'count' => count($account->getChildren()),
-				]
-			);
-
-		} elseif ($name === self::RELATIONSHIPS_EMAILS) {
-			return new JsonApi\Schema\Link(
-				false,
-				$this->router->urlFor(
-					AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAILS,
-					[
-						Router\Router::URL_ACCOUNT_ID => $account->getPlainId(),
-					]
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAILS
 				),
 				true,
 				[

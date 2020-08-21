@@ -80,10 +80,12 @@ final class ServicesTest extends BaseTestCase
 		Assert::notNull($container->getByType(Schemas\Identities\UserAccountIdentitySchema::class));
 		Assert::notNull($container->getByType(Schemas\Roles\RoleSchema::class));
 
+		Assert::notNull($container->getByType(Hydrators\Accounts\ProfileAccountHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Accounts\UserAccountHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Accounts\MachineAccountHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Identities\UserAccountIdentityHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Identities\MachineAccountIdentityHydrator::class));
+		Assert::notNull($container->getByType(Hydrators\Emails\ProfileEmailHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Emails\EmailHydrator::class));
 		Assert::notNull($container->getByType(Hydrators\Roles\RoleHydrator::class));
 	}

@@ -129,7 +129,6 @@ class VernemqCommand extends Console\Command\Command
 		foreach ($accounts as $account) {
 			if (
 				$account instanceof Entities\Accounts\IMachineAccount
-				|| $account instanceof Entities\Accounts\INodeAccount
 				|| $account instanceof Entities\Accounts\IUserAccount
 			) {
 				$identities = $account->getIdentities();
@@ -144,7 +143,6 @@ class VernemqCommand extends Console\Command\Command
 				if ($verneMqAccount !== null) {
 					if (
 						$identity instanceof Entities\Identities\IMachineAccountIdentity
-						|| $identity instanceof Entities\Identities\INodeAccountIdentity
 					) {
 						$update = Utils\ArrayHash::from([
 							'username' => $identity->getUid(),
@@ -177,38 +175,19 @@ class VernemqCommand extends Console\Command\Command
 				} else {
 					if (
 						$identity instanceof Entities\Identities\IMachineAccountIdentity
-						|| $identity instanceof Entities\Identities\INodeAccountIdentity
 					) {
 						$publishAcls = [];
 						$subscribeAcls = [];
 
-						if ($identity instanceof Entities\Identities\INodeAccountIdentity) {
-							$publishRule = new stdClass();
-							$publishRule->pattern = '/fb/#';
+						$publishRule = new stdClass();
+						$publishRule->pattern = '/fb/' . $identity->getUid() . '/#';
 
-							$publishAcls[] = $publishRule;
+						$publishAcls[] = $publishRule;
 
-							$subscribeRule = new stdClass();
-							$subscribeRule->pattern = '/fb/#';
+						$subscribeRule = new stdClass();
+						$subscribeRule->pattern = '/fb/' . $identity->getUid() . '/#';
 
-							$subscribeAcls[] = $subscribeRule;
-
-							$subscribeRule = new stdClass();
-							$subscribeRule->pattern = '$SYS/broker/log/#';
-
-							$subscribeAcls[] = $subscribeRule;
-
-						} else {
-							$publishRule = new stdClass();
-							$publishRule->pattern = '/fb/' . $identity->getUid() . '/#';
-
-							$publishAcls[] = $publishRule;
-
-							$subscribeRule = new stdClass();
-							$subscribeRule->pattern = '/fb/' . $identity->getUid() . '/#';
-
-							$subscribeAcls[] = $subscribeRule;
-						}
+						$subscribeAcls[] = $subscribeRule;
 
 						$create = Utils\ArrayHash::from([
 							'username'     => $identity->getUid(),

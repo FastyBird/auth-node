@@ -33,47 +33,4 @@ interface IMachineAccount extends IAccount
 	 */
 	public function getDevice(): string;
 
-	/**
-	 * @param Entities\Accounts\IMachineAccount $account
-	 *
-	 * @return void
-	 */
-	public function setParent(Entities\Accounts\IMachineAccount $account): void;
-
-	/**
-	 * @return Entities\Accounts\IMachineAccount|null
-	 */
-	public function getParent(): ?Entities\Accounts\IMachineAccount;
-
-	/**
-	 * @return void
-	 */
-	public function removeParent(): void;
-
-	/**
-	 * @param Entities\Accounts\IMachineAccount[] $children
-	 *
-	 * @return void
-	 */
-	public function setChildren(array $children): void;
-
-	/**
-	 * @param Entities\Accounts\IMachineAccount $child
-	 *
-	 * @return void
-	 */
-	public function addChild(Entities\Accounts\IMachineAccount $child): void;
-
-	/**
-	 * @return Entities\Accounts\IMachineAccount[]
-	 */
-	public function getChildren(): array;
-
-	/**
-	 * @param Entities\Accounts\IMachineAccount $child
-	 *
-	 * @return void
-	 */
-	public function removeChild(Entities\Accounts\IMachineAccount $child): void;
-
 }

@@ -159,26 +159,6 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 			}
 		}
 
-		if ($identity instanceof Entities\Identities\INodeAccountIdentity) {
-			$verneMqAccount = $this->findAccount($identity);
-
-			if ($verneMqAccount === null) {
-				$publishAcls = [
-					'/fb/#',
-				];
-
-				$subscribeAcls = [
-					'/fb/#',
-					'$SYS/broker/log/#',
-				];
-
-				$this->createAccount($identity, $uow, $publishAcls, $subscribeAcls);
-
-			} else {
-				$this->updateAccount($verneMqAccount, $identity, $em, $uow);
-			}
-		}
-
 		if ($identity instanceof Entities\Identities\IUserAccountIdentity) {
 			$account = $identity->getAccount();
 
@@ -241,7 +221,6 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		if (
 			!$identity instanceof Entities\Identities\IUserAccountIdentity
 			&& !$identity instanceof Entities\Identities\IMachineAccountIdentity
-			&& !$identity instanceof Entities\Identities\INodeAccountIdentity
 		) {
 			return;
 		}
@@ -289,8 +268,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		ORM\UnitOfWork $uow
 	): void {
 		if (
-			!$identity instanceof Entities\Identities\IMachineAccountIdentity
-			&& !$identity instanceof Entities\Identities\INodeAccountIdentity
+		!$identity instanceof Entities\Identities\IMachineAccountIdentity
 		) {
 			return;
 		}

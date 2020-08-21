@@ -23,6 +23,41 @@ final class AccountIdentitiesV1ControllerTest extends DbTestCase
 	/**
 	 * @param string $url
 	 * @param string|null $token
+	 * @param int $statusCode
+	 * @param string $fixture
+	 *
+	 * @dataProvider ./../../../fixtures/Controllers/account.identitiesRead.php
+	 */
+	public function testRead(string $url, ?string $token, int $statusCode, string $fixture): void
+	{
+		/** @var Router\Router $router */
+		$router = $this->getContainer()->getByType(Router\Router::class);
+
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
+
+		$request = new ServerRequest(
+			RequestMethodInterface::METHOD_GET,
+			$url,
+			$headers
+		);
+
+		$response = $router->handle($request);
+
+		Tools\JsonAssert::assertFixtureMatch(
+			$fixture,
+			(string) $response->getBody()
+		);
+		Assert::same($statusCode, $response->getStatusCode());
+		Assert::type(Http\Response::class, $response);
+	}
+
+	/**
+	 * @param string $url
+	 * @param string|null $token
 	 * @param string $body
 	 * @param int $statusCode
 	 * @param string $fixture

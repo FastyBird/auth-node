@@ -15,10 +15,8 @@
 
 namespace FastyBird\AuthNode\Hydrators\Emails;
 
-use FastyBird\AuthNode\Entities;
-use FastyBird\AuthNode\Types;
+use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
-use IPub\JsonAPIDocument;
 
 /**
  * Email entity hydrator
@@ -31,6 +29,8 @@ use IPub\JsonAPIDocument;
 final class EmailHydrator extends NodeJsonApiHydrators\Hydrator
 {
 
+	use TEmailHydrator;
+
 	/** @var string */
 	protected $entityIdentifier = self::IDENTIFIER_KEY;
 
@@ -38,31 +38,17 @@ final class EmailHydrator extends NodeJsonApiHydrators\Hydrator
 	protected $attributes = [
 		0 => 'address',
 
-		'is_default' => 'default',
-		'is_private' => 'visibility',
+		'is_default'  => 'default',
+		'is_private'  => 'visibility',
+		'is_verified' => 'verified',
+	];
+
+	/** @var string[] */
+	protected $relationships = [
+		Schemas\Emails\EmailSchema::RELATIONSHIPS_ACCOUNT,
 	];
 
 	/** @var string */
 	protected $translationDomain = 'node.emails';
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function getEntityName(): string
-	{
-		return Entities\Emails\Email::class;
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IStandardObject<mixed> $attributes
-	 *
-	 * @return Types\EmailVisibilityType
-	 */
-	protected function hydrateVisibilityAttribute(JsonAPIDocument\Objects\IStandardObject $attributes): Types\EmailVisibilityType
-	{
-		$isPrivate = (bool) $attributes->get('is_private');
-
-		return Types\EmailVisibilityType::get($isPrivate ? Types\EmailVisibilityType::VISIBILITY_PRIVATE : Types\EmailVisibilityType::VISIBILITY_PUBLIC);
-	}
 
 }

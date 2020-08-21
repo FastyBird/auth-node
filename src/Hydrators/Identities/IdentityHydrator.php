@@ -15,6 +15,7 @@
 
 namespace FastyBird\AuthNode\Hydrators\Identities;
 
+use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Hydrators as NodeJsonApiHydrators;
 
 /**
@@ -34,6 +35,11 @@ abstract class IdentityHydrator extends NodeJsonApiHydrators\Hydrator
 	/** @var string[] */
 	protected $attributes = [
 		'uid',
+	];
+
+	/** @var string[] */
+	protected $relationships = [
+		Schemas\Identities\IdentitySchema::RELATIONSHIPS_ACCOUNT,
 	];
 
 	/** @var string */

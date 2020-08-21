@@ -46,21 +46,16 @@ final class ProfileAccountHydrator extends AccountHydrator
 		'params',
 	];
 
-	/** @var Models\Accounts\IAccountRepository */
-	protected $accountRepository;
-
 	/** @var Models\Roles\IRoleRepository */
 	protected $roleRepository;
 
 	public function __construct(
-		Models\Accounts\IAccountRepository $accountRepository,
 		Models\Roles\IRoleRepository $roleRepository,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		Translation\Translator $translator
 	) {
 		parent::__construct($managerRegistry, $translator);
 
-		$this->accountRepository = $accountRepository;
 		$this->roleRepository = $roleRepository;
 	}
 

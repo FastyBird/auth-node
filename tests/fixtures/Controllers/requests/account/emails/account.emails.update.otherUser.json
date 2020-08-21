@@ -1,0 +1,10 @@
+{
+  "data" : {
+    "type" : "auth-node/email",
+    "id" : "73efbfbd-efbf-bd36-44ef-bfbdefbfbd7a",
+    "attributes" : {
+      "is_default" : false,
+      "is_private" : true
+    }
+  }
+}

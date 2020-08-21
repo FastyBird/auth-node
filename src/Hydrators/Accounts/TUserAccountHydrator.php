@@ -19,7 +19,6 @@ use Contributte\Translation;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use FastyBird\AuthNode\Schemas;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
@@ -35,7 +34,6 @@ use stdClass;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  *
- * @property-read Models\Accounts\IAccountRepository $accountRepository
  * @property-read Models\Roles\IRoleRepository $roleRepository
  * @property-read Translation\Translator $translator
  */
@@ -204,54 +202,6 @@ trait TUserAccountHydrator
 		}
 
 		return $params;
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IRelationship<mixed> $relationship
-	 *
-	 * @return Entities\Accounts\IUserAccount
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 * @throws Translation\Exceptions\InvalidArgument
-	 */
-	protected function hydrateParentRelationship(
-		JsonAPIDocument\Objects\IRelationship $relationship
-	): Entities\Accounts\IUserAccount {
-		if (
-			!$relationship->isHasOne()
-			|| $relationship->getIdentifier() === null
-			|| !Uuid\Uuid::isValid($relationship->getIdentifier()->getId())
-			|| !$relationship->getData() instanceof JsonAPIDocument\Objects\IResourceIdentifier
-			|| $relationship->getData()->get('type') !== Schemas\Accounts\UserAccountSchema::SCHEMA_TYPE
-		) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.base.messages.notFound.heading'),
-				$this->translator->translate('//node.base.messages.notFound.message'),
-				[
-					'pointer' => '/data/relationships/parent/data/id',
-				]
-			);
-		}
-
-		$findQuery = new Queries\FindAccountsQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($relationship->getIdentifier()->getId()));
-
-		/** @var Entities\Accounts\IUserAccount|null $account */
-		$account = $this->accountRepository->findOneBy($findQuery);
-
-		if ($account === null) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_NOT_FOUND,
-				$this->translator->translate('//node.base.messages.notFound.heading'),
-				$this->translator->translate('//node.base.messages.notFound.message'),
-				[
-					'pointer' => '/data/relationships/parent/data/id',
-				]
-			);
-		}
-
-		return $account;
 	}
 
 	/**

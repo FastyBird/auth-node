@@ -46,7 +46,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 
 	use Controllers\Finders\TEmailFinder;
 
-	/** @var Hydrators\Emails\EmailHydrator */
+	/** @var Hydrators\Emails\ProfileEmailHydrator */
 	private $emailHydrator;
 
 	/** @var Models\Emails\IEmailsManager */
@@ -62,7 +62,7 @@ final class AccountEmailsV1Controller extends BaseV1Controller
 	protected $translationDomain = 'node.emails';
 
 	public function __construct(
-		Hydrators\Emails\EmailHydrator $emailHydrator,
+		Hydrators\Emails\ProfileEmailHydrator $emailHydrator,
 		Models\Emails\IEmailRepository $emailRepository,
 		Models\Emails\IEmailsManager $emailsManager,
 		Helpers\SecurityHash $securityHash

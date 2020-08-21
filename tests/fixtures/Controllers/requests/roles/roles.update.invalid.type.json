@@ -1,0 +1,9 @@
+{
+  "data" : {
+    "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61",
+    "type" : "auth-node/invalid-type",
+    "attributes" : {
+      "description" : "Authenticated with update"
+    }
+  }
+}

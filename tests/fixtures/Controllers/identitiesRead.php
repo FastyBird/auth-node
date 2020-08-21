@@ -1,112 +1,127 @@
 <?php declare(strict_types = 1);
 
+use FastyBird\AuthNode\Schemas;
 use Fig\Http\Message\StatusCodeInterface;
 
-const VALID_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
+const ADMINISTRATOR_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
 const EXPIRED_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3MjFlMTAyNS04Zjc4LTQzOGQtODIwZi0wZDQ2OWEzNzk1NWQiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU3Nzg4MDAwMCwiZXhwIjoxNTc3OTAxNjAwLCJ1c2VyIjoiNTI1ZDZhMDktN2MwNi00NmQyLWFmZmEtNzA5YmIxODM3MDdlIiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.F9veOiNfcqQVxpbMF7OY5j1AcPLpPQb8dEIZbrBmh24';
 const INVALID_TOKEN = 'eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
-const VALID_TOKEN_USER = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3YzVkNzdhZC1kOTNlLTRjMmMtOThlNS05ZTFhZmM0NDQ2MTUiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiZWZiZmJkZWYtYmZiZC02OGVmLWJmYmQtNzcwYjQwZWZiZmJkIiwicm9sZXMiOlsidXNlciJdfQ.cbatWCuGX-K8XbF9MMN7DqxV9hriWmUSGcDGGmnxXX0';
+const USER_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3YzVkNzdhZC1kOTNlLTRjMmMtOThlNS05ZTFhZmM0NDQ2MTUiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiZWZiZmJkZWYtYmZiZC02OGVmLWJmYmQtNzcwYjQwZWZiZmJkIiwicm9sZXMiOlsidXNlciJdfQ.cbatWCuGX-K8XbF9MMN7DqxV9hriWmUSGcDGGmnxXX0';
+
+const USER_ACCOUNT_ID = '5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34';
+const CHILD_USER_ACCOUNT_ID = 'efbfbdef-bfbd-68ef-bfbd-770b40efbfbd';
+const MACHINE_ACCOUNT_ID = '16e5db29-0006-4484-ac38-5cdea5a008f5';
+const ADMINISTRATOR_IDENTITY_ID = '77331268-efbf-bd34-49ef-bfbdefbfbd04';
+const USER_IDENTITY_ID = 'faf7a863-a49c-4428-a757-1de537773355';
+const MACHINE_IDENTITY_ID = '35be5624-0160-4323-83ee-6f59000934b4';
+const UNKNOWN_ID = '83985c13-238c-46bd-aacb-2359d5c921a7';
 
 return [
 	// Valid responses
 	//////////////////
-	'readAll'                        => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
-		'Bearer ' . VALID_TOKEN,
+	'readAll'                  => [
+		'/v1/identities',
+		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/identities.index.json',
+		__DIR__ . '/responses/identities/identities.index.json',
 	],
-	'readAllPaging'                  => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities?page[offset]=1&page[limit]=1',
-		'Bearer ' . VALID_TOKEN,
+	'readAllPaging'            => [
+		'/v1/identities?page[offset]=1&page[limit]=1',
+		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/identities.index.paging.json',
+		__DIR__ . '/responses/identities/identities.index.paging.json',
 	],
-	'readOneUser'                    => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04',
-		'Bearer ' . VALID_TOKEN,
+	'readOneUser'              => [
+		'/v1/identities/' . ADMINISTRATOR_IDENTITY_ID,
+		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/identities.read.user.json',
+		__DIR__ . '/responses/identities/identities.read.user.json',
 	],
-	'readOneMachine'                 => [
-		'/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities/35be5624-0160-4323-83ee-6f59000934b4',
-		'Bearer ' . VALID_TOKEN,
+	'readOneMachine'           => [
+		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/identities.read.machine.json',
+		__DIR__ . '/responses/identities/identities.read.machine.json',
 	],
-	'readRelationshipsAccount'       => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04/relationships/account',
-		'Bearer ' . VALID_TOKEN,
+	'readRelationshipsAccount' => [
+		'/v1/identities/' . ADMINISTRATOR_IDENTITY_ID . '/relationships/' . Schemas\Identities\IdentitySchema::RELATIONSHIPS_ACCOUNT,
+		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/identities.readRelationships.account.json',
+		__DIR__ . '/responses/identities/identities.relationships.account.json',
 	],
 
 	// Invalid responses
 	////////////////////
-	'readOneUnknown'                 => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities/17c59dfa-2edd-438e-8c49-faa4e38e5ae5',
-		'Bearer ' . VALID_TOKEN,
+	'readOneUnknown'           => [
+		'/v1/identities/' . UNKNOWN_ID,
+		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',
 	],
-	'readRelationshipsUnknown'       => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04/relationships/unknown',
-		'Bearer ' . VALID_TOKEN,
+	'readRelationshipsUnknown' => [
+		'/v1/identities/' . ADMINISTRATOR_IDENTITY_ID . '/relationships/unknown',
+		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_NOT_FOUND,
-		__DIR__ . '/responses/relation.unknown.json',
+		__DIR__ . '/responses/generic/relation.unknown.json',
 	],
-	'readRelationshipsUnknownEntity' => [
-		'/v1/accounts/17c59dfa-2edd-438e-8c49-faa4e38e5ae5/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04/relationships/children',
-		'Bearer ' . VALID_TOKEN,
-		StatusCodeInterface::STATUS_NOT_FOUND,
-		__DIR__ . '/responses/generic/notFound.json',
-	],
-	'readAllNoToken'                 => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
+	'readAllNoToken'           => [
+		'/v1/identities',
 		null,
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'readOneNoToken'                 => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04',
+	'readOneNoToken'           => [
+		'/v1/identities/' . ADMINISTRATOR_IDENTITY_ID,
 		null,
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'readAllExpiredToken'            => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
-		'Bearer ' . EXPIRED_TOKEN,
-		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/generic/unauthorized.json',
+	'readAllEmptyToken'        => [
+		'/v1/identities',
+		'',
+		StatusCodeInterface::STATUS_FORBIDDEN,
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'readOneExpiredToken'            => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04',
-		'Bearer ' . EXPIRED_TOKEN,
-		StatusCodeInterface::STATUS_UNAUTHORIZED,
-		__DIR__ . '/responses/generic/unauthorized.json',
+	'readOneEmptyToken'        => [
+		'/v1/identities/' . ADMINISTRATOR_IDENTITY_ID,
+		'',
+		StatusCodeInterface::STATUS_FORBIDDEN,
+		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'readAllInvalidToken'            => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
+	'readAllUserToken'         => [
+		'/v1/identities',
+		'Bearer ' . USER_TOKEN,
+		StatusCodeInterface::STATUS_FORBIDDEN,
+		__DIR__ . '/responses/generic/forbidden.json',
+	],
+	'readOneUserToken'         => [
+		'/v1/identities/' . ADMINISTRATOR_IDENTITY_ID,
+		'Bearer ' . USER_TOKEN,
+		StatusCodeInterface::STATUS_FORBIDDEN,
+		__DIR__ . '/responses/generic/forbidden.json',
+	],
+	'readAllInvalidToken'      => [
+		'/v1/identities',
 		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/generic/unauthorized.json',
 	],
-	'readOneInvalidToken'            => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04',
+	'readOneInvalidToken'      => [
+		'/v1/identities/' . ADMINISTRATOR_IDENTITY_ID,
 		'Bearer ' . INVALID_TOKEN,
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/generic/unauthorized.json',
 	],
-	'readAllUserToken'               => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities',
-		'Bearer ' . VALID_TOKEN_USER,
-		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/generic/forbidden.json',
+	'readAllExpiredToken'      => [
+		'/v1/identities',
+		'Bearer ' . EXPIRED_TOKEN,
+		StatusCodeInterface::STATUS_UNAUTHORIZED,
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
-	'readOneUserToken'               => [
-		'/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04',
-		'Bearer ' . VALID_TOKEN_USER,
-		StatusCodeInterface::STATUS_FORBIDDEN,
-		__DIR__ . '/responses/generic/forbidden.json',
+	'readOneExpiredToken'      => [
+		'/v1/identities/' . ADMINISTRATOR_IDENTITY_ID,
+		'Bearer ' . EXPIRED_TOKEN,
+		StatusCodeInterface::STATUS_UNAUTHORIZED,
+		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 ];

@@ -34,7 +34,7 @@ trait TIdentityFinder
 
 	/**
 	 * @param Message\ServerRequestInterface $request
-	 * @param Entities\Accounts\IAccount $account
+	 * @param Entities\Accounts\IAccount|null $account
 	 *
 	 * @return Entities\Identities\IIdentity
 	 *
@@ -42,7 +42,7 @@ trait TIdentityFinder
 	 */
 	private function findIdentity(
 		Message\ServerRequestInterface $request,
-		Entities\Accounts\IAccount $account
+		?Entities\Accounts\IAccount $account = null
 	): Entities\Identities\IIdentity {
 		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -54,7 +54,10 @@ trait TIdentityFinder
 
 		$findQuery = new Queries\FindIdentitiesQuery();
 		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID, null)));
-		$findQuery->forAccount($account);
+
+		if ($account !== null) {
+			$findQuery->forAccount($account);
+		}
 
 		$identity = $this->identityRepository->findOneBy($findQuery);
 

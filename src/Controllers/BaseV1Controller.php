@@ -185,6 +185,7 @@ abstract class BaseV1Controller
 	): bool {
 		if (
 			in_array(strtoupper($request->getMethod()), [RequestMethodInterface::METHOD_POST, RequestMethodInterface::METHOD_PATCH], true)
+			&& $request->getAttribute(Router\Router::URL_ITEM_ID, null) !== null
 			&& $request->getAttribute(Router\Router::URL_ITEM_ID) !== $document->getResource()->getIdentifier()->getId()
 		) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(

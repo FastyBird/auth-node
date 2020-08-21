@@ -1,0 +1,198 @@
+{
+  "meta" : {
+    "author" : "FastyBird dev team",
+    "copyright" : "FastyBird s.r.o"
+  },
+  "jsonapi" : {
+    "version" : "1.1"
+  },
+  "links" : {
+    "self" : "/v1/identities"
+  },
+  "data" : [
+    {
+      "type" : "auth-node/machine-account-identity",
+      "id" : "35be5624-0160-4323-83ee-6f59000934b4",
+      "attributes" : {
+        "uid" : "oldDeviceUsername",
+        "state" : "active",
+        "password" : "unsecuredDevicePassword"
+      },
+      "relationships" : {
+        "account" : {
+          "links" : {
+            "self" : "/v1/identities/35be5624-0160-4323-83ee-6f59000934b4/relationships/account"
+          },
+          "data" : {
+            "type" : "auth-node/machine-account",
+            "id" : "16e5db29-0006-4484-ac38-5cdea5a008f5"
+          }
+        }
+      },
+      "links" : {
+        "self" : "/v1/identities/35be5624-0160-4323-83ee-6f59000934b4"
+      }
+    },
+    {
+      "type" : "auth-node/machine-account-identity",
+      "id" : "540f6cfc-39d1-4175-87fb-aac729d78c0a",
+      "attributes" : {
+        "uid" : "deviceUsername",
+        "state" : "active",
+        "password" : "unsecuredDevicePassword"
+      },
+      "relationships" : {
+        "account" : {
+          "links" : {
+            "self" : "/v1/identities/540f6cfc-39d1-4175-87fb-aac729d78c0a/relationships/account"
+          },
+          "data" : {
+            "type" : "auth-node/machine-account",
+            "id" : "ff32ac4e-f010-4c85-9cb3-d310f6708a4e"
+          }
+        }
+      },
+      "links" : {
+        "self" : "/v1/identities/540f6cfc-39d1-4175-87fb-aac729d78c0a"
+      }
+    },
+    {
+      "type" : "auth-node/user-account-identity",
+      "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
+      "attributes" : {
+        "uid" : "john.doe@fastybird.com",
+        "state" : "active",
+        "email" : "john.doe@fastybird.com"
+      },
+      "relationships" : {
+        "account" : {
+          "links" : {
+            "self" : "/v1/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04/relationships/account"
+          },
+          "data" : {
+            "type" : "auth-node/user-account",
+            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
+          }
+        }
+      },
+      "links" : {
+        "self" : "/v1/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04"
+      }
+    },
+    {
+      "type" : "auth-node/user-account-identity",
+      "id" : "f2ab51a8-0b6f-4adb-b51e-1c648d41f24e",
+      "attributes" : {
+        "uid" : "peter.parker@fastybird.com",
+        "state" : "active",
+        "email" : "peter.parker@fastybird.com"
+      },
+      "relationships" : {
+        "account" : {
+          "links" : {
+            "self" : "/v1/identities/f2ab51a8-0b6f-4adb-b51e-1c648d41f24e/relationships/account"
+          },
+          "data" : {
+            "type" : "auth-node/user-account",
+            "id" : "fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4"
+          }
+        }
+      },
+      "links" : {
+        "self" : "/v1/identities/f2ab51a8-0b6f-4adb-b51e-1c648d41f24e"
+      }
+    },
+    {
+      "type" : "auth-node/user-account-identity",
+      "id" : "faf7a863-a49c-4428-a757-1de537773355",
+      "attributes" : {
+        "uid" : "jane.doe@fastybird.com",
+        "state" : "active",
+        "email" : "jane.doe@fastybird.com"
+      },
+      "relationships" : {
+        "account" : {
+          "links" : {
+            "self" : "/v1/identities/faf7a863-a49c-4428-a757-1de537773355/relationships/account"
+          },
+          "data" : {
+            "type" : "auth-node/user-account",
+            "id" : "efbfbdef-bfbd-68ef-bfbd-770b40efbfbd"
+          }
+        }
+      },
+      "links" : {
+        "self" : "/v1/identities/faf7a863-a49c-4428-a757-1de537773355"
+      }
+    },
+    {
+      "type" : "auth-node/user-account-identity",
+      "id" : "fd3385a5-d8d7-44fb-b7f1-151c62a4a7b4",
+      "attributes" : {
+        "uid" : "peter.pan@fastybird.com",
+        "state" : "active",
+        "email" : "peter.pan@fastybird.com"
+      },
+      "relationships" : {
+        "account" : {
+          "links" : {
+            "self" : "/v1/identities/fd3385a5-d8d7-44fb-b7f1-151c62a4a7b4/relationships/account"
+          },
+          "data" : {
+            "type" : "auth-node/user-account",
+            "id" : "fe115286-8cfd-41bf-aceb-6ca95baf6fe9"
+          }
+        }
+      },
+      "links" : {
+        "self" : "/v1/identities/fd3385a5-d8d7-44fb-b7f1-151c62a4a7b4"
+      }
+    },
+    {
+      "type" : "auth-node/user-account-identity",
+      "id" : "fe115286-8cfd-41bf-aceb-6ca95baf6fe9",
+      "attributes" : {
+        "uid" : "bruce.wane@fastybird.com",
+        "state" : "active",
+        "email" : "bruce.wane@fastybird.com"
+      },
+      "relationships" : {
+        "account" : {
+          "links" : {
+            "self" : "/v1/identities/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/account"
+          },
+          "data" : {
+            "type" : "auth-node/user-account",
+            "id" : "fd23ccb4-8d87-4eb3-94da-638ab4e10ae3"
+          }
+        }
+      },
+      "links" : {
+        "self" : "/v1/identities/fe115286-8cfd-41bf-aceb-6ca95baf6fe9"
+      }
+    },
+    {
+      "type" : "auth-node/user-account-identity",
+      "id" : "ff99f3c4-70b9-43f9-9ef6-c9b33b43abcb",
+      "attributes" : {
+        "uid" : "clark.kent@fastybird.com",
+        "state" : "active",
+        "email" : "clark.kent@fastybird.com"
+      },
+      "relationships" : {
+        "account" : {
+          "links" : {
+            "self" : "/v1/identities/ff99f3c4-70b9-43f9-9ef6-c9b33b43abcb/relationships/account"
+          },
+          "data" : {
+            "type" : "auth-node/user-account",
+            "id" : "fae8d781-7e2c-4318-9c85-43ba637d14c5"
+          }
+        }
+      },
+      "links" : {
+        "self" : "/v1/identities/ff99f3c4-70b9-43f9-9ef6-c9b33b43abcb"
+      }
+    }
+  ]
+}
