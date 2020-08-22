@@ -17,14 +17,10 @@ namespace FastyBird\AuthNode\Hydrators\Accounts;
 
 use Contributte\Translation;
 use FastyBird\AuthNode\Entities;
-use FastyBird\AuthNode\Models;
-use FastyBird\AuthNode\Queries;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use Fig\Http\Message\StatusCodeInterface;
 use IPub\JsonAPIDocument;
 use Nette\Utils;
-use Ramsey\Uuid;
-use stdClass;
 
 /**
  * User account entity hydrator trait
@@ -34,7 +30,6 @@ use stdClass;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  *
- * @property-read Models\Roles\IRoleRepository $roleRepository
  * @property-read Translation\Translator $translator
  */
 trait TUserAccountHydrator
@@ -202,52 +197,6 @@ trait TUserAccountHydrator
 		}
 
 		return $params;
-	}
-
-	/**
-	 * @param JsonAPIDocument\Objects\IRelationship<mixed> $relationship
-	 *
-	 * @return Entities\Roles\IRole[]
-	 *
-	 * @throws NodeJsonApiExceptions\IJsonApiException
-	 * @throws Translation\Exceptions\InvalidArgument
-	 */
-	protected function hydrateRolesRelationship(
-		JsonAPIDocument\Objects\IRelationship $relationship
-	): ?array {
-		if (!$relationship->isHasMany()) {
-			return null;
-		}
-
-		$roles = [];
-
-		foreach ($relationship as $rolesRelation) {
-			/** @var stdClass $roleRelation */
-			foreach ($rolesRelation as $roleRelation) {
-				try {
-					$findQuery = new Queries\FindRolesQuery();
-					$findQuery->byId(Uuid\Uuid::fromString($roleRelation->id));
-
-					$role = $this->roleRepository->findOneBy($findQuery);
-
-					if ($role !== null) {
-						$roles[] = $role;
-					}
-
-				} catch (Uuid\Exception\InvalidUuidStringException $ex) {
-					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-						$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
-						$this->translator->translate('//node.base.messages.invalidIdentifier.message'),
-						[
-							'pointer' => '/data/relationships/roles/data/id',
-						]
-					);
-				}
-			}
-		}
-
-		return $roles;
 	}
 
 }

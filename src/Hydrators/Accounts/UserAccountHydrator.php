@@ -15,9 +15,6 @@
 
 namespace FastyBird\AuthNode\Hydrators\Accounts;
 
-use Contributte\Translation;
-use Doctrine\Common;
-use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Schemas;
 
 /**
@@ -53,18 +50,5 @@ class UserAccountHydrator extends AccountHydrator
 		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_PARENT,
 		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_ROLES,
 	];
-
-	/** @var Models\Roles\IRoleRepository */
-	protected $roleRepository;
-
-	public function __construct(
-		Models\Roles\IRoleRepository $roleRepository,
-		Common\Persistence\ManagerRegistry $managerRegistry,
-		Translation\Translator $translator
-	) {
-		parent::__construct($managerRegistry, $translator);
-
-		$this->roleRepository = $roleRepository;
-	}
 
 }

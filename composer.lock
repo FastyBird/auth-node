@@ -2055,12 +2055,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-json-api.git",
-                "reference": "9fb671d0da39a822219e41d5abe47de49ef577b1"
+                "reference": "a581f8edb1176a3bc403315ea4112e9c96a1e5fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/9fb671d0da39a822219e41d5abe47de49ef577b1",
-                "reference": "9fb671d0da39a822219e41d5abe47de49ef577b1",
+                "url": "https://api.github.com/repos/FastyBird/node-json-api/zipball/a581f8edb1176a3bc403315ea4112e9c96a1e5fe",
+                "reference": "a581f8edb1176a3bc403315ea4112e9c96a1e5fe",
                 "shasum": ""
             },
             "require": {
@@ -2122,7 +2122,7 @@
                 "library",
                 "libs"
             ],
-            "time": "2020-08-21T20:24:44+00:00"
+            "time": "2020-08-22T09:12:20+00:00"
         },
         {
             "name": "fastybird/node-metadata",
@@ -2130,12 +2130,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-metadata.git",
-                "reference": "88f002660b7de2d5f3f3dc92dbf87d4a1b66c033"
+                "reference": "ab6e30b3f86397329226ef869957a50424f1ff5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/88f002660b7de2d5f3f3dc92dbf87d4a1b66c033",
-                "reference": "88f002660b7de2d5f3f3dc92dbf87d4a1b66c033",
+                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/ab6e30b3f86397329226ef869957a50424f1ff5f",
+                "reference": "ab6e30b3f86397329226ef869957a50424f1ff5f",
                 "shasum": ""
             },
             "require": {
@@ -2188,7 +2188,7 @@
                 "metadata",
                 "node"
             ],
-            "time": "2020-08-20T22:32:43+00:00"
+            "time": "2020-08-22T08:12:06+00:00"
         },
         {
             "name": "fastybird/node-web-server",

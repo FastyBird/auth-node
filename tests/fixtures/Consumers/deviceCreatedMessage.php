@@ -17,6 +17,7 @@ return [
 			'control'    => ['configure'],
 			'params'     => [],
 			'device'     => 'first-device',
+			'owner'      => '5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34',
 			'parent'     => null,
 		]),
 		'69786d15-fd0c-4d9f-9378-33287c2009fa',

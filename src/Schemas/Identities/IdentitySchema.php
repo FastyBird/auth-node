@@ -84,7 +84,7 @@ abstract class IdentitySchema extends NodeJsonApiSchemas\JsonApiSchema
 			$this->router->urlFor(
 				AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY,
 				[
-					Router\Router::URL_ITEM_ID    => (string) $identity->getId(),
+					Router\Router::URL_ITEM_ID => (string) $identity->getId(),
 				]
 			),
 			false

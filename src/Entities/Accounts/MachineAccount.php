@@ -16,6 +16,7 @@
 namespace FastyBird\AuthNode\Entities\Accounts;
 
 use Doctrine\ORM\Mapping as ORM;
+use FastyBird\AuthNode\Entities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use Ramsey\Uuid;
 use Throwable;
@@ -38,6 +39,15 @@ class MachineAccount extends Account implements IMachineAccount
 {
 
 	/**
+	 * @var Entities\Accounts\IUserAccount
+	 *
+	 * @IPubDoctrine\Crud(is="required")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Accounts\UserAccount")
+	 * @ORM\JoinColumn(name="owner_id", referencedColumnName="account_id", onDelete="cascade", nullable=false)
+	 */
+	private $owner;
+
+	/**
 	 * @var string
 	 *
 	 * @IPubDoctrine\Crud(is={"required", "writable"})
@@ -47,17 +57,28 @@ class MachineAccount extends Account implements IMachineAccount
 
 	/**
 	 * @param string $device
+	 * @param Entities\Accounts\IUserAccount $owner
 	 * @param Uuid\UuidInterface|null $id
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		string $device,
+		Entities\Accounts\IUserAccount $owner,
 		?Uuid\UuidInterface $id = null
 	) {
 		parent::__construct($id);
 
+		$this->owner = $owner;
 		$this->device = $device;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function getOwner(): IUserAccount
+	{
+		return $this->owner;
 	}
 
 	/**
@@ -76,6 +97,7 @@ class MachineAccount extends Account implements IMachineAccount
 		return array_merge(parent::toArray(), [
 			'type'   => 'machine',
 			'device' => $this->getDevice(),
+			'owner'  => $this->getOwner()->getPlainId(),
 		]);
 	}
 

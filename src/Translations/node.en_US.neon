@@ -91,6 +91,12 @@ session:
 			heading	: "System error"
 			message	: "Something went wrong, session could not be destroyed"
 
+accounts:
+	messages:
+		selfNotDeletable:
+			heading	: "Self account"
+			message	: "You can't delete your account"
+
 emails:
 	messages:
 		taken:

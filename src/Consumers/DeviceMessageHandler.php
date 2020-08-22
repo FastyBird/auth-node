@@ -96,20 +96,28 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 
 					if ($account === null) {
 						if ($message->offsetGet('parent') === null) {
-							// Start transaction connection to the database
-							$this->getOrmConnection()->beginTransaction();
+							$findAccount = new Queries\FindAccountsQuery();
+							$findAccount->byId(Uuid\Uuid::fromString($message->offsetGet('owner')));
 
-							$create = Utils\ArrayHash::from([
-								'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
-								'device' => $message->offsetGet('device'),
-								'entity' => Entities\Accounts\MachineAccount::class,
-								'state'  => AuthNode\Types\AccountStateType::get(AuthNode\Types\AccountStateType::STATE_ACTIVE),
-							]);
+							$owner = $this->accountRepository->findOneBy($findAccount);
 
-							$this->accountsManager->create($create);
+							if ($owner !== null) {
+								// Start transaction connection to the database
+								$this->getOrmConnection()->beginTransaction();
 
-							// Commit all changes into database
-							$this->getOrmConnection()->commit();
+								$create = Utils\ArrayHash::from([
+									'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
+									'device' => $message->offsetGet('device'),
+									'entity' => Entities\Accounts\MachineAccount::class,
+									'state'  => AuthNode\Types\AccountStateType::get(AuthNode\Types\AccountStateType::STATE_ACTIVE),
+									'owner'  => $owner,
+								]);
+
+								$this->accountsManager->create($create);
+
+								// Commit all changes into database
+								$this->getOrmConnection()->commit();
+							}
 						}
 
 					} elseif ($message->offsetGet('parent') !== null) {

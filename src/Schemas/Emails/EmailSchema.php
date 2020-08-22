@@ -102,7 +102,7 @@ final class EmailSchema extends NodeJsonApiSchemas\JsonApiSchema
 			$this->router->urlFor(
 				AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL,
 				[
-					Router\Router::URL_ITEM_ID    => $email->getPlainId(),
+					Router\Router::URL_ITEM_ID => $email->getPlainId(),
 				]
 			),
 			false

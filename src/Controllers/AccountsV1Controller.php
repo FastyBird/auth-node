@@ -23,6 +23,7 @@ use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\AuthNode\Router;
 use FastyBird\AuthNode\Schemas;
+use FastyBird\AuthNode\Types;
 use FastyBird\NodeJsonApi\Exceptions as NodeJsonApiExceptions;
 use FastyBird\NodeWebServer\Http as NodeWebServerHttp;
 use Fig\Http\Message\StatusCodeInterface;
@@ -58,6 +59,9 @@ final class AccountsV1Controller extends BaseV1Controller
 	/** @var Models\Accounts\IAccountsManager */
 	private $accountsManager;
 
+	/** @var Models\Identities\IIdentitiesManager */
+	private $identitiesManager;
+
 	/** @var string */
 	protected $translationDomain = 'node.accounts';
 
@@ -65,13 +69,15 @@ final class AccountsV1Controller extends BaseV1Controller
 		Hydrators\Accounts\UserAccountHydrator $userAccountHydrator,
 		Hydrators\Accounts\MachineAccountHydrator $machineAccountHydrator,
 		Models\Accounts\IAccountRepository $accountRepository,
-		Models\Accounts\IAccountsManager $accountsManager
+		Models\Accounts\IAccountsManager $accountsManager,
+		Models\Identities\IIdentitiesManager $identitiesManager
 	) {
 		$this->userAccountHydrator = $userAccountHydrator;
 		$this->machineAccountHydrator = $machineAccountHydrator;
 
 		$this->accountRepository = $accountRepository;
 		$this->accountsManager = $accountsManager;
+		$this->identitiesManager = $identitiesManager;
 	}
 
 	/**
@@ -138,6 +144,7 @@ final class AccountsV1Controller extends BaseV1Controller
 
 			} elseif ($document->getResource()->getType() === Schemas\Accounts\MachineAccountSchema::SCHEMA_TYPE) {
 				$createData = $this->machineAccountHydrator->hydrate($document);
+				$createData['owner'] = $this->user->getAccount();
 
 				// Store item into database
 				$account = $this->accountsManager->create($createData);
@@ -373,6 +380,82 @@ final class AccountsV1Controller extends BaseV1Controller
 		/** @var NodeWebServerHttp\Response $response */
 		$response = $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($account));
+
+		return $response;
+	}
+
+	/**
+	 * @param Message\ServerRequestInterface $request
+	 * @param NodeWebServerHttp\Response $response
+	 *
+	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
+	 * @throws Doctrine\DBAL\ConnectionException
+	 */
+	public function delete(
+		Message\ServerRequestInterface $request,
+		NodeWebServerHttp\Response $response
+	): NodeWebServerHttp\Response {
+		$account = $this->findAccount($request);
+
+		if (
+			$this->user->getAccount() !== null
+			&& $account->getId()->equals($this->user->getAccount()->getId())
+		) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('messages.selfNotDeletable.heading'),
+				$this->translator->translate('messages.selfNotDeletable.message')
+			);
+		}
+
+		try {
+			// Start transaction connection to the database
+			$this->getOrmConnection()->beginTransaction();
+
+			$updateData = Utils\ArrayHash::from([
+				'state' => Types\AccountStateType::get(Types\AccountStateType::STATE_DELETED),
+			]);
+
+			$this->accountsManager->update($account, $updateData);
+
+			foreach ($account->getIdentities() as $identity) {
+				$updateIdentity = Utils\ArrayHash::from([
+					'state' => Types\IdentityStateType::get(Types\IdentityStateType::STATE_DELETED),
+				]);
+
+				$this->identitiesManager->update($identity, $updateIdentity);
+			}
+
+			// Commit all changes into database
+			$this->getOrmConnection()->commit();
+
+		} catch (Throwable $ex) {
+			// Log catched exception
+			$this->logger->error('[CONTROLLER] ' . $ex->getMessage(), [
+				'exception' => [
+					'message' => $ex->getMessage(),
+					'code'    => $ex->getCode(),
+				],
+			]);
+
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.notDeleted.heading'),
+				$this->translator->translate('//node.base.messages.notDeleted.message')
+			);
+
+		} finally {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
+			}
+		}
+
+		/** @var NodeWebServerHttp\Response $response */
+		$response = $response
+			->withStatus(StatusCodeInterface::STATUS_NO_CONTENT);
 
 		return $response;
 	}

@@ -29,6 +29,11 @@ interface IMachineAccount extends IAccount
 {
 
 	/**
+	 * @return Entities\Accounts\IUserAccount
+	 */
+	public function getOwner(): IUserAccount;
+
+	/**
 	 * @return string
 	 */
 	public function getDevice(): string;
