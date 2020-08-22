@@ -159,6 +159,56 @@ final class EmailsV1ControllerTest extends DbTestCase
 		Assert::type(Http\Response::class, $response);
 	}
 
+	/**
+	 * @param string $url
+	 * @param string|null $token
+	 * @param int $statusCode
+	 * @param string $fixture
+	 *
+	 * @dataProvider ./../../../fixtures/Controllers/emailsDelete.php
+	 */
+	public function testDelete(string $url, ?string $token, int $statusCode, string $fixture): void
+	{
+		/** @var Router\Router $router */
+		$router = $this->getContainer()->getByType(Router\Router::class);
+
+		$headers = [];
+
+		if ($token !== null) {
+			$headers['authorization'] = $token;
+		}
+
+		$request = new ServerRequest(
+			RequestMethodInterface::METHOD_DELETE,
+			$url,
+			$headers
+		);
+
+		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher
+			->shouldReceive('publish')
+			->withArgs(function (string $routingKey, array $data): bool {
+				Assert::same('fb.bus.node.entity.deleted.email', $routingKey);
+				Assert::false($data === []);
+
+				return true;
+			});
+
+		$this->mockContainerService(
+			NodeExchangePublishers\IRabbitMqPublisher::class,
+			$rabbitPublisher
+		);
+
+		$response = $router->handle($request);
+
+		Tools\JsonAssert::assertFixtureMatch(
+			$fixture,
+			(string) $response->getBody()
+		);
+		Assert::same($statusCode, $response->getStatusCode());
+		Assert::type(Http\Response::class, $response);
+	}
+
 }
 
 $test_case = new EmailsV1ControllerTest();
