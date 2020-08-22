@@ -44,7 +44,7 @@ trait TAccountFinder
 	protected function findAccount(
 		Message\ServerRequestInterface $request
 	): Entities\Accounts\IAccount {
-		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ACCOUNT_ID, null))) {
+		if (!Uuid\Uuid::isValid($request->getAttribute(Router\Router::URL_ITEM_ID, null))) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_NOT_FOUND,
 				$this->translator->translate('//node.base.messages.notFound.heading'),
@@ -53,7 +53,7 @@ trait TAccountFinder
 		}
 
 		$findQuery = new Queries\FindAccountsQuery();
-		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ACCOUNT_ID, null)));
+		$findQuery->byId(Uuid\Uuid::fromString($request->getAttribute(Router\Router::URL_ITEM_ID, null)));
 
 		$account = $this->accountRepository->findOneBy($findQuery);
 

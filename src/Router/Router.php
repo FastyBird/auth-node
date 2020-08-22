@@ -34,8 +34,6 @@ class Router extends Routing\Router
 
 	public const URL_ITEM_ID = 'id';
 
-	public const URL_ACCOUNT_ID = 'account';
-
 	public const RELATION_ENTITY = 'relationEntity';
 
 	/** @var Controllers\SessionV1Controller */
@@ -116,6 +114,9 @@ class Router extends Routing\Router
 		$this->group('/v1', function (Routing\RouteCollector $group): void {
 			$group->post('/password-reset', [$this->accountIdentitiesV1Controller, 'requestPassword']);
 
+			/**
+			 * SESSION
+			 */
 			$group->group('/session', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->sessionV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_SESSION);
@@ -130,6 +131,9 @@ class Router extends Routing\Router
 				$route->setName(AuthNode\Constants::ROUTE_NAME_SESSION_RELATIONSHIP);
 			});
 
+			/**
+			 * PROFILE
+			 */
 			$group->group('/me', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->accountV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ME);
@@ -180,6 +184,9 @@ class Router extends Routing\Router
 				});
 			});
 
+			/**
+			 * ACCOUNTS
+			 */
 			$group->group('/accounts', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->accountsV1Controller, 'index']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNTS);
@@ -195,13 +202,11 @@ class Router extends Routing\Router
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountsV1Controller, 'readRelationship']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_RELATIONSHIP);
-			});
 
-			$group->group('/accounts/{' . self::URL_ACCOUNT_ID . '}', function (Routing\RouteCollector $group): void {
 				/**
 				 * CHILDREN
 				 */
-				$route = $group->get('/children', [$this->accountChildrenV1Controller, 'index']);
+				$route = $group->get('/{' . self::URL_ITEM_ID . '}/children', [$this->accountChildrenV1Controller, 'index']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_CHILDREN);
 			});
 
@@ -243,6 +248,9 @@ class Router extends Routing\Router
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL_RELATIONSHIP);
 			});
 
+			/**
+			 * ACCESS ROLES
+			 */
 			$group->group('/roles', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->rolesV1Controller, 'index']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ROLES);
