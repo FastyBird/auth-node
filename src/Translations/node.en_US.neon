@@ -73,6 +73,18 @@ base:
 			heading	: "Attribute not unique"
 			message	: "Provided attribute is not unique"
 
+public:
+	messages:
+		notActivated:
+			heading	: "Not processed"
+			message	: "Account is not activated yet. Activation email was resend"
+		blocked:
+			heading	: "Not processed"
+			message	: "This account is blocked"
+		requestNotSent:
+			heading	: "System error"
+			message	: "Something went wrong, password reset request could not be processed"
+
 session:
 	messages:
 		unknownAccount:
@@ -105,15 +117,3 @@ emails:
 		defaultNotDeletable:
 			heading	: "Email is default"
 			message	: "Default email address could not be deleted"
-
-identities:
-	messages:
-		notActivated:
-			heading	: "Not processed"
-			message	: "Account is not activated yet. Activation email was resend"
-		blocked:
-			heading	: "Not processed"
-			message	: "This account is blocked"
-		requestNotSent:
-			heading	: "System error"
-			message	: "Something went wrong, password reset request could not be processed"

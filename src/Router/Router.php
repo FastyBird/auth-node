@@ -34,7 +34,12 @@ class Router extends Routing\Router
 
 	public const URL_ITEM_ID = 'id';
 
+	public const URL_ACCOUNT_ID = 'account';
+
 	public const RELATION_ENTITY = 'relationEntity';
+
+	/** @var Controllers\PublicV1Controller */
+	private $publicV1Controller;
 
 	/** @var Controllers\SessionV1Controller */
 	private $sessionV1Controller;
@@ -73,6 +78,7 @@ class Router extends Routing\Router
 	private $accessControlMiddleware;
 
 	public function __construct(
+		Controllers\PublicV1Controller $publicV1Controller,
 		Controllers\SessionV1Controller $sessionV1Controller,
 		Controllers\AccountV1Controller $accountV1Controller,
 		Controllers\AccountEmailsV1Controller $accountEmailsV1Controller,
@@ -88,6 +94,8 @@ class Router extends Routing\Router
 		?ResponseFactoryInterface $responseFactory = null
 	) {
 		parent::__construct($responseFactory, null);
+
+		$this->publicV1Controller = $publicV1Controller;
 
 		$this->sessionV1Controller = $sessionV1Controller;
 
@@ -112,7 +120,9 @@ class Router extends Routing\Router
 	public function registerRoutes(): void
 	{
 		$this->group('/v1', function (Routing\RouteCollector $group): void {
-			$group->post('/password-reset', [$this->accountIdentitiesV1Controller, 'requestPassword']);
+			$group->post('/reset-identity', [$this->publicV1Controller, 'resetIdentity']);
+
+			$group->post('/register', [$this->publicV1Controller, 'register']);
 
 			/**
 			 * SESSION
@@ -137,8 +147,6 @@ class Router extends Routing\Router
 			$group->group('/me', function (Routing\RouteCollector $group): void {
 				$route = $group->get('', [$this->accountV1Controller, 'read']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ME);
-
-				$group->post('', [$this->accountV1Controller, 'create']);
 
 				$group->patch('', [$this->accountV1Controller, 'update']);
 
@@ -202,50 +210,52 @@ class Router extends Routing\Router
 
 				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->accountsV1Controller, 'readRelationship']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_RELATIONSHIP);
+			});
 
+			$group->group('/accounts/{' . self::URL_ACCOUNT_ID . '}', function (Routing\RouteCollector $group): void {
 				/**
 				 * CHILDREN
 				 */
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/children', [$this->accountChildrenV1Controller, 'index']);
+				$route = $group->get('/children', [$this->accountChildrenV1Controller, 'index']);
 				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_CHILDREN);
-			});
 
-			/**
-			 * ACCOUNT IDENTITIES
-			 */
-			$group->group('/identities', function (Routing\RouteCollector $group): void {
-				$route = $group->get('', [$this->identitiesV1Controller, 'index']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITIES);
+				/**
+				 * ACCOUNT IDENTITIES
+				 */
+				$group->group('/identities', function (Routing\RouteCollector $group): void {
+					$route = $group->get('', [$this->identitiesV1Controller, 'index']);
+					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITIES);
 
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->identitiesV1Controller, 'read']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY);
+					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->identitiesV1Controller, 'read']);
+					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY);
 
-				$group->post('', [$this->identitiesV1Controller, 'create']);
+					$group->post('', [$this->identitiesV1Controller, 'create']);
 
-				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->identitiesV1Controller, 'update']);
+					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->identitiesV1Controller, 'update']);
 
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->identitiesV1Controller, 'readRelationship']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY_RELATIONSHIP);
-			});
+					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->identitiesV1Controller, 'readRelationship']);
+					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY_RELATIONSHIP);
+				});
 
-			/**
-			 * ACCOUNT EMAILS
-			 */
-			$group->group('/emails', function (Routing\RouteCollector $group): void {
-				$route = $group->get('', [$this->emailsV1Controller, 'index']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAILS);
+				/**
+				 * ACCOUNT EMAILS
+				 */
+				$group->group('/emails', function (Routing\RouteCollector $group): void {
+					$route = $group->get('', [$this->emailsV1Controller, 'index']);
+					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAILS);
 
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'read']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL);
+					$route = $group->get('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'read']);
+					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL);
 
-				$group->post('', [$this->emailsV1Controller, 'create']);
+					$group->post('', [$this->emailsV1Controller, 'create']);
 
-				$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'update']);
+					$group->patch('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'update']);
 
-				$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'delete']);
+					$group->delete('/{' . self::URL_ITEM_ID . '}', [$this->emailsV1Controller, 'delete']);
 
-				$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->emailsV1Controller, 'readRelationship']);
-				$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL_RELATIONSHIP);
+					$route = $group->get('/{' . self::URL_ITEM_ID . '}/relationships/{' . self::RELATION_ENTITY . '}', [$this->emailsV1Controller, 'readRelationship']);
+					$route->setName(AuthNode\Constants::ROUTE_NAME_ACCOUNT_EMAIL_RELATIONSHIP);
+				});
 			});
 
 			/**

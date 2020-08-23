@@ -89,12 +89,15 @@ final class EmailsV1Controller extends BaseV1Controller
 	 * @param NodeWebServerHttp\Response $response
 	 *
 	 * @return NodeWebServerHttp\Response
+	 *
+	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 */
 	public function index(
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		$findQuery = new Queries\FindEmailsQuery();
+		$findQuery->forAccount($this->findAccount($request));
 
 		$emails = $this->emailRepository->getResultSet($findQuery);
 
@@ -115,7 +118,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// Find email
-		$email = $this->findEmail($request);
+		$email = $this->findEmail($request, $this->findAccount($request));
 
 		return $response
 			->withEntity(NodeWebServerHttp\ScalarEntity::from($email));
@@ -134,6 +137,9 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
+		// Get user profile account or url defined account
+		$account = $this->findAccount($request);
+
 		$document = $this->createDocument($request);
 
 		try {
@@ -142,6 +148,7 @@ final class EmailsV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
 				$createData = $this->emailHydrator->hydrate($document);
+				$createData->offsetSet('account', $account);
 				$createData->offsetSet('verificationHash', $this->securityHash->createKey());
 				$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
 
@@ -273,7 +280,7 @@ final class EmailsV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		$document = $this->createDocument($request);
 
-		$email = $this->findEmail($request);
+		$email = $this->findEmail($request, $this->findAccount($request));
 
 		$this->validateIdentifier($request, $document);
 
@@ -355,7 +362,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		Message\ServerRequestInterface $request,
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
-		$email = $this->findEmail($request);
+		$email = $this->findEmail($request, $this->findAccount($request));
 
 		if ($email->isDefault()) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -416,7 +423,7 @@ final class EmailsV1Controller extends BaseV1Controller
 		NodeWebServerHttp\Response $response
 	): NodeWebServerHttp\Response {
 		// At first, try to load email
-		$email = $this->findEmail($request);
+		$email = $this->findEmail($request, $this->findAccount($request));
 
 		// & relation entity name
 		$relationEntity = strtolower($request->getAttribute(Router\Router::RELATION_ENTITY));

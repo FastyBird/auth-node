@@ -34,7 +34,13 @@
     "relationships" : {
       "identities" : {
         "links" : {
-          "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/identities"
+          "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/identities",
+          "related" : {
+            "href" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/identities",
+            "meta" : {
+              "count" : 1
+            }
+          }
         },
         "data" : [
           {
@@ -56,7 +62,13 @@
       },
       "emails" : {
         "links" : {
-          "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/emails"
+          "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/emails",
+          "related" : {
+            "href" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/emails",
+            "meta" : {
+              "count" : 1
+            }
+          }
         },
         "data" : [
           {
@@ -67,7 +79,8 @@
       },
       "parent" : {
         "links" : {
-          "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/parent"
+          "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/parent",
+          "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
         },
         "data" : {
           "type" : "auth-node/user-account",
@@ -76,7 +89,13 @@
       },
       "children" : {
         "links" : {
-          "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/children"
+          "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/children",
+          "related" : {
+            "href" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/children",
+            "meta" : {
+              "count" : 0
+            }
+          }
         },
         "data" : []
       }

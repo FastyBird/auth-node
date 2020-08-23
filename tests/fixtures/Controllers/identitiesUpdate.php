@@ -7,8 +7,7 @@ const EXPIRED_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3MjFlMTAy
 const INVALID_TOKEN = 'eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
 const USER_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3YzVkNzdhZC1kOTNlLTRjMmMtOThlNS05ZTFhZmM0NDQ2MTUiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiZWZiZmJkZWYtYmZiZC02OGVmLWJmYmQtNzcwYjQwZWZiZmJkIiwicm9sZXMiOlsidXNlciJdfQ.cbatWCuGX-K8XbF9MMN7DqxV9hriWmUSGcDGGmnxXX0';
 
-const ADMINISTRATOR_IDENTITY_ID = '77331268-efbf-bd34-49ef-bfbdefbfbd04';
-const USER_IDENTITY_ID = 'faf7a863-a49c-4428-a757-1de537773355';
+const MACHINE_ACCOUNT_ID = 'ff32ac4e-f010-4c85-9cb3-d310f6708a4e';
 const MACHINE_IDENTITY_ID = '540f6cfc-39d1-4175-87fb-aac729d78c0a';
 const UNKNOWN_ID = '83985c13-238c-46bd-aacb-2359d5c921a7';
 
@@ -16,7 +15,7 @@ return [
 	// Valid responses
 	//////////////////
 	'update'       => [
-		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . MACHINE_IDENTITY_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_OK,
@@ -26,56 +25,56 @@ return [
 	// Invalid responses
 	////////////////////
 	'unknown'      => [
-		'/v1/identities/' . UNKNOWN_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . UNKNOWN_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.invalid.id.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',
 	],
 	'invalidType'  => [
-		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . MACHINE_IDENTITY_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.invalid.type.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/invalid.type.json',
 	],
 	'idMismatch'   => [
-		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . MACHINE_IDENTITY_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.invalid.id.json'),
 		StatusCodeInterface::STATUS_BAD_REQUEST,
 		__DIR__ . '/responses/generic/invalid.identifier.json',
 	],
 	'noToken'      => [
-		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . MACHINE_IDENTITY_ID,
 		null,
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'emptyToken'   => [
-		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . MACHINE_IDENTITY_ID,
 		'',
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'userToken'    => [
-		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . MACHINE_IDENTITY_ID,
 		'Bearer ' . USER_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'invalidToken' => [
-		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . MACHINE_IDENTITY_ID,
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'expiredToken' => [
-		'/v1/identities/' . MACHINE_IDENTITY_ID,
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities/' . MACHINE_IDENTITY_ID,
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.update.machine.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,

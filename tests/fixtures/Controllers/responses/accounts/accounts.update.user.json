@@ -34,7 +34,13 @@
     "relationships" : {
       "identities" : {
         "links" : {
-          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/identities"
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/identities",
+          "related" : {
+            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities",
+            "meta" : {
+              "count" : 1
+            }
+          }
         },
         "data" : [
           {
@@ -56,7 +62,13 @@
       },
       "emails" : {
         "links" : {
-          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/emails"
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/emails",
+          "related" : {
+            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/emails",
+            "meta" : {
+              "count" : 2
+            }
+          }
         },
         "data" : [
           {
@@ -71,13 +83,20 @@
       },
       "parent" : {
         "links" : {
-          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent"
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent",
+          "related" : "/auth-node/user-account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/parent"
         },
         "data" : null
       },
       "children" : {
         "links" : {
-          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children"
+          "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children",
+          "related" : {
+            "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/children",
+            "meta" : {
+              "count" : 5
+            }
+          }
         },
         "data" : [
           {

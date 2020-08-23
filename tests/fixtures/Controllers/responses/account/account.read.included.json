@@ -34,7 +34,13 @@
     "relationships" : {
       "identities" : {
         "links" : {
-          "self" : "/v1/me/relationships/identities"
+          "self" : "/v1/me/relationships/identities",
+          "related" : {
+            "href" : "/v1/me/identities",
+            "meta" : {
+              "count" : 1
+            }
+          }
         },
         "data" : [
           {
@@ -56,7 +62,13 @@
       },
       "emails" : {
         "links" : {
-          "self" : "/v1/me/relationships/emails"
+          "self" : "/v1/me/relationships/emails",
+          "related" : {
+            "href" : "/v1/me/emails",
+            "meta" : {
+              "count" : 2
+            }
+          }
         },
         "data" : [
           {

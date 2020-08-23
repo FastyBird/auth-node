@@ -7,18 +7,21 @@ const EXPIRED_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3MjFlMTAy
 const INVALID_TOKEN = 'eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZmYiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiNWU3OWVmYmYtYmQwZC01YjdjLTQ2ZWYtYmZiZGVmYmZiZDM0Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdfQ.Lb-zUa9DL7swdVSEuPTqaR9FvLgKwuEtrhxiJFWjhU8';
 const USER_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI3YzVkNzdhZC1kOTNlLTRjMmMtOThlNS05ZTFhZmM0NDQ2MTUiLCJpc3MiOiJjb20uZmFzdHliaXJkLmF1dGgtbm9kZSIsImlhdCI6MTU4NTc0MjQwMCwiZXhwIjoxNTg1NzQ5NjAwLCJ1c2VyIjoiZWZiZmJkZWYtYmZiZC02OGVmLWJmYmQtNzcwYjQwZWZiZmJkIiwicm9sZXMiOlsidXNlciJdfQ.cbatWCuGX-K8XbF9MMN7DqxV9hriWmUSGcDGGmnxXX0';
 
+const ADMINISTRATOR_ACCOUNT_ID = '5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34';
+const MACHINE_ACCOUNT_ID = '16e5db29-0006-4484-ac38-5cdea5a008f5';
+
 return [
 	// Valid responses
 	//////////////////
 	'createUser'          => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.user.json'),
 		StatusCodeInterface::STATUS_CREATED,
 		__DIR__ . '/responses/identities/identities.create.user.json',
 	],
 	'createMachine'       => [
-		'/v1/identities',
+		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/identities',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.machine.json'),
 		StatusCodeInterface::STATUS_CREATED,
@@ -28,70 +31,70 @@ return [
 	// Invalid responses
 	////////////////////
 	'missingRequired'     => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.missing.required.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/identities/identities.create.missing.required.json',
 	],
 	'missingRelation'     => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.missing.relation.json'),
 		StatusCodeInterface::STATUS_BAD_REQUEST,
 		__DIR__ . '/responses/identities/identities.create.missing.relation.json',
 	],
 	'invalidType'         => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.invalid.type.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/invalid.type.json',
 	],
 	'identifierNotUnique' => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.identifier.notUnique.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/identifier.notUnique.json',
 	],
 	'usedUid'             => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.usedUid.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/identities/identities.create.usedUid.json',
 	],
 	'noToken'             => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		null,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'emptyToken'          => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'',
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'userToken'           => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . USER_TOKEN,
 		file_get_contents(__DIR__ . '/responses/identities/identities.create.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
 	'invalidToken'        => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.user.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/generic/unauthorized.json',
 	],
 	'expiredToken'        => [
-		'/v1/identities',
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/identities',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/identities/identities.create.user.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,

@@ -83,28 +83,6 @@ final class AccountV1Controller extends BaseV1Controller
 	 *
 	 * @return NodeWebServerHttp\Response
 	 *
-	 * @Secured
-	 * @Secured\User(guest)
-	 */
-	public function create(
-		Message\ServerRequestInterface $request,
-		NodeWebServerHttp\Response $response
-	): NodeWebServerHttp\Response {
-		// TODO: Registration not implemented yet
-
-		/** @var NodeWebServerHttp\Response $response */
-		$response = $response
-			->withStatus(StatusCodeInterface::STATUS_ACCEPTED);
-
-		return $response;
-	}
-
-	/**
-	 * @param Message\ServerRequestInterface $request
-	 * @param NodeWebServerHttp\Response $response
-	 *
-	 * @return NodeWebServerHttp\Response
-	 *
 	 * @throws NodeJsonApiExceptions\IJsonApiException
 	 * @throws Doctrine\DBAL\ConnectionException
 	 *

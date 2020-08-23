@@ -84,7 +84,8 @@ abstract class IdentitySchema extends NodeJsonApiSchemas\JsonApiSchema
 			$this->router->urlFor(
 				AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY,
 				[
-					Router\Router::URL_ITEM_ID => (string) $identity->getId(),
+					Router\Router::URL_ACCOUNT_ID => $identity->getAccount()->getPlainId(),
+					Router\Router::URL_ITEM_ID    => (string) $identity->getId(),
 				]
 			),
 			false
@@ -107,9 +108,35 @@ abstract class IdentitySchema extends NodeJsonApiSchemas\JsonApiSchema
 			self::RELATIONSHIPS_ACCOUNT => [
 				self::RELATIONSHIP_DATA          => $identity->getAccount(),
 				self::RELATIONSHIP_LINKS_SELF    => true,
-				self::RELATIONSHIP_LINKS_RELATED => false,
+				self::RELATIONSHIP_LINKS_RELATED => true,
 			],
 		];
+	}
+
+	/**
+	 * @param Entities\Identities\IIdentity $identity
+	 * @param string $name
+	 *
+	 * @return JsonApi\Contracts\Schema\LinkInterface
+	 *
+	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+	 */
+	public function getRelationshipRelatedLink($identity, string $name): JsonApi\Contracts\Schema\LinkInterface
+	{
+		if ($name === self::RELATIONSHIPS_ACCOUNT) {
+			return new JsonApi\Schema\Link(
+				false,
+				$this->router->urlFor(
+					AuthNode\Constants::ROUTE_NAME_ACCOUNT,
+					[
+						Router\Router::URL_ITEM_ID => $identity->getAccount()->getPlainId(),
+					]
+				),
+				false
+			);
+		}
+
+		return parent::getRelationshipRelatedLink($identity, $name);
 	}
 
 	/**
@@ -130,6 +157,7 @@ abstract class IdentitySchema extends NodeJsonApiSchemas\JsonApiSchema
 				$this->router->urlFor(
 					AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY_RELATIONSHIP,
 					[
+						Router\Router::URL_ACCOUNT_ID  => $identity->getAccount()->getPlainId(),
 						Router\Router::URL_ITEM_ID     => (string) $identity->getId(),
 						Router\Router::RELATION_ENTITY => $name,
 					]

@@ -21,7 +21,8 @@
       "relationships" : {
         "account" : {
           "links" : {
-            "self" : "/v1/me/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04/relationships/account"
+            "self" : "/v1/me/identities/77331268-efbf-bd34-49ef-bfbdefbfbd04/relationships/account",
+            "related" : "/v1/me"
           },
           "data" : {
             "type" : "auth-node/user-account",

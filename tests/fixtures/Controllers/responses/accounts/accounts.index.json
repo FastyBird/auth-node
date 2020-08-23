@@ -22,7 +22,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/relationships/identities"
+            "self" : "/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/16e5db29-0006-4484-ac38-5cdea5a008f5/identities",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -54,7 +60,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/relationships/identities"
+            "self" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/f3cce15a-f956-4c7e-a4b3-ac31a0017ac9/identities",
+              "meta" : {
+                "count" : 0
+              }
+            }
           },
           "data" : []
         },
@@ -81,7 +93,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/relationships/identities"
+            "self" : "/v1/accounts/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/ff32ac4e-f010-4c85-9cb3-d310f6708a4e/identities",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -126,7 +144,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/identities"
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/identities",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -148,7 +172,13 @@
         },
         "emails" : {
           "links" : {
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/emails"
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/emails",
+            "related" : {
+              "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/emails",
+              "meta" : {
+                "count" : 2
+              }
+            }
           },
           "data" : [
             {
@@ -163,13 +193,20 @@
         },
         "parent" : {
           "links" : {
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent"
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent",
+            "related" : "/auth-node/user-account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/parent"
           },
           "data" : null
         },
         "children" : {
           "links" : {
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children"
+            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/children",
+              "meta" : {
+                "count" : 5
+              }
+            }
           },
           "data" : [
             {
@@ -224,7 +261,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/identities"
+            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/identities",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -246,7 +289,13 @@
         },
         "emails" : {
           "links" : {
-            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/emails"
+            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/emails",
+            "related" : {
+              "href" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/emails",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -257,7 +306,8 @@
         },
         "parent" : {
           "links" : {
-            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/parent"
+            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/parent",
+            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
           },
           "data" : {
             "type" : "auth-node/user-account",
@@ -266,7 +316,13 @@
         },
         "children" : {
           "links" : {
-            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/children"
+            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
           },
           "data" : []
         }
@@ -300,7 +356,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/identities"
+            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/identities",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -317,7 +379,13 @@
         },
         "emails" : {
           "links" : {
-            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/emails"
+            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/emails",
+            "related" : {
+              "href" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/emails",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -328,7 +396,8 @@
         },
         "parent" : {
           "links" : {
-            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/parent"
+            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/parent",
+            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
           },
           "data" : {
             "type" : "auth-node/user-account",
@@ -337,7 +406,13 @@
         },
         "children" : {
           "links" : {
-            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/children"
+            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
           },
           "data" : []
         }
@@ -371,7 +446,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/identities"
+            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/identities",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -388,7 +469,13 @@
         },
         "emails" : {
           "links" : {
-            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/emails"
+            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/emails",
+            "related" : {
+              "href" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/emails",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -399,7 +486,8 @@
         },
         "parent" : {
           "links" : {
-            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/parent"
+            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/parent",
+            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
           },
           "data" : {
             "type" : "auth-node/user-account",
@@ -408,7 +496,13 @@
         },
         "children" : {
           "links" : {
-            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/children"
+            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
           },
           "data" : []
         }
@@ -442,7 +536,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/identities"
+            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/identities",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -459,7 +559,13 @@
         },
         "emails" : {
           "links" : {
-            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/emails"
+            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/emails",
+            "related" : {
+              "href" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/emails",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -470,7 +576,8 @@
         },
         "parent" : {
           "links" : {
-            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/parent"
+            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/parent",
+            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
           },
           "data" : {
             "type" : "auth-node/user-account",
@@ -479,7 +586,13 @@
         },
         "children" : {
           "links" : {
-            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/children"
+            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
           },
           "data" : []
         }
@@ -513,7 +626,13 @@
       "relationships" : {
         "identities" : {
           "links" : {
-            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/identities"
+            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/identities",
+            "related" : {
+              "href" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/identities",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -530,7 +649,13 @@
         },
         "emails" : {
           "links" : {
-            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/emails"
+            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/emails",
+            "related" : {
+              "href" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/emails",
+              "meta" : {
+                "count" : 1
+              }
+            }
           },
           "data" : [
             {
@@ -541,7 +666,8 @@
         },
         "parent" : {
           "links" : {
-            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/parent"
+            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/parent",
+            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
           },
           "data" : {
             "type" : "auth-node/user-account",
@@ -550,7 +676,13 @@
         },
         "children" : {
           "links" : {
-            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/children"
+            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/children",
+            "related" : {
+              "href" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/children",
+              "meta" : {
+                "count" : 0
+              }
+            }
           },
           "data" : []
         }

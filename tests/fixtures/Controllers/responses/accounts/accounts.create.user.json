@@ -34,7 +34,13 @@
     "relationships" : {
       "identities" : {
         "links" : {
-          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/identities"
+          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/identities",
+          "related" : {
+            "href" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/identities",
+            "meta" : {
+              "count" : 0
+            }
+          }
         },
         "data" : []
       },
@@ -51,13 +57,20 @@
       },
       "emails" : {
         "links" : {
-          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/emails"
+          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/emails",
+          "related" : {
+            "href" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/emails",
+            "meta" : {
+              "count" : 0
+            }
+          }
         },
         "data" : []
       },
       "parent" : {
         "links" : {
-          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/parent"
+          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/parent",
+          "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
         },
         "data" : {
           "type" : "auth-node/user-account",
@@ -66,7 +79,13 @@
       },
       "children" : {
         "links" : {
-          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/children"
+          "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/children",
+          "related" : {
+            "href" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/children",
+            "meta" : {
+              "count" : 0
+            }
+          }
         },
         "data" : []
       }
