@@ -29,49 +29,6 @@ interface IUserAccount extends IAccount
 {
 
 	/**
-	 * @param Entities\Accounts\IUserAccount|null $account
-	 *
-	 * @return void
-	 */
-	public function setParent(?Entities\Accounts\IUserAccount $account): void;
-
-	/**
-	 * @return Entities\Accounts\IUserAccount|null
-	 */
-	public function getParent(): ?Entities\Accounts\IUserAccount;
-
-	/**
-	 * @return bool
-	 */
-	public function hasParent(): bool;
-
-	/**
-	 * @param Entities\Accounts\IUserAccount[] $children
-	 *
-	 * @return void
-	 */
-	public function setChildren(array $children): void;
-
-	/**
-	 * @param Entities\Accounts\IUserAccount $child
-	 *
-	 * @return void
-	 */
-	public function addChild(Entities\Accounts\IUserAccount $child): void;
-
-	/**
-	 * @return Entities\Accounts\IUserAccount[]
-	 */
-	public function getChildren(): array;
-
-	/**
-	 * @param Entities\Accounts\IUserAccount $child
-	 *
-	 * @return void
-	 */
-	public function removeChild(Entities\Accounts\IUserAccount $child): void;
-
-	/**
 	 * @return Entities\Details\IDetails
 	 */
 	public function getDetails(): Entities\Details\IDetails;

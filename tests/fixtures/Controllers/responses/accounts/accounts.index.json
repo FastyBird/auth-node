@@ -190,46 +190,6 @@
               "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c"
             }
           ]
-        },
-        "parent" : {
-          "links" : {
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent",
-            "related" : "/auth-node/user-account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/parent"
-          },
-          "data" : null
-        },
-        "children" : {
-          "links" : {
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children",
-            "related" : {
-              "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/children",
-              "meta" : {
-                "count" : 5
-              }
-            }
-          },
-          "data" : [
-            {
-              "type" : "auth-node/user-account",
-              "id" : "efbfbdef-bfbd-68ef-bfbd-770b40efbfbd"
-            },
-            {
-              "type" : "auth-node/user-account",
-              "id" : "fae8d781-7e2c-4318-9c85-43ba637d14c5"
-            },
-            {
-              "type" : "auth-node/user-account",
-              "id" : "fd23ccb4-8d87-4eb3-94da-638ab4e10ae3"
-            },
-            {
-              "type" : "auth-node/user-account",
-              "id" : "fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4"
-            },
-            {
-              "type" : "auth-node/user-account",
-              "id" : "fe115286-8cfd-41bf-aceb-6ca95baf6fe9"
-            }
-          ]
         }
       },
       "links" : {
@@ -303,28 +263,6 @@
               "id" : "73efbfbd-efbf-bd36-44ef-bfbdefbfbd7a"
             }
           ]
-        },
-        "parent" : {
-          "links" : {
-            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/parent",
-            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          },
-          "data" : {
-            "type" : "auth-node/user-account",
-            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          }
-        },
-        "children" : {
-          "links" : {
-            "self" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/relationships/children",
-            "related" : {
-              "href" : "/v1/accounts/efbfbdef-bfbd-68ef-bfbd-770b40efbfbd/children",
-              "meta" : {
-                "count" : 0
-              }
-            }
-          },
-          "data" : []
         }
       },
       "links" : {
@@ -393,28 +331,6 @@
               "id" : "ed987404-f14c-40b4-9150-15b6590deb8c"
             }
           ]
-        },
-        "parent" : {
-          "links" : {
-            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/parent",
-            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          },
-          "data" : {
-            "type" : "auth-node/user-account",
-            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          }
-        },
-        "children" : {
-          "links" : {
-            "self" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/relationships/children",
-            "related" : {
-              "href" : "/v1/accounts/fae8d781-7e2c-4318-9c85-43ba637d14c5/children",
-              "meta" : {
-                "count" : 0
-              }
-            }
-          },
-          "data" : []
         }
       },
       "links" : {
@@ -483,28 +399,6 @@
               "id" : "baefec20-1927-41ce-a7e0-ae74bd641b9c"
             }
           ]
-        },
-        "parent" : {
-          "links" : {
-            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/parent",
-            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          },
-          "data" : {
-            "type" : "auth-node/user-account",
-            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          }
-        },
-        "children" : {
-          "links" : {
-            "self" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/relationships/children",
-            "related" : {
-              "href" : "/v1/accounts/fd23ccb4-8d87-4eb3-94da-638ab4e10ae3/children",
-              "meta" : {
-                "count" : 0
-              }
-            }
-          },
-          "data" : []
         }
       },
       "links" : {
@@ -573,28 +467,6 @@
               "id" : "eb54a59e-5c7a-41e5-bfac-4fb6ec4d6ad9"
             }
           ]
-        },
-        "parent" : {
-          "links" : {
-            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/parent",
-            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          },
-          "data" : {
-            "type" : "auth-node/user-account",
-            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          }
-        },
-        "children" : {
-          "links" : {
-            "self" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/relationships/children",
-            "related" : {
-              "href" : "/v1/accounts/fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4/children",
-              "meta" : {
-                "count" : 0
-              }
-            }
-          },
-          "data" : []
         }
       },
       "links" : {
@@ -663,28 +535,6 @@
               "id" : "7d60dd96-efbf-bd53-4e2b-efbfbdefbfbd"
             }
           ]
-        },
-        "parent" : {
-          "links" : {
-            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/parent",
-            "related" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          },
-          "data" : {
-            "type" : "auth-node/user-account",
-            "id" : "5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34"
-          }
-        },
-        "children" : {
-          "links" : {
-            "self" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/relationships/children",
-            "related" : {
-              "href" : "/v1/accounts/fe115286-8cfd-41bf-aceb-6ca95baf6fe9/children",
-              "meta" : {
-                "count" : 0
-              }
-            }
-          },
-          "data" : []
         }
       },
       "links" : {

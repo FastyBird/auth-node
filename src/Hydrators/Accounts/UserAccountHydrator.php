@@ -47,7 +47,6 @@ class UserAccountHydrator extends AccountHydrator
 
 	/** @var string[] */
 	protected $relationships = [
-		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_PARENT,
 		Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_ROLES,
 	];
 

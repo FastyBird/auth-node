@@ -220,10 +220,7 @@ services:
 
 	- {factory: FastyBird\AuthNode\Subscribers\EntitiesSubscriber}
 
-	-
-		factory: FastyBird\AuthNode\Subscribers\AccountEntitySubscriber
-		arguments:
-			singleAdministrator: %security.singleAdministrator%
+	- {factory: FastyBird\AuthNode\Subscribers\AccountEntitySubscriber}
 
 	# Database repositories
 
@@ -279,8 +276,6 @@ services:
 	- {factory: FastyBird\AuthNode\Controllers\AccountIdentitiesV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\AccountsV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\AccountChildrenV1Controller, tags: [nette.inject]}
 
 	- {factory: FastyBird\AuthNode\Controllers\EmailsV1Controller, tags: [nette.inject]}
 

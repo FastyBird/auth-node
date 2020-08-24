@@ -62,29 +62,6 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/identifier.notUnique.json',
 	],
-	'missingParent'          => [
-		'/v1/accounts',
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		file_get_contents(__DIR__ . '/requests/accounts/accounts.create.missing.parent.json'),
-		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/accounts/accounts.missing.parent.json',
-	],
-	// As parent is set account with other parent
-	'invalidParent'          => [
-		'/v1/accounts',
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		file_get_contents(__DIR__ . '/requests/accounts/accounts.create.invalid.parent.json'),
-		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/accounts/accounts.invalid.parent.json',
-	],
-	// Administrator role is only for parent account
-	'invalidRole'            => [
-		'/v1/accounts',
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		file_get_contents(__DIR__ . '/requests/accounts/accounts.create.invalid.role.json'),
-		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/accounts/accounts.invalid.role.json',
-	],
 	// User role could not be combined with other roles
 	'invalidRoles'           => [
 		'/v1/accounts',

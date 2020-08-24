@@ -88,42 +88,6 @@ final class UrlFormatMiddleware implements MiddlewareInterface
 			$content = str_replace('\/v1\/identities', '\/v1\/me\/identities', $content);
 			$content = str_replace('\/v1\/accounts\/' . $this->user->getAccount()->getPlainId(), '\/v1\/me', $content);
 
-			if ($content !== '') {
-				try {
-					$contentJson = Utils\Json::decode($content, Utils\Json::FORCE_ARRAY);
-
-					if (array_key_exists('data', $contentJson)) {
-						$data = $contentJson['data'];
-
-						if (is_array($data) && array_key_exists('relationships', $data)) {
-							$relationships = $data['relationships'];
-
-							if (is_array($relationships)) {
-								if (array_key_exists('parent', $relationships)) {
-									unset($relationships['parent']);
-								}
-								if (array_key_exists('children', $relationships)) {
-									unset($relationships['children']);
-								}
-							}
-
-							$data['relationships'] = $relationships;
-						}
-
-						$contentJson['data'] = $data;
-					}
-
-					$content = Utils\Json::encode($contentJson, Utils\Json::PRETTY);
-
-				} catch (Utils\JsonException $ex) {
-					throw new NodeJsonApiExceptions\JsonApiErrorException(
-						StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR,
-						$this->translator->translate('//node.base.messages.failed.heading'),
-						$this->translator->translate('//node.base.messages.failed.message')
-					);
-				}
-			}
-
 			$response = $response->withBody(Http\Stream::fromBodyString($content));
 		}
 

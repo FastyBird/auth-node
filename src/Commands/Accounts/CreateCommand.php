@@ -256,10 +256,6 @@ class CreateCommand extends Console\Command\Command
 			$create->offsetSet('state', Types\AccountStateType::get(Types\AccountStateType::STATE_ACTIVE));
 			$create->offsetSet('roles', [$role]);
 
-			if ($role->getRoleId() === NodeAuth\Constants::ROLE_ADMINISTRATOR) {
-				$create->offsetSet('parent', null);
-			}
-
 			$details = new Utils\ArrayHash();
 			$details->offsetSet('entity', Entities\Details\Details::class);
 			$details->offsetSet('firstName', $firstName);

@@ -51,9 +51,6 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 		NodeAuth\Constants::ROLE_ANONYMOUS,
 	];
 
-	/** @var bool */
-	private $singleAdministrator;
-
 	/** @var Models\Accounts\IAccountRepository */
 	private $accountRepository;
 
@@ -69,18 +66,14 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 	{
 		return [
 			ORM\Events::prePersist,
-			ORM\Events::preFlush,
 			ORM\Events::onFlush,
 		];
 	}
 
 	public function __construct(
-		bool $singleAdministrator,
 		Models\Accounts\IAccountRepository $accountRepository,
 		Models\Roles\IRoleRepository $roleRepository
 	) {
-		$this->singleAdministrator = $singleAdministrator;
-
 		$this->accountRepository = $accountRepository;
 		$this->roleRepository = $roleRepository;
 	}
@@ -126,39 +119,6 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param ORM\Event\PreFlushEventArgs $eventArgs
-	 *
-	 * @return void
-	 *
-	 * @throws Throwable
-	 */
-	public function preFlush(ORM\Event\PreFlushEventArgs $eventArgs): void
-	{
-		$em = $eventArgs->getEntityManager();
-		$uow = $em->getUnitOfWork();
-
-		// Check all scheduled updates
-		foreach (array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledEntityUpdates()) as $object) {
-			if ($object instanceof Entities\Accounts\IUserAccount) {
-				/**
-				 * When node is single administrator mode
-				 * every user have to have as a parent administrator account
-				 *
-				 * This check is skipped when node is without administrator account
-				 */
-				if (
-					$this->singleAdministrator
-					&& $this->getAdministrator() !== null
-					&& !$object->hasParent()
-					&& !$object->getId()->equals($this->getAdministrator()->getId())
-				) {
-					throw new Exceptions\RelationEntityRequired('Account parent entity have to be defined');
-				}
-			}
-		}
-	}
-
-	/**
 	 * @param ORM\Event\OnFlushEventArgs $eventArgs
 	 *
 	 * @return void
@@ -173,48 +133,7 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 		// Check all scheduled updates
 		foreach (array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledEntityUpdates()) as $object) {
 			if ($object instanceof Entities\Accounts\IUserAccount) {
-				/**
-				 * When in node is single administrator mode
-				 * every user have to have as a parent administrator account
-				 *
-				 * This check is skipped when node is without administrator account
-				 */
-				if (
-					$this->singleAdministrator
-					&& $this->getAdministrator() !== null
-					&& $object->getParent() !== null
-					&& !$object->getParent()->getId()->equals($this->getAdministrator()->getId())
-				) {
-					throw new Exceptions\ParentInvalidException('Provided parent entity is not node administrator');
-				}
-
-				/**
-				 * When node is single administrator mode
-				 * every user have to have as a parent administrator account
-				 *
-				 * This check is skipped when node is without administrator account
-				 */
-				if (
-					$this->singleAdministrator
-					&& $this->getAdministrator() !== null
-					&& !$object->hasParent()
-					&& !$object->getId()->equals($this->getAdministrator()->getId())
-				) {
-					throw new Exceptions\RelationEntityRequired('Account parent entity have to be defined');
-				}
-
 				foreach ($object->getRoles() as $role) {
-					/**
-					 * If account has administrator role
-					 * it have to be a account without parent
-					 */
-					if (
-						$role->getRoleId() === NodeAuth\Constants::ROLE_ADMINISTRATOR
-						&& $object->hasParent()
-					) {
-						throw new Exceptions\AccountRoleInvalidException('Account with administrator role have to be without parent');
-					}
-
 					/**
 					 * Special roles like administrator or user
 					 * can not be assigned to account with other roles
@@ -234,13 +153,6 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 						throw new Exceptions\AccountRoleInvalidException(sprintf('Role %s could not be assigned to account', $role->getRoleId()));
 					}
 				}
-
-				if (
-					!$object->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)
-					&& count($object->getChildren())
-				) {
-					throw new Exceptions\AccountRoleInvalidException('Only account with administrator role could have children');
-				}
 			}
 		}
 	}
@@ -252,10 +164,6 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 	 */
 	private function getAdministrator(): ?Entities\Accounts\IUserAccount
 	{
-		if (!$this->singleAdministrator) {
-			throw new Exceptions\InvalidArgumentException('Node is in multi-administrator mode');
-		}
-
 		$findRole = new Queries\FindRolesQuery();
 		$findRole->byName(NodeAuth\Constants::ROLE_ADMINISTRATOR);
 

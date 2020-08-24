@@ -86,46 +86,6 @@
               "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c"
             }
           ]
-        },
-        "parent" : {
-          "links" : {
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/parent",
-            "related" : "/auth-node/user-account/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/parent"
-          },
-          "data" : null
-        },
-        "children" : {
-          "links" : {
-            "self" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/relationships/children",
-            "related" : {
-              "href" : "/v1/accounts/5e79efbf-bd0d-5b7c-46ef-bfbdefbfbd34/children",
-              "meta" : {
-                "count" : 5
-              }
-            }
-          },
-          "data" : [
-            {
-              "type" : "auth-node/user-account",
-              "id" : "efbfbdef-bfbd-68ef-bfbd-770b40efbfbd"
-            },
-            {
-              "type" : "auth-node/user-account",
-              "id" : "fae8d781-7e2c-4318-9c85-43ba637d14c5"
-            },
-            {
-              "type" : "auth-node/user-account",
-              "id" : "fd23ccb4-8d87-4eb3-94da-638ab4e10ae3"
-            },
-            {
-              "type" : "auth-node/user-account",
-              "id" : "fdbe2ce2-3b18-41f1-aaab-c3c56d286eb4"
-            },
-            {
-              "type" : "auth-node/user-account",
-              "id" : "fe115286-8cfd-41bf-aceb-6ca95baf6fe9"
-            }
-          ]
         }
       },
       "links" : {

@@ -24,5 +24,4 @@ parameters:
 		port: 8000
 
 	security:
-		singleAdministrator: true
 		signature: 'g3xHbkELpMD9LRqW4WmJkHL7kz2bdNYAQJyEuFVzR3k='

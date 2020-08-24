@@ -166,26 +166,6 @@ final class AccountsV1Controller extends BaseV1Controller
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			throw $ex;
 
-		} catch (Exceptions\RelationEntityRequired $ex) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRelation.heading'),
-				$this->translator->translate('//node.base.messages.missingRelation.message'),
-				[
-					'pointer' => '/data/relationships/parent/data/id',
-				]
-			);
-
-		} catch (Exceptions\ParentInvalidException | Exceptions\ParentWithParentException $ex) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.invalidRelation.heading'),
-				$this->translator->translate('//node.base.messages.invalidRelation.message'),
-				[
-					'pointer' => '/data/relationships/parent/data/id',
-				]
-			);
-
 		} catch (Exceptions\AccountRoleInvalidException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
 				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
@@ -324,26 +304,6 @@ final class AccountsV1Controller extends BaseV1Controller
 
 		} catch (NodeJsonApiExceptions\IJsonApiException $ex) {
 			throw $ex;
-
-		} catch (Exceptions\RelationEntityRequired $ex) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.missingRelation.heading'),
-				$this->translator->translate('//node.base.messages.missingRelation.message'),
-				[
-					'pointer' => '/data/relationships/parent/data/id',
-				]
-			);
-
-		} catch (Exceptions\ParentInvalidException | Exceptions\ParentWithParentException $ex) {
-			throw new NodeJsonApiExceptions\JsonApiErrorException(
-				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-				$this->translator->translate('//node.base.messages.invalidRelation.heading'),
-				$this->translator->translate('//node.base.messages.invalidRelation.message'),
-				[
-					'pointer' => '/data/relationships/parent/data/id',
-				]
-			);
 
 		} catch (Exceptions\AccountRoleInvalidException $ex) {
 			throw new NodeJsonApiExceptions\JsonApiErrorException(
@@ -488,15 +448,7 @@ final class AccountsV1Controller extends BaseV1Controller
 		}
 
 		if ($account instanceof Entities\Accounts\IUserAccount) {
-			if ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_PARENT) {
-				return $response
-					->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getParent()));
-
-			} elseif ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_CHILDREN) {
-				return $response
-					->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getChildren()));
-
-			} elseif ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_EMAILS) {
+			if ($relationEntity === Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_EMAILS) {
 				return $response
 					->withEntity(NodeWebServerHttp\ScalarEntity::from($account->getEmails()));
 			}

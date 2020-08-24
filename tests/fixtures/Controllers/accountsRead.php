@@ -34,23 +34,11 @@ return [
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/accounts/accounts.read.user.json',
 	],
-	'readOneChildUser'               => [
-		'/v1/accounts/' . CHILD_USER_ACCOUNT_ID,
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/accounts/accounts.read.childUser.json',
-	],
 	'readOneMachine'                 => [
 		'/v1/accounts/' . MACHINE_ACCOUNT_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/accounts/accounts.read.machine.json',
-	],
-	'readUserAccountChildren'        => [
-		'/v1/accounts/' . USER_ACCOUNT_ID . '/children',
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/accounts/accounts.read.user.children.json',
 	],
 	'readRelationshipsIdentities'    => [
 		'/v1/accounts/' . USER_ACCOUNT_ID . '/relationships/' . Schemas\Accounts\AccountSchema::RELATIONSHIPS_IDENTITIES,
@@ -70,29 +58,11 @@ return [
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/accounts/accounts.relationships.emails.json',
 	],
-	'readRelationshipsChildren'      => [
-		'/v1/accounts/' . USER_ACCOUNT_ID . '/relationships/' . Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_CHILDREN,
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/accounts/accounts.relationships.children.json',
-	],
-	'readRelationshipsParent'        => [
-		'/v1/accounts/' . CHILD_USER_ACCOUNT_ID . '/relationships/' . Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_PARENT,
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		StatusCodeInterface::STATUS_OK,
-		__DIR__ . '/responses/accounts/accounts.relationships.parent.json',
-	],
 
 	// Invalid responses
 	////////////////////
 	'readOneUnknown'                 => [
 		'/v1/accounts/' . UNKNOWN_ID,
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		StatusCodeInterface::STATUS_NOT_FOUND,
-		__DIR__ . '/responses/generic/notFound.json',
-	],
-	'readMachineAccountChildren'     => [
-		'/v1/accounts/' . MACHINE_ACCOUNT_ID . '/children',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',
@@ -104,7 +74,7 @@ return [
 		__DIR__ . '/responses/generic/relation.unknown.json',
 	],
 	'readRelationshipsUnknownEntity' => [
-		'/v1/accounts/' . UNKNOWN_ID . '/relationships/' . Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_CHILDREN,
+		'/v1/accounts/' . UNKNOWN_ID . '/relationships/' . Schemas\Accounts\UserAccountSchema::RELATIONSHIPS_EMAILS,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',

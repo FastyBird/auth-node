@@ -90,29 +90,6 @@ class FindAccountsQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
-	 * @param Entities\Accounts\IAccount $account
-	 *
-	 * @return void
-	 */
-	public function forParent(Entities\Accounts\IAccount $account): void
-	{
-		$this->select[] = function (ORM\QueryBuilder $qb) use ($account): void {
-			if ($account instanceof Entities\Accounts\IUserAccount) {
-				$qb->innerJoin(Entities\Accounts\UserAccount::class, 'ua', ORM\Query\Expr\Join::WITH, 'ua.id = a.id');
-				$qb->join('ua.parent', 'parent');
-
-			} elseif ($account instanceof Entities\Accounts\IMachineAccount) {
-				$qb->innerJoin(Entities\Accounts\MachineAccount::class, 'ma', ORM\Query\Expr\Join::WITH, 'ma.id = a.id');
-				$qb->join('ma.parent', 'parent');
-			}
-		};
-
-		$this->filter[] = function (ORM\QueryBuilder $qb) use ($account): void {
-			$qb->andWhere('parent.id = :parent')->setParameter('parent', $account->getId(), Uuid\Doctrine\UuidBinaryType::NAME);
-		};
-	}
-
-	/**
 	 * @param ORM\EntityRepository<Entities\Accounts\Account> $repository
 	 *
 	 * @return ORM\QueryBuilder

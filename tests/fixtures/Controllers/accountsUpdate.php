@@ -60,38 +60,6 @@ return [
 		StatusCodeInterface::STATUS_BAD_REQUEST,
 		__DIR__ . '/responses/generic/invalid.identifier.json',
 	],
-	// As parent is set account with other parent
-	'invalidParent'            => [
-		'/v1/accounts/' . CHILD_USER_ACCOUNT_ID,
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.invalid.parent.json'),
-		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/accounts/accounts.invalid.parent.json',
-	],
-	// Trying to remove parent from user account
-	'removeParent'             => [
-		'/v1/accounts/' . CHILD_USER_ACCOUNT_ID,
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.removeParent.json'),
-		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/accounts/accounts.missing.parent.json',
-	],
-	// Trying to add parent to administrator
-	'addParentToAdministrator' => [
-		'/v1/accounts/' . USER_ACCOUNT_ID,
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.administratorParent.json'),
-		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/accounts/accounts.invalid.parent.json',
-	],
-	// Administrator role is only for parent account
-	'invalidRole'              => [
-		'/v1/accounts/' . CHILD_USER_ACCOUNT_ID,
-		'Bearer ' . ADMINISTRATOR_TOKEN,
-		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.invalid.role.json'),
-		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
-		__DIR__ . '/responses/accounts/accounts.invalid.role.json',
-	],
 	'invalidRolesCombination'  => [
 		'/v1/accounts/' . CHILD_USER_ACCOUNT_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
