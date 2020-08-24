@@ -17,6 +17,7 @@ namespace FastyBird\AuthNode\Controllers;
 
 use Contributte\Translation;
 use Doctrine\DBAL\Connection;
+use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Router;
 use FastyBird\AuthNode\Security;
@@ -192,6 +193,42 @@ abstract class BaseV1Controller
 				StatusCodeInterface::STATUS_BAD_REQUEST,
 				$this->translator->translate('//node.base.messages.invalidIdentifier.heading'),
 				$this->translator->translate('//node.base.messages.invalidIdentifier.message')
+			);
+		}
+
+		return true;
+	}
+
+	/**
+	 * @param Utils\ArrayHash $data
+	 * @param Entities\Accounts\IAccount $account
+	 * @param bool $required
+	 *
+	 * @return bool
+	 *
+	 * @throws NodeJsonApiExceptions\JsonApiErrorException
+	 */
+	protected function validateAccountRelation(
+		Utils\ArrayHash $data,
+		Entities\Accounts\IAccount $account,
+		bool $required = false
+	): bool {
+		if (
+			(
+				$required && !$data->offsetExists('account')
+				|| $data->offsetExists('account')
+			) && (
+				!$data->offsetGet('account') instanceof Entities\Accounts\IAccount
+				|| !$account->getId()->equals($data->offsetGet('account')->getId())
+			)
+		) {
+			throw new NodeJsonApiExceptions\JsonApiErrorException(
+				StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+				$this->translator->translate('//node.base.messages.invalidRelation.heading'),
+				$this->translator->translate('//node.base.messages.invalidRelation.message'),
+				[
+					'pointer' => '/data/relationships/account/data/id',
+				]
 			);
 		}
 

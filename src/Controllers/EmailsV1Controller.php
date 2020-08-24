@@ -148,6 +148,9 @@ final class EmailsV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
 				$createData = $this->emailHydrator->hydrate($document);
+
+				$this->validateAccountRelation($createData, $account);
+
 				$createData->offsetSet('account', $account);
 				$createData->offsetSet('verificationHash', $this->securityHash->createKey());
 				$createData->offsetSet('verificationCreated', $this->dateFactory->getNow());
@@ -280,7 +283,9 @@ final class EmailsV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		$document = $this->createDocument($request);
 
-		$email = $this->findEmail($request, $this->findAccount($request));
+		$account = $this->findAccount($request);
+
+		$email = $this->findEmail($request, $account);
 
 		$this->validateIdentifier($request, $document);
 
@@ -289,9 +294,11 @@ final class EmailsV1Controller extends BaseV1Controller
 			$this->getOrmConnection()->beginTransaction();
 
 			if ($document->getResource()->getType() === Schemas\Emails\EmailSchema::SCHEMA_TYPE) {
-				$updateEmailData = $this->emailHydrator->hydrate($document, $email);
+				$updateData = $this->emailHydrator->hydrate($document, $email);
 
-				$email = $this->emailsManager->update($email, $updateEmailData);
+				$this->validateAccountRelation($updateData, $account);
+
+				$email = $this->emailsManager->update($email, $updateData);
 
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(

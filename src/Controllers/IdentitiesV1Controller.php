@@ -148,6 +148,9 @@ final class IdentitiesV1Controller extends BaseV1Controller
 
 			if ($document->getResource()->getType() === Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE) {
 				$createData = $this->userAccountIdentityHydrator->hydrate($document);
+
+				$this->validateAccountRelation($createData, $account);
+
 				$createData->offsetSet('account', $account);
 
 				// Store item into database
@@ -155,6 +158,9 @@ final class IdentitiesV1Controller extends BaseV1Controller
 
 			} elseif ($document->getResource()->getType() === Schemas\Identities\MachineAccountIdentitySchema::SCHEMA_TYPE) {
 				$createData = $this->machineAccountIdentityHydrator->hydrate($document);
+
+				$this->validateAccountRelation($createData, $account);
+
 				$createData->offsetSet('account', $account);
 
 				// Store item into database
@@ -265,7 +271,9 @@ final class IdentitiesV1Controller extends BaseV1Controller
 	): NodeWebServerHttp\Response {
 		$document = $this->createDocument($request);
 
-		$identity = $this->findIdentity($request, $this->findAccount($request));
+		$account = $this->findAccount($request);
+
+		$identity = $this->findIdentity($request, $account);
 
 		$this->validateIdentifier($request, $document);
 
@@ -277,19 +285,23 @@ final class IdentitiesV1Controller extends BaseV1Controller
 				$document->getResource()->getType() === Schemas\Identities\UserAccountIdentitySchema::SCHEMA_TYPE
 				&& $identity instanceof Entities\Identities\IUserAccountIdentity
 			) {
-				$updateIdentityData = $this->userAccountIdentityHydrator->hydrate($document, $identity);
+				$updateData = $this->userAccountIdentityHydrator->hydrate($document, $identity);
+
+				$this->validateAccountRelation($updateData, $account);
 
 				// Update item in database
-				$identity = $this->identitiesManager->update($identity, $updateIdentityData);
+				$identity = $this->identitiesManager->update($identity, $updateData);
 
 			} elseif (
 				$document->getResource()->getType() === Schemas\Identities\MachineAccountIdentitySchema::SCHEMA_TYPE
 				&& $identity instanceof Entities\Identities\IMachineAccountIdentity
 			) {
-				$updateIdentityData = $this->machineAccountIdentityHydrator->hydrate($document, $identity);
+				$updateData = $this->machineAccountIdentityHydrator->hydrate($document, $identity);
+
+				$this->validateAccountRelation($updateData, $account);
 
 				// Update item in database
-				$identity = $this->identitiesManager->update($identity, $updateIdentityData);
+				$identity = $this->identitiesManager->update($identity, $updateData);
 
 			} else {
 				throw new NodeJsonApiExceptions\JsonApiErrorException(

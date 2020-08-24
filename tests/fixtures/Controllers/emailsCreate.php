@@ -37,6 +37,13 @@ return [
 		StatusCodeInterface::STATUS_BAD_REQUEST,
 		__DIR__ . '/responses/emails/emails.create.missing.relation.json',
 	],
+	'invalidRelation'     => [
+		'/v1/accounts/' . USER_ACCOUNT_ID . '/emails',
+		'Bearer ' . ADMINISTRATOR_TOKEN,
+		file_get_contents(__DIR__ . '/requests/emails/emails.create.json'),
+		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+		__DIR__ . '/responses/emails/emails.create.invalid.relation.json',
+	],
 	'invalidType'         => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails',
 		'Bearer ' . ADMINISTRATOR_TOKEN,

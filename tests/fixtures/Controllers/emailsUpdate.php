@@ -40,6 +40,13 @@ return [
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',
 	],
+	'invalidRelation'     => [
+		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
+		'Bearer ' . ADMINISTRATOR_TOKEN,
+		file_get_contents(__DIR__ . '/requests/emails/emails.update.invalid.relation.json'),
+		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
+		__DIR__ . '/responses/emails/emails.update.invalid.relation.json',
+	],
 	'invalidType'  => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
