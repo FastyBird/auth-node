@@ -26,8 +26,6 @@ commands:
 				title	: "User last name?"
 			email:
 				title	: "User primary email address?"
-			identity:
-				title	: "Create identity?"
 			password:
 				title	: "User default password?"
 			role:
@@ -47,12 +45,7 @@ commands:
 				wasNotCreated	: "Account identity could not be created. Error was logged."
 				noEmail	: "Account identity could not be created because this account is withnout email address."
 
-		texts:
-			createIdentity: "Create identity for this account?"
-
-		success:
-			account: "Account \"%name%\" was successfully saved."
-			identity: "Identity for account \"%name%\" was successfully saved."
+		success: "Account \"%name%\" was successfully saved."
 
 	roleCreate:
 		key:

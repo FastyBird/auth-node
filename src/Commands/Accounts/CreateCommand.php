@@ -117,7 +117,6 @@ class CreateCommand extends Console\Command\Command
 			->addArgument('firstName', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.firstName.title'))
 			->addArgument('email', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.email.title'))
 			->addArgument('role', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.role.title'))
-			->addArgument('identity', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.identity.title'))
 			->addOption('noconfirm', null, Input\InputOption::VALUE_NONE, 'do not ask for any confirmation')
 			->addOption('injected', null, Input\InputOption::VALUE_NONE, 'do not show all outputs')
 			->setDescription('Create account.');
@@ -278,8 +277,6 @@ class CreateCommand extends Console\Command\Command
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();
 
-			$io->success($this->translator->translate('success.account', ['name' => $account->getName()]));
-
 		} catch (Throwable $ex) {
 			// Revert all changes when error occur
 			if ($this->getOrmConnection()->isTransactionActive()) {
@@ -293,65 +290,45 @@ class CreateCommand extends Console\Command\Command
 			return $ex->getCode();
 		}
 
-		if (
-			$input->hasArgument('identity')
-			&& is_string($input->getArgument('identity'))
-			&& in_array(strtolower($input->getArgument('identity')), ['y', 'yes', 'n', 'no'], true)
-		) {
-			$createIdentity = in_array(strtolower($input->getArgument('identity')), ['y', 'yes'], true) ? 'y' : 'n';
+		$password = $io->askHidden($this->translator->translate('inputs.password.title'));
 
-		} else {
-			$createIdentity = $io->choice(
-				$this->translator->translate('texts.createIdentity'),
-				[
-					'y' => 'Yes',
-					'n' => 'No',
-				],
-				'y'
-			);
+		if ($account->getEmail() === null) {
+			$io->warning($this->translator->translate('validation.identity.noEmail'));
+
+			return 0;
 		}
 
-		if ($createIdentity === 'y') {
-			$password = $io->askHidden($this->translator->translate('inputs.password.title'));
+		try {
+			// Start transaction connection to the database
+			$this->getOrmConnection()->beginTransaction();
 
-			if ($account->getEmail() === null) {
-				$io->warning($this->translator->translate('validation.identity.noEmail'));
+			// Create new email entity for user
+			$create = new Utils\ArrayHash();
+			$create->offsetSet('entity', Entities\Identities\UserAccountIdentity::class);
+			$create->offsetSet('account', $account);
+			$create->offsetSet('uid', $account->getEmail()->getAddress());
+			$create->offsetSet('password', $password);
+			$create->offsetSet('state', Types\IdentityStateType::get(Types\IdentityStateType::STATE_ACTIVE));
 
-				return 0;
+			$this->identitiesManager->create($create);
+
+			// Commit all changes into database
+			$this->getOrmConnection()->commit();
+
+		} catch (Throwable $ex) {
+			// Revert all changes when error occur
+			if ($this->getOrmConnection()->isTransactionActive()) {
+				$this->getOrmConnection()->rollBack();
 			}
 
-			try {
-				// Start transaction connection to the database
-				$this->getOrmConnection()->beginTransaction();
+			$this->logger->error($ex->getMessage());
 
-				// Create new email entity for user
-				$create = new Utils\ArrayHash();
-				$create->offsetSet('entity', Entities\Identities\UserAccountIdentity::class);
-				$create->offsetSet('account', $account);
-				$create->offsetSet('uid', $account->getEmail()->getAddress());
-				$create->offsetSet('password', $password);
-				$create->offsetSet('state', Types\IdentityStateType::get(Types\IdentityStateType::STATE_ACTIVE));
+			$io->error($this->translator->translate('validation.identity.wasNotCreated', ['error' => $ex->getMessage()]));
 
-				$this->identitiesManager->create($create);
-
-				// Commit all changes into database
-				$this->getOrmConnection()->commit();
-
-				$io->success($this->translator->translate('success.identity', ['name' => $account->getName()]));
-
-			} catch (Throwable $ex) {
-				// Revert all changes when error occur
-				if ($this->getOrmConnection()->isTransactionActive()) {
-					$this->getOrmConnection()->rollBack();
-				}
-
-				$this->logger->error($ex->getMessage());
-
-				$io->error($this->translator->translate('validation.identity.wasNotCreated', ['error' => $ex->getMessage()]));
-
-				return $ex->getCode();
-			}
+			return $ex->getCode();
 		}
+
+		$io->success($this->translator->translate('success', ['name' => $account->getName()]));
 
 		return 0;
 	}

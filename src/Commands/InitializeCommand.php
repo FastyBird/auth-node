@@ -225,7 +225,6 @@ class InitializeCommand extends Console\Command\Command
 
 				$result = $accountCmd->run(new Input\ArrayInput([
 					'role'       => NodeAuth\Constants::ROLE_ADMINISTRATOR,
-					'identity'   => 'y',
 					'--injected' => true,
 				]), $output);
 
