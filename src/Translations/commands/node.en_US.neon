@@ -47,20 +47,24 @@ commands:
 
 		success: "Account \"%name%\" was successfully saved."
 
-	roleCreate:
-		key:
-			title	: "Role key name?"
-		name:
-			title	: "Role name?"
-		priority:
-			title	: "Role priority?"
+	vernemqCreate:
+		inputs:
+			username:
+				title	: "Username?"
+			password:
+				title	: "User default password?"
+			role:
+				title	: "User access role?"
+				values:
+					user			: "Regular user"
+					manager			: "System manager"
+					administrator	: "System administrator"
 
 		validation:
-			role:
-				exists			: "Role with key name %role% already exists."
-				wasNotCreated	: "Role could not be created. Error was logged."
+			account:
+				wasNotCreated	: "Account could not be created. Error was logged."
 
-		success	: "Created role : \"%name%\" with key: \"%key%\"."
+		success: "Account \"%name%\" was successfully saved."
 
 	sync:
 		validation:
