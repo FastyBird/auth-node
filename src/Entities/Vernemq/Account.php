@@ -117,14 +117,14 @@ class Account implements IAccount
 	/**
 	 * @param string $username
 	 * @param string $password
-	 * @param Entities\Identities\IIdentity $identity
+	 * @param Entities\Identities\IIdentity|null $identity
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		string $username,
 		string $password,
-		Entities\Identities\IIdentity $identity
+		?Entities\Identities\IIdentity $identity = null
 	) {
 		$this->id = Uuid\Uuid::uuid4();
 

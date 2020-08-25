@@ -73,9 +73,6 @@ final class SynchroniseVernemqTest extends DbTestCase
 
 		$accounts = $verneAccountRepository->findAllBy($findQuery);
 
-		foreach ($accounts as $account) {
-			var_dump($account->getUsername());
-		}
 		Assert::same(3, count($accounts));
 	}
 

@@ -191,6 +191,8 @@ services:
 
 	- {factory: FastyBird\AuthNode\Commands\Accounts\CreateCommand}
 
+	- {factory: FastyBird\AuthNode\Commands\Vernemq\CreateCommand}
+
 	- {factory: FastyBird\AuthNode\Commands\Synchronisation\VernemqCommand}
 
 	- {factory: FastyBird\AuthNode\Commands\Tests\GenerateTokenCommand}

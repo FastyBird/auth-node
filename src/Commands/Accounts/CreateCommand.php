@@ -112,10 +112,11 @@ class CreateCommand extends Console\Command\Command
 	protected function configure(): void
 	{
 		$this
-			->setName('fb:auth-node:accounts:create')
+			->setName('fb:auth-node:create:account')
 			->addArgument('lastName', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.lastName.title'))
 			->addArgument('firstName', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.firstName.title'))
 			->addArgument('email', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.email.title'))
+			->addArgument('password', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.password.title'))
 			->addArgument('role', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.role.title'))
 			->addOption('noconfirm', null, Input\InputOption::VALUE_NONE, 'do not ask for any confirmation')
 			->addOption('injected', null, Input\InputOption::VALUE_NONE, 'do not show all outputs')
@@ -290,7 +291,16 @@ class CreateCommand extends Console\Command\Command
 			return $ex->getCode();
 		}
 
-		$password = $io->askHidden($this->translator->translate('inputs.password.title'));
+		if (
+			$input->hasArgument('password')
+			&& is_string($input->getArgument('password'))
+			&& $input->getArgument('password') !== ''
+		) {
+			$password = $input->getArgument('password');
+
+		} else {
+			$password = $io->askHidden($this->translator->translate('inputs.password.title'));
+		}
 
 		if ($account->getEmail() === null) {
 			$io->warning($this->translator->translate('validation.identity.noEmail'));
