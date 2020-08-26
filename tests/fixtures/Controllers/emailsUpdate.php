@@ -16,14 +16,14 @@ const UNKNOWN_ID = '83985c13-238c-46bd-aacb-2359d5c921a7';
 return [
 	// Valid responses
 	//////////////////
-	'update'       => [
+	'update'          => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.json'),
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/emails/emails.update.json',
 	],
-	'verify'       => [
+	'verify'          => [
 		'/v1/accounts/' . USER_ACCOUNT_ID . '/emails/' . USER_EMAIL_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.verify.json'),
@@ -33,63 +33,63 @@ return [
 
 	// Invalid responses
 	////////////////////
-	'unknown'      => [
+	'unknown'         => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . UNKNOWN_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.invalid.id.json'),
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',
 	],
-	'invalidRelation'     => [
+	'invalidRelation' => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.invalid.relation.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/emails/emails.update.invalid.relation.json',
 	],
-	'invalidType'  => [
+	'invalidType'     => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.invalid.type.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/invalid.type.json',
 	],
-	'idMismatch'   => [
+	'idMismatch'      => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.invalid.id.json'),
 		StatusCodeInterface::STATUS_BAD_REQUEST,
 		__DIR__ . '/responses/generic/invalid.identifier.json',
 	],
-	'noToken'      => [
+	'noToken'         => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		null,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'emptyToken'   => [
+	'emptyToken'      => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'',
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'userToken'    => [
+	'userToken'       => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . USER_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'invalidToken' => [
+	'invalidToken'    => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/generic/unauthorized.json',
 	],
-	'expiredToken' => [
+	'expiredToken'    => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.update.json'),

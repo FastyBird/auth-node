@@ -58,14 +58,14 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/identifier.notUnique.json',
 	],
-	'invalidEmail'    => [
+	'invalidEmail'        => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.create.invalid.email.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/emails/emails.create.invalid.email.json',
 	],
-	'usedEmail'             => [
+	'usedEmail'           => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/emails/emails.create.usedEmail.json'),

@@ -9,7 +9,7 @@ const INVALID_TOKEN = 'eyJqdGkiOiI5YWY1NjI0Mi01ZDg3LTQzNjQtYmIxZS1kOWZjODI4NmIzZ
 return [
 	// Valid responses
 	//////////////////
-	'create'          => [
+	'create'              => [
 		'/v1/me/emails',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.json'),
@@ -19,14 +19,14 @@ return [
 
 	// Invalid responses
 	////////////////////
-	'missingRequired' => [
+	'missingRequired'     => [
 		'/v1/me/emails',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.missing.required.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/account/emails/account.emails.create.missing.required.json',
 	],
-	'invalidType'     => [
+	'invalidType'         => [
 		'/v1/me/emails',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.invalid.type.json'),
@@ -40,42 +40,42 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/identifier.notUnique.json',
 	],
-	'invalidEmail'    => [
+	'invalidEmail'        => [
 		'/v1/me/emails',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.invalid.email.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/account/emails/account.emails.invalidEmail.json',
 	],
-	'usedEmail'       => [
+	'usedEmail'           => [
 		'/v1/me/emails',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.usedEmail.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/account/emails/account.emails.create.usedEmail.json',
 	],
-	'noToken'         => [
+	'noToken'             => [
 		'/v1/me/emails',
 		null,
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'emptyToken'      => [
+	'emptyToken'          => [
 		'/v1/me/emails',
 		'',
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'invalidToken'    => [
+	'invalidToken'        => [
 		'/v1/me/emails',
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/generic/unauthorized.json',
 	],
-	'expiredToken'    => [
+	'expiredToken'        => [
 		'/v1/me/emails',
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/emails/account.emails.create.json'),

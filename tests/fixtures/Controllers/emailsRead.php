@@ -29,7 +29,7 @@ return [
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/emails/emails.index.paging.json',
 	],
-	'readOne'              => [
+	'readOne'                  => [
 		'/v1/accounts/' . ADMINISTRATOR_ACCOUNT_ID . '/emails/' . ADMINISTRATOR_EMAIL_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		StatusCodeInterface::STATUS_OK,

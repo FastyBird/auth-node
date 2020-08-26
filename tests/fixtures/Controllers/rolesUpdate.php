@@ -23,7 +23,7 @@ return [
 
 	// Invalid responses
 	////////////////////
-	'unknown'     => [
+	'unknown'      => [
 		'/v1/roles/' . UNKNOWN_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/roles/roles.update.invalid.id.json'),

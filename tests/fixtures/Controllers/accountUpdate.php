@@ -27,14 +27,14 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/account/account.update.missing.required.json',
 	],
-	'invalidType'  => [
+	'invalidType'     => [
 		'/v1/me',
 		'Bearer ' . USER_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/account.update.invalid.type.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/invalid.type.json',
 	],
-	'idMismatch'   => [
+	'idMismatch'      => [
 		'/v1/me',
 		'Bearer ' . USER_TOKEN,
 		file_get_contents(__DIR__ . '/requests/account/account.update.invalid.id.json'),

@@ -15,21 +15,21 @@ const UNKNOWN_ID = '83985c13-238c-46bd-aacb-2359d5c921a7';
 return [
 	// Valid responses
 	//////////////////
-	'updateUser'               => [
+	'updateUser'              => [
 		'/v1/accounts/' . USER_ACCOUNT_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.user.json'),
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/accounts/accounts.update.user.json',
 	],
-	'updateUserWithRoles'      => [
+	'updateUserWithRoles'     => [
 		'/v1/accounts/' . CHILD_USER_ACCOUNT_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.userWithRoles.json'),
 		StatusCodeInterface::STATUS_OK,
 		__DIR__ . '/responses/accounts/accounts.update.userWithRoles.json',
 	],
-	'updateMachine'            => [
+	'updateMachine'           => [
 		'/v1/accounts/' . MACHINE_ACCOUNT_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.machine.json'),
@@ -46,56 +46,56 @@ return [
 		StatusCodeInterface::STATUS_NOT_FOUND,
 		__DIR__ . '/responses/generic/notFound.json',
 	],
-	'invalidType'              => [
+	'invalidType'             => [
 		'/v1/accounts/' . USER_ACCOUNT_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.invalid.type.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/invalid.type.json',
 	],
-	'idMismatch'               => [
+	'idMismatch'              => [
 		'/v1/accounts/' . USER_ACCOUNT_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.invalid.id.json'),
 		StatusCodeInterface::STATUS_BAD_REQUEST,
 		__DIR__ . '/responses/generic/invalid.identifier.json',
 	],
-	'invalidRolesCombination'  => [
+	'invalidRolesCombination' => [
 		'/v1/accounts/' . CHILD_USER_ACCOUNT_ID,
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.invalid.rolesCombination.json'),
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/accounts/accounts.invalid.role.json',
 	],
-	'noToken'                  => [
+	'noToken'                 => [
 		'/v1/accounts/' . USER_ACCOUNT_ID,
 		null,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'emptyToken'               => [
+	'emptyToken'              => [
 		'/v1/accounts/' . USER_ACCOUNT_ID,
 		'',
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'userToken'                => [
+	'userToken'               => [
 		'/v1/accounts/' . USER_ACCOUNT_ID,
 		'Bearer ' . USER_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.user.json'),
 		StatusCodeInterface::STATUS_FORBIDDEN,
 		__DIR__ . '/responses/generic/forbidden.json',
 	],
-	'invalidToken'             => [
+	'invalidToken'            => [
 		'/v1/accounts/' . USER_ACCOUNT_ID,
 		'Bearer ' . INVALID_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.user.json'),
 		StatusCodeInterface::STATUS_UNAUTHORIZED,
 		__DIR__ . '/responses/generic/unauthorized.json',
 	],
-	'expiredToken'             => [
+	'expiredToken'            => [
 		'/v1/accounts/' . USER_ACCOUNT_ID,
 		'Bearer ' . EXPIRED_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.update.user.json'),

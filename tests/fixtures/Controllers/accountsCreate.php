@@ -55,7 +55,7 @@ return [
 		StatusCodeInterface::STATUS_UNPROCESSABLE_ENTITY,
 		__DIR__ . '/responses/generic/invalid.type.json',
 	],
-	'identifierNotUnique' => [
+	'identifierNotUnique'    => [
 		'/v1/accounts',
 		'Bearer ' . ADMINISTRATOR_TOKEN,
 		file_get_contents(__DIR__ . '/requests/accounts/accounts.create.identifier.notUnique.json'),
