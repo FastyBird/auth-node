@@ -22,7 +22,6 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Nette\Utils;
@@ -52,8 +51,6 @@ class Email implements IEmail
 	use NodeDatabaseEntities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
-	use DoctrineBlameable\Entities\TEntityCreator;
-	use DoctrineBlameable\Entities\TEntityEditor;
 
 	/**
 	 * @var Uuid\UuidInterface
@@ -298,13 +295,13 @@ class Email implements IEmail
 	public function toArray(): array
 	{
 		return [
-			'id'          => $this->getPlainId(),
-			'account'     => $this->getAccount()->getPlainId(),
-			'address'     => $this->getAddress(),
-			'is_default'  => $this->isDefault(),
-			'is_verified' => $this->isVerified(),
-			'is_private'  => $this->isPrivate(),
-			'is_public'   => $this->isPublic(),
+			'id'       => $this->getPlainId(),
+			'account'  => $this->getAccount()->getPlainId(),
+			'address'  => $this->getAddress(),
+			'default'  => $this->isDefault(),
+			'verified' => $this->isVerified(),
+			'private'  => $this->isPrivate(),
+			'public'   => $this->isPublic(),
 		];
 	}
 

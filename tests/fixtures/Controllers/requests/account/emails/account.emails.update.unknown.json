@@ -3,8 +3,8 @@
     "type" : "auth-node/email",
     "id" : "83985c13-238c-46bd-aacb-2359d5c921a7",
     "attributes" : {
-      "is_default" : false,
-      "is_private" : true
+      "default" : false,
+      "private" : true
     }
   }
 }

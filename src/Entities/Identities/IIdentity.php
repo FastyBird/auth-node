@@ -17,11 +17,9 @@ namespace FastyBird\AuthNode\Entities\Identities;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Types;
+use FastyBird\NodeAuth\Security as NodeAuthSecurity;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineBlameable;
-use IPub\DoctrineCrud;
 use IPub\DoctrineTimestampable;
-use Nette\Security as NS;
 
 /**
  * Identity entity interface
@@ -31,13 +29,11 @@ use Nette\Security as NS;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IIdentity extends NS\IIdentity,
-	DoctrineCrud\Entities\IIdentifiedEntity,
+interface IIdentity extends NodeDatabaseEntities\IEntity,
+	NodeAuthSecurity\IIdentity,
 	NodeDatabaseEntities\IEntityParams,
 	DoctrineTimestampable\Entities\IEntityCreated,
-	DoctrineBlameable\Entities\IEntityCreator,
-	DoctrineTimestampable\Entities\IEntityUpdated,
-	DoctrineBlameable\Entities\IEntityEditor
+	DoctrineTimestampable\Entities\IEntityUpdated
 {
 
 	/**

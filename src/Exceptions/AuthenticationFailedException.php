@@ -15,9 +15,9 @@
 
 namespace FastyBird\AuthNode\Exceptions;
 
-use Nette\Security as NS;
+use FastyBird\NodeAuth\Exceptions as NodeAuthExceptions;
 
-class AuthenticationFailedException extends NS\AuthenticationException implements IException
+class AuthenticationFailedException extends NodeAuthExceptions\AuthenticationException implements IException
 {
 
 }

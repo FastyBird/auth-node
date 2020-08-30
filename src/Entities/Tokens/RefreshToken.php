@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\NodeAuth\Entities as NodeAuthEntities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -44,8 +43,6 @@ class RefreshToken extends NodeAuthEntities\Tokens\Token implements IRefreshToke
 	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
-	use DoctrineBlameable\Entities\TEntityCreator;
-	use DoctrineBlameable\Entities\TEntityEditor;
 
 	/**
 	 * @var DateTimeInterface|null

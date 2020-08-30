@@ -46,8 +46,6 @@ final class ServicesTest extends BaseTestCase
 
 		Assert::notNull($container->getByType(Subscribers\EmailEntitySubscriber::class));
 		Assert::notNull($container->getByType(Subscribers\EntitiesSubscriber::class));
-		Assert::notNull($container->getByType(Subscribers\EntityAuthorSubscriber::class));
-		Assert::notNull($container->getByType(Subscribers\EntityEditorSubscriber::class));
 		Assert::notNull($container->getByType(Subscribers\IdentityEntitySubscriber::class));
 
 		Assert::notNull($container->getByType(Models\Accounts\AccountRepository::class));

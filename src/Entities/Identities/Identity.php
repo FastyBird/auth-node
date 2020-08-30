@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Nette\Utils;
@@ -60,8 +59,6 @@ abstract class Identity implements IIdentity
 	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
-	use DoctrineBlameable\Entities\TEntityCreator;
-	use DoctrineBlameable\Entities\TEntityEditor;
 
 	/**
 	 * @var Uuid\UuidInterface
@@ -183,11 +180,13 @@ abstract class Identity implements IIdentity
 	}
 
 	/**
-	 * @return Entities\Roles\IRole[]
+	 * {@inheritDoc}
 	 */
 	public function getRoles(): array
 	{
-		return $this->account->getRoles();
+		return array_map(function (Entities\Roles\IRole $role): string {
+			return $role->getName();
+		}, $this->account->getRoles());
 	}
 
 	/**

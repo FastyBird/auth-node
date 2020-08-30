@@ -416,7 +416,7 @@ final class SessionV1Controller extends BaseV1Controller
 
 			$this->tokensManager->delete($accessToken);
 
-			$this->user->logout(true);
+			$this->user->logout();
 
 			// Commit all changes into database
 			$this->getOrmConnection()->commit();

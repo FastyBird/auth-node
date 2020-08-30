@@ -37,10 +37,10 @@ final class EmailHydrator extends NodeJsonApiHydrators\Hydrator
 	/** @var string[] */
 	protected $attributes = [
 		0 => 'address',
+		1 => 'default',
+		2 => 'verified',
 
-		'is_default'  => 'default',
-		'is_private'  => 'visibility',
-		'is_verified' => 'verified',
+		'private' => 'visibility',
 	];
 
 	/** @var string[] */

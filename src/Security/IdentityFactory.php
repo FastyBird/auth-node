@@ -20,7 +20,6 @@ use FastyBird\NodeAuth\Models as NodeAuthModels;
 use FastyBird\NodeAuth\Queries as NodeAuthQueries;
 use FastyBird\NodeAuth\Security as NodeAuthSecurity;
 use Lcobucci\JWT;
-use Nette\Security as NS;
 
 /**
  * Application identity factory
@@ -45,7 +44,7 @@ class IdentityFactory implements NodeAuthSecurity\IIdentityFactory
 	/**
 	 * {@inheritDoc}
 	 */
-	public function create(JWT\Token $token): ?NS\IIdentity
+	public function create(JWT\Token $token): ?NodeAuthSecurity\IIdentity
 	{
 		$findToken = new NodeAuthQueries\FindTokensQuery();
 		$findToken->byToken((string) $token);

@@ -37,8 +37,8 @@ final class ProfileEmailHydrator extends NodeJsonApiHydrators\Hydrator
 	protected $attributes = [
 		0 => 'address',
 
-		'is_default' => 'default',
-		'is_private' => 'visibility',
+		'default' => 'default',
+		'private' => 'visibility',
 	];
 
 	/** @var string */

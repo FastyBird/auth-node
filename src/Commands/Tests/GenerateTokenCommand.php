@@ -159,7 +159,7 @@ class GenerateTokenCommand extends Console\Command\Command
 		$token = $this->tokenBuilder->build(
 			$account->getPlainId(),
 			array_map(function (Entities\Roles\IRole $role): string {
-				return $role->getRoleId();
+				return $role->getName();
 			}, $account->getRoles()),
 			$validTill
 		);

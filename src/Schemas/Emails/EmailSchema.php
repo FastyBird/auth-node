@@ -81,10 +81,10 @@ final class EmailSchema extends NodeJsonApiSchemas\JsonApiSchema
 	public function getAttributes($email, JsonApi\Contracts\Schema\ContextInterface $context): iterable
 	{
 		return [
-			'address'     => $email->getAddress(),
-			'is_default'  => $email->isDefault(),
-			'is_verified' => $email->isVerified(),
-			'is_private'  => $email->isPrivate(),
+			'address'  => $email->getAddress(),
+			'default'  => $email->isDefault(),
+			'verified' => $email->isVerified(),
+			'private'  => $email->isPrivate(),
 		];
 	}
 

@@ -3,9 +3,9 @@
     {
       "attributes" : {
         "address" : "john.doe@fastybird.ovh",
-        "is_default" : false,
-        "is_private" : false,
-        "is_verified" : true
+        "default" : false,
+        "private" : false,
+        "verified" : true
       },
       "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c",
       "links" : {

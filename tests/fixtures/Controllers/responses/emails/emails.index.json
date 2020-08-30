@@ -15,9 +15,9 @@
       "id" : "73efbfbd-efbf-bd36-44ef-bfbdefbfbd7a",
       "attributes" : {
         "address" : "jane.doe@fastybird.com",
-        "is_default" : true,
-        "is_verified" : true,
-        "is_private" : false
+        "default" : true,
+        "verified" : true,
+        "private" : false
       },
       "relationships" : {
         "account" : {

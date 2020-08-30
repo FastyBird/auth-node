@@ -85,7 +85,7 @@ abstract class IdentitySchema extends NodeJsonApiSchemas\JsonApiSchema
 				AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY,
 				[
 					Router\Router::URL_ACCOUNT_ID => $identity->getAccount()->getPlainId(),
-					Router\Router::URL_ITEM_ID    => (string) $identity->getId(),
+					Router\Router::URL_ITEM_ID    => $identity->getPlainId(),
 				]
 			),
 			false
@@ -158,7 +158,7 @@ abstract class IdentitySchema extends NodeJsonApiSchemas\JsonApiSchema
 					AuthNode\Constants::ROUTE_NAME_ACCOUNT_IDENTITY_RELATIONSHIP,
 					[
 						Router\Router::URL_ACCOUNT_ID  => $identity->getAccount()->getPlainId(),
-						Router\Router::URL_ITEM_ID     => (string) $identity->getId(),
+						Router\Router::URL_ITEM_ID     => $identity->getPlainId(),
 						Router\Router::RELATION_ENTITY => $name,
 					]
 				),

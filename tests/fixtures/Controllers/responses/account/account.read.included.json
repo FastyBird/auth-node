@@ -92,9 +92,9 @@
       "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
       "attributes" : {
         "address" : "john.doe@fastybird.com",
-        "is_default" : true,
-        "is_verified" : true,
-        "is_private" : false
+        "default" : true,
+        "verified" : true,
+        "private" : false
       },
       "relationships" : {
         "account" : {
@@ -117,9 +117,9 @@
       "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c",
       "attributes" : {
         "address" : "john.doe@fastybird.ovh",
-        "is_default" : false,
-        "is_verified" : true,
-        "is_private" : false
+        "default" : false,
+        "verified" : true,
+        "private" : false
       },
       "relationships" : {
         "account" : {

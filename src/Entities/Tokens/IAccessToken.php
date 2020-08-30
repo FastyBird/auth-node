@@ -19,7 +19,6 @@ use DateTimeInterface;
 use FastyBird\AuthNode\Entities;
 use FastyBird\NodeAuth\Entities as NodeAuthEntities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud;
 use IPub\DoctrineTimestampable;
 
@@ -35,9 +34,7 @@ interface IAccessToken extends NodeAuthEntities\Tokens\IToken,
 	DoctrineCrud\Entities\IIdentifiedEntity,
 	NodeDatabaseEntities\IEntityParams,
 	DoctrineTimestampable\Entities\IEntityCreated,
-	DoctrineBlameable\Entities\IEntityCreator,
-	DoctrineTimestampable\Entities\IEntityUpdated,
-	DoctrineBlameable\Entities\IEntityEditor
+	DoctrineTimestampable\Entities\IEntityUpdated
 {
 
 	public const TOKEN_EXPIRATION = '+6 hours';

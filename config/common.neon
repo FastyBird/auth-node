@@ -172,7 +172,6 @@ services:
 
 	# Nette services overwrite
 	security.user: FastyBird\AuthNode\Security\User
-	security.userStorage: FastyBird\AuthNode\Security\UserStorage
 
 	# Http router
 	#############
@@ -215,10 +214,6 @@ services:
 	- {factory: FastyBird\AuthNode\Subscribers\EmailEntitySubscriber}
 
 	- {factory: FastyBird\AuthNode\Subscribers\IdentityEntitySubscriber}
-
-	- {factory: FastyBird\AuthNode\Subscribers\EntityAuthorSubscriber}
-
-	- {factory: FastyBird\AuthNode\Subscribers\EntityEditorSubscriber}
 
 	- {factory: FastyBird\AuthNode\Subscribers\EntitiesSubscriber}
 

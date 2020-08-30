@@ -3,8 +3,8 @@
     "type" : "auth-node/invalid-type",
     "id" : "32ebe3c3-0238-482e-ab79-6b1d9ee2147c",
     "attributes" : {
-      "is_default" : false,
-      "is_private" : true
+      "default" : false,
+      "private" : true
     }
   }
 }

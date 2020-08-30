@@ -323,7 +323,7 @@ final class EmailsV1Controller extends BaseV1Controller
 				$this->translator->translate('//node.base.messages.invalidAttribute.heading'),
 				$this->translator->translate('//node.base.messages.invalidAttribute.message'),
 				[
-					'pointer' => 'data/attributes/is_default',
+					'pointer' => 'data/attributes/default',
 				]
 			);
 

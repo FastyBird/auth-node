@@ -14,9 +14,9 @@
     "id" : "0b46d3d6-c980-494a-8b40-f19e6095e610",
     "attributes" : {
       "address" : "john.doe@fastybird.com",
-      "is_default" : true,
-      "is_verified" : true,
-      "is_private" : false
+      "default" : true,
+      "verified" : true,
+      "private" : false
     },
     "relationships" : {
       "account" : {

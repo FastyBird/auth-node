@@ -196,7 +196,7 @@ class CreateCommand extends Console\Command\Command
 			return 1;
 		}
 
-		if ($role->getRoleId() === NodeAuth\Constants::ROLE_USER) {
+		if ($role->getName() === NodeAuth\Constants::ROLE_USER) {
 			$publishAcls = [];
 
 			$subscribeAcls = [

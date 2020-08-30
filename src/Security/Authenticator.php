@@ -19,7 +19,7 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Types;
-use Nette\Security as NS;
+use FastyBird\NodeAuth\Security as NodeAuthSecurity;
 
 /**
  * Account authentication
@@ -29,7 +29,7 @@ use Nette\Security as NS;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class Authenticator implements NS\IAuthenticator
+final class Authenticator implements NodeAuthSecurity\IAuthenticator
 {
 
 	public const IDENTITY_UID_NOT_FOUND = 110;
@@ -59,7 +59,7 @@ final class Authenticator implements NS\IAuthenticator
 	 * @throws Exceptions\AccountNotFoundException
 	 * @throws Exceptions\AuthenticationFailedException
 	 */
-	public function authenticate(array $credentials): NS\IIdentity
+	public function authenticate(array $credentials): NodeAuthSecurity\IIdentity
 	{
 		[$username, $password] = $credentials + [null, null];
 

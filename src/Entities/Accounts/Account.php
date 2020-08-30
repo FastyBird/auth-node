@@ -22,7 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Types;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -54,8 +53,6 @@ abstract class Account implements IAccount
 	use NodeDatabaseEntities\TEntityParams;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
-	use DoctrineBlameable\Entities\TEntityCreator;
-	use DoctrineBlameable\Entities\TEntityEditor;
 
 	/**
 	 * @var Uuid\UuidInterface
@@ -268,7 +265,7 @@ abstract class Account implements IAccount
 		if ($this->roles !== null) {
 			$role = $this->roles
 				->filter(function (Entities\Roles\IRole $row) use ($role): bool {
-					return $role === $row->getRoleId();
+					return $role === $row->getName();
 				})
 				->first();
 
@@ -289,7 +286,7 @@ abstract class Account implements IAccount
 			'registered' => $this->getCreatedAt() !== null ? $this->getCreatedAt()->format(DATE_ATOM) : null,
 			'last_visit' => $this->getLastVisit() !== null ? $this->getLastVisit()->format(DATE_ATOM) : null,
 			'roles'      => array_map(function (Entities\Roles\IRole $role): string {
-				return $role->getRoleId();
+				return $role->getName();
 			}, $this->getRoles()),
 		];
 	}

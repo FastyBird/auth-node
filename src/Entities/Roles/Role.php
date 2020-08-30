@@ -19,7 +19,6 @@ use Doctrine\Common;
 use Doctrine\ORM\Mapping as ORM;
 use FastyBird\NodeAuth\Constants as NodeAuthConstants;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineBlameable;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -45,8 +44,6 @@ class Role implements IRole
 	use NodeDatabaseEntities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
-	use DoctrineBlameable\Entities\TEntityCreator;
-	use DoctrineBlameable\Entities\TEntityEditor;
 
 	/**
 	 * @var Uuid\UuidInterface
@@ -107,14 +104,6 @@ class Role implements IRole
 		$this->description = $description;
 
 		$this->children = new Common\Collections\ArrayCollection();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getRoleId(): string
-	{
-		return $this->getName();
 	}
 
 	/**
@@ -249,7 +238,7 @@ class Role implements IRole
 	 */
 	public function __toString(): string
 	{
-		return $this->getRoleId();
+		return $this->getName();
 	}
 
 }

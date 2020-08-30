@@ -44,7 +44,6 @@
     "fastybird/node-json-api" : "^0.1",
     "fastybird/node-metadata" : "^0.1",
     "fastybird/node-web-server" : "^0.1",
-    "ipub/doctrine-blameable" : "^1.4",
     "ipub/doctrine-consistence" : "^0.3",
     "ipub/doctrine-timestampable" : "^1.4"
   },

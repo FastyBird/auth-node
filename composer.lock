@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "23dd6746de7ab31acaf9561c9ff80d9e",
+    "content-hash": "8d735cfb2451be6fcfef3a23131efe38",
     "packages": [
         {
             "name": "bunny/bunny",
@@ -116,16 +116,16 @@
         },
         {
             "name": "composer/package-versions-deprecated",
-            "version": "1.10.99.1",
+            "version": "1.11.99",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/package-versions-deprecated.git",
-                "reference": "68c9b502036e820c33445ff4d174327f6bb87486"
+                "reference": "c8c9aa8a14cc3d3bec86d0a8c3fa52ea79936855"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/68c9b502036e820c33445ff4d174327f6bb87486",
-                "reference": "68c9b502036e820c33445ff4d174327f6bb87486",
+                "url": "https://api.github.com/repos/composer/package-versions-deprecated/zipball/c8c9aa8a14cc3d3bec86d0a8c3fa52ea79936855",
+                "reference": "c8c9aa8a14cc3d3bec86d0a8c3fa52ea79936855",
                 "shasum": ""
             },
             "require": {
@@ -133,7 +133,7 @@
                 "php": "^7 || ^8"
             },
             "replace": {
-                "ocramius/package-versions": "1.10.99"
+                "ocramius/package-versions": "1.11.99"
             },
             "require-dev": {
                 "composer/composer": "^1.9.3 || ^2.0@dev",
@@ -181,7 +181,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-13T12:55:41+00:00"
+            "time": "2020-08-25T05:50:16+00:00"
         },
         {
             "name": "consistence/consistence",
@@ -1751,12 +1751,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-auth.git",
-                "reference": "7948e366fc5f2abc04a117a288f6d0d4163bc204"
+                "reference": "255e967ff33c61b404160d1b303ea275d010dcfb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-auth/zipball/7948e366fc5f2abc04a117a288f6d0d4163bc204",
-                "reference": "7948e366fc5f2abc04a117a288f6d0d4163bc204",
+                "url": "https://api.github.com/repos/FastyBird/node-auth/zipball/255e967ff33c61b404160d1b303ea275d010dcfb",
+                "reference": "255e967ff33c61b404160d1b303ea275d010dcfb",
                 "shasum": ""
             },
             "require": {
@@ -1770,8 +1770,6 @@
                 "lcobucci/jwt": "^3.3",
                 "nette/bootstrap": "^3.0",
                 "nette/di": "^3.0",
-                "nette/http": "^3.0",
-                "nette/security": "^3.0",
                 "nette/utils": "^3.0",
                 "php": ">=7.3.0",
                 "ramsey/uuid": "^3.5 || ^4.0 ",
@@ -1825,7 +1823,7 @@
                 "library",
                 "libs"
             ],
-            "time": "2020-08-15T20:32:48+00:00"
+            "time": "2020-08-30T10:22:45+00:00"
         },
         {
             "name": "fastybird/node-bootstrap",
@@ -2130,12 +2128,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-metadata.git",
-                "reference": "5e5d3079b437bfd51917e663ef18ac3f958b25da"
+                "reference": "5c8315d98afa64167ee55a158294ec66c54419cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/5e5d3079b437bfd51917e663ef18ac3f958b25da",
-                "reference": "5e5d3079b437bfd51917e663ef18ac3f958b25da",
+                "url": "https://api.github.com/repos/FastyBird/node-metadata/zipball/5c8315d98afa64167ee55a158294ec66c54419cc",
+                "reference": "5c8315d98afa64167ee55a158294ec66c54419cc",
                 "shasum": ""
             },
             "require": {
@@ -2188,7 +2186,7 @@
                 "metadata",
                 "node"
             ],
-            "time": "2020-08-24T19:15:08+00:00"
+            "time": "2020-08-30T17:29:59+00:00"
         },
         {
             "name": "fastybird/node-web-server",
@@ -2549,76 +2547,6 @@
                 "psr-7"
             ],
             "time": "2018-07-31T19:32:56+00:00"
-        },
-        {
-            "name": "ipub/doctrine-blameable",
-            "version": "v1.4.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/ipublikuj/doctrine-blameable.git",
-                "reference": "3e1202445bd9839f6a6d28f741390e548f6ed336"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/ipublikuj/doctrine-blameable/zipball/3e1202445bd9839f6a6d28f741390e548f6ed336",
-                "reference": "3e1202445bd9839f6a6d28f741390e548f6ed336",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/orm": "~2.5",
-                "nette/di": "~3.0",
-                "nette/security": "~3.0",
-                "nette/utils": "~3.0",
-                "php": ">=7.2.0"
-            },
-            "require-dev": {
-                "contributte/console": "~0.7",
-                "nette/bootstrap": "~3.0",
-                "nette/http": "~3.0",
-                "nette/mail": "~3.0",
-                "nette/robot-loader": "~3.0",
-                "nette/safe-stream": "~2.3",
-                "nette/tester": "~2.3",
-                "nettrine/orm": "~0.3",
-                "pds/skeleton": "~1.0",
-                "tracy/tracy": "~2.4"
-            },
-            "type": "library",
-            "extra": {
-                "ipub": {
-                    "configuration": {
-                        "extension": "IPub\\DoctrineBlameable\\DI\\DoctrineBlameableExtension"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "IPub\\DoctrineBlameable\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0",
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "iPublikuj:cms",
-                    "email": "info@ipublikuj.eu",
-                    "homepage": "https://www.ipublikuj.eu/"
-                }
-            ],
-            "description": "Behavior for automate the update of username or user reference fields on your Entities.",
-            "homepage": "https://github.com/iPublikuj/doctrine-blameable",
-            "keywords": [
-                "Blameable",
-                "doctrine",
-                "ipub",
-                "ipublikuj",
-                "nette",
-                "tools"
-            ],
-            "time": "2020-06-23T21:37:09+00:00"
         },
         {
             "name": "ipub/doctrine-consistence",
@@ -4071,70 +3999,6 @@
                 "nette"
             ],
             "time": "2019-10-31T20:52:19+00:00"
-        },
-        {
-            "name": "nette/security",
-            "version": "v3.0.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nette/security.git",
-                "reference": "f18cf84a87c241d74d87b484a694cefe18c17061"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/security/zipball/f18cf84a87c241d74d87b484a694cefe18c17061",
-                "reference": "f18cf84a87c241d74d87b484a694cefe18c17061",
-                "shasum": ""
-            },
-            "require": {
-                "nette/utils": "^2.4 || ^3.0",
-                "php": ">=7.1"
-            },
-            "conflict": {
-                "nette/di": "<3.0-stable"
-            },
-            "require-dev": {
-                "nette/di": "^3.0.0",
-                "nette/http": "^3.0.0",
-                "nette/tester": "^2.0",
-                "tracy/tracy": "^2.4"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0-dev"
-                }
-            },
-            "autoload": {
-                "classmap": [
-                    "src/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause",
-                "GPL-2.0",
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "David Grudl",
-                    "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
-                }
-            ],
-            "description": "🔑 Nette Security: provides authentication, authorization and a role-based access control management via ACL (Access Control List)",
-            "homepage": "https://nette.org",
-            "keywords": [
-                "Authentication",
-                "acl",
-                "authorization",
-                "nette"
-            ],
-            "time": "2019-10-16T11:23:11+00:00"
         },
         {
             "name": "nette/utils",
@@ -6081,16 +5945,16 @@
         },
         {
             "name": "react/socket",
-            "version": "v1.5.0",
+            "version": "v1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket.git",
-                "reference": "842dcd71df86671ee9491734035b3d2cf4a80ece"
+                "reference": "e2b96b23a13ca9b41ab343268dbce3f8ef4d524a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket/zipball/842dcd71df86671ee9491734035b3d2cf4a80ece",
-                "reference": "842dcd71df86671ee9491734035b3d2cf4a80ece",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/e2b96b23a13ca9b41ab343268dbce3f8ef4d524a",
+                "reference": "e2b96b23a13ca9b41ab343268dbce3f8ef4d524a",
                 "shasum": ""
             },
             "require": {
@@ -6104,7 +5968,7 @@
             },
             "require-dev": {
                 "clue/block-react": "^1.2",
-                "phpunit/phpunit": "^9.0 || ^5.7 || ^4.8.35",
+                "phpunit/phpunit": "^9.3 || ^5.7 || ^4.8.35",
                 "react/promise-stream": "^1.2"
             },
             "type": "library",
@@ -6117,6 +5981,28 @@
             "license": [
                 "MIT"
             ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering",
+                    "homepage": "https://clue.engineering/"
+                },
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "reactphp@ceesjankiewiet.nl",
+                    "homepage": "https://wyrihaximus.net/"
+                },
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com",
+                    "homepage": "https://sorgalla.com/"
+                },
+                {
+                    "name": "Chris Boden",
+                    "email": "cboden@gmail.com",
+                    "homepage": "https://cboden.dev/"
+                }
+            ],
             "description": "Async, streaming plaintext TCP/IP and secure TLS socket server and client connections for ReactPHP",
             "keywords": [
                 "Connection",
@@ -6125,7 +6011,17 @@
                 "reactphp",
                 "stream"
             ],
-            "time": "2020-07-01T12:50:00+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/WyriHaximus",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/clue",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-08-28T12:49:05+00:00"
         },
         {
             "name": "react/stream",
@@ -8483,30 +8379,30 @@
         },
         {
             "name": "phpstan/extension-installer",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/extension-installer.git",
-                "reference": "2e041def501d661b806f50000c8a4dccbd4907b4"
+                "reference": "5c2da3846819f951385cb6a25d3277051481c48a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/2e041def501d661b806f50000c8a4dccbd4907b4",
-                "reference": "2e041def501d661b806f50000c8a4dccbd4907b4",
+                "url": "https://api.github.com/repos/phpstan/extension-installer/zipball/5c2da3846819f951385cb6a25d3277051481c48a",
+                "reference": "5c2da3846819f951385cb6a25d3277051481c48a",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.1 || ^2.0",
-                "php": "^7.1",
+                "php": "^7.1 || ^8.0",
                 "phpstan/phpstan": ">=0.11.6"
             },
             "require-dev": {
                 "composer/composer": "^1.8",
                 "consistence/coding-standard": "^3.8",
-                "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0",
                 "ergebnis/composer-normalize": "^2.0.2",
-                "jakub-onderka/php-parallel-lint": "^1.0",
                 "phing/phing": "^2.16",
+                "php-parallel-lint/php-parallel-lint": "^1.2.0",
                 "phpstan/phpstan-strict-rules": "^0.11",
                 "slevomat/coding-standard": "^5.0.4"
             },
@@ -8524,7 +8420,7 @@
                 "MIT"
             ],
             "description": "Composer plugin for automatic installation of PHPStan extensions",
-            "time": "2020-03-31T16:00:42+00:00"
+            "time": "2020-08-30T12:06:42+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
@@ -8575,16 +8471,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.38",
+            "version": "0.12.40",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "ad606c5f1c641b465b739e79a3a0f1a5a57cf1b4"
+                "reference": "dce7293ad7b59fc09a9ab9b0b5b44902c092ca17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ad606c5f1c641b465b739e79a3a0f1a5a57cf1b4",
-                "reference": "ad606c5f1c641b465b739e79a3a0f1a5a57cf1b4",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/dce7293ad7b59fc09a9ab9b0b5b44902c092ca17",
+                "reference": "dce7293ad7b59fc09a9ab9b0b5b44902c092ca17",
                 "shasum": ""
             },
             "require": {
@@ -8627,7 +8523,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-08-19T08:13:30+00:00"
+            "time": "2020-08-26T19:06:20+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
@@ -8748,16 +8644,16 @@
         },
         {
             "name": "phpstan/phpstan-nette",
-            "version": "0.12.8",
+            "version": "0.12.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-nette.git",
-                "reference": "ff3e7c05d7cd1648b1c1bd5f50f5265255a520a9"
+                "reference": "7a3a35b71e4ee131126972be4475da603e74453a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-nette/zipball/ff3e7c05d7cd1648b1c1bd5f50f5265255a520a9",
-                "reference": "ff3e7c05d7cd1648b1c1bd5f50f5265255a520a9",
+                "url": "https://api.github.com/repos/phpstan/phpstan-nette/zipball/7a3a35b71e4ee131126972be4475da603e74453a",
+                "reference": "7a3a35b71e4ee131126972be4475da603e74453a",
                 "shasum": ""
             },
             "require": {
@@ -8808,7 +8704,7 @@
                 "MIT"
             ],
             "description": "Nette Framework class reflection extension for PHPStan",
-            "time": "2020-07-21T14:47:32+00:00"
+            "time": "2020-08-26T07:54:37+00:00"
         },
         {
             "name": "slevomat/coding-standard",

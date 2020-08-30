@@ -17,9 +17,7 @@ namespace FastyBird\AuthNode\Entities\Roles;
 
 use FastyBird\AuthNode\Entities;
 use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
-use IPub\DoctrineBlameable;
 use IPub\DoctrineTimestampable;
-use Nette\Security as NS;
 
 /**
  * ACL role entity interface
@@ -29,12 +27,9 @@ use Nette\Security as NS;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IRole extends NS\IRole,
-	NodeDatabaseEntities\IEntity,
+interface IRole extends NodeDatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
-	DoctrineBlameable\Entities\IEntityCreator,
-	DoctrineTimestampable\Entities\IEntityUpdated,
-	DoctrineBlameable\Entities\IEntityEditor
+	DoctrineTimestampable\Entities\IEntityUpdated
 {
 
 	/**
