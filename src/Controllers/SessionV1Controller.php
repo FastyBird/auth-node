@@ -190,12 +190,10 @@ final class SessionV1Controller extends BaseV1Controller
 
 			$validTill = $this->getNow()->modify(Entities\Tokens\IAccessToken::TOKEN_EXPIRATION);
 
-			$accessTokenId = Uuid\Uuid::uuid4();
-
 			$values = Utils\ArrayHash::from([
-				'id'        => $accessTokenId,
+				'id'        => Uuid\Uuid::uuid4(),
 				'entity'    => Entities\Tokens\AccessToken::class,
-				'token'     => $this->createToken($accessTokenId, $this->user->getRoles(), $validTill),
+				'token'     => $this->createToken($this->user->getId() ?? Uuid\Uuid::uuid4(), $this->user->getRoles(), $validTill),
 				'validTill' => $validTill,
 				'state'     => NodeAuthTypes\TokenStateType::get(NodeAuthTypes\TokenStateType::STATE_ACTIVE),
 				'identity'  => $this->user->getIdentity(),
@@ -205,13 +203,11 @@ final class SessionV1Controller extends BaseV1Controller
 
 			$validTill = $this->getNow()->modify(Entities\Tokens\IRefreshToken::TOKEN_EXPIRATION);
 
-			$refreshTokenId = Uuid\Uuid::uuid4();
-
 			$values = Utils\ArrayHash::from([
-				'id'          => $refreshTokenId,
+				'id'          => Uuid\Uuid::uuid4(),
 				'entity'      => Entities\Tokens\RefreshToken::class,
 				'accessToken' => $accessToken,
-				'token'       => $this->createToken($refreshTokenId, [], $validTill),
+				'token'       => $this->createToken($this->user->getId() ?? Uuid\Uuid::uuid4(), [], $validTill),
 				'validTill'   => $validTill,
 				'state'       => NodeAuthTypes\TokenStateType::get(NodeAuthTypes\TokenStateType::STATE_ACTIVE),
 			]);
@@ -324,12 +320,10 @@ final class SessionV1Controller extends BaseV1Controller
 
 			$validTill = $this->getNow()->modify(Entities\Tokens\IAccessToken::TOKEN_EXPIRATION);
 
-			$accessTokenId = Uuid\Uuid::uuid4();
-
 			$values = Utils\ArrayHash::from([
-				'id'        => $accessTokenId,
+				'id'        => Uuid\Uuid::uuid4(),
 				'entity'    => Entities\Tokens\AccessToken::class,
-				'token'     => $this->createToken($accessTokenId, $this->user->getRoles(), $validTill),
+				'token'     => $this->createToken($this->user->getId() ?? Uuid\Uuid::uuid4(), $this->user->getRoles(), $validTill),
 				'validTill' => $validTill,
 				'state'     => NodeAuthTypes\TokenStateType::get(NodeAuthTypes\TokenStateType::STATE_ACTIVE),
 				'identity'  => $this->user->getIdentity(),
@@ -339,13 +333,11 @@ final class SessionV1Controller extends BaseV1Controller
 
 			$validTill = $this->getNow()->modify(Entities\Tokens\IRefreshToken::TOKEN_EXPIRATION);
 
-			$refreshTokenId = Uuid\Uuid::uuid4();
-
 			$values = Utils\ArrayHash::from([
-				'id'          => $refreshTokenId,
+				'id'          => Uuid\Uuid::uuid4(),
 				'entity'      => Entities\Tokens\RefreshToken::class,
 				'accessToken' => $newAccessToken,
-				'token'       => $this->createToken($refreshTokenId, [], $validTill),
+				'token'       => $this->createToken($this->user->getId() ?? Uuid\Uuid::uuid4(), [], $validTill),
 				'validTill'   => $validTill,
 				'state'       => NodeAuthTypes\TokenStateType::get(NodeAuthTypes\TokenStateType::STATE_ACTIVE),
 			]);
@@ -526,7 +518,7 @@ final class SessionV1Controller extends BaseV1Controller
 	}
 
 	/**
-	 * @param Uuid\UuidInterface $id
+	 * @param Uuid\UuidInterface $userId
 	 * @param string[] $roles
 	 * @param DateTimeInterface|null $validTill
 	 *
@@ -535,11 +527,11 @@ final class SessionV1Controller extends BaseV1Controller
 	 * @throws Throwable
 	 */
 	private function createToken(
-		Uuid\UuidInterface $id,
+		Uuid\UuidInterface $userId,
 		array $roles,
 		?DateTimeInterface $validTill
 	): string {
-		return (string) $this->tokenBuilder->build($id->toString(), $roles, $validTill);
+		return (string) $this->tokenBuilder->build($userId->toString(), $roles, $validTill);
 	}
 
 }
