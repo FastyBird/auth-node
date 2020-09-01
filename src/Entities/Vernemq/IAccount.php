@@ -86,6 +86,13 @@ interface IAccount extends NodeDatabaseEntities\IEntity,
 	public function getPassword(): string;
 
 	/**
+	 * @param string[] $publishAcl
+	 *
+	 * @return void
+	 */
+	public function setPublishAcl(array $publishAcl): void;
+
+	/**
 	 * @param string $pattern
 	 *
 	 * @return void
@@ -96,6 +103,13 @@ interface IAccount extends NodeDatabaseEntities\IEntity,
 	 * @return mixed[]
 	 */
 	public function getPublishAcl(): array;
+
+	/**
+	 * @param string[] $subscribeAcl
+	 *
+	 * @return void
+	 */
+	public function setSubscribeAcl(array $subscribeAcl): void;
 
 	/**
 	 * @param string $pattern

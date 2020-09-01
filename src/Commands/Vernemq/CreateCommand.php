@@ -99,6 +99,7 @@ class CreateCommand extends Console\Command\Command
 			->setName('fb:auth-node:create:vernemq')
 			->addArgument('username', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.username.title'))
 			->addArgument('password', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.password.title'))
+			->addArgument('clientid', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.clientId.title'))
 			->addArgument('role', Input\InputArgument::OPTIONAL, $this->translator->translate('inputs.role.title'))
 			->addOption('noconfirm', null, Input\InputOption::VALUE_NONE, 'do not ask for any confirmation')
 			->addOption('injected', null, Input\InputOption::VALUE_NONE, 'do not show all outputs')
@@ -138,6 +139,17 @@ class CreateCommand extends Console\Command\Command
 			$password = $io->ask($this->translator->translate('inputs.password.title'));
 		}
 
+		if (
+			$input->hasArgument('clientid')
+			&& is_string($input->getArgument('clientid'))
+			&& $input->getArgument('clientid') !== ''
+		) {
+			$clientId = $input->getArgument('clientid');
+
+		} else {
+			$clientId = $io->ask($this->translator->translate('inputs.clientId.title'));
+		}
+
 		$repeat = true;
 
 		if ($input->hasArgument('role') && in_array($input->getArgument('role'), [NodeAuth\Constants::ROLE_USER, NodeAuth\Constants::ROLE_MANAGER, NodeAuth\Constants::ROLE_ADMINISTRATOR], true)) {
@@ -152,58 +164,30 @@ class CreateCommand extends Console\Command\Command
 				return 1;
 			}
 
-		} else {
-			do {
-				$roleName = $io->choice(
-					$this->translator->translate('inputs.role.title'),
-					[
-						'U' => $this->translator->translate('inputs.role.values.user'),
-						'M' => $this->translator->translate('inputs.role.values.manager'),
-						'A' => $this->translator->translate('inputs.role.values.administrator'),
-					],
-					'U'
-				);
-
-				switch ($roleName) {
-					case 'U':
-						$roleName = NodeAuth\Constants::ROLE_USER;
-						break;
-
-					case 'M':
-						$roleName = NodeAuth\Constants::ROLE_MANAGER;
-						break;
-
-					case 'A':
-						$roleName = NodeAuth\Constants::ROLE_ADMINISTRATOR;
-						break;
-				}
-
-				$findRole = new Queries\FindRolesQuery();
-				$findRole->byName($roleName);
-
-				$role = $this->roleRepository->findOneBy($findRole);
-
-				if ($role !== null) {
-					$repeat = false;
-				}
-
-			} while ($repeat);
-		}
-
-		if ($role === null) {
-			$io->error('Role could\'t be loaded.');
-
-			return 1;
-		}
-
-		if ($role->getName() === NodeAuth\Constants::ROLE_USER) {
-			$publishAcls = [];
-
-			$subscribeAcls = [
-				'/fb/#',
-			];
+			$roleName = $role->getName();
 
 		} else {
+			$roleName = $io->choice(
+				$this->translator->translate('inputs.role.title'),
+				[
+					'U' => $this->translator->translate('inputs.role.values.user'),
+					'M' => $this->translator->translate('inputs.role.values.manager'),
+				],
+				'U'
+			);
+
+			switch ($roleName) {
+				case 'U':
+					$roleName = NodeAuth\Constants::ROLE_USER;
+					break;
+
+				case 'M':
+					$roleName = NodeAuth\Constants::ROLE_MANAGER;
+					break;
+			}
+		}
+
+		if ($roleName === NodeAuth\Constants::ROLE_MANAGER) {
 			$publishAcls = [
 				'/fb/#',
 			];
@@ -211,6 +195,13 @@ class CreateCommand extends Console\Command\Command
 			$subscribeAcls = [
 				'/fb/#',
 				'$SYS/broker/log/#',
+			];
+
+		} else {
+			$publishAcls = [];
+
+			$subscribeAcls = [
+				'/fb/#',
 			];
 		}
 
@@ -222,6 +213,7 @@ class CreateCommand extends Console\Command\Command
 				'entity'       => Entities\Vernemq\Account::class,
 				'username'     => $username,
 				'password'     => $password,
+				'clientId'     => $clientId,
 				'publishAcl'   => $publishAcls,
 				'subscribeAcl' => $subscribeAcls,
 			]);

@@ -53,6 +53,8 @@ commands:
 				title	: "Username?"
 			password:
 				title	: "User default password?"
+			clientId:
+				title	: "User client id?"
 			role:
 				title	: "User access role?"
 				values:

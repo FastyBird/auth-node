@@ -210,6 +210,21 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
+	public function setPublishAcl(array $publishAcl): void
+	{
+		$this->publishAcl = [];
+
+		foreach ($publishAcl as $pattern) {
+			$rule = new stdClass();
+			$rule->pattern = $pattern;
+
+			$this->publishAcl[] = $rule;
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	public function addPublishAcl(string $pattern): void
 	{
 		$rule = new stdClass();
@@ -224,6 +239,21 @@ class Account implements IAccount
 	public function getPublishAcl(): array
 	{
 		return $this->publishAcl;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setSubscribeAcl(array $subscribeAcl): void
+	{
+		$this->subscribeAcl = [];
+
+		foreach ($subscribeAcl as $pattern) {
+			$rule = new stdClass();
+			$rule->pattern = $pattern;
+
+			$this->subscribeAcl[] = $rule;
+		}
 	}
 
 	/**

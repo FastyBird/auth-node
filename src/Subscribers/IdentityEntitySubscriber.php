@@ -225,6 +225,8 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 			return;
 		}
 
+		$account = $identity->getAccount();
+
 		if ($identity instanceof Entities\Identities\IUserAccountIdentity) {
 			$password = $identity->getPassword()->getPassword();
 
@@ -241,6 +243,13 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 			$password,
 			$identity
 		);
+
+		if (
+			$identity instanceof Entities\Identities\IMachineAccountIdentity
+			&& $account instanceof Entities\Accounts\IMachineAccount
+		) {
+			$verneMqAccount->setClientId($account->getDevice());
+		}
 
 		foreach ($publishAcls as $publishAcl) {
 			$verneMqAccount->addPublishAcl($publishAcl);
