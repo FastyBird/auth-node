@@ -150,8 +150,6 @@ class CreateCommand extends Console\Command\Command
 			$clientId = $io->ask($this->translator->translate('inputs.clientId.title'));
 		}
 
-		$repeat = true;
-
 		if ($input->hasArgument('role') && in_array($input->getArgument('role'), [NodeAuth\Constants::ROLE_USER, NodeAuth\Constants::ROLE_MANAGER, NodeAuth\Constants::ROLE_ADMINISTRATOR], true)) {
 			$findRole = new Queries\FindRolesQuery();
 			$findRole->byName($input->getArgument('role'));
@@ -164,7 +162,12 @@ class CreateCommand extends Console\Command\Command
 				return 1;
 			}
 
-			$roleName = $role->getName();
+			if ($role->getName() !== NodeAuth\Constants::ROLE_MANAGER) {
+				$roleName = NodeAuth\Constants::ROLE_USER;
+
+			} else {
+				$roleName = $role->getName();
+			}
 
 		} else {
 			$roleName = $io->choice(

@@ -9,7 +9,9 @@ use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
 use FastyBird\NodeAuth;
+use Nette\Utils;
 use Psr\Log\LoggerInterface;
+use stdClass;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Tester\Assert;
@@ -58,7 +60,8 @@ final class CreateVernemqTest extends DbTestCase
 		$commandTester->execute([
 			'username' => 'vmqusername',
 			'password' => 'vmqpassword',
-			'role'     => NodeAuth\Constants::ROLE_ADMINISTRATOR,
+			'clientid' => 'vmqclientId',
+			'role'     => NodeAuth\Constants::ROLE_MANAGER,
 		]);
 
 		$findQuery = new Queries\FindVerneMqAccountsQuery();
@@ -66,9 +69,19 @@ final class CreateVernemqTest extends DbTestCase
 
 		$account = $accountRepository->findOneBy($findQuery);
 
+		$subsItem1 = new stdClass();
+		$subsItem1->pattern = '/fb/#';
+
+		$subsItem2 = new stdClass();
+		$subsItem2->pattern = '$SYS/broker/log/#';
+
+		$pubItem1 = new stdClass();
+		$pubItem1->pattern = '/fb/#';
+
 		Assert::type(Entities\Vernemq\Account::class, $account);
-		Assert::same(['/fb/#', '$SYS/broker/log/#'], $account->getSubscribeAcl());
-		Assert::same(['/fb/#'], $account->getPublishAcl());
+		Assert::equal(Utils\Json::decode(Utils\Json::encode([$subsItem1, $subsItem2])), $account->getSubscribeAcl());
+		Assert::equal(Utils\Json::decode(Utils\Json::encode([$pubItem1])), $account->getPublishAcl());
+		Assert::same('vmqclientId', $account->getClientId());
 	}
 
 }
