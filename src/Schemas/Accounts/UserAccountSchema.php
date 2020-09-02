@@ -71,7 +71,6 @@ final class UserAccountSchema extends AccountSchema
 	{
 		return array_merge((array) parent::getAttributes($account, $context), [
 			'name'  => $account->getName(),
-			'email' => $account->getEmail() !== null ? $account->getEmail()->getAddress() : null,
 
 			'details' => [
 				'first_name'  => $account->getDetails()->getFirstName(),

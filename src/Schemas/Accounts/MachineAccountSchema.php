@@ -64,10 +64,6 @@ final class MachineAccountSchema extends AccountSchema
 	{
 		return array_merge((array) parent::getAttributes($account, $context), [
 			'device' => $account->getDevice(),
-			'state'  => $account->getState()->getValue(),
-
-			'last_visit' => $account->getLastVisit() !== null ? $account->getLastVisit()->format(DATE_ATOM) : null,
-			'registered' => $account->getCreatedAt() !== null ? $account->getCreatedAt()->format(DATE_ATOM) : null,
 		]);
 	}
 
