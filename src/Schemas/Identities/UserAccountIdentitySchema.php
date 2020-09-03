@@ -16,7 +16,6 @@
 namespace FastyBird\AuthNode\Schemas\Identities;
 
 use FastyBird\AuthNode\Entities;
-use Neomerx\JsonApi;
 
 /**
  * User account identity entity schema
