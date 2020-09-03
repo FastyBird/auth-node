@@ -14,8 +14,7 @@
     "id" : "0feb8e33-04b2-4925-9bc8-e497f49595b4",
     "attributes" : {
       "uid" : "petr@novak.cz",
-      "state" : "active",
-      "email" : "john.doe@fastybird.com"
+      "state" : "active"
     },
     "relationships" : {
       "account" : {

@@ -14,8 +14,7 @@
     "id" : "77331268-efbf-bd34-49ef-bfbdefbfbd04",
     "attributes" : {
       "uid" : "john.doe@fastybird.com",
-      "state" : "active",
-      "email" : "john.doe@fastybird.com"
+      "state" : "active"
     },
     "relationships" : {
       "account" : {

@@ -52,19 +52,4 @@ final class UserAccountIdentitySchema extends IdentitySchema
 		return self::SCHEMA_TYPE;
 	}
 
-	/**
-	 * @param Entities\Identities\IUserAccountIdentity $identity
-	 * @param JsonApi\Contracts\Schema\ContextInterface $context
-	 *
-	 * @return iterable<string, string|null>
-	 *
-	 * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
-	 */
-	public function getAttributes($identity, JsonApi\Contracts\Schema\ContextInterface $context): iterable
-	{
-		return array_merge((array) parent::getAttributes($identity, $context), [
-			'email' => $identity->getAccount() instanceof Entities\Accounts\IUserAccount && $identity->getAccount()->getEmail() !== null ? $identity->getAccount()->getEmail()->getAddress() : null,
-		]);
-	}
-
 }
