@@ -4,6 +4,7 @@ namespace Tests\Cases;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use FastyBird\AuthNode;
 use FastyBird\AuthNode\Consumers;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
@@ -62,6 +63,11 @@ final class DeviceMessageHandlerTest extends DbTestCase
 		$account = $accountRepository->findOneBy($findAccount);
 
 		Assert::type(Entities\Accounts\MachineAccount::class, $account);
+		Assert::count(count(AuthNode\Constants::MACHINE_ACCOUNT_DEFAULT_ROLES), $account->getRoles());
+
+		foreach ($account->getRoles() as $role) {
+			Assert::true(in_array($role->getName(), AuthNode\Constants::MACHINE_ACCOUNT_DEFAULT_ROLES, true));
+		}
 	}
 
 	/**
