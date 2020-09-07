@@ -35,7 +35,12 @@
         "links" : {
           "self" : "/v1/accounts/3de0c345-ea83-4585-a7ca-7759a2e1e66e/relationships/roles"
         },
-        "data" : []
+        "data" : [
+          {
+            "type" : "auth-node/role",
+            "id" : "efbfbdef-bfbd-efbf-bd0f-efbfbd5c4f61"
+          }
+        ]
       }
     },
     "links" : {
