@@ -115,8 +115,6 @@ final class AccountEntitySubscriber implements Common\EventSubscriber
 
 		// Check all scheduled updates
 		foreach (array_merge($uow->getScheduledEntityInsertions(), $uow->getScheduledEntityUpdates()) as $object) {
-			var_dump(get_class($object));
-
 			if ($object instanceof Entities\Accounts\IUserAccount) {
 				/**
 				 * If new account is without any role
