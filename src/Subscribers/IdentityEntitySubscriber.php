@@ -145,11 +145,11 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 
 			if ($verneMqAccount === null) {
 				$publishAcls = [
-					'/fb/' . $identity->getUid() . '/#',
+					'/fb/+/' . $identity->getUid() . '/#',
 				];
 
 				$subscribeAcls = [
-					'/fb/' . $identity->getUid() . '/#',
+					'/fb/+/' . $identity->getUid() . '/#',
 				];
 
 				$this->createAccount($identity, $uow, $publishAcls, $subscribeAcls);

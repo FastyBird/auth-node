@@ -180,12 +180,12 @@ class VernemqCommand extends Console\Command\Command
 						$subscribeAcls = [];
 
 						$publishRule = new stdClass();
-						$publishRule->pattern = '/fb/' . $identity->getUid() . '/#';
+						$publishRule->pattern = '/fb/+/' . $identity->getUid() . '/#';
 
 						$publishAcls[] = $publishRule;
 
 						$subscribeRule = new stdClass();
-						$subscribeRule->pattern = '/fb/' . $identity->getUid() . '/#';
+						$subscribeRule->pattern = '/fb/+/' . $identity->getUid() . '/#';
 
 						$subscribeAcls[] = $subscribeRule;
 
