@@ -165,7 +165,9 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			}
 		}
 
-		$this->logger->info('[CONSUMER] Successfully consumed entity message');
+		$this->logger->info('[CONSUMER] Successfully consumed entity message', [
+			'routingKey' => $routingKey,
+		]);
 
 		return true;
 	}
