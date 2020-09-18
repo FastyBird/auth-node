@@ -1982,12 +1982,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/node-exchange.git",
-                "reference": "e2979ffd28e1a17f63d418a350b9a455e006d1c1"
+                "reference": "6c10b680038cdba79ee1d089499eb7c7e7563ecc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/node-exchange/zipball/e2979ffd28e1a17f63d418a350b9a455e006d1c1",
-                "reference": "e2979ffd28e1a17f63d418a350b9a455e006d1c1",
+                "url": "https://api.github.com/repos/FastyBird/node-exchange/zipball/6c10b680038cdba79ee1d089499eb7c7e7563ecc",
+                "reference": "6c10b680038cdba79ee1d089499eb7c7e7563ecc",
                 "shasum": ""
             },
             "require": {
@@ -2046,7 +2046,7 @@
                 "queue",
                 "rabbit"
             ],
-            "time": "2020-09-18T17:58:59+00:00"
+            "time": "2020-09-18T20:15:56+00:00"
         },
         {
             "name": "fastybird/node-json-api",
