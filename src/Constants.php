@@ -15,8 +15,8 @@
 
 namespace FastyBird\AuthNode;
 
-use FastyBird\AuthNode\Entities as AuthNodeEntities;
-use FastyBird\NodeAuth;
+use FastyBird\AuthModule\Entities as AuthModuleEntities;
+use FastyBird\SimpleAuth;
 
 /**
  * Node constants
@@ -30,50 +30,19 @@ final class Constants
 {
 
 	/**
-	 * Node routing
-	 */
-
-	public const ROUTE_NAME_ME = 'me';
-	public const ROUTE_NAME_ME_RELATIONSHIP = 'me.relationship';
-	public const ROUTE_NAME_ME_EMAILS = 'me.emails';
-	public const ROUTE_NAME_ME_EMAIL = 'me.email';
-	public const ROUTE_NAME_ME_EMAIL_RELATIONSHIP = 'me.email.relationship';
-	public const ROUTE_NAME_ME_IDENTITIES = 'me.identities';
-	public const ROUTE_NAME_ME_IDENTITY = 'me.identity';
-	public const ROUTE_NAME_ME_IDENTITY_RELATIONSHIP = 'me.identity.relationship';
-
-	public const ROUTE_NAME_ACCOUNTS = 'accounts';
-	public const ROUTE_NAME_ACCOUNT = 'account';
-	public const ROUTE_NAME_ACCOUNT_RELATIONSHIP = 'account.relationship';
-	public const ROUTE_NAME_ACCOUNT_EMAILS = 'account.emails';
-	public const ROUTE_NAME_ACCOUNT_EMAIL = 'account.email';
-	public const ROUTE_NAME_ACCOUNT_EMAIL_RELATIONSHIP = 'account.email.relationship';
-	public const ROUTE_NAME_ACCOUNT_IDENTITIES = 'account.identities';
-	public const ROUTE_NAME_ACCOUNT_IDENTITY = 'account.identity';
-	public const ROUTE_NAME_ACCOUNT_IDENTITY_RELATIONSHIP = 'account.identity.relationship';
-
-	public const ROUTE_NAME_SESSION = 'session';
-	public const ROUTE_NAME_SESSION_RELATIONSHIP = 'session.relationship';
-
-	public const ROUTE_NAME_ROLE = 'role';
-	public const ROUTE_NAME_ROLES = 'roles';
-	public const ROUTE_NAME_ROLE_RELATIONSHIP = 'role.relationship';
-	public const ROUTE_NAME_ROLE_CHILDREN = 'role.children';
-
-	/**
 	 * Accounts default roles
 	 */
 
 	public const USER_ACCOUNT_DEFAULT_ROLES = [
-		NodeAuth\Constants::ROLE_USER,
+		SimpleAuth\Constants::ROLE_USER,
 	];
 
 	public const MACHINE_ACCOUNT_DEFAULT_ROLES = [
-		NodeAuth\Constants::ROLE_USER,
+		SimpleAuth\Constants::ROLE_USER,
 	];
 
 	public const NODE_ACCOUNT_DEFAULT_ROLES = [
-		NodeAuth\Constants::ROLE_USER,
+		SimpleAuth\Constants::ROLE_USER,
 	];
 
 	/**
@@ -87,9 +56,9 @@ final class Constants
 	 * Message bus routing keys mapping
 	 */
 	public const RABBIT_MQ_ENTITIES_ROUTING_KEYS_MAPPING = [
-		AuthNodeEntities\Accounts\Account::class    => 'fb.bus.node.entity.[ACTION].account',
-		AuthNodeEntities\Emails\Email::class        => 'fb.bus.node.entity.[ACTION].email',
-		AuthNodeEntities\Identities\Identity::class => 'fb.bus.node.entity.[ACTION].identity',
+		AuthModuleEntities\Accounts\Account::class    => 'fb.bus.node.entity.[ACTION].account',
+		AuthModuleEntities\Emails\Email::class        => 'fb.bus.node.entity.[ACTION].email',
+		AuthModuleEntities\Identities\Identity::class => 'fb.bus.node.entity.[ACTION].identity',
 	];
 
 	public const RABBIT_MQ_ENTITIES_ROUTING_KEY_ACTION_REPLACE_STRING = '[ACTION]';

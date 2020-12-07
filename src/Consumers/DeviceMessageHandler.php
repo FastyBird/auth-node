@@ -18,15 +18,17 @@ namespace FastyBird\AuthNode\Consumers;
 use Doctrine\Common;
 use Doctrine\DBAL;
 use Doctrine\DBAL\Connection;
+use FastyBird\AuthModule\Entities as AuthModuleEntities;
+use FastyBird\AuthModule\Models as AuthModuleModels;
+use FastyBird\AuthModule\Queries as AuthModuleQueries;
+use FastyBird\AuthModule\Types as AuthModuleTypes;
 use FastyBird\AuthNode;
-use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Exceptions;
-use FastyBird\AuthNode\Models;
-use FastyBird\AuthNode\Queries;
-use FastyBird\NodeExchange\Consumers as NodeExchangeConsumers;
-use FastyBird\NodeExchange\Exceptions as NodeExchangeExceptions;
-use FastyBird\NodeMetadata;
-use FastyBird\NodeMetadata\Loaders as NodeMetadataLoaders;
+use FastyBird\ModulesMetadata;
+use FastyBird\ModulesMetadata\Loaders as ModulesMetadataLoaders;
+use FastyBird\ModulesMetadata\Schemas as ModulesMetadataSchemas;
+use FastyBird\RabbitMqPlugin\Consumers as RabbitMqPluginConsumers;
+use FastyBird\RabbitMqPlugin\Exceptions as RabbitMqPluginExceptions;
 use Nette;
 use Nette\Utils;
 use Psr\Log;
@@ -41,19 +43,22 @@ use Throwable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandler
+final class DeviceMessageHandler implements RabbitMqPluginConsumers\IMessageHandler
 {
 
 	use Nette\SmartObject;
 
-	/** @var Models\Accounts\IAccountRepository */
+	/** @var AuthModuleModels\Accounts\IAccountRepository */
 	private $accountRepository;
 
-	/** @var Models\Accounts\IAccountsManager */
+	/** @var AuthModuleModels\Accounts\IAccountsManager */
 	private $accountsManager;
 
-	/** @var NodeMetadataLoaders\ISchemaLoader */
+	/** @var ModulesMetadataLoaders\ISchemaLoader */
 	private $schemaLoader;
+
+	/** @var ModulesMetadataSchemas\IValidator */
+	private $validator;
 
 	/** @var Log\LoggerInterface */
 	private $logger;
@@ -62,9 +67,10 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	private $managerRegistry;
 
 	public function __construct(
-		Models\Accounts\IAccountRepository $accountRepository,
-		Models\Accounts\IAccountsManager $accountsManager,
-		NodeMetadataLoaders\ISchemaLoader $schemaLoader,
+		AuthModuleModels\Accounts\IAccountRepository $accountRepository,
+		AuthModuleModels\Accounts\IAccountsManager $accountsManager,
+		ModulesMetadataLoaders\ISchemaLoader $schemaLoader,
+		ModulesMetadataSchemas\IValidator $validator,
 		Log\LoggerInterface $logger,
 		Common\Persistence\ManagerRegistry $managerRegistry
 	) {
@@ -72,6 +78,7 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 		$this->accountsManager = $accountsManager;
 
 		$this->schemaLoader = $schemaLoader;
+		$this->validator = $validator;
 		$this->logger = $logger;
 		$this->managerRegistry = $managerRegistry;
 	}
@@ -79,24 +86,45 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws NodeExchangeExceptions\TerminateException
+	 * @throws RabbitMqPluginExceptions\TerminateException
 	 * @throws DBAL\ConnectionException
 	 */
 	public function process(
 		string $routingKey,
-		Utils\ArrayHash $message
+		string $origin,
+		string $payload
 	): bool {
+		$schema = $this->getSchema($routingKey, $origin);
+
+		if ($schema === null) {
+			return true;
+		}
+
+		try {
+			$message = $this->validator->validate($payload, $schema);
+
+		} catch (Throwable $ex) {
+			$this->logger->error('[FB:NODE:CONSUMER] ' . $ex->getMessage(), [
+				'exception' => [
+					'message' => $ex->getMessage(),
+					'code'    => $ex->getCode(),
+				],
+			]);
+
+			return true;
+		}
+
 		try {
 			switch ($routingKey) {
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY:
-					$findAccount = new Queries\FindAccountsQuery();
+					$findAccount = new AuthModuleQueries\FindAccountsQuery();
 					$findAccount->byId(Uuid\Uuid::fromString($message->offsetGet('id')));
 
 					$account = $this->accountRepository->findOneBy($findAccount);
 
 					if ($account === null) {
 						if ($message->offsetGet('parent') === null) {
-							$findAccount = new Queries\FindAccountsQuery();
+							$findAccount = new AuthModuleQueries\FindAccountsQuery();
 							$findAccount->byId(Uuid\Uuid::fromString($message->offsetGet('owner')));
 
 							$owner = $this->accountRepository->findOneBy($findAccount);
@@ -108,8 +136,8 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 								$create = Utils\ArrayHash::from([
 									'id'     => Uuid\Uuid::fromString($message->offsetGet('id')),
 									'device' => $message->offsetGet('device'),
-									'entity' => Entities\Accounts\MachineAccount::class,
-									'state'  => AuthNode\Types\AccountStateType::get(AuthNode\Types\AccountStateType::STATE_ACTIVE),
+									'entity' => AuthModuleEntities\Accounts\MachineAccount::class,
+									'state'  => AuthModuleTypes\AccountStateType::get(AuthModuleTypes\AccountStateType::STATE_ACTIVE),
 									'owner'  => $owner,
 								]);
 
@@ -132,7 +160,7 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 					break;
 
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY:
-					$findAccount = new Queries\FindAccountsQuery();
+					$findAccount = new AuthModuleQueries\FindAccountsQuery();
 					$findAccount->byId(Uuid\Uuid::fromString($message->offsetGet('id')));
 
 					$account = $this->accountRepository->findOneBy($findAccount);
@@ -156,7 +184,7 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			return false;
 
 		} catch (Throwable $ex) {
-			throw new NodeExchangeExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
+			throw new RabbitMqPluginExceptions\TerminateException('An error occurred: ' . $ex->getMessage(), $ex->getCode(), $ex);
 
 		} finally {
 			// Revert all changes when error occur
@@ -181,7 +209,7 @@ final class DeviceMessageHandler implements NodeExchangeConsumers\IMessageHandle
 			switch ($routingKey) {
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_CREATED_ENTITY_ROUTING_KEY:
 				case AuthNode\Constants::RABBIT_MQ_DEVICES_DELETED_ENTITY_ROUTING_KEY:
-					return $this->schemaLoader->load(NodeMetadata\Constants::RESOURCES_FOLDER . '/schemas/devices-node/entity.device.json');
+					return $this->schemaLoader->load(ModulesMetadata\Constants::RESOURCES_FOLDER . '/schemas/devices-module/entity.device.json');
 			}
 		}
 

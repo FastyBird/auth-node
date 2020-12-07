@@ -17,10 +17,11 @@ namespace FastyBird\AuthNode\Subscribers;
 
 use Doctrine\Common;
 use Doctrine\ORM;
+use FastyBird\AuthModule\Entities as AuthModuleEntities;
 use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use FastyBird\NodeAuth;
+use FastyBird\SimpleAuth;
 use Nette;
 use Throwable;
 
@@ -74,7 +75,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 
 		// Check all scheduled updates
 		foreach ($uow->getScheduledEntityUpdates() as $object) {
-			if ($object instanceof Entities\Identities\IIdentity) {
+			if ($object instanceof AuthModuleEntities\Identities\IIdentity) {
 				$this->processIdentityEntity($object, $em, $uow);
 			}
 		}
@@ -94,7 +95,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 
 		// Check all scheduled updates
 		foreach ($uow->getScheduledEntityInsertions() as $object) {
-			if ($object instanceof Entities\Identities\IIdentity) {
+			if ($object instanceof AuthModuleEntities\Identities\IIdentity) {
 				$this->processIdentityEntity($object, $em, $uow);
 			}
 		}
@@ -113,7 +114,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		$uow = $em->getUnitOfWork();
 
 		foreach (array_merge($uow->getScheduledEntityDeletions(), $uow->getScheduledCollectionDeletions()) as $object) {
-			if ($object instanceof Entities\Accounts\IAccount) {
+			if ($object instanceof AuthModuleEntities\Accounts\IAccount) {
 				$findAccount = new Queries\FindVerneMqAccountsQuery();
 				$findAccount->forAccount($object);
 
@@ -127,7 +128,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\Identities\IIdentity $identity
+	 * @param AuthModuleEntities\Identities\IIdentity $identity
 	 * @param ORM\EntityManager $em
 	 * @param ORM\UnitOfWork $uow
 	 *
@@ -136,11 +137,11 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 	 * @throws Throwable
 	 */
 	private function processIdentityEntity(
-		Entities\Identities\IIdentity $identity,
+		AuthModuleEntities\Identities\IIdentity $identity,
 		ORM\EntityManager $em,
 		ORM\UnitOfWork $uow
 	): void {
-		if ($identity instanceof Entities\Identities\IMachineAccountIdentity) {
+		if ($identity instanceof AuthModuleEntities\Identities\IMachineAccountIdentity) {
 			$verneMqAccount = $this->findAccount($identity);
 
 			if ($verneMqAccount === null) {
@@ -159,7 +160,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 			}
 		}
 
-		if ($identity instanceof Entities\Identities\IUserAccountIdentity) {
+		if ($identity instanceof AuthModuleEntities\Identities\IUserAccountIdentity) {
 			$account = $identity->getAccount();
 
 			$verneMqAccount = $this->findAccount($identity);
@@ -171,13 +172,13 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 				];
 
 				if (
-					$account->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)
-					|| $account->hasRole(NodeAuth\Constants::ROLE_MANAGER)
+					$account->hasRole(SimpleAuth\Constants::ROLE_ADMINISTRATOR)
+					|| $account->hasRole(SimpleAuth\Constants::ROLE_MANAGER)
 				) {
 					$publishAcls[] = '/fb/#';
 				}
 
-				if ($account->hasRole(NodeAuth\Constants::ROLE_ADMINISTRATOR)) {
+				if ($account->hasRole(SimpleAuth\Constants::ROLE_ADMINISTRATOR)) {
 					$subscribeAcls[] = '$SYS/broker/log/#';
 				}
 
@@ -187,12 +188,12 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\Identities\IIdentity $identity
+	 * @param AuthModuleEntities\Identities\IIdentity $identity
 	 *
 	 * @return Entities\Vernemq\IAccount|null
 	 */
 	private function findAccount(
-		Entities\Identities\IIdentity $identity
+		AuthModuleEntities\Identities\IIdentity $identity
 	): ?Entities\Vernemq\IAccount {
 		$account = $identity->getAccount();
 
@@ -203,7 +204,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 	}
 
 	/**
-	 * @param Entities\Identities\IIdentity $identity
+	 * @param AuthModuleEntities\Identities\IIdentity $identity
 	 * @param ORM\UnitOfWork $uow
 	 * @param string[] $publishAcls
 	 * @param string[] $subscribeAcls
@@ -213,21 +214,21 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 	 * @throws Throwable
 	 */
 	private function createAccount(
-		Entities\Identities\IIdentity $identity,
+		AuthModuleEntities\Identities\IIdentity $identity,
 		ORM\UnitOfWork $uow,
 		array $publishAcls,
 		array $subscribeAcls
 	): void {
 		if (
-			!$identity instanceof Entities\Identities\IUserAccountIdentity
-			&& !$identity instanceof Entities\Identities\IMachineAccountIdentity
+			!$identity instanceof AuthModuleEntities\Identities\IUserAccountIdentity
+			&& !$identity instanceof AuthModuleEntities\Identities\IMachineAccountIdentity
 		) {
 			return;
 		}
 
 		$account = $identity->getAccount();
 
-		if ($identity instanceof Entities\Identities\IUserAccountIdentity) {
+		if ($identity instanceof AuthModuleEntities\Identities\IUserAccountIdentity) {
 			$password = $identity->getPassword()->getPassword();
 
 			if ($password === null) {
@@ -245,8 +246,8 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		);
 
 		if (
-			$identity instanceof Entities\Identities\IMachineAccountIdentity
-			&& $account instanceof Entities\Accounts\IMachineAccount
+			$identity instanceof AuthModuleEntities\Identities\IMachineAccountIdentity
+			&& $account instanceof AuthModuleEntities\Accounts\IMachineAccount
 		) {
 			$verneMqAccount->setClientId($account->getDevice());
 		}
@@ -264,7 +265,7 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 
 	/**
 	 * @param Entities\Vernemq\IAccount $verneMqAccount
-	 * @param Entities\Identities\IIdentity $identity
+	 * @param AuthModuleEntities\Identities\IIdentity $identity
 	 * @param ORM\EntityManager $em
 	 * @param ORM\UnitOfWork $uow
 	 *
@@ -272,12 +273,12 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 	 */
 	private function updateAccount(
 		Entities\Vernemq\IAccount $verneMqAccount,
-		Entities\Identities\IIdentity $identity,
+		AuthModuleEntities\Identities\IIdentity $identity,
 		ORM\EntityManager $em,
 		ORM\UnitOfWork $uow
 	): void {
 		if (
-		!$identity instanceof Entities\Identities\IMachineAccountIdentity
+		!$identity instanceof AuthModuleEntities\Identities\IMachineAccountIdentity
 		) {
 			return;
 		}

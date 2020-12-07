@@ -15,8 +15,8 @@
 
 namespace FastyBird\AuthNode\Entities\Vernemq;
 
-use FastyBird\AuthNode\Entities;
-use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
+use FastyBird\AuthModule\Entities as AuthModuleEntities;
+use FastyBird\Database\Entities as DatabaseEntities;
 use IPub\DoctrineTimestampable;
 
 /**
@@ -27,15 +27,15 @@ use IPub\DoctrineTimestampable;
  *
  * @author         Adam Kadlec <adam.kadlec@fastybird.com>
  */
-interface IAccount extends NodeDatabaseEntities\IEntity,
+interface IAccount extends DatabaseEntities\IEntity,
 	DoctrineTimestampable\Entities\IEntityCreated,
 	DoctrineTimestampable\Entities\IEntityUpdated
 {
 
 	/**
-	 * @return Entities\Identities\IIdentity|null
+	 * @return AuthModuleEntities\Identities\IIdentity|null
 	 */
-	public function getIdentity(): ?Entities\Identities\IIdentity;
+	public function getIdentity(): ?AuthModuleEntities\Identities\IIdentity;
 
 	/**
 	 * @param string $mountpoint

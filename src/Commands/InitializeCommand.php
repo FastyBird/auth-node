@@ -17,10 +17,10 @@ namespace FastyBird\AuthNode\Commands;
 
 use Doctrine\Common;
 use Doctrine\DBAL\Connection;
+use FastyBird\AuthModule\Models as AuthModuleModels;
+use FastyBird\AuthModule\Queries as AuthModuleQueries;
 use FastyBird\AuthNode\Exceptions;
-use FastyBird\AuthNode\Models;
-use FastyBird\AuthNode\Queries;
-use FastyBird\NodeAuth;
+use FastyBird\SimpleAuth;
 use Monolog;
 use Nette\Utils;
 use Psr\Log\LoggerInterface;
@@ -42,13 +42,13 @@ use Throwable;
 class InitializeCommand extends Console\Command\Command
 {
 
-	/** @var Models\Accounts\IAccountRepository */
+	/** @var AuthModuleModels\Accounts\IAccountRepository */
 	private $accountRepository;
 
-	/** @var Models\Roles\IRoleRepository */
+	/** @var AuthModuleModels\Roles\IRoleRepository */
 	private $roleRepository;
 
-	/** @var Models\Roles\IRolesManager */
+	/** @var AuthModuleModels\Roles\IRolesManager */
 	private $rolesManager;
 
 	/** @var Common\Persistence\ManagerRegistry */
@@ -58,9 +58,9 @@ class InitializeCommand extends Console\Command\Command
 	private $logger;
 
 	public function __construct(
-		Models\Accounts\IAccountRepository $accountRepository,
-		Models\Roles\IRoleRepository $roleRepository,
-		Models\Roles\IRolesManager $rolesManager,
+		AuthModuleModels\Accounts\IAccountRepository $accountRepository,
+		AuthModuleModels\Roles\IRoleRepository $roleRepository,
+		AuthModuleModels\Roles\IRolesManager $rolesManager,
 		Common\Persistence\ManagerRegistry $managerRegistry,
 		LoggerInterface $logger,
 		?string $name = null
@@ -157,11 +157,11 @@ class InitializeCommand extends Console\Command\Command
 		$io->section('Preparing initial data');
 
 		$allRoles = [
-			NodeAuth\Constants::ROLE_ANONYMOUS,
-			NodeAuth\Constants::ROLE_VISITOR,
-			NodeAuth\Constants::ROLE_USER,
-			NodeAuth\Constants::ROLE_MANAGER,
-			NodeAuth\Constants::ROLE_ADMINISTRATOR,
+			SimpleAuth\Constants::ROLE_ANONYMOUS,
+			SimpleAuth\Constants::ROLE_VISITOR,
+			SimpleAuth\Constants::ROLE_USER,
+			SimpleAuth\Constants::ROLE_MANAGER,
+			SimpleAuth\Constants::ROLE_ADMINISTRATOR,
 		];
 
 		try {
@@ -172,7 +172,7 @@ class InitializeCommand extends Console\Command\Command
 
 			// Roles initialization
 			foreach ($allRoles as $roleName) {
-				$findRole = new Queries\FindRolesQuery();
+				$findRole = new AuthModuleQueries\FindRolesQuery();
 				$findRole->byName($roleName);
 
 				$role = $this->roleRepository->findOneBy($findRole);
@@ -209,13 +209,13 @@ class InitializeCommand extends Console\Command\Command
 
 		$io->section('Checking for administrator account');
 
-		$findRole = new Queries\FindRolesQuery();
-		$findRole->byName(NodeAuth\Constants::ROLE_ADMINISTRATOR);
+		$findRole = new AuthModuleQueries\FindRolesQuery();
+		$findRole->byName(SimpleAuth\Constants::ROLE_ADMINISTRATOR);
 
 		$administratorRole = $this->roleRepository->findOneBy($findRole);
 
 		if ($administratorRole !== null) {
-			$findAccounts = new Queries\FindAccountsQuery();
+			$findAccounts = new AuthModuleQueries\FindAccountsQuery();
 			$findAccounts->inRole($administratorRole);
 
 			$accounts = $this->accountRepository->findAllBy($findAccounts);
@@ -224,7 +224,7 @@ class InitializeCommand extends Console\Command\Command
 				$accountCmd = $symfonyApp->find('fb:auth-node:create:account');
 
 				$result = $accountCmd->run(new Input\ArrayInput([
-					'role'       => NodeAuth\Constants::ROLE_ADMINISTRATOR,
+					'role'       => SimpleAuth\Constants::ROLE_ADMINISTRATOR,
 					'--injected' => true,
 				]), $output);
 

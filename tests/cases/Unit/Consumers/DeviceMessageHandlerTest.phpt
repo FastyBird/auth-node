@@ -4,14 +4,15 @@ namespace Tests\Cases;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use FastyBird\AuthModule\Entities as AuthModuleEntities;
+use FastyBird\AuthModule\Models as AuthModuleModels;
+use FastyBird\AuthModule\Queries as AuthModuleQueries;
 use FastyBird\AuthNode;
 use FastyBird\AuthNode\Consumers;
-use FastyBird\AuthNode\Entities;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use FastyBird\RabbitMqPlugin\Publishers as RabbitMqPluginPublishers;
 use Mockery;
-use Nette\Utils;
 use Ramsey\Uuid;
 use Tester\Assert;
 
@@ -30,39 +31,39 @@ final class DeviceMessageHandlerTest extends DbTestCase
 
 		parent::setUp();
 
-		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher = Mockery::mock(RabbitMqPluginPublishers\RabbitMqPublisher::class);
 		$rabbitPublisher
 			->shouldReceive('publish');
 
 		$this->mockContainerService(
-			NodeExchangePublishers\IRabbitMqPublisher::class,
+			RabbitMqPluginPublishers\IRabbitMqPublisher::class,
 			$rabbitPublisher
 		);
 	}
 
 	/**
 	 * @param string $routingKey
-	 * @param Utils\ArrayHash $message
-	 * @param string|null $verneUsername
+	 * @param string $payload
+	 * @param string|null $id
 	 *
 	 * @dataProvider ./../../../fixtures/Consumers/deviceCreatedMessage.php
 	 */
-	public function testProcessMessageDeviceCreated(string $routingKey, Utils\ArrayHash $message, ?string $id): void
+	public function testProcessMessageDeviceCreated(string $routingKey, string $payload, ?string $id): void
 	{
 		/** @var Consumers\DeviceMessageHandler $handler */
 		$handler = $this->getContainer()->getByType(Consumers\DeviceMessageHandler::class);
 
-		$handler->process($routingKey, $message);
+		$handler->process($routingKey, AuthNode\Constants::RABBIT_MQ_DEVICES_ORIGIN, $payload);
 
-		/** @var Models\Accounts\IAccountRepository $accountRepository */
-		$accountRepository = $this->getContainer()->getByType(Models\Accounts\IAccountRepository::class);
+		/** @var AuthModuleModels\Accounts\IAccountRepository $accountRepository */
+		$accountRepository = $this->getContainer()->getByType(AuthModuleModels\Accounts\IAccountRepository::class);
 
-		$findAccount = new Queries\FindAccountsQuery();
+		$findAccount = new AuthModuleQueries\FindAccountsQuery();
 		$findAccount->byId(Uuid\Uuid::fromString($id));
 
 		$account = $accountRepository->findOneBy($findAccount);
 
-		Assert::type(Entities\Accounts\MachineAccount::class, $account);
+		Assert::type(AuthModuleEntities\Accounts\MachineAccount::class, $account);
 		Assert::count(count(AuthNode\Constants::MACHINE_ACCOUNT_DEFAULT_ROLES), $account->getRoles());
 
 		foreach ($account->getRoles() as $role) {
@@ -72,11 +73,11 @@ final class DeviceMessageHandlerTest extends DbTestCase
 
 	/**
 	 * @param string $routingKey
-	 * @param Utils\ArrayHash $message
+	 * @param string $payload
 	 *
 	 * @dataProvider ./../../../fixtures/Consumers/deviceDeletedMessage.php
 	 */
-	public function testProcessMessageDeviceDeleted(string $routingKey, Utils\ArrayHash $message): void
+	public function testProcessMessageDeviceDeleted(string $routingKey, string $payload): void
 	{
 		/** @var Models\Vernemq\IAccountRepository $accountRepository */
 		$accountRepository = $this->getContainer()->getByType(Models\Vernemq\IAccountRepository::class);
@@ -88,7 +89,7 @@ final class DeviceMessageHandlerTest extends DbTestCase
 		/** @var Consumers\DeviceMessageHandler $handler */
 		$handler = $this->getContainer()->getByType(Consumers\DeviceMessageHandler::class);
 
-		$handler->process($routingKey, $message);
+		$handler->process($routingKey, AuthNode\Constants::RABBIT_MQ_DEVICES_ORIGIN, $payload);
 
 		/** @var EntityManager $em */
 		$em = $this->getContainer()->getByType(EntityManagerInterface::class);

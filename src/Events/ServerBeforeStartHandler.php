@@ -15,7 +15,7 @@
 
 namespace FastyBird\AuthNode\Events;
 
-use FastyBird\NodeExchange;
+use FastyBird\RabbitMqPlugin;
 use Nette;
 use Throwable;
 
@@ -32,11 +32,11 @@ class ServerBeforeStartHandler
 
 	use Nette\SmartObject;
 
-	/** @var NodeExchange\Exchange */
+	/** @var RabbitMqPlugin\Exchange */
 	private $exchange;
 
 	public function __construct(
-		NodeExchange\Exchange $exchange
+		RabbitMqPlugin\Exchange $exchange
 	) {
 		$this->exchange = $exchange;
 	}

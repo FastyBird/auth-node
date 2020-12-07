@@ -35,36 +35,37 @@ extensions:
 	nettrineOrmAnnotations				: Nettrine\ORM\DI\OrmAnnotationsExtension
 	nettrineOrmConsole					: Nettrine\ORM\DI\OrmConsoleExtension
 	nettrineOrmCache					: Nettrine\ORM\DI\OrmCacheExtension
+	fbDateTimeFactory					: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
+	fbSimpleAuth						: FastyBird\SimpleAuth\DI\SimpleAuthExtension
+	fbDatabase							: FastyBird\Database\DI\DatabaseExtension
+	fbJsonApi							: FastyBird\JsonApi\DI\JsonApiExtension
+	fbModulesMetadata					: FastyBird\ModulesMetadata\DI\ModulesMetadataExtension
+	fbWebServer							: FastyBird\WebServer\DI\WebServerExtension
+	fbAuthModule						: FastyBird\AuthModule\DI\AuthModuleExtension
+	fbRabbitMqPlugin					: FastyBird\RabbitMqPlugin\DI\RabbitMqPluginExtension
 	ipubDoctrineConsistence				: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
 	ipubDoctrineCrud					: IPub\DoctrineCrud\DI\DoctrineCrudExtension
 	ipubDoctrineTimestampable			: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
 	ipubDoctrineDynamicDiscriminatorMap	: IPub\DoctrineDynamicDiscriminatorMap\DI\DoctrineDynamicDiscriminatorMapExtension
-	fbDateTimeFactory					: FastyBird\DateTimeFactory\DI\DateTimeFactoryExtension
-	nodeAuth							: FastyBird\NodeAuth\DI\NodeAuthExtension
-	nodeDatabase						: FastyBird\NodeDatabase\DI\NodeDatabaseExtension
-	nodeExchange						: FastyBird\NodeExchange\DI\NodeExchangeExtension
-	nodeJsonApi							: FastyBird\NodeJsonApi\DI\NodeJsonApiExtension
-	nodeMetadata						: FastyBird\NodeMetadata\DI\NodeMetadataExtension
-	nodeWebServer						: FastyBird\NodeWebServer\DI\NodeWebServerExtension
 
 ##################################
 # Nette extensions configuration #
 ##################################
 
-# Node authentication
-#####################
-nodeAuth:
+# Simple authentication
+#######################
+fbSimpleAuth:
 	token:
-		issuer: %origin%
+		issuer: %security.issuer%
 		signature: %security.signature%
 	enable:
 		middleware: true
 		doctrine:
 			models: true
 
-# Node data exchange
+# RabbitMQ exchange
 ####################
-nodeExchange:
+fbRabbitMqPlugin:
 	origin: %origin%
 	rabbitMQ:
 		connection:
@@ -78,9 +79,9 @@ nodeExchange:
 		routing:
 			keys: %rabbitmq.routing%
 
-# Node web server
+# Web server
 #################
-nodeWebServer:
+fbWebServer:
 	server:
 		address: %server.address%
 		port: %server.port%
@@ -92,8 +93,6 @@ contributteTranslation:
 		default: en_US
 		fallback: [en_US, en]
 	localeResolvers: []
-	dirs:
-		- %appDir%/src/Translations
 
 # Doctrine DBAL
 ###############
@@ -140,12 +139,9 @@ nettrineOrm:
 		proxyDir	: %tempDir%/cache/doctrine.proxies
 
 nettrineOrmAnnotations:
-	namespaces:
-		- FastyBird\AuthNode\Entities
-		- FastyBird\NodeAuth\Entities
-	paths:
-		- %appDir%/src/Entities
-		- %appDir%/vendor/fastybird/node-auth/src/Entities
+	mapping: [
+		FastyBird\AuthNode\Entities: %appDir%/src/Entities
+	]
 
 #############################
 # Node services definitions #
@@ -156,45 +152,13 @@ decorator:
 		setup:
 			- '$onBeforeServerStart[]' = @FastyBird\AuthNode\Events\ServerBeforeStartHandler
 
-	FastyBird\NodeExchange\Exchange:
+	FastyBird\RabbitMqPlugin\Exchange:
 		setup:
-			- '$onAfterConsumeMessage[]' = @FastyBird\NodeDatabase\Events\AfterConsumeHandler
+			- '$onAfterConsumeMessage[]' = @FastyBird\AuthNode\Events\AfterConsumeHandler
 
 services:
-	# Security
-	##########
-
-	- {factory: FastyBird\AuthNode\Helpers\SecurityHash}
-
-	- {factory: FastyBird\AuthNode\Security\IdentityFactory}
-
-	- {factory: FastyBird\AuthNode\Security\Authenticator}
-
-	# Nette services overwrite
-	security.user: FastyBird\AuthNode\Security\User
-
-	# Http router
-	#############
-
-	- {factory: FastyBird\AuthNode\Middleware\AccessMiddleware, tags: [middleware: {priority: 50}]}
-
-	- {factory: FastyBird\AuthNode\Middleware\UrlFormatMiddleware, tags: [middleware: {priority: 150}]}
-
-	-
-		factory: FastyBird\AuthNode\Router\Router
-		setup:
-			- registerRoutes
-
 	# Console commands
 	##################
-
-	- {factory: FastyBird\AuthNode\Commands\Accounts\CreateCommand}
-
-	- {factory: FastyBird\AuthNode\Commands\Vernemq\CreateCommand}
-
-	- {factory: FastyBird\AuthNode\Commands\Synchronisation\VernemqCommand}
-
-	- {factory: FastyBird\AuthNode\Commands\Tests\GenerateTokenCommand}
 
 	- {factory: FastyBird\AuthNode\Commands\InitializeCommand}
 
@@ -208,114 +172,19 @@ services:
 
 	- {factory: FastyBird\AuthNode\Events\ServerBeforeStartHandler}
 
+	- {factory: FastyBird\AuthNode\Events\AfterConsumeHandler}
+
 	# Events subscribers
 	####################
 
-	- {factory: FastyBird\AuthNode\Subscribers\EmailEntitySubscriber}
-
 	- {factory: FastyBird\AuthNode\Subscribers\IdentityEntitySubscriber}
 
-	- {factory: FastyBird\AuthNode\Subscribers\EntitiesSubscriber}
-
-	- {factory: FastyBird\AuthNode\Subscribers\AccountEntitySubscriber}
-
 	# Database repositories
-
-	- {factory: FastyBird\AuthNode\Models\Accounts\AccountRepository}
-
-	- {factory: FastyBird\AuthNode\Models\Emails\EmailRepository}
-
-	- {factory: FastyBird\AuthNode\Models\Identities\IdentityRepository}
-
-	- {factory: FastyBird\AuthNode\Models\Roles\RoleRepository}
+	#######################
 
 	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountRepository}
 
 	# Database managers
 	###################
 
-	-
-		factory: FastyBird\AuthNode\Models\Accounts\AccountsManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Accounts\Account)
-
-	-
-		factory: FastyBird\AuthNode\Models\Emails\EmailsManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Emails\Email)
-
-	-
-		factory: FastyBird\AuthNode\Models\Identities\IdentitiesManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Identities\Identity)
-
-	-
-		factory: FastyBird\AuthNode\Models\Roles\RolesManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Roles\Role)
-
-	-
-		factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager
-		arguments:
-			entityCrud: @ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account)
-
-	# API controllers
-	#################
-
-	- {factory: FastyBird\AuthNode\Controllers\PublicV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\SessionV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\AccountV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\AccountEmailsV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\AccountIdentitiesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\AccountsV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\EmailsV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\IdentitiesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\RolesV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\RoleChildrenV1Controller, tags: [nette.inject]}
-
-	- {factory: FastyBird\AuthNode\Controllers\AuthenticateV1Controller, tags: [nette.inject]}
-
-	# API schemas
-	#############
-
-	- {factory: FastyBird\AuthNode\Schemas\Accounts\UserAccountSchema}
-
-	- {factory: FastyBird\AuthNode\Schemas\Accounts\MachineAccountSchema}
-
-	- {factory: FastyBird\AuthNode\Schemas\Emails\EmailSchema}
-
-	- {factory: FastyBird\AuthNode\Schemas\Sessions\SessionSchema}
-
-	- {factory: FastyBird\AuthNode\Schemas\Identities\UserAccountIdentitySchema}
-
-	- {factory: FastyBird\AuthNode\Schemas\Identities\MachineAccountIdentitySchema}
-
-	- {factory: FastyBird\AuthNode\Schemas\Roles\RoleSchema}
-
-	# API hydrators
-	###############
-
-	- {factory: FastyBird\AuthNode\Hydrators\Accounts\UserAccountHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Accounts\MachineAccountHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Accounts\ProfileAccountHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Identities\UserAccountIdentityHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Identities\MachineAccountIdentityHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Emails\ProfileEmailHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Emails\EmailHydrator}
-
-	- {factory: FastyBird\AuthNode\Hydrators\Roles\RoleHydrator}
+	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account))}

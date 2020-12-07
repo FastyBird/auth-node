@@ -2,10 +2,12 @@
 
 namespace Tests\Cases;
 
-use FastyBird\AuthNode\Entities;
+use FastyBird\AuthModule\Entities as AuthModuleEntities;
+use FastyBird\AuthModule\Models as AuthModuleModels;
+use FastyBird\AuthModule\Queries as AuthModuleQueries;
 use FastyBird\AuthNode\Models;
 use FastyBird\AuthNode\Queries;
-use FastyBird\NodeExchange\Publishers as NodeExchangePublishers;
+use FastyBird\RabbitMqPlugin\Publishers as RabbitMqPluginPublishers;
 use Mockery;
 use Nette\Utils;
 use Ramsey\Uuid;
@@ -26,37 +28,37 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 	{
 		parent::setUp();
 
-		$rabbitPublisher = Mockery::mock(NodeExchangePublishers\RabbitMqPublisher::class);
+		$rabbitPublisher = Mockery::mock(RabbitMqPluginPublishers\RabbitMqPublisher::class);
 		$rabbitPublisher
 			->shouldReceive('publish');
 
 		$this->mockContainerService(
-			NodeExchangePublishers\IRabbitMqPublisher::class,
+			RabbitMqPluginPublishers\IRabbitMqPublisher::class,
 			$rabbitPublisher
 		);
 	}
 
 	public function testCreateEntity(): void
 	{
-		/** @var Models\Accounts\IAccountRepository $accountRepository */
-		$accountRepository = $this->getContainer()->getByType(Models\Accounts\AccountRepository::class);
+		/** @var AuthModuleModels\Accounts\IAccountRepository $accountRepository */
+		$accountRepository = $this->getContainer()->getByType(AuthModuleModels\Accounts\AccountRepository::class);
 
-		$findAccount = new Queries\FindAccountsQuery();
+		$findAccount = new AuthModuleQueries\FindAccountsQuery();
 		$findAccount->byId(Uuid\Uuid::fromString(self::ACCOUNT_TEST_ID));
 
-		$account = $accountRepository->findOneBy($findAccount, Entities\Accounts\MachineAccount::class);
+		$account = $accountRepository->findOneBy($findAccount, AuthModuleEntities\Accounts\MachineAccount::class);
 
 		$createIdentity = Utils\ArrayHash::from([
-			'entity'   => Entities\Identities\MachineAccountIdentity::class,
+			'entity'   => AuthModuleEntities\Identities\MachineAccountIdentity::class,
 			'account'  => $account,
 			'password' => 'randomPassword',
 			'uid'      => 'newUsername',
 		]);
 
-		/** @var Models\Identities\IIdentitiesManager $identitiesManager */
-		$identitiesManager = $this->getContainer()->getByType(Models\Identities\IdentitiesManager::class);
+		/** @var AuthModuleModels\Identities\IIdentitiesManager $identitiesManager */
+		$identitiesManager = $this->getContainer()->getByType(AuthModuleModels\Identities\IdentitiesManager::class);
 
-		/** @var Entities\Identities\MachineAccountIdentity $identity */
+		/** @var AuthModuleEntities\Identities\MachineAccountIdentity $identity */
 		$identity = $identitiesManager->create($createIdentity);
 
 		/** @var Models\Vernemq\IAccountRepository $verneMQRepository */
@@ -75,23 +77,23 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 
 	public function testUpdateEntityPasswordUsername(): void
 	{
-		/** @var Models\Identities\IIdentityRepository $identityRepository */
-		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
+		/** @var AuthModuleModels\Identities\IIdentityRepository $identityRepository */
+		$identityRepository = $this->getContainer()->getByType(AuthModuleModels\Identities\IdentityRepository::class);
 
-		$findIdentity = new Queries\FindIdentitiesQuery();
+		$findIdentity = new AuthModuleQueries\FindIdentitiesQuery();
 		$findIdentity->byUid('deviceUsername');
 
-		$identity = $identityRepository->findOneBy($findIdentity, Entities\Identities\MachineAccountIdentity::class);
+		$identity = $identityRepository->findOneBy($findIdentity, AuthModuleEntities\Identities\MachineAccountIdentity::class);
 
 		$updateIdentity = Utils\ArrayHash::from([
 			'password' => 'randomPassword',
 			'uid'      => 'newUsername',
 		]);
 
-		/** @var Models\Identities\IIdentitiesManager $identitiesManager */
-		$identitiesManager = $this->getContainer()->getByType(Models\Identities\IdentitiesManager::class);
+		/** @var AuthModuleModels\Identities\IIdentitiesManager $identitiesManager */
+		$identitiesManager = $this->getContainer()->getByType(AuthModuleModels\Identities\IdentitiesManager::class);
 
-		/** @var Entities\Identities\MachineAccountIdentity $identity */
+		/** @var AuthModuleEntities\Identities\MachineAccountIdentity $identity */
 		$identity = $identitiesManager->update($identity, $updateIdentity);
 
 		/** @var Models\Vernemq\IAccountRepository $verneMQRepository */
@@ -110,22 +112,22 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 
 	public function testUpdateEntityPassword(): void
 	{
-		/** @var Models\Identities\IIdentityRepository $identityRepository */
-		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
+		/** @var AuthModuleModels\Identities\IIdentityRepository $identityRepository */
+		$identityRepository = $this->getContainer()->getByType(AuthModuleModels\Identities\IdentityRepository::class);
 
-		$findIdentity = new Queries\FindIdentitiesQuery();
+		$findIdentity = new AuthModuleQueries\FindIdentitiesQuery();
 		$findIdentity->byUid('deviceUsername');
 
-		$identity = $identityRepository->findOneBy($findIdentity, Entities\Identities\MachineAccountIdentity::class);
+		$identity = $identityRepository->findOneBy($findIdentity, AuthModuleEntities\Identities\MachineAccountIdentity::class);
 
 		$updateIdentity = Utils\ArrayHash::from([
 			'password' => 'randomPassword',
 		]);
 
-		/** @var Models\Identities\IIdentitiesManager $identitiesManager */
-		$identitiesManager = $this->getContainer()->getByType(Models\Identities\IdentitiesManager::class);
+		/** @var AuthModuleModels\Identities\IIdentitiesManager $identitiesManager */
+		$identitiesManager = $this->getContainer()->getByType(AuthModuleModels\Identities\IdentitiesManager::class);
 
-		/** @var Entities\Identities\MachineAccountIdentity $identity */
+		/** @var AuthModuleEntities\Identities\MachineAccountIdentity $identity */
 		$identity = $identitiesManager->update($identity, $updateIdentity);
 
 		/** @var Models\Vernemq\IAccountRepository $verneMQRepository */
@@ -144,16 +146,16 @@ final class IdentityEntitySubscriberTest extends DbTestCase
 
 	public function testDeleteEntity(): void
 	{
-		/** @var Models\Identities\IIdentityRepository $identityRepository */
-		$identityRepository = $this->getContainer()->getByType(Models\Identities\IdentityRepository::class);
+		/** @var AuthModuleModels\Identities\IIdentityRepository $identityRepository */
+		$identityRepository = $this->getContainer()->getByType(AuthModuleModels\Identities\IdentityRepository::class);
 
-		$findIdentity = new Queries\FindIdentitiesQuery();
+		$findIdentity = new AuthModuleQueries\FindIdentitiesQuery();
 		$findIdentity->byUid('deviceUsername');
 
-		$identity = $identityRepository->findOneBy($findIdentity, Entities\Identities\MachineAccountIdentity::class);
+		$identity = $identityRepository->findOneBy($findIdentity, AuthModuleEntities\Identities\MachineAccountIdentity::class);
 
-		/** @var Models\Identities\IIdentitiesManager $identitiesManager */
-		$identitiesManager = $this->getContainer()->getByType(Models\Identities\IdentitiesManager::class);
+		/** @var AuthModuleModels\Identities\IIdentitiesManager $identitiesManager */
+		$identitiesManager = $this->getContainer()->getByType(AuthModuleModels\Identities\IdentitiesManager::class);
 
 		$identitiesManager->delete($identity);
 

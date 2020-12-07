@@ -16,8 +16,8 @@
 namespace FastyBird\AuthNode\Entities\Vernemq;
 
 use Doctrine\ORM\Mapping as ORM;
-use FastyBird\AuthNode\Entities;
-use FastyBird\NodeDatabase\Entities as NodeDatabaseEntities;
+use FastyBird\AuthModule\Entities as AuthModuleEntities;
+use FastyBird\Database\Entities as DatabaseEntities;
 use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
@@ -41,7 +41,7 @@ use Throwable;
 class Account implements IAccount
 {
 
-	use NodeDatabaseEntities\TEntity;
+	use DatabaseEntities\TEntity;
 	use DoctrineTimestampable\Entities\TEntityCreated;
 	use DoctrineTimestampable\Entities\TEntityUpdated;
 
@@ -55,10 +55,10 @@ class Account implements IAccount
 	protected $id;
 
 	/**
-	 * @var Entities\Identities\IIdentity|null
+	 * @var AuthModuleEntities\Identities\IIdentity|null
 	 *
 	 * @IPubDoctrine\Crud(is="writable")
-	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthNode\Entities\Identities\Identity")
+	 * @ORM\ManyToOne(targetEntity="FastyBird\AuthModule\Entities\Identities\Identity")
 	 * @ORM\JoinColumn(name="identity_id", referencedColumnName="identity_id", onDelete="cascade", nullable=true)
 	 */
 	private $identity;
@@ -114,14 +114,14 @@ class Account implements IAccount
 	/**
 	 * @param string $username
 	 * @param string $password
-	 * @param Entities\Identities\IIdentity|null $identity
+	 * @param AuthModuleEntities\Identities\IIdentity|null $identity
 	 *
 	 * @throws Throwable
 	 */
 	public function __construct(
 		string $username,
 		string $password,
-		?Entities\Identities\IIdentity $identity = null
+		?AuthModuleEntities\Identities\IIdentity $identity = null
 	) {
 		$this->id = Uuid\Uuid::uuid4();
 
@@ -138,7 +138,7 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function getIdentity(): ?Entities\Identities\IIdentity
+	public function getIdentity(): ?AuthModuleEntities\Identities\IIdentity
 	{
 		return $this->identity;
 	}

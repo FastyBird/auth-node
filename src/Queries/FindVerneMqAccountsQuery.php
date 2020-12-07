@@ -17,6 +17,7 @@ namespace FastyBird\AuthNode\Queries;
 
 use Closure;
 use Doctrine\ORM;
+use FastyBird\AuthModule\Entities as AuthModuleEntities;
 use FastyBird\AuthNode\Entities;
 use IPub\DoctrineOrmQuery;
 use Ramsey\Uuid;
@@ -66,11 +67,11 @@ class FindVerneMqAccountsQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
-	 * @param Entities\Identities\IIdentity $identity
+	 * @param AuthModuleEntities\Identities\IIdentity $identity
 	 *
 	 * @return void
 	 */
-	public function forIdentity(Entities\Identities\IIdentity $identity): void
+	public function forIdentity(AuthModuleEntities\Identities\IIdentity $identity): void
 	{
 		$this->select[] = function (ORM\QueryBuilder $qb): void {
 			$qb->join('a.identity', 'identity');
@@ -82,11 +83,11 @@ class FindVerneMqAccountsQuery extends DoctrineOrmQuery\QueryObject
 	}
 
 	/**
-	 * @param Entities\Accounts\IAccount $account
+	 * @param AuthModuleEntities\Accounts\IAccount $account
 	 *
 	 * @return void
 	 */
-	public function forAccount(Entities\Accounts\IAccount $account): void
+	public function forAccount(AuthModuleEntities\Accounts\IAccount $account): void
 	{
 		$this->select[] = function (ORM\QueryBuilder $qb): void {
 			$qb->join('a.identity', 'identity');
