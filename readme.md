@@ -2,7 +2,7 @@
 
 [![Build Status](https://img.shields.io/travis/com/FastyBird/auth-node.svg?style=flat-square)](https://travis-ci.com/FastyBird/auth-node)
 [![Code coverage](https://img.shields.io/coveralls/FastyBird/auth-node.svg?style=flat-square)](https://coveralls.io/r/FastyBird/auth-node)
-![PHP from Travis config](https://img.shields.io/travis/php-v/fastybird/auth-node?style=flat-square)
+![PHP](https://img.shields.io/packagist/php-v/fastybird/auth-node?style=flat-square)
 [![Licence](https://img.shields.io/packagist/l/FastyBird/auth-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/auth-node)
 [![Downloads total](https://img.shields.io/packagist/dt/FastyBird/auth-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/auth-node)
 [![Latest stable](https://img.shields.io/packagist/v/FastyBird/auth-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/auth-node)
