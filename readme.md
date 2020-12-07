@@ -1,6 +1,6 @@
 # FastyBird auth node
 
-[![Build Status](https://img.shields.io/travis/FastyBird/auth-node.svg?style=flat-square)](https://travis-ci.org/FastyBird/auth-node)
+[![Build Status](https://img.shields.io/travis/com/FastyBird/auth-node.svg?style=flat-square)](https://travis-ci.com/FastyBird/auth-node)
 [![Code coverage](https://img.shields.io/coveralls/FastyBird/auth-node.svg?style=flat-square)](https://coveralls.io/r/FastyBird/auth-node)
 ![PHP from Travis config](https://img.shields.io/travis/php-v/fastybird/auth-node?style=flat-square)
 [![Licence](https://img.shields.io/packagist/l/FastyBird/auth-node.svg?style=flat-square)](https://packagist.org/packages/FastyBird/auth-node)
@@ -37,7 +37,7 @@ This microservice has several console command.
 ##### HTTP server
 
 ```sh
-$ vendor/bin/fb-console fb:node:server:start
+$ vendor/bin/fb-console fb:web-server:start
 ```
 
 This command is to start build-in web server which is listening for incoming http api request messages from clients and is listening for new data from exchange bus from other microservices. 
@@ -71,23 +71,23 @@ Configuration could be made via environment variables:
 
 | Environment Variable | Description |
 | ---------------------- | ---------------------------- |
-| `FB_NODE_PARAMETER__EXCHANGE_HOST=127.0.0.1` | RabbitMQ host address |
-| `FB_NODE_PARAMETER__EXCHANGE_PORT=5672` | RabbitMQ access port |
-| `FB_NODE_PARAMETER__EXCHANGE_VHOST=/` | RabbitMQ vhost |
-| `FB_NODE_PARAMETER__EXCHANGE_USERNAME=guest` | Username |
-| `FB_NODE_PARAMETER__EXCHANGE_PASSWORD=guest` | Password |
+| `FB_APP_PARAMETER__EXCHANGE_HOST=127.0.0.1` | RabbitMQ host address |
+| `FB_APP_PARAMETER__EXCHANGE_PORT=5672` | RabbitMQ access port |
+| `FB_APP_PARAMETER__EXCHANGE_VHOST=/` | RabbitMQ vhost |
+| `FB_APP_PARAMETER__EXCHANGE_USERNAME=guest` | Username |
+| `FB_APP_PARAMETER__EXCHANGE_PASSWORD=guest` | Password |
 | | |
-| `FB_NODE_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
-| `FB_NODE_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
-| `FB_NODE_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
-| `FB_NODE_PARAMETER__DATABASE_DBNAME=auth_node` | MySQL database name |
-| `FB_NODE_PARAMETER__DATABASE_USERNAME=root` | Username |
-| `FB_NODE_PARAMETER__DATABASE_PASSWORD=` | Password |
+| `FB_APP_PARAMETER__DATABASE_VERSION=5.7` | MySQL server version |
+| `FB_APP_PARAMETER__DATABASE_HOST=127.0.0.1` | MySQL host address |
+| `FB_APP_PARAMETER__DATABASE_PORT=3306` | MySQL access port |
+| `FB_APP_PARAMETER__DATABASE_DBNAME=auth_node` | MySQL database name |
+| `FB_APP_PARAMETER__DATABASE_USERNAME=root` | Username |
+| `FB_APP_PARAMETER__DATABASE_PASSWORD=` | Password |
 | | |
-| `FB_NODE_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
-| `FB_NODE_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
+| `FB_APP_PARAMETER__SERVER_ADDRESS=0.0.0.0` | HTTP server host address |
+| `FB_APP_PARAMETER__SERVER_PORT=8000` | HTTP server access port |
 | | |
-| `FB_NODE_PARAMETER__SECURITY_SIGNATURE=` | Security token signature string |
+| `FB_APP_PARAMETER__SECURITY_SIGNATURE=` | Security token signature string |
 
 > **NOTE:** In case you are not using docker image or you are not able to configure environment variables, you could edit configuration file `./config/default.neon`
 
@@ -130,4 +130,4 @@ For release info check [release page](https://github.com/FastyBird/auth-node/rel
 </table>
 
 ***
-Homepage [https://fastybird.com](https://fastybird.com) and repository [https://github.com/fastybird/auth-node](https://github.com/fastybird/auth-node).
+Homepage [https://www.fastybird.com](https://www.fastybird.com) and repository [https://github.com/fastybird/auth-node](https://github.com/fastybird/auth-node).
