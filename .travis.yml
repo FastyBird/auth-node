@@ -2,10 +2,14 @@ language: php
 
 php:
   - 7.4
-  - nightly
+  - 8.0
 
 services:
   - mysql
+
+before_script:
+  # Additional PHP config
+  - phpenv config-add ./tests/travis.php.ini
 
 before_install:
   # Turn off XDebug
@@ -13,7 +17,6 @@ before_install:
 
 install:
   # Install dependencies
-  - rm composer.lock
   - travis_retry composer install --no-progress --prefer-dist
 
 script:
@@ -26,29 +29,29 @@ after_failure:
 
 jobs:
   include:
-    -   stage: Quality Assurance
-        php: 7.4
-        script:
-          - make qa
+    - stage: Quality Assurance
+      php: 7.4
+      script:
+        - make qa
 
-    -   stage: Test Coverage
-        if: branch = master AND type = push
-        php: 7.4
-        script:
-          - make coverage
-        after_script:
-          - composer require php-coveralls/php-coveralls ^2.1.0
-          - vendor/bin/php-coveralls --verbose --config tests/.coveralls.yml
+    - stage: Test Coverage
+      if: branch = master AND type = push
+      php: 7.4
+      script:
+        - make coverage
+      after_script:
+        - composer require php-coveralls/php-coveralls ^2.1.0
+        - vendor/bin/php-coveralls --verbose --config tests/.coveralls.yml
 
-    -   stage: Outdated Dependencies
-        if: branch = master AND type = cron
-        php: 7.4
-        script:
-          - composer outdated --direct
+    - stage: Outdated Dependencies
+      if: branch = master AND type = cron
+      php: 7.4
+      script:
+        - composer outdated --direct
 
   allow_failures:
-    -   stage: Test Coverage
-    -   php: nightly
+    - stage: Test Coverage
+    - php: 8.0
 
 sudo: false
 

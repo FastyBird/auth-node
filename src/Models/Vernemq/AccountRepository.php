@@ -59,18 +59,6 @@ final class AccountRepository implements IAccountRepository
 	}
 
 	/**
-	 * {@inheritDoc}
-	 *
-	 * @throws Throwable
-	 */
-	public function findAllBy(Queries\FindVerneMqAccountsQuery $queryObject): array
-	{
-		$result = $queryObject->fetch($this->getRepository());
-
-		return is_array($result) ? $result : $result->toArray();
-	}
-
-	/**
 	 * @return Persistence\ObjectRepository<Entities\Vernemq\Account>
 	 */
 	private function getRepository(): Persistence\ObjectRepository
@@ -80,6 +68,18 @@ final class AccountRepository implements IAccountRepository
 		}
 
 		return $this->repository;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @throws Throwable
+	 */
+	public function findAllBy(Queries\FindVerneMqAccountsQuery $queryObject): array
+	{
+		$result = $queryObject->fetch($this->getRepository());
+
+		return is_array($result) ? $result : $result->toArray();
 	}
 
 }

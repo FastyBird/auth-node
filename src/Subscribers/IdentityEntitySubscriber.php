@@ -41,6 +41,12 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 	/** @var Models\Vernemq\IAccountRepository */
 	private $accountRepository;
 
+	public function __construct(
+		Models\Vernemq\IAccountRepository $accountRepository
+	) {
+		$this->accountRepository = $accountRepository;
+	}
+
 	/**
 	 * Register events
 	 *
@@ -53,12 +59,6 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 			ORM\Events::preUpdate,
 			ORM\Events::preRemove,
 		];
-	}
-
-	public function __construct(
-		Models\Vernemq\IAccountRepository $accountRepository
-	) {
-		$this->accountRepository = $accountRepository;
 	}
 
 	/**
@@ -77,52 +77,6 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 		foreach ($uow->getScheduledEntityUpdates() as $object) {
 			if ($object instanceof AuthModuleEntities\Identities\IIdentity) {
 				$this->processIdentityEntity($object, $em, $uow);
-			}
-		}
-	}
-
-	/**
-	 * @param ORM\Event\PreFlushEventArgs $eventArgs
-	 *
-	 * @return void
-	 *
-	 * @throws Throwable
-	 */
-	public function preFlush(ORM\Event\PreFlushEventArgs $eventArgs): void
-	{
-		$em = $eventArgs->getEntityManager();
-		$uow = $em->getUnitOfWork();
-
-		// Check all scheduled updates
-		foreach ($uow->getScheduledEntityInsertions() as $object) {
-			if ($object instanceof AuthModuleEntities\Identities\IIdentity) {
-				$this->processIdentityEntity($object, $em, $uow);
-			}
-		}
-	}
-
-	/**
-	 * @param ORM\Event\LifecycleEventArgs $eventArgs
-	 *
-	 * @return void
-	 *
-	 * @throws Throwable
-	 */
-	public function preRemove(ORM\Event\LifecycleEventArgs $eventArgs): void
-	{
-		$em = $eventArgs->getEntityManager();
-		$uow = $em->getUnitOfWork();
-
-		foreach (array_merge($uow->getScheduledEntityDeletions(), $uow->getScheduledCollectionDeletions()) as $object) {
-			if ($object instanceof AuthModuleEntities\Accounts\IAccount) {
-				$findAccount = new Queries\FindVerneMqAccountsQuery();
-				$findAccount->forAccount($object);
-
-				$verneMqAccounts = $this->accountRepository->findAllBy($findAccount);
-
-				foreach ($verneMqAccounts as $verneMqAccount) {
-					$uow->scheduleForDelete($verneMqAccount);
-				}
 			}
 		}
 	}
@@ -315,6 +269,52 @@ final class IdentityEntitySubscriber implements Common\EventSubscriber
 				$identity->getUid(),
 			],
 		]);
+	}
+
+	/**
+	 * @param ORM\Event\PreFlushEventArgs $eventArgs
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	public function preFlush(ORM\Event\PreFlushEventArgs $eventArgs): void
+	{
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
+
+		// Check all scheduled updates
+		foreach ($uow->getScheduledEntityInsertions() as $object) {
+			if ($object instanceof AuthModuleEntities\Identities\IIdentity) {
+				$this->processIdentityEntity($object, $em, $uow);
+			}
+		}
+	}
+
+	/**
+	 * @param ORM\Event\LifecycleEventArgs $eventArgs
+	 *
+	 * @return void
+	 *
+	 * @throws Throwable
+	 */
+	public function preRemove(ORM\Event\LifecycleEventArgs $eventArgs): void
+	{
+		$em = $eventArgs->getEntityManager();
+		$uow = $em->getUnitOfWork();
+
+		foreach (array_merge($uow->getScheduledEntityDeletions(), $uow->getScheduledCollectionDeletions()) as $object) {
+			if ($object instanceof AuthModuleEntities\Accounts\IAccount) {
+				$findAccount = new Queries\FindVerneMqAccountsQuery();
+				$findAccount->forAccount($object);
+
+				$verneMqAccounts = $this->accountRepository->findAllBy($findAccount);
+
+				foreach ($verneMqAccounts as $verneMqAccount) {
+					$uow->scheduleForDelete($verneMqAccount);
+				}
+			}
+		}
 	}
 
 }

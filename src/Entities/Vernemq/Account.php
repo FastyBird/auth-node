@@ -15,10 +15,8 @@
 
 namespace FastyBird\AuthNode\Entities\Vernemq;
 
-use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthModule\Entities as AuthModuleEntities;
 use FastyBird\Database\Entities as DatabaseEntities;
-use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
 use stdClass;
@@ -146,14 +144,6 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setMountpoint(string $mountpoint): void
-	{
-		$this->mountpoint = $mountpoint;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
 	public function getMountpoint(): string
 	{
 		return $this->mountpoint;
@@ -162,9 +152,9 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setClientId(string $clientId): void
+	public function setMountpoint(string $mountpoint): void
 	{
-		$this->clientId = $clientId;
+		$this->mountpoint = $mountpoint;
 	}
 
 	/**
@@ -178,9 +168,9 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setUsername(string $username): void
+	public function setClientId(string $clientId): void
 	{
-		$this->username = $username;
+		$this->clientId = $clientId;
 	}
 
 	/**
@@ -194,9 +184,9 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setPassword(string $password): void
+	public function setUsername(string $username): void
 	{
-		$this->password = hash('sha256', $password, false);
+		$this->username = $username;
 	}
 
 	/**
@@ -210,16 +200,9 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setPublishAcl(array $publishAcl): void
+	public function setPassword(string $password): void
 	{
-		$this->publishAcl = [];
-
-		foreach ($publishAcl as $pattern) {
-			$rule = new stdClass();
-			$rule->pattern = $pattern;
-
-			$this->publishAcl[] = $rule;
-		}
+		$this->password = hash('sha256', $password, false);
 	}
 
 	/**
@@ -244,15 +227,15 @@ class Account implements IAccount
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setSubscribeAcl(array $subscribeAcl): void
+	public function setPublishAcl(array $publishAcl): void
 	{
-		$this->subscribeAcl = [];
+		$this->publishAcl = [];
 
-		foreach ($subscribeAcl as $pattern) {
+		foreach ($publishAcl as $pattern) {
 			$rule = new stdClass();
 			$rule->pattern = $pattern;
 
-			$this->subscribeAcl[] = $rule;
+			$this->publishAcl[] = $rule;
 		}
 	}
 
@@ -273,6 +256,21 @@ class Account implements IAccount
 	public function getSubscribeAcl(): array
 	{
 		return $this->subscribeAcl;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setSubscribeAcl(array $subscribeAcl): void
+	{
+		$this->subscribeAcl = [];
+
+		foreach ($subscribeAcl as $pattern) {
+			$rule = new stdClass();
+			$rule->pattern = $pattern;
+
+			$this->subscribeAcl[] = $rule;
+		}
 	}
 
 }

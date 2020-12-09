@@ -118,18 +118,6 @@ class FindVerneMqAccountsQuery extends DoctrineOrmQuery\QueryObject
 	 *
 	 * @phpstan-param ORM\EntityRepository<T> $repository
 	 */
-	protected function doCreateCountQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
-	{
-		return $this->createBasicDql($repository)->select('COUNT(a.id)');
-	}
-
-	/**
-	 * @param ORM\EntityRepository<Entities\Vernemq\Account> $repository
-	 *
-	 * @return ORM\QueryBuilder
-	 *
-	 * @phpstan-param ORM\EntityRepository<T> $repository
-	 */
 	private function createBasicDql(ORM\EntityRepository $repository): ORM\QueryBuilder
 	{
 		$qb = $repository->createQueryBuilder('a');
@@ -143,6 +131,18 @@ class FindVerneMqAccountsQuery extends DoctrineOrmQuery\QueryObject
 		}
 
 		return $qb;
+	}
+
+	/**
+	 * @param ORM\EntityRepository<Entities\Vernemq\Account> $repository
+	 *
+	 * @return ORM\QueryBuilder
+	 *
+	 * @phpstan-param ORM\EntityRepository<T> $repository
+	 */
+	protected function doCreateCountQuery(ORM\EntityRepository $repository): ORM\QueryBuilder
+	{
+		return $this->createBasicDql($repository)->select('COUNT(a.id)');
 	}
 
 }

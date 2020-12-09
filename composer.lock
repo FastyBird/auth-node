@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bunny/bunny",
-            "version": "v0.4.3",
+            "version": "v0.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jakubkulhan/bunny.git",
-                "reference": "5c1a0f7ed81c20559ada8eeb9c6cd5037030b8b5"
+                "reference": "acd2b87c3889fe1cf23c01177e289b6c789e99e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jakubkulhan/bunny/zipball/5c1a0f7ed81c20559ada8eeb9c6cd5037030b8b5",
-                "reference": "5c1a0f7ed81c20559ada8eeb9c6cd5037030b8b5",
+                "url": "https://api.github.com/repos/jakubkulhan/bunny/zipball/acd2b87c3889fe1cf23c01177e289b6c789e99e4",
+                "reference": "acd2b87c3889fe1cf23c01177e289b6c789e99e4",
                 "shasum": ""
             },
             "require": {
@@ -62,9 +62,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jakubkulhan/bunny/issues",
-                "source": "https://github.com/jakubkulhan/bunny/tree/v0.4.3"
+                "source": "https://github.com/jakubkulhan/bunny/tree/v0.4.4"
             },
-            "time": "2020-09-27T14:39:46+00:00"
+            "time": "2020-10-17T12:32:55+00:00"
         },
         {
             "name": "clue/stream-filter",
@@ -1775,12 +1775,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/auth-module.git",
-                "reference": "196a58f23b7032d8b5f66cbaef7bca078d45e568"
+                "reference": "93eafe719e503f56e000c997ade01fe4840fb8b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/auth-module/zipball/196a58f23b7032d8b5f66cbaef7bca078d45e568",
-                "reference": "196a58f23b7032d8b5f66cbaef7bca078d45e568",
+                "url": "https://api.github.com/repos/FastyBird/auth-module/zipball/93eafe719e503f56e000c997ade01fe4840fb8b2",
+                "reference": "93eafe719e503f56e000c997ade01fe4840fb8b2",
                 "shasum": ""
             },
             "require": {
@@ -1836,7 +1836,7 @@
             "authors": [
                 {
                     "name": "FastyBird s.r.o.",
-                    "email": "info@fastybird.com",
+                    "email": "code@fastybird.com",
                     "homepage": "https://www.fastybird.com/"
                 },
                 {
@@ -1860,7 +1860,7 @@
                 "issues": "https://github.com/FastyBird/auth-module/issues",
                 "source": "https://github.com/FastyBird/auth-module/tree/master"
             },
-            "time": "2020-12-03T00:30:06+00:00"
+            "time": "2020-12-08T00:20:45+00:00"
         },
         {
             "name": "fastybird/bootstrap",
@@ -1868,12 +1868,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/bootstrap.git",
-                "reference": "f3725cfe19267c4bc00cfda0437f023dc67add4c"
+                "reference": "c1ce22b1c64fb2f62054ceb88d6e4e9c4f36cc82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/bootstrap/zipball/f3725cfe19267c4bc00cfda0437f023dc67add4c",
-                "reference": "f3725cfe19267c4bc00cfda0437f023dc67add4c",
+                "url": "https://api.github.com/repos/FastyBird/bootstrap/zipball/c1ce22b1c64fb2f62054ceb88d6e4e9c4f36cc82",
+                "reference": "c1ce22b1c64fb2f62054ceb88d6e4e9c4f36cc82",
                 "shasum": ""
             },
             "require": {
@@ -1883,7 +1883,7 @@
                 "nette/bootstrap": "^3.0",
                 "nette/di": "^3.0",
                 "nette/utils": "^3.0",
-                "php": ">=7.3.0",
+                "php": ">=7.4.0",
                 "sentry/sdk": "^2.1"
             },
             "require-dev": {
@@ -1918,7 +1918,7 @@
             "authors": [
                 {
                     "name": "FastyBird s.r.o.",
-                    "email": "info@fastybird.com",
+                    "email": "code@fastybird.com",
                     "homepage": "https://www.fastybird.com/"
                 },
                 {
@@ -1926,20 +1926,21 @@
                     "email": "adam.kadlec@fastybird.com"
                 }
             ],
-            "description": "FastyBird bootstrap for applications",
+            "description": "FastyBird application bootstrap",
             "homepage": "https://www.fastybird.com",
             "keywords": [
                 "bootstrap",
                 "fastybird",
                 "fb",
                 "library",
-                "libs"
+                "libs",
+                "nette"
             ],
             "support": {
                 "issues": "https://github.com/FastyBird/bootstrap/issues",
                 "source": "https://github.com/FastyBird/bootstrap/tree/master"
             },
-            "time": "2020-12-03T16:17:12+00:00"
+            "time": "2020-12-07T20:54:14+00:00"
         },
         {
             "name": "fastybird/database",
@@ -1947,19 +1948,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/database.git",
-                "reference": "e4ebcf74369d63e89ea9c8eb68ede94f2179f6a1"
+                "reference": "97c5a1b56074ac95caea5cb27903b444e2ca84d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/database/zipball/e4ebcf74369d63e89ea9c8eb68ede94f2179f6a1",
-                "reference": "e4ebcf74369d63e89ea9c8eb68ede94f2179f6a1",
+                "url": "https://api.github.com/repos/FastyBird/database/zipball/97c5a1b56074ac95caea5cb27903b444e2ca84d5",
+                "reference": "97c5a1b56074ac95caea5cb27903b444e2ca84d5",
                 "shasum": ""
             },
             "require": {
                 "fastybird/web-server": "@dev",
                 "ipub/doctrine-crud": "^2.3",
                 "ipub/doctrine-orm-query": "^0.0.6",
-                "nette/bootstrap": "^3.0",
                 "nette/di": "^3.0",
                 "nette/utils": "^3.0",
                 "nettrine/cache": "^0.2",
@@ -1995,7 +1995,7 @@
             "authors": [
                 {
                     "name": "FastyBird s.r.o.",
-                    "email": "info@fastybird.com",
+                    "email": "code@fastybird.com",
                     "homepage": "https://www.fastybird.com/"
                 },
                 {
@@ -2019,7 +2019,7 @@
                 "issues": "https://github.com/FastyBird/database/issues",
                 "source": "https://github.com/FastyBird/database/tree/master"
             },
-            "time": "2020-12-03T19:55:23+00:00"
+            "time": "2020-12-07T20:55:59+00:00"
         },
         {
             "name": "fastybird/datetime-factory",
@@ -2096,12 +2096,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/json-api.git",
-                "reference": "2dd8d99fc5154a028ba23fc82e8d33158423995c"
+                "reference": "2f118a9e1e4d00d3d15381bbccd30ee61d7dabe4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/json-api/zipball/2dd8d99fc5154a028ba23fc82e8d33158423995c",
-                "reference": "2dd8d99fc5154a028ba23fc82e8d33158423995c",
+                "url": "https://api.github.com/repos/FastyBird/json-api/zipball/2f118a9e1e4d00d3d15381bbccd30ee61d7dabe4",
+                "reference": "2f118a9e1e4d00d3d15381bbccd30ee61d7dabe4",
                 "shasum": ""
             },
             "require": {
@@ -2146,7 +2146,7 @@
             "authors": [
                 {
                     "name": "FastyBird s.r.o.",
-                    "email": "info@fastybird.com",
+                    "email": "code@fastybird.com",
                     "homepage": "https://www.fastybird.com/"
                 },
                 {
@@ -2154,7 +2154,7 @@
                     "email": "adam.kadlec@fastybird.com"
                 }
             ],
-            "description": "FastyBird {JSON:API} api utils with data hydration",
+            "description": "FastyBird {JSON:API} api tools with data hydration",
             "homepage": "https://www.fastybird.com",
             "keywords": [
                 "api",
@@ -2168,7 +2168,7 @@
                 "issues": "https://github.com/FastyBird/json-api/issues",
                 "source": "https://github.com/FastyBird/json-api/tree/master"
             },
-            "time": "2020-12-03T19:40:55+00:00"
+            "time": "2020-12-07T20:54:54+00:00"
         },
         {
             "name": "fastybird/modules-metadata",
@@ -2176,12 +2176,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/modules-metadata.git",
-                "reference": "ad989d1c8a635c014645b40f8f2b610a7773315d"
+                "reference": "e3d7b257ae4ab278e9d332f219932f0b7c42e20f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/modules-metadata/zipball/ad989d1c8a635c014645b40f8f2b610a7773315d",
-                "reference": "ad989d1c8a635c014645b40f8f2b610a7773315d",
+                "url": "https://api.github.com/repos/FastyBird/modules-metadata/zipball/e3d7b257ae4ab278e9d332f219932f0b7c42e20f",
+                "reference": "e3d7b257ae4ab278e9d332f219932f0b7c42e20f",
                 "shasum": ""
             },
             "require": {
@@ -2217,7 +2217,7 @@
             "authors": [
                 {
                     "name": "FastyBird s.r.o.",
-                    "email": "info@fastybird.com",
+                    "email": "code@fastybird.com",
                     "homepage": "https://www.fastybird.com/"
                 },
                 {
@@ -2239,7 +2239,7 @@
                 "issues": "https://github.com/FastyBird/modules-metadata/issues",
                 "source": "https://github.com/FastyBird/modules-metadata/tree/master"
             },
-            "time": "2020-12-05T15:52:56+00:00"
+            "time": "2020-12-07T21:00:09+00:00"
         },
         {
             "name": "fastybird/rabbitmq-plugin",
@@ -2247,12 +2247,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/rabbitmq-plugin.git",
-                "reference": "8006eec1082dbb7323f1ae1fe09bfeadeaf22035"
+                "reference": "cfea935da55a7dec2a046d8fc4dc2dbb97bd13f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/rabbitmq-plugin/zipball/8006eec1082dbb7323f1ae1fe09bfeadeaf22035",
-                "reference": "8006eec1082dbb7323f1ae1fe09bfeadeaf22035",
+                "url": "https://api.github.com/repos/FastyBird/rabbitmq-plugin/zipball/cfea935da55a7dec2a046d8fc4dc2dbb97bd13f1",
+                "reference": "cfea935da55a7dec2a046d8fc4dc2dbb97bd13f1",
                 "shasum": ""
             },
             "require": {
@@ -2291,7 +2291,7 @@
             "authors": [
                 {
                     "name": "FastyBird s.r.o.",
-                    "email": "info@fastybird.com",
+                    "email": "code@fastybird.com",
                     "homepage": "https://www.fastybird.com/"
                 },
                 {
@@ -2315,7 +2315,7 @@
                 "issues": "https://github.com/FastyBird/rabbitmq-plugin/issues",
                 "source": "https://github.com/FastyBird/rabbitmq-plugin/tree/master"
             },
-            "time": "2020-12-06T11:21:39+00:00"
+            "time": "2020-12-07T22:36:52+00:00"
         },
         {
             "name": "fastybird/simple-auth",
@@ -2323,12 +2323,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/simple-auth.git",
-                "reference": "042f4b0121440dfcc31b94b4ad8dbac707c89623"
+                "reference": "a2fe2678bfa03f0f558600d75b77bcf8002f33ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/simple-auth/zipball/042f4b0121440dfcc31b94b4ad8dbac707c89623",
-                "reference": "042f4b0121440dfcc31b94b4ad8dbac707c89623",
+                "url": "https://api.github.com/repos/FastyBird/simple-auth/zipball/a2fe2678bfa03f0f558600d75b77bcf8002f33ea",
+                "reference": "a2fe2678bfa03f0f558600d75b77bcf8002f33ea",
                 "shasum": ""
             },
             "require": {
@@ -2377,7 +2377,7 @@
             "authors": [
                 {
                     "name": "FastyBird s.r.o.",
-                    "email": "info@fastybird.com",
+                    "email": "code@fastybird.com",
                     "homepage": "https://www.fastybird.com/"
                 },
                 {
@@ -2399,7 +2399,7 @@
                 "issues": "https://github.com/FastyBird/simple-auth/issues",
                 "source": "https://github.com/FastyBird/simple-auth/tree/master"
             },
-            "time": "2020-12-06T18:05:50+00:00"
+            "time": "2020-12-07T21:31:49+00:00"
         },
         {
             "name": "fastybird/web-server",
@@ -2407,12 +2407,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/web-server.git",
-                "reference": "50800ca46791df55b048c20ab9532cee4ca3ffaa"
+                "reference": "8028e84e1c7a1711136bac922d9b1b42366c9c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/web-server/zipball/50800ca46791df55b048c20ab9532cee4ca3ffaa",
-                "reference": "50800ca46791df55b048c20ab9532cee4ca3ffaa",
+                "url": "https://api.github.com/repos/FastyBird/web-server/zipball/8028e84e1c7a1711136bac922d9b1b42366c9c1b",
+                "reference": "8028e84e1c7a1711136bac922d9b1b42366c9c1b",
                 "shasum": ""
             },
             "require": {
@@ -2450,7 +2450,7 @@
             "authors": [
                 {
                     "name": "FastyBird s.r.o.",
-                    "email": "info@fastybird.com",
+                    "email": "code@fastybird.com",
                     "homepage": "https://www.fastybird.com/"
                 },
                 {
@@ -2473,7 +2473,7 @@
                 "issues": "https://github.com/FastyBird/web-server/issues",
                 "source": "https://github.com/FastyBird/web-server/tree/master"
             },
-            "time": "2020-12-05T15:06:38+00:00"
+            "time": "2020-12-07T21:46:15+00:00"
         },
         {
             "name": "fig/http-message-util",
@@ -3344,16 +3344,16 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "3.4.1",
+            "version": "3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "958a9873a63b0244a72f6e354ccc86019ee674a5"
+                "reference": "17cb82dd625ccb17c74bf8f38563d3b260306483"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/958a9873a63b0244a72f6e354ccc86019ee674a5",
-                "reference": "958a9873a63b0244a72f6e354ccc86019ee674a5",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/17cb82dd625ccb17c74bf8f38563d3b260306483",
+                "reference": "17cb82dd625ccb17c74bf8f38563d3b260306483",
                 "shasum": ""
             },
             "require": {
@@ -3405,7 +3405,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/3.4.1"
+                "source": "https://github.com/lcobucci/jwt/tree/3.4.2"
             },
             "funding": [
                 {
@@ -3417,7 +3417,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2020-11-27T01:17:14+00:00"
+            "time": "2020-12-03T13:43:45+00:00"
         },
         {
             "name": "mangoweb/clock",
@@ -8962,16 +8962,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "0.12.58",
+            "version": "0.12.59",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "2a4847df6047b30af28854ed9dc95304cdb56ae5"
+                "reference": "cf4107257c8ca2ad967efdd6a00f12b21acbb779"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2a4847df6047b30af28854ed9dc95304cdb56ae5",
-                "reference": "2a4847df6047b30af28854ed9dc95304cdb56ae5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/cf4107257c8ca2ad967efdd6a00f12b21acbb779",
+                "reference": "cf4107257c8ca2ad967efdd6a00f12b21acbb779",
                 "shasum": ""
             },
             "require": {
@@ -9002,7 +9002,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/0.12.58"
+                "source": "https://github.com/phpstan/phpstan/tree/0.12.59"
             },
             "funding": [
                 {
@@ -9018,7 +9018,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-11-29T13:32:03+00:00"
+            "time": "2020-12-07T14:46:03+00:00"
         },
         {
             "name": "phpstan/phpstan-deprecation-rules",
