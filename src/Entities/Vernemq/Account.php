@@ -15,8 +15,10 @@
 
 namespace FastyBird\AuthNode\Entities\Vernemq;
 
+use Doctrine\ORM\Mapping as ORM;
 use FastyBird\AuthModule\Entities as AuthModuleEntities;
 use FastyBird\Database\Entities as DatabaseEntities;
+use IPub\DoctrineCrud\Mapping\Annotation as IPubDoctrine;
 use IPub\DoctrineTimestampable;
 use Ramsey\Uuid;
 use stdClass;
