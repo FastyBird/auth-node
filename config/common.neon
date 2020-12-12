@@ -20,7 +20,6 @@ parameters:
 	rabbitmq:
 		queueName: fb.auth.node.exchange
 		routing:
-			- fb.bus.node.entity.*.device		# Device entities
 
 #########################
 # Used Nette extensions #
@@ -139,9 +138,7 @@ nettrineOrm:
 		proxyDir	: %tempDir%/cache/doctrine.proxies
 
 nettrineOrmAnnotations:
-	mapping: [
-		FastyBird\AuthNode\Entities: %appDir%/src/Entities
-	]
+	mapping: []
 
 #############################
 # Node services definitions #
@@ -162,29 +159,9 @@ services:
 
 	- {factory: FastyBird\AuthNode\Commands\InitializeCommand}
 
-	# Message bus messages handlers
-	###############################
-
-	- {factory: FastyBird\AuthNode\Consumers\DeviceMessageHandler}
-
 	# Node events
 	#############
 
 	- {factory: FastyBird\AuthNode\Events\ServerBeforeStartHandler}
 
 	- {factory: FastyBird\AuthNode\Events\AfterConsumeHandler}
-
-	# Events subscribers
-	####################
-
-	- {factory: FastyBird\AuthNode\Subscribers\IdentityEntitySubscriber}
-
-	# Database repositories
-	#######################
-
-	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountRepository}
-
-	# Database managers
-	###################
-
-	- {factory: FastyBird\AuthNode\Models\Vernemq\AccountsManager(@ipubDoctrineCrud.crud::create(FastyBird\AuthNode\Entities\Vernemq\Account))}

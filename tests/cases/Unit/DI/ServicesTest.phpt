@@ -3,10 +3,7 @@
 namespace Tests\Cases;
 
 use FastyBird\AuthNode\Commands;
-use FastyBird\AuthNode\Consumers;
 use FastyBird\AuthNode\Events;
-use FastyBird\AuthNode\Models;
-use FastyBird\AuthNode\Subscribers;
 use FastyBird\Bootstrap\Boot;
 use Ninjify\Nunjuck\TestCase\BaseTestCase;
 use Tester\Assert;
@@ -32,15 +29,7 @@ final class ServicesTest extends BaseTestCase
 
 		Assert::notNull($container->getByType(Commands\InitializeCommand::class));
 
-		Assert::notNull($container->getByType(Consumers\DeviceMessageHandler::class));
-
 		Assert::notNull($container->getByType(Events\ServerBeforeStartHandler::class));
-
-		Assert::notNull($container->getByType(Subscribers\IdentityEntitySubscriber::class));
-
-		Assert::notNull($container->getByType(Models\Vernemq\AccountRepository::class));
-
-		Assert::notNull($container->getByType(Models\Vernemq\AccountsManager::class));
 	}
 
 }
