@@ -221,7 +221,7 @@ class InitializeCommand extends Console\Command\Command
 			$accounts = $this->accountRepository->findAllBy($findAccounts);
 
 			if (count($accounts) === 0) {
-				$accountCmd = $symfonyApp->find('fb:auth-node:create:account');
+				$accountCmd = $symfonyApp->find('fb:auth-module:create:account');
 
 				$result = $accountCmd->run(new Input\ArrayInput([
 					'role'       => SimpleAuth\Constants::ROLE_ADMINISTRATOR,

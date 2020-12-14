@@ -38,12 +38,8 @@
     "cweagans/composer-patches": "^1.6",
     "fastybird/auth-module": "@dev",
     "fastybird/bootstrap": "@dev",
-    "fastybird/database": "@dev",
-    "fastybird/json-api": "@dev",
     "fastybird/modules-metadata": "@dev",
-    "fastybird/rabbitmq-plugin": "@dev",
-    "fastybird/simple-auth": "@dev",
-    "fastybird/web-server": "@dev"
+    "fastybird/rabbitmq-plugin": "@dev"
   },
 
   "require-dev" : {

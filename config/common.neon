@@ -15,7 +15,7 @@
 ##############################
 
 parameters:
-	origin: com.fastybird.auth-node
+	origin: com.fastybird.auth-module
 
 	rabbitmq:
 		queueName: fb.auth.node.exchange
