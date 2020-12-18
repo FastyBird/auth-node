@@ -20,10 +20,11 @@ use Doctrine\DBAL\Connection;
 use FastyBird\AuthModule\Models as AuthModuleModels;
 use FastyBird\AuthModule\Queries as AuthModuleQueries;
 use FastyBird\AuthNode\Exceptions;
+use FastyBird\Database;
 use FastyBird\SimpleAuth;
 use Monolog;
 use Nette\Utils;
-use Psr\Log\LoggerInterface;
+use Psr\Log;
 use RuntimeException;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input;
@@ -43,32 +44,37 @@ class InitializeCommand extends Console\Command\Command
 {
 
 	/** @var AuthModuleModels\Accounts\IAccountRepository */
-	private $accountRepository;
+	private AuthModuleModels\Accounts\IAccountRepository $accountRepository;
 
 	/** @var AuthModuleModels\Roles\IRoleRepository */
-	private $roleRepository;
+	private AuthModuleModels\Roles\IRoleRepository $roleRepository;
 
 	/** @var AuthModuleModels\Roles\IRolesManager */
-	private $rolesManager;
+	private AuthModuleModels\Roles\IRolesManager $rolesManager;
 
 	/** @var Common\Persistence\ManagerRegistry */
-	private $managerRegistry;
+	private Common\Persistence\ManagerRegistry $managerRegistry;
 
-	/** @var LoggerInterface */
-	private $logger;
+	/** @var Database\Helpers\Database */
+	private Database\Helpers\Database $database;
+
+	/** @var Log\LoggerInterface */
+	private Log\LoggerInterface $logger;
 
 	public function __construct(
 		AuthModuleModels\Accounts\IAccountRepository $accountRepository,
 		AuthModuleModels\Roles\IRoleRepository $roleRepository,
 		AuthModuleModels\Roles\IRolesManager $rolesManager,
+		Database\Helpers\Database $database,
 		Common\Persistence\ManagerRegistry $managerRegistry,
-		LoggerInterface $logger,
+		Log\LoggerInterface $logger,
 		?string $name = null
 	) {
 		$this->accountRepository = $accountRepository;
 		$this->roleRepository = $roleRepository;
 		$this->rolesManager = $rolesManager;
 
+		$this->database = $database;
 		$this->managerRegistry = $managerRegistry;
 
 		$this->logger = $logger;
@@ -124,6 +130,20 @@ class InitializeCommand extends Console\Command\Command
 
 		if (!$continue) {
 			return 0;
+		}
+
+		$io->section('Checking database connection');
+
+		try {
+			if (!$this->database->ping()) {
+				$io->error('Connection to the database could not be established. Check configuration.');
+
+				return 1;
+			}
+		} catch (Throwable $ex) {
+			$io->error('Something went wrong, initialization could not be finished.');
+
+			return 1;
 		}
 
 		$io->section('Preparing node database');

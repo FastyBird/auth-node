@@ -12,7 +12,7 @@
 
 Auth node is a microservice for managing application accounts & sessions.
 
-FastyBird auth node is an [Apache2](https://github.com/fastybird/auth-node/blob/master/license.md) licensed distributed authentication microservice, developed in PHP with [Nette framework](https://nette.org).
+FastyBird auth node is an [Apache2 licensed](http://www.apache.org/licenses/LICENSE-2.0) distributed authentication microservice, developed in PHP with [Nette framework](https://nette.org).
 
 ## Requirements
 
