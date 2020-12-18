@@ -22,9 +22,7 @@ use FastyBird\AuthModule\Queries as AuthModuleQueries;
 use FastyBird\AuthNode\Exceptions;
 use FastyBird\Database;
 use FastyBird\SimpleAuth;
-use Monolog;
 use Nette\Utils;
-use Psr\Log;
 use RuntimeException;
 use Symfony\Component\Console;
 use Symfony\Component\Console\Input;
@@ -58,37 +56,22 @@ class InitializeCommand extends Console\Command\Command
 	/** @var Database\Helpers\Database */
 	private Database\Helpers\Database $database;
 
-	/** @var Log\LoggerInterface */
-	private Log\LoggerInterface $logger;
-
 	public function __construct(
 		AuthModuleModels\Accounts\IAccountRepository $accountRepository,
 		AuthModuleModels\Roles\IRoleRepository $roleRepository,
 		AuthModuleModels\Roles\IRolesManager $rolesManager,
 		Database\Helpers\Database $database,
 		Common\Persistence\ManagerRegistry $managerRegistry,
-		Log\LoggerInterface $logger,
 		?string $name = null
 	) {
+		parent::__construct($name);
+
 		$this->accountRepository = $accountRepository;
 		$this->roleRepository = $roleRepository;
 		$this->rolesManager = $rolesManager;
 
 		$this->database = $database;
 		$this->managerRegistry = $managerRegistry;
-
-		$this->logger = $logger;
-
-		parent::__construct($name);
-
-		// Override loggers to not log debug events into console
-		if ($logger instanceof Monolog\Logger) {
-			foreach ($logger->getHandlers() as $handler) {
-				if ($handler instanceof Monolog\Handler\StreamHandler) {
-					$handler->setLevel(Monolog\Logger::WARNING);
-				}
-			}
-		}
 	}
 
 	/**
