@@ -23,7 +23,7 @@ parameters:
 
 extensions:
 	contributteTranslation				: Contributte\Translation\DI\TranslationExtension
-	contributeEvents					: Contributte\EventDispatcher\DI\EventDispatcherExtension
+	contributteEvents					: Contributte\EventDispatcher\DI\EventDispatcherExtension
 	nettrineAnnotations					: Nettrine\Annotations\DI\AnnotationsExtension
 	nettrineCache						: Nettrine\Cache\DI\CacheExtension
 	nettrineDbal						: Nettrine\DBAL\DI\DbalExtension
@@ -138,24 +138,8 @@ nettrineOrmAnnotations:
 # Node services definitions #
 #############################
 
-decorator:
-	FastyBird\NodeWebServer\Commands\HttpServerCommand:
-		setup:
-			- '$onBeforeServerStart[]' = @FastyBird\AuthNode\Events\ServerBeforeStartHandler
-
-	FastyBird\RabbitMqPlugin\Exchange:
-		setup:
-			- '$onAfterConsumeMessage[]' = @FastyBird\AuthNode\Events\AfterConsumeHandler
-
 services:
 	# Console commands
 	##################
 
 	- {factory: FastyBird\AuthNode\Commands\InitializeCommand}
-
-	# Node events
-	#############
-
-	- {factory: FastyBird\AuthNode\Events\ServerBeforeStartHandler}
-
-	- {factory: FastyBird\AuthNode\Events\AfterConsumeHandler}
