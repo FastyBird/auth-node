@@ -199,8 +199,6 @@ class InitializeCommand extends Console\Command\Command
 				$this->getOrmConnection()->rollBack();
 			}
 
-			$this->logger->error($ex->getMessage());
-
 			$io->error('Initial data could not be created.');
 
 			return $ex->getCode();

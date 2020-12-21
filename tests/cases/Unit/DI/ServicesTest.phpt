@@ -29,6 +29,7 @@ final class ServicesTest extends BaseTestCase
 
 		Assert::notNull($container->getByType(Commands\InitializeCommand::class));
 
+		Assert::notNull($container->getByType(Events\AfterConsumeHandler::class));
 		Assert::notNull($container->getByType(Events\ServerBeforeStartHandler::class));
 	}
 
