@@ -2457,12 +2457,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FastyBird/rabbitmq-plugin.git",
-                "reference": "99c2d5c60ca656547cb91299b93882220438bcc1"
+                "reference": "cb2b1670d34c8aa67b1dcbdfb8f5a6c280115e65"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FastyBird/rabbitmq-plugin/zipball/99c2d5c60ca656547cb91299b93882220438bcc1",
-                "reference": "99c2d5c60ca656547cb91299b93882220438bcc1",
+                "url": "https://api.github.com/repos/FastyBird/rabbitmq-plugin/zipball/cb2b1670d34c8aa67b1dcbdfb8f5a6c280115e65",
+                "reference": "cb2b1670d34c8aa67b1dcbdfb8f5a6c280115e65",
                 "shasum": ""
             },
             "require": {
@@ -2528,7 +2528,7 @@
                 "issues": "https://github.com/FastyBird/rabbitmq-plugin/issues",
                 "source": "https://github.com/FastyBird/rabbitmq-plugin/tree/master"
             },
-            "time": "2020-12-21T22:07:09+00:00"
+            "time": "2020-12-22T09:31:25+00:00"
         },
         {
             "name": "fastybird/simple-auth",

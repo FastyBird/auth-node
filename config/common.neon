@@ -39,6 +39,7 @@ extensions:
 	fbModulesMetadata					: FastyBird\ModulesMetadata\DI\ModulesMetadataExtension
 	fbWebServer							: FastyBird\WebServer\DI\WebServerExtension
 	fbAuthModule						: FastyBird\AuthModule\DI\AuthModuleExtension
+	fbRabbitMqPlugin					: FastyBird\RabbitMqPlugin\DI\RabbitMqPluginExtension
 	ipubDoctrineConsistence				: IPub\DoctrineConsistence\DI\DoctrineConsistenceExtension
 	ipubDoctrineCrud					: IPub\DoctrineCrud\DI\DoctrineCrudExtension
 	ipubDoctrineTimestampable			: IPub\DoctrineTimestampable\DI\DoctrineTimestampableExtension
@@ -58,6 +59,18 @@ fbSimpleAuth:
 		middleware: true
 		doctrine:
 			models: true
+
+# RabbitMQ exchange
+####################
+fbRabbitMqPlugin:
+	origin: %origin%
+	rabbitMQ:
+		connection:
+			host: %exchange.host%
+			port: %exchange.port%
+			vhost: %exchange.vhost%
+			username: %exchange.username%
+			password: %exchange.password%
 
 # Web server
 #################
